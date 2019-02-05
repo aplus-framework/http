@@ -1,0 +1,44 @@
+# Image from https://hub.docker.com/_/php/
+image: php:7.3
+
+cache:
+    paths:
+        - vendor/
+
+before_script:
+    - apt-get update -yqq
+    - apt-get install -yqq curl git libcurl4-gnutls-dev libxml2-dev libbz2-dev libzip-dev zlib1g-dev zip
+    # Install PHP extensions
+    - docker-php-ext-install curl json mbstring xml zip
+    # Install & enable Xdebug for code coverage reports
+    - pecl install xdebug-beta
+    - docker-php-ext-enable xdebug
+    # Install and run Composer
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar install
+
+test:php7.3:
+    image: php:7.3
+    stage: test
+    script:
+        - vendor/bin/phpunit --configuration phpunit.xml.dist --colors=never
+    artifacts:
+        paths:
+            - build/html/
+    coverage: '/^\s*Lines:\s*\d+.\d+\%/'
+
+pages:
+    stage: deploy
+    dependencies:
+        - test:php7.3
+    environment:
+        name: production
+        url: https://the-framework.gitlab.io
+    script:
+        - mkdir public/
+        - mv build/html/* public/
+    artifacts:
+        paths:
+            - public
+    only:
+        - master
