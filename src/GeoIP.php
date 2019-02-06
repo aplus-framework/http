@@ -18,7 +18,7 @@ class GeoIP
 	/**
 	 * @var string
 	 */
-	protected $regionName;
+	protected $region;
 	/**
 	 * @var string
 	 */
@@ -44,28 +44,24 @@ class GeoIP
 	/**
 	 * GeoIP constructor.
 	 *
-	 * @param string      $ip
-	 * @param string|null $custom_directory
+	 * @param string $ip
 	 */
-	public function __construct(string $ip, string $custom_directory = null)
+	public function __construct(string $ip)
 	{
-		if ($custom_directory)
-		{
-			\geoip_setup_custom_directory($custom_directory);
-		}
-
 		$this->parse($ip);
 	}
 
-	public function parse(string $ip)
+	protected function parse(string $ip)
 	{
-		$this->ip         = $ip;
-		$this->record     = \geoip_record_by_name($ip);
-		$this->regionName = null;
-		$this->timezone   = null;
-		$this->asn        = null;
+		$this->ip     = $ip;
+		$this->record = \geoip_record_by_name($ip);
 
 		return $this;
+	}
+
+	protected function getRecord(string $key)
+	{
+		return $this->record[$key] === '' ? null : $this->record[$key];
 	}
 
 	public function getIP(): string
@@ -73,29 +69,34 @@ class GeoIP
 		return $this->ip;
 	}
 
+	public function getCity(): ?string
+	{
+		return $this->getRecord('city');
+	}
+
 	public function getContinentCode(): ?string
 	{
-		return $this->record['continent_code'] ?? null;
+		return $this->getRecord('continent_code');
+	}
+
+	public function getCountry(): ?string
+	{
+		return $this->getRecord('country_name');
 	}
 
 	public function getCountryCode(): ?string
 	{
-		return $this->record['country_code'] ?? null;
+		return $this->getRecord('country_code');
 	}
 
 	public function getCountryCode3(): ?string
 	{
-		return $this->record['country_code3'] ?? null;
+		return $this->getRecord('country_code3');
 	}
 
-	public function getCountryName(): ?string
+	public function getRegionCode(): ?string
 	{
-		return $this->record['country_name'] ?? null;
-	}
-
-	public function getRegion(): ?string
-	{
-		return $this->record['region'] ?? null;
+		return $this->getRecord('region');
 	}
 
 	/**
@@ -103,22 +104,17 @@ class GeoIP
 	 *
 	 * @return string|null
 	 */
-	public function getRegionName(): ?string
+	public function getRegion(): ?string
 	{
-		if ($this->regionName === null && $this->getCountryCode() && $this->getRegion())
+		if ($this->region === null && $this->getCountryCode() && $this->getRegionCode())
 		{
-			$this->regionName = \geoip_region_name_by_code(
+			$this->region = \geoip_region_name_by_code(
 				$this->getCountryCode(),
-				$this->getRegion()
+				$this->getRegionCode()
 			);
 		}
 
-		return $this->regionName ? $this->regionName : null;
-	}
-
-	public function getCity(): ?string
-	{
-		return $this->record['city'] ?? null;
+		return $this->region ?? null;
 	}
 
 	public function getPostalCode(): ?string
@@ -153,100 +149,115 @@ class GeoIP
 	 */
 	public function getTimezone(): ?string
 	{
-		if ($this->timezone === null && $this->getCountryCode() && $this->getRegion())
+		if ($this->timezone === null && $this->getCountryCode() && $this->getRegionCode())
 		{
 			$this->timezone = \geoip_time_zone_by_country_and_region(
 				$this->getCountryCode(),
-				$this->getRegion()
+				$this->getRegionCode()
 			);
 		}
 
-		return $this->timezone ? $this->timezone : null;
+		return $this->timezone ?? null;
 	}
 
-	public function getASN(): ?string
+	/**
+	 * @return string|null|false
+	 */
+	public function getASN()
 	{
 		if ($this->asn === null && $this->record)
 		{
-			try
+			if (\geoip_db_avail(\GEOIP_ASNUM_EDITION))
 			{
 				$this->asn = \geoip_asnum_by_name($this->ip);
 			}
-			catch (\Exception $e)
+			else
 			{
 				$this->asn = false;
 			}
 		}
 
-		return $this->asn ? $this->asn : null;
+		return $this->asn;
 	}
 
-	public function getDomain(): ?string
+	/**
+	 * @return string|null|false
+	 */
+	public function getDomain()
 	{
 		if ($this->domain === null && $this->record)
 		{
-			try
+			if (\geoip_db_avail(\GEOIP_DOMAIN_EDITION))
 			{
 				$this->domain = \geoip_domain_by_name($this->ip);
 			}
-			catch (\Exception $e)
+			else
 			{
 				$this->domain = false;
 			}
 		}
 
-		return $this->domain ? $this->domain : null;
+		return $this->domain;
 	}
 
-	public function getISP(): ?string
+	/**
+	 * @return string|null|false
+	 */
+	public function getISP()
 	{
 		if ($this->isp === null && $this->record)
 		{
-			try
+			if (\geoip_db_avail(\GEOIP_ISP_EDITION))
 			{
 				$this->isp = \geoip_isp_by_name($this->ip);
 			}
-			catch (\Exception $e)
+			else
 			{
 				$this->isp = false;
 			}
 		}
 
-		return $this->isp ? $this->isp : null;
+		return $this->isp;
 	}
 
-	public function getORG(): ?string
+	/**
+	 * @return string|null|false
+	 */
+	public function getORG()
 	{
 		if ($this->org === null && $this->record)
 		{
-			try
+			if (\geoip_db_avail(\GEOIP_ORG_EDITION))
 			{
 				$this->org = \geoip_org_by_name($this->ip);
 			}
-			catch (\Exception $e)
+			else
 			{
 				$this->org = false;
 			}
 		}
 
-		return $this->org ? $this->org : null;
+		return $this->org;
 	}
 
-	public function getNetSpeed(): ?string
+	/**
+	 * @return string|null|false
+	 */
+	public function getNetSpeed()
 	{
 		if ($this->netspeed === null && $this->record)
 		{
-			try
+			if (\geoip_db_avail(\GEOIP_NETSPEED_EDITION))
 			{
 				$this->netspeed = \geoip_netspeedcell_by_name($this->ip);
 			}
-			catch (\Exception $e)
+			else
 			{
 				$this->netspeed = false;
 			}
 		}
 
-		return $this->netspeed ? $this->netspeed : null;
+		return $this->netspeed;
 	}
 }
 
