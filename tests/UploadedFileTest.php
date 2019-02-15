@@ -6,43 +6,28 @@ use PHPUnit\Framework\TestCase;
 class UploadedFileTest extends TestCase
 {
 	/**
-	 * @var \Framework\HTTP\UploadedFile;
-	 */
-	protected $uploadedFile;
-	/**
 	 * @var array
 	 */
 	protected $file = [
-		'name'     => 'logo.png',
-		'type'     => 'foo/bar',
-		'size'     => 19878,
+		'name' => 'logo.png',
+		'type' => 'foo/bar',
+		'size' => 19878,
 		'tmp_name' => __DIR__ . '/files/logo.png',
-		'error'    => 0,
+		'error' => 0,
 	];
+	/**
+	 * @var \Framework\HTTP\UploadedFile;
+	 */
+	protected $uploadedFile;
 
 	protected function setUp()
 	{
 		$this->uploadedFile = new UploadedFile($this->file);
 	}
 
-	public function testGetName()
+	public function testGetClientExtension()
 	{
-		$this->assertEquals($this->file['name'], $this->uploadedFile->getName());
-	}
-
-	public function testGetTmpName()
-	{
-		$this->assertEquals($this->file['tmp_name'], $this->uploadedFile->getTmpName());
-	}
-
-	public function testGetSize()
-	{
-		$this->assertEquals($this->file['size'], $this->uploadedFile->getSize());
-	}
-
-	public function testGetType()
-	{
-		$this->assertEquals('image/png', $this->uploadedFile->getType());
+		$this->assertEquals('png', $this->uploadedFile->getClientExtension());
 	}
 
 	public function testGetClientType()
@@ -60,23 +45,38 @@ class UploadedFileTest extends TestCase
 		$this->assertEquals('', $this->uploadedFile->getErrorMessage());
 	}
 
-	public function testGetClientExtension()
+	public function testGetName()
 	{
-		$this->assertEquals('png', $this->uploadedFile->getClientExtension());
+		$this->assertEquals($this->file['name'], $this->uploadedFile->getName());
 	}
 
-	public function testMove()
+	public function testGetSize()
 	{
-		$this->assertEquals(false, $this->uploadedFile->move('/tmp/foo'));
+		$this->assertEquals($this->file['size'], $this->uploadedFile->getSize());
+	}
+
+	public function testGetTmpName()
+	{
+		$this->assertEquals($this->file['tmp_name'], $this->uploadedFile->getTmpName());
+	}
+
+	public function testGetType()
+	{
+		$this->assertEquals('image/png', $this->uploadedFile->getType());
 	}
 
 	public function testIsMoved()
 	{
-		$this->assertEquals(false, $this->uploadedFile->isMoved());
+		$this->assertFalse($this->uploadedFile->isMoved());
 	}
 
 	public function testIsValid()
 	{
-		$this->assertEquals(false, $this->uploadedFile->isValid());
+		$this->assertFalse($this->uploadedFile->isValid());
+	}
+
+	public function testMove()
+	{
+		$this->assertFalse($this->uploadedFile->move('/tmp/foo'));
 	}
 }

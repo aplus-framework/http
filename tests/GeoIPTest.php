@@ -16,11 +16,9 @@ class GeoIPTest extends TestCase
 
 	public function getGeoIP()
 	{
-		if (empty(static::$geoip))
-		{
+		if (empty(static::$geoip)) {
 			static::$geoip = new GeoIP($this->ip);
 		}
-
 		return static::$geoip;
 	}
 
@@ -104,14 +102,14 @@ class GeoIPTest extends TestCase
 		$this->assertEquals('94043', $this->getGeoIP()->getPostalCode());
 	}
 
-	public function testRegionCode()
-	{
-		$this->assertEquals('CA', $this->getGeoIP()->getRegionCode());
-	}
-
 	public function testRegion()
 	{
 		$this->assertEquals('California', $this->getGeoIP()->getRegion());
+	}
+
+	public function testRegionCode()
+	{
+		$this->assertEquals('CA', $this->getGeoIP()->getRegionCode());
 	}
 
 	public function testTimezone()
@@ -119,4 +117,3 @@ class GeoIPTest extends TestCase
 		$this->assertEquals('America/Los_Angeles', $this->getGeoIP()->getTimezone());
 	}
 }
-

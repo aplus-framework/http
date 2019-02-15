@@ -3,21 +3,10 @@
 use Config\Services;
 
 /**
- * Class UploadedFile
- *
- * @package Framework\HTTP
+ * Class UploadedFile.
  */
 class UploadedFile
 {
-	/**
-	 * @var string
-	 */
-	protected $name;
-	/**
-	 * @todo Get a secure extension
-	 * @var string
-	 */
-	protected $extension;
 	/**
 	 * @var string
 	 */
@@ -25,15 +14,7 @@ class UploadedFile
 	/**
 	 * @var string
 	 */
-	protected $type;
-	/**
-	 * @var string
-	 */
 	protected $clientType;
-	/**
-	 * @var string
-	 */
-	protected $tmpName;
 	/**
 	 * @var int
 	 */
@@ -43,68 +24,50 @@ class UploadedFile
 	 */
 	protected $errorMessage;
 	/**
-	 * @var int
+	 * @todo Get a secure extension
+	 *
+	 * @var string
 	 */
-	protected $size;
+	protected $extension;
 	/**
 	 * @var bool
 	 */
 	protected $isMoved = false;
+	/**
+	 * @var string
+	 */
+	protected $name;
+	/**
+	 * @var int
+	 */
+	protected $size;
+	/**
+	 * @var string
+	 */
+	protected $tmpName;
+	/**
+	 * @var string
+	 */
+	protected $type;
 
 	public function __construct(array $file)
 	{
-		$this->name       = $file['name'];
+		$this->name = $file['name'];
 		$this->clientType = $file['type'];
-		$this->tmpName    = $file['tmp_name'];
-		$this->error      = $file['error'];
-		$this->size       = $file['size'];
+		$this->tmpName = $file['tmp_name'];
+		$this->error = $file['error'];
+		$this->size = $file['size'];
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getName(): string
+	public function getClientExtension() : string
 	{
-		return $this->name;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getTmpName(): string
-	{
-		return $this->tmpName;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getSize(): int
-	{
-		return $this->size;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getType(): string
-	{
-		if ($this->type === null)
-		{
-			$finfo = \finfo_open(\FILEINFO_MIME_TYPE);
-
-			if (\is_resource($finfo))
-			{
-				$this->type = \finfo_file($finfo, $this->tmpName);
-				\finfo_close($finfo);
-			}
-			else
-			{
-				$this->type = '';
-			}
+		if ($this->clientExtension === null) {
+			$this->clientExtension = (string) \pathinfo($this->getName(), \PATHINFO_EXTENSION);
 		}
-
-		return $this->type;
+		return $this->clientExtension;
 	}
 
 	/**
@@ -116,22 +79,9 @@ class UploadedFile
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getClientExtension(): string
-	{
-		if ($this->clientExtension === null)
-		{
-			$this->clientExtension = (string)\pathinfo($this->getName(), \PATHINFO_EXTENSION);
-		}
-
-		return $this->clientExtension;
-	}
-
-	/**
 	 * @return int
 	 */
-	public function getError(): int
+	public function getError() : int
 	{
 		return $this->error;
 	}
@@ -141,47 +91,82 @@ class UploadedFile
 	 *
 	 * @return string
 	 */
-	public function getErrorMessage(): string
+	public function getErrorMessage() : string
 	{
-		if ($this->errorMessage === null)
-		{
+		if ($this->errorMessage === null) {
 			$this->setErrorMessage($this->error);
 		}
-
 		return $this->errorMessage;
 	}
 
 	/**
-	 * Moves an uploaded file to a new location
+	 * @return string
+	 */
+	public function getName() : string
+	{
+		return $this->name;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getSize() : int
+	{
+		return $this->size;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTmpName() : string
+	{
+		return $this->tmpName;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getType() : string
+	{
+		if ($this->type === null) {
+			$finfo = \finfo_open(\FILEINFO_MIME_TYPE);
+			if (\is_resource($finfo)) {
+				$this->type = \finfo_file($finfo, $this->tmpName);
+				\finfo_close($finfo);
+			} else {
+				$this->type = '';
+			}
+		}
+		return $this->type;
+	}
+
+	public function isMoved() : bool
+	{
+		return $this->isMoved;
+	}
+
+	public function isValid() : bool
+	{
+		return $this->error === \UPLOAD_ERR_OK && \is_uploaded_file($this->tmpName);
+	}
+
+	/**
+	 * Moves an uploaded file to a new location.
 	 *
 	 * @param string $destination The destination of the moved file
 	 * @param bool   $overwrite
 	 *
 	 * @return bool
 	 */
-	public function move(string $destination, bool $overwrite = false): bool
+	public function move(string $destination, bool $overwrite = false) : bool
 	{
-		if ($this->isMoved)
-		{
+		if ($this->isMoved) {
 			throw new \ErrorException('File already is moved.');
 		}
-
-		if ($overwrite === false && \file_exists($destination))
-		{
+		if ($overwrite === false && \file_exists($destination)) {
 			return false;
 		}
-
 		return $this->isMoved = \move_uploaded_file($this->tmpName, $destination);
-	}
-
-	public function isMoved(): bool
-	{
-		return $this->isMoved;
-	}
-
-	public function isValid(): bool
-	{
-		return $this->error === \UPLOAD_ERR_OK && \is_uploaded_file($this->tmpName);
 	}
 
 	/**
@@ -191,8 +176,7 @@ class UploadedFile
 	 */
 	protected function setErrorMessage(int $code)
 	{
-		switch ($code)
-		{
+		switch ($code) {
 			case \UPLOAD_ERR_OK:
 				$line = '';
 				break;
@@ -221,10 +205,8 @@ class UploadedFile
 				$line = 'uploadErrorUnknown';
 				break;
 		}
-
 		$this->errorMessage = empty($line)
 			? ''
 			: Services::language()->render('http', $line, [\esc($this->getName())]);
 	}
 }
-

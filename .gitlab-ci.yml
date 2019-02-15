@@ -1,52 +1,54 @@
+---
 # Image from https://hub.docker.com/_/php/
 image: php:7.3
 
 cache:
-    paths:
-        - vendor/
+  paths:
+    - vendor/
 
 before_script:
-    - apt-get update -yqq
-    - apt-get install -yqq curl git libcurl4-gnutls-dev libxml2-dev libbz2-dev libgeoip-dev libzip-dev wget zlib1g-dev zip automake autoconf libtool g++
-    # Download package containing legacy GeoIP databases and move to PHP default local
-    - wget http://debian.backend.mirrors.debian.org/debian/pool/main/g/geoip-database/geoip-database-extra_20181108-1_all.deb
-    - dpkg-deb -xv geoip-database-extra_20181108-1_all.deb geoip-database-extra
-    - mkdir -p /usr/share/GeoIP/
-    - mv geoip-database-extra/usr/share/GeoIP/* /usr/share/GeoIP/
-    # Install & enable PHP GeoIP
-    - pecl install geoip-beta
-    - docker-php-ext-enable geoip
-    # Install PHP extensions
-    - docker-php-ext-install curl json mbstring xml zip
-    # Install & enable Xdebug for code coverage reports
-    - pecl install xdebug-beta
-    - docker-php-ext-enable xdebug
-    # Install and run Composer
-    - curl -sS https://getcomposer.org/installer | php
-    - php composer.phar install
+  - apt-get update -yqq
+  - apt-get install -yqq curl git libcurl4-gnutls-dev libxml2-dev libbz2-dev libgeoip-dev libzip-dev wget zlib1g-dev zip automake autoconf libtool g++
+  # Download package containing legacy GeoIP databases and move to PHP default local
+  - wget http://debian.backend.mirrors.debian.org/debian/pool/main/g/geoip-database/geoip-database-extra_20181108-1_all.deb
+  - dpkg-deb -xv geoip-database-extra_20181108-1_all.deb geoip-database-extra
+  - mkdir -p /usr/share/GeoIP/
+  - mv geoip-database-extra/usr/share/GeoIP/* /usr/share/GeoIP/
+  # Install & enable PHP GeoIP
+  - pecl install geoip-beta
+  - docker-php-ext-enable geoip
+  # Install PHP extensions
+  - docker-php-ext-install curl json mbstring xml zip
+  # Install & enable Xdebug for code coverage reports
+  - pecl install xdebug-beta
+  - docker-php-ext-enable xdebug
+  # Install and run Composer
+  - curl -sS https://getcomposer.org/installer | php
+  - mv composer.phar /usr/bin/composer
+  - composer install
 
 test:php7.3:
-    image: php:7.3
-    stage: test
-    script:
-        - vendor/bin/phpunit --configuration phpunit.xml.dist --colors=never
-    artifacts:
-        paths:
-            - build/html/
-    coverage: '/^\s*Lines:\s*\d+.\d+\%/'
+  image: php:7.3
+  stage: test
+  script:
+    - vendor/bin/phpunit --colors=never
+  artifacts:
+    paths:
+      - build/coverage/
+  coverage: '/^\s*Lines:\s*\d+.\d+\%/'
 
 pages:
-    stage: deploy
-    dependencies:
-        - test:php7.3
-    environment:
-        name: production
-        url: https://the-framework.gitlab.io
-    script:
-        - mkdir public/
-        - mv build/html/* public/
-    artifacts:
-        paths:
-            - public
-    only:
-        - master
+  stage: deploy
+  dependencies:
+    - test:php7.3
+  environment:
+    name: production
+    url: https://the-framework.gitlab.io
+  script:
+    - mkdir public/
+    - mv build/coverage/ public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - master

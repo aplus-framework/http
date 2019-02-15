@@ -1,23 +1,54 @@
 {
-    "name": "framework/http",
-    "autoload": {
-        "psr-4": {
-            "Framework\\HTTP\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\HTTP\\": "tests/"
-        }
-    },
-    "require": {
-        "php": ">=7.3",
-        "ext-curl": "*",
-        "ext-geoip": "*",
-        "ext-json": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^7.5",
-        "ext-xdebug": "*"
-    }
+	"name": "framework/http",
+	"type": "library",
+	"description": "The HTTP package",
+	"keywords": [
+		"http"
+	],
+	"homepage": "https://gitlab.com/the-framework/http",
+	"license": "proprietary",
+	"authors": [
+		{
+			"name": "Natan Felles",
+			"email": "natanfelles@gmail.com"
+		}
+	],
+	"require": {
+		"php": ">=7.3"
+	},
+	"require-dev": {
+		"ext-xdebug": "*",
+		"friendsofphp/php-cs-fixer": "^2.14",
+		"localheinz/composer-normalize": "^1.1",
+		"phpmd/phpmd": "^2.6",
+		"phpstan/phpstan": "^0.11",
+		"phpunit/phpunit": "^7.5"
+	},
+	"autoload": {
+		"psr-4": {
+			"Framework\\HTTP\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Tests\\HTTP\\": "tests/"
+		}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"scripts": {
+		"post-install-cmd": [
+			".hooks/init"
+		],
+		"post-update-cmd": [
+			"composer dump-autoload"
+		]
+	},
+	"support": {
+		"email": "natanfelles@gmail.com",
+		"issues": "https://gitlab.com/the-framework/http/issues",
+		"wiki": "https://gitlab.com/the-framework/packages/http",
+		"source": "https://gitlab.com/the-framework/http",
+		"docs": "https://the-framework.gitlab.io/the-framework/packages/http/docs"
+	}
 }

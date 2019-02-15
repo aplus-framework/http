@@ -1,29 +1,31 @@
 <?php namespace Framework\HTTP;
 
 /**
- * Class Cookie
+ * Class Cookie.
  *
  * @see     https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
  * @see     https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
  * @see     https://tools.ietf.org/html/rfc6265
  * @see     https://php.net/manual/en/function.setcookie.php
- *
- * @package Framework\HTTP
  */
 class Cookie
 {
 	/**
-	 * @var string
+	 * @var string|null
 	 */
-	protected $name;
-	/**
-	 * @var string
-	 */
-	protected $value;
+	protected $domain;
 	/**
 	 * @var \DateTime|null
 	 */
 	protected $expires;
+	/**
+	 * @var bool
+	 */
+	protected $httpOnly = false;
+	/**
+	 * @var string
+	 */
+	protected $name;
 	/**
 	 * @var string|null
 	 */
@@ -31,19 +33,15 @@ class Cookie
 	/**
 	 * @var string|null
 	 */
-	protected $domain;
+	protected $sameSite;
 	/**
 	 * @var bool
 	 */
 	protected $secure = false;
 	/**
-	 * @var bool
+	 * @var string
 	 */
-	protected $httpOnly = false;
-	/**
-	 * @var string|null
-	 */
-	protected $sameSite;
+	protected $value;
 
 	/**
 	 * Cookie constructor.
@@ -57,106 +55,123 @@ class Cookie
 		$this->setValue($value);
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getName(): string
+	public function __toString() : string
 	{
-		return $this->name;
+		return $this->getAsString();
+	}
+
+	public function getAsString() : string
+	{
+		$string = $this->getName() . '=' . $this->getValue();
+		$part = $this->getExpires();
+		if ($part !== null) {
+			$string .= '; expires=' . $this->expires->format('D, d-M-Y H:i:s') . ' GMT';
+			$string .= '; Max-Age=' . $this->expires->diff(new \DateTime('-1 second'))->s;
+		}
+		$part = $this->getPath();
+		if ($part !== null) {
+			$string .= '; path=' . $part;
+		}
+		$part = $this->getDomain();
+		if ($part !== null) {
+			$string .= '; domain=' . $part;
+		}
+		$part = $this->isSecure();
+		if ($part) {
+			$string .= '; secure';
+		}
+		$part = $this->isHttpOnly();
+		if ($part) {
+			$string .= '; HttpOnly';
+		}
+		$part = $this->getSameSite();
+		if ($part !== null) {
+			$string .= '; SameSite=' . $part;
+		}
+		return $string;
 	}
 
 	/**
-	 * @param string $name
-	 *
-	 * @return $this
+	 * @return string|null
 	 */
-	public function setName(string $name)
+	public function getDomain() : ?string
 	{
-		$this->name = $name;
-
-		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getValue(): string
-	{
-		return $this->value;
-	}
-
-	/**
-	 * @param string $value
-	 *
-	 * @return $this
-	 */
-	public function setValue(string $value)
-	{
-		$this->value = $value;
-
-		return $this;
+		return $this->domain;
 	}
 
 	/**
 	 * @return \DateTime|null
 	 */
-	public function getExpires(): ?\DateTime
+	public function getExpires() : ?\DateTime
 	{
 		return $this->expires;
 	}
 
 	/**
-	 * @param \DateTime|string|null $expires
-	 *
-	 * @return $this
+	 * @return string
 	 */
-	public function setExpires($expires)
+	public function getName() : string
 	{
-		if ($expires instanceof \DateTime)
-		{
-			$expires = clone $expires;
-			$expires->setTimezone(new \DateTimeZone('UTC'));
-		}
-		elseif (\is_numeric($expires))
-		{
-			$expires = \DateTime::createFromFormat('U', $expires, new \DateTimeZone('UTC'));
-		}
-		elseif ($expires !== null)
-		{
-			$expires = new \DateTime($expires, new \DateTimeZone('UTC'));
-		}
-
-		$this->expires = $expires;
-
-		return $this;
+		return $this->name;
 	}
 
 	/**
 	 * @return string|null
 	 */
-	public function getPath(): ?string
+	public function getPath() : ?string
 	{
 		return $this->path;
 	}
 
 	/**
-	 * @param string|null $path
-	 *
-	 * @return $this
+	 * @return string|null
 	 */
-	public function setPath(?string $path)
+	public function getSameSite() : ?string
 	{
-		$this->path = $path;
-
-		return $this;
+		return $this->sameSite;
 	}
 
 	/**
-	 * @return string|null
+	 * @return string
 	 */
-	public function getDomain(): ?string
+	public function getValue() : string
 	{
-		return $this->domain;
+		return $this->value;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isHttpOnly() : bool
+	{
+		return $this->httpOnly;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isSecure() : bool
+	{
+		return $this->secure;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function send() : bool
+	{
+		$expires = $this->getExpires();
+		if ($expires) {
+			$expires = (int) $expires->format('U');
+		}
+		return \setcookie($this->getName(), $this->getValue(), [
+			'expires' => $expires,
+			'path' => $this->getPath(),
+			'domain' => $this->getDomain(),
+			'secure' => $this->isSecure(),
+			'httponly' => $this->isHttpOnly(),
+			'samesite' => $this->getSameSite(),
+		]);
 	}
 
 	/**
@@ -167,36 +182,26 @@ class Cookie
 	public function setDomain(?string $domain)
 	{
 		$this->domain = $domain;
-
 		return $this;
 	}
 
 	/**
-	 * @return bool
-	 */
-	public function isSecure(): bool
-	{
-		return $this->secure;
-	}
-
-	/**
-	 * @param bool $secure
+	 * @param \DateTime|string|null $expires
 	 *
 	 * @return $this
 	 */
-	public function setSecure(bool $secure = true)
+	public function setExpires($expires)
 	{
-		$this->secure = $secure;
-
+		if ($expires instanceof \DateTime) {
+			$expires = clone $expires;
+			$expires->setTimezone(new \DateTimeZone('UTC'));
+		} elseif (\is_numeric($expires)) {
+			$expires = \DateTime::createFromFormat('U', $expires, new \DateTimeZone('UTC'));
+		} elseif ($expires !== null) {
+			$expires = new \DateTime($expires, new \DateTimeZone('UTC'));
+		}
+		$this->expires = $expires;
 		return $this;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function isHttpOnly(): bool
-	{
-		return $this->httpOnly;
 	}
 
 	/**
@@ -207,116 +212,69 @@ class Cookie
 	public function setHttpOnly(bool $http_only = true)
 	{
 		$this->httpOnly = $http_only;
-
 		return $this;
 	}
 
 	/**
-	 * @return string|null
+	 * @param string $name
+	 *
+	 * @return $this
 	 */
-	public function getSameSite(): ?string
+	public function setName(string $name)
 	{
-		return $this->sameSite;
+		$this->name = $name;
+		return $this;
+	}
+
+	/**
+	 * @param string|null $path
+	 *
+	 * @return $this
+	 */
+	public function setPath(?string $path)
+	{
+		$this->path = $path;
+		return $this;
 	}
 
 	/**
 	 * @param string|null $same_site Strict, Lax or Unset
 	 *
-	 * @return $this
-	 *
 	 * @throws \InvalidArgumentException for invalid $same_site value
+	 *
+	 * @return $this
 	 */
 	public function setSameSite(?string $same_site)
 	{
-		if ($same_site !== null)
-		{
+		if ($same_site !== null) {
 			$same_site = \ucfirst(\strtolower($same_site));
-
-			if ( ! \in_array($same_site, ['Strict', 'Lax', 'Unset']))
-			{
+			if ( ! \in_array($same_site, ['Strict', 'Lax', 'Unset'])) {
 				throw new \InvalidArgumentException('SameSite must be Strict, Lax or Unset');
 			}
 		}
-
 		$this->sameSite = $same_site;
-
 		return $this;
 	}
 
-	public function getAsString(): string
+	/**
+	 * @param bool $secure
+	 *
+	 * @return $this
+	 */
+	public function setSecure(bool $secure = true)
 	{
-		$string = $this->getName() . '=' . $this->getValue();
-
-		$part = $this->getExpires();
-
-		if ($part !== null)
-		{
-			$string .= '; expires=' . $this->expires->format('D, d-M-Y H:i:s') . ' GMT';
-			$string .= '; Max-Age=' . $this->expires->diff(new \DateTime('-1 second'))->s;
-		}
-
-		$part = $this->getPath();
-
-		if ($part !== null)
-		{
-			$string .= '; path=' . $part;
-		}
-
-		$part = $this->getDomain();
-
-		if ($part !== null)
-		{
-			$string .= '; domain=' . $part;
-		}
-
-		$part = $this->isSecure();
-
-		if ($part)
-		{
-			$string .= '; secure';
-		}
-
-		$part = $this->isHttpOnly();
-
-		if ($part)
-		{
-			$string .= '; HttpOnly';
-		}
-
-		$part = $this->getSameSite();
-
-		if ($part !== null)
-		{
-			$string .= '; SameSite=' . $part;
-		}
-
-		return $string;
+		$this->secure = $secure;
+		return $this;
 	}
 
 	/**
-	 * @return bool
+	 * @param string $value
+	 *
+	 * @return $this
 	 */
-	public function send(): bool
+	public function setValue(string $value)
 	{
-		$expires = $this->getExpires();
-
-		if ($expires)
-		{
-			$expires = (int)$expires->format('U');
-		}
-
-		return \setcookie($this->getName(), $this->getValue(), [
-			'expires'  => $expires,
-			'path'     => $this->getPath(),
-			'domain'   => $this->getDomain(),
-			'secure'   => $this->isSecure(),
-			'httponly' => $this->isHttpOnly(),
-			'samesite' => $this->getSameSite(),
-		]);
-	}
-
-	public function __toString(): string
-	{
-		return $this->getAsString();
+		$this->value = $value;
+		return $this;
 	}
 }

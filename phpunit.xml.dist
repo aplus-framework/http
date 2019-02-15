@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/bootstrap.php"
-         backupGlobals="false"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         stopOnError="false"
-         stopOnFailure="false"
-         stopOnIncomplete="false"
-         stopOnSkipped="false">
+<phpunit backupGlobals="false"
+		 bootstrap="vendor/autoload.php"
+		 colors="true"
+		 convertErrorsToExceptions="true"
+		 convertNoticesToExceptions="true"
+		 convertWarningsToExceptions="true"
+		 stopOnError="false"
+		 stopOnFailure="false"
+		 stopOnIncomplete="false"
+		 stopOnSkipped="false">
 
-    <testsuite name="HTTP Tests">
-        <directory suffix="Test.php">tests</directory>
-    </testsuite>
+	<testsuite>
+		<directory suffix="Test.php">tests</directory>
+	</testsuite>
 
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">src</directory>
+		</whitelist>
+	</filter>
 
-    <logging>
-        <log type="coverage-clover" target="build/clover.xml"/>
-        <log type="coverage-html" target="build/html"/>
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
-    </logging>
+	<logging>
+		<log type="coverage-clover" target="build/coverage/clover.xml"/>
+		<log type="coverage-html" target="build/coverage"/>
+		<log type="coverage-text" target="php://stdout" />
+	</logging>
 
 </phpunit>

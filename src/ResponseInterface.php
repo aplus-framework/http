@@ -1,19 +1,15 @@
 <?php namespace Framework\HTTP;
 
 /**
- * Interface ResponseInterface
- *
- * @package Framework\HTTP
+ * Interface ResponseInterface.
  */
 interface ResponseInterface
 {
-	/**
-	 * @param int         $code
-	 * @param string|null $reason
-	 *
-	 * @return $this
-	 */
-	public function setStatus(int $code, string $reason = null);
+	public function appendBody(string $content);
+
+	public function getBody() : string;
+
+	public function getHeader(string $name = null);
 
 	/**
 	 * @param string|null $part "code" or "reason"
@@ -22,11 +18,17 @@ interface ResponseInterface
 	 */
 	public function getStatus(string $part = null);
 
-	public function setHeader($name, string $value = null);
+	/**
+	 * @return bool
+	 */
+	public function isSent() : bool;
 
-	public function getHeader(string $name = null);
+	public function prependBody(string $content);
 
-	public function getBody(): string;
+	/**
+	 * @return $this
+	 */
+	public function send();
 
 	/**
 	 * @param string $body
@@ -35,18 +37,13 @@ interface ResponseInterface
 	 */
 	public function setBody(string $body);
 
-	public function prependBody(string $content);
-
-	public function appendBody(string $content);
+	public function setHeader($name, string $value = null);
 
 	/**
-	 * @return bool
-	 */
-	public function isSent(): bool;
-
-	/**
+	 * @param int         $code
+	 * @param string|null $reason
+	 *
 	 * @return $this
 	 */
-	public function send();
+	public function setStatus(int $code, string $reason = null);
 }
-
