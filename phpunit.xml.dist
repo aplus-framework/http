@@ -10,7 +10,7 @@
 		 stopOnIncomplete="false"
 		 stopOnSkipped="false">
 
-	<testsuite>
+	<testsuite name="HTTP tests">
 		<directory suffix="Test.php">tests</directory>
 	</testsuite>
 
