@@ -44,4 +44,9 @@ class Request extends \Framework\HTTP\Request
 		'ENCODING' => null,
 		'LANGUAGE' => null,
 	];
+
+	public function setInput(array $input)
+	{
+		$this->input = \array_replace_recursive($this->input, $input);
+	}
 }

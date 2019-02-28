@@ -11,7 +11,7 @@ class RequestTest extends TestCase
 	 */
 	protected $proxy_request;
 	/**
-	 * @var \Framework\HTTP\Request
+	 * @var Mocks\Request
 	 */
 	protected $request;
 
@@ -63,6 +63,22 @@ class RequestTest extends TestCase
 			'foo',
 			'bar',
 		]));
+	}
+
+	public function testBasicAuth()
+	{
+		$this->request->setInput([
+			'SERVER' => [
+				'HTTP_AUTHORIZATION' => 'Basic ' . \base64_encode('user:pass'),
+			],
+		]);
+		$expected = [
+			'type' => 'Basic',
+			'username' => 'user',
+			'password' => 'pass',
+		];
+		self::assertEquals($expected, $this->request->getAuth());
+		self::assertEquals($expected, $this->request->getAuth());
 	}
 
 	public function testBody()
@@ -119,6 +135,34 @@ class RequestTest extends TestCase
 			['status-bar' => 'open', 'session_id' => 'abc'],
 			$this->request->getCookie(['session_id', 'status-bar'])
 		);
+	}
+
+	public function testDigestAuth()
+	{
+		$this->request->setInput([
+			'SERVER' => [
+				'HTTP_AUTHORIZATION' => 'Digest realm="testrealm@host.com", qop="auth,auth-int", nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", opaque="5ccc069c403ebaf9f0171e9517f40e41"',
+			],
+		]);
+		$expected = [
+			'type' => 'Digest',
+			'username' => null,
+			'realm' => 'testrealm@host.com',
+			'nonce' => 'dcd98b7102dd2f0e8b11d0f600bfb0c093',
+			'uri' => null,
+			'response' => null,
+			'opaque' => '5ccc069c403ebaf9f0171e9517f40e41',
+			'qop' => 'auth,auth-int',
+			'nc' => null,
+			'cnonce' => null,
+		];
+		self::assertEquals($expected, $this->request->getAuth());
+		self::assertEquals($expected, $this->request->getAuth());
+	}
+
+	public function testEmptyAuth()
+	{
+		self::assertEmpty($this->request->getAuth());
 	}
 
 	public function testEncoding()
@@ -285,8 +329,6 @@ class RequestTest extends TestCase
 		$this->assertFalse($this->request->isAJAX(false));
 		$this->assertTrue($this->request->isAJAX(false, 'XMLHTTPREQUEST'));
 		$this->assertFalse($this->proxy_request->isAJAX());
-		$this->assertFalse($this->proxy_request->isAJAX(false));
-		$this->assertFalse($this->proxy_request->isAJAX(false, 'XMLHTTPREQUEST'));
 	}
 
 	public function testIsSecure()

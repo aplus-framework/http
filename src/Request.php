@@ -87,10 +87,9 @@ class Request extends Message //implements RequestInterface
 	 */
 	protected function filter($variable, int $filter = null, $options = null)
 	{
-		if (empty($filter)) {
-			return $variable;
-		}
-		return \filter_var($variable, $filter, $options);
+		return $filter
+			? \filter_var($variable, $filter, $options)
+			: $variable;
 	}
 
 	/**
@@ -166,7 +165,7 @@ class Request extends Message //implements RequestInterface
 				);
 				foreach ($matches as $match) {
 					if (isset($match[1], $match[3])) {
-						$data[$match[1]] = $match[3] ? $match[3] : $match[4] ?? '';
+						$data[$match[1]] = $match[3] ?: $match[4] ?? '';
 					}
 				}
 			}
@@ -187,11 +186,10 @@ class Request extends Message //implements RequestInterface
 			\parse_str($this->getBody(), $parse);
 			return $parse;
 		}
-		if ($this->body !== null) {
-			return $this->body;
+		if ($this->body === null) {
+			$this->body = \file_get_contents('php://input') ?: '';
 		}
-		$contents = \file_get_contents('php://input');
-		return $this->body = $contents ? $contents : '';
+		return $this->body;
 	}
 
 	/**
@@ -357,7 +355,7 @@ class Request extends Message //implements RequestInterface
 		// TODO: Try other Server keys - apache is different
 		$this->id = $this->getServer('HTTP_X_REQUEST_ID');
 		if (empty($this->id)) {
-			$this->id = \md5($this->getIP() . '-' . \uniqid());
+			$this->id = \md5(\uniqid($this->getIP(), true));
 		}
 		return $this->id;
 	}
@@ -567,6 +565,15 @@ class Request extends Message //implements RequestInterface
 		);
 	}
 
+	private function getScheme(string $host) : string
+	{
+		$scheme = \substr($host, 0, 7);
+		if ($scheme === 'http://' || $scheme === 'https:/') {
+			return '';
+		}
+		return 'http://';
+	}
+
 	/**
 	 * @param array|string|null $name
 	 * @param int|null          $filter
@@ -653,10 +660,8 @@ class Request extends Message //implements RequestInterface
 	 */
 	public function isSecure() : bool
 	{
-		if ($this->getServer('REQUEST_SCHEME') === 'https' || $this->getServer('HTTPS') === 'on') {
-			return true;
-		}
-		return false;
+		return $this->getServer('REQUEST_SCHEME') === 'https'
+			|| $this->getServer('HTTPS') === 'on';
 	}
 
 	/**
@@ -676,7 +681,7 @@ class Request extends Message //implements RequestInterface
 		if ($negotiable) {
 			$negotiable = \array_map('strtolower', $negotiable);
 			foreach ($this->input[$type] as $item) {
-				if (\in_array($item, $negotiable)) {
+				if (\in_array($item, $negotiable, true)) {
 					return $item;
 				}
 			}
@@ -767,13 +772,7 @@ class Request extends Message //implements RequestInterface
 	 */
 	protected function setHost(string $host)
 	{
-		$scheme = \substr($host, 0, 7);
-		if ($scheme === 'http://' || $scheme === 'https:/') {
-			$scheme = '';
-		} else {
-			$scheme = 'http://';
-		}
-		$filtered_host = $scheme . $host;
+		$filtered_host = $this->getScheme($host) . $host;
 		if ( ! $filtered_host = $this->filter($filtered_host, \FILTER_VALIDATE_URL)) {
 			throw RequestException::forInvalidHost($host);
 		}
