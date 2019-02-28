@@ -21,6 +21,9 @@ class GeoIP
 	 * @var string
 	 */
 	protected $isp;
+	/**
+	 * @var string
+	 */
 	protected $netspeed;
 	/**
 	 * @var string
@@ -60,11 +63,9 @@ class GeoIP
 	public function getASN()
 	{
 		if ($this->asn === null && $this->record) {
-			if (\geoip_db_avail(\GEOIP_ASNUM_EDITION)) {
-				$this->asn = \geoip_asnum_by_name($this->ip);
-			} else {
-				$this->asn = false;
-			}
+			$this->asn = \geoip_db_avail(\GEOIP_ASNUM_EDITION)
+				? \geoip_asnum_by_name($this->ip)
+				: false;
 		}
 		return $this->asn;
 	}
@@ -105,11 +106,9 @@ class GeoIP
 	public function getDomain()
 	{
 		if ($this->domain === null && $this->record) {
-			if (\geoip_db_avail(\GEOIP_DOMAIN_EDITION)) {
-				$this->domain = \geoip_domain_by_name($this->ip);
-			} else {
-				$this->domain = false;
-			}
+			$this->domain = \geoip_db_avail(\GEOIP_DOMAIN_EDITION)
+				? \geoip_domain_by_name($this->ip)
+				: false;
 		}
 		return $this->domain;
 	}
@@ -125,11 +124,9 @@ class GeoIP
 	public function getISP()
 	{
 		if ($this->isp === null && $this->record) {
-			if (\geoip_db_avail(\GEOIP_ISP_EDITION)) {
-				$this->isp = \geoip_isp_by_name($this->ip);
-			} else {
-				$this->isp = false;
-			}
+			$this->isp = \geoip_db_avail(\GEOIP_ISP_EDITION)
+				? \geoip_isp_by_name($this->ip)
+				: false;
 		}
 		return $this->isp;
 	}
@@ -150,11 +147,9 @@ class GeoIP
 	public function getNetSpeed()
 	{
 		if ($this->netspeed === null && $this->record) {
-			if (\geoip_db_avail(\GEOIP_NETSPEED_EDITION)) {
-				$this->netspeed = \geoip_netspeedcell_by_name($this->ip);
-			} else {
-				$this->netspeed = false;
-			}
+			$this->netspeed = \geoip_db_avail(\GEOIP_NETSPEED_EDITION)
+				? \geoip_netspeedcell_by_name($this->ip)
+				: false;
 		}
 		return $this->netspeed;
 	}
@@ -165,11 +160,9 @@ class GeoIP
 	public function getORG()
 	{
 		if ($this->org === null && $this->record) {
-			if (\geoip_db_avail(\GEOIP_ORG_EDITION)) {
-				$this->org = \geoip_org_by_name($this->ip);
-			} else {
-				$this->org = false;
-			}
+			$this->org = \geoip_db_avail(\GEOIP_ORG_EDITION)
+				? \geoip_org_by_name($this->ip)
+				: false;
 		}
 		return $this->org;
 	}

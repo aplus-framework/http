@@ -31,11 +31,11 @@ test:php7.3:
     # Run PHPUnit
     - vendor/bin/phpunit --colors=never
     # ApiGen
-    - vendor/bin/apigen generate src --destination build/api/
+    #- vendor/bin/apigen generate src --destination build/api/
   artifacts:
     paths:
       - build/coverage/
-      - build/api/
+      #- build/api/
   coverage: '/^\s*Lines:\s*\d+.\d+\%/'
 
 pages:
