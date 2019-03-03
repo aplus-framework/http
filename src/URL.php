@@ -80,6 +80,13 @@ class URL
 		return $this;
 	}
 
+	protected function filterQuery(array $allowed) : array
+	{
+		return $this->query ?
+			\array_intersect_key($this->query, \array_flip($allowed))
+			: [];
+	}
+
 	public function getBaseURL(string $path = '/') : string
 	{
 		if ($path && $path !== '/') {
@@ -106,15 +113,21 @@ class URL
 
 	public function getOrigin() : string
 	{
-		$url = $this->getScheme() . '://' . $this->getHost();
-		if ( ! \in_array($part = $this->getPort(), [
-			null,
-			80,
-			443,
-		], true)) {
-			$url .= ':' . $part;
-		}
-		return $url;
+		return $this->getScheme() . '://' . $this->getHost() . $this->getPortPart();
+	}
+
+	public function getParsedURL() : array
+	{
+		return [
+			'scheme' => $this->getScheme(),
+			'user' => $this->getUser(),
+			'pass' => $this->getPass(),
+			'host' => $this->getHost(),
+			'port' => $this->getPort(),
+			'path' => $this->getSegments(),
+			'query' => $this->getQueryData(),
+			'fragment' => $this->getFragment(),
+		];
 	}
 
 	/**
@@ -125,16 +138,8 @@ class URL
 		return $this->pass;
 	}
 
-	/**
-	 * @param bool $exploded
-	 *
-	 * @return array|string
-	 */
-	public function getPath(bool $exploded = false)
+	public function getPath() : string
 	{
-		if ($exploded) {
-			return $this->path;
-		}
 		return '/' . \implode('/', $this->path);
 	}
 
@@ -146,23 +151,35 @@ class URL
 		return $this->port;
 	}
 
+	protected function getPortPart() : string
+	{
+		if ( ! \in_array($part = $this->getPort(), [
+			null,
+			80,
+			443,
+		], true)) {
+			return ':' . $part;
+		}
+		return '';
+	}
+
 	/**
 	 * Get the "Query" part of the URL.
 	 *
-	 * @param bool       $exploded If true will return an array, otherwise a string
-	 * @param array|null $queries  Allowed queries
+	 * @param array|null $queries Allowed queries
 	 *
-	 * @return array|string
+	 * @return string
 	 */
-	public function getQuery(bool $exploded = false, array $queries = null)
+	public function getQuery(array $queries = []) : string
 	{
-		if ($queries) {
-			$queries = \array_intersect_key($this->query, \array_flip($queries));
-		}
-		if ($exploded) {
-			return $queries ?? $this->query;
-		}
-		return \urldecode(\http_build_query($queries ?? $this->query));
+		return \urldecode(\http_build_query(
+			$queries ? $this->filterQuery($queries) : $this->query
+		));
+	}
+
+	public function getQueryData(array $queries = []) : array
+	{
+		return $queries ? $this->filterQuery($queries) : $this->query;
 	}
 
 	/**
@@ -173,25 +190,13 @@ class URL
 		return $this->scheme;
 	}
 
-	/**
-	 * @param bool $as_array
-	 *
-	 * @return array|string
-	 */
-	public function getURL(bool $as_array = false)
+	public function getSegments() : array
 	{
-		if ($as_array) {
-			return [
-				'scheme' => $this->getScheme(),
-				'user' => $this->getUser(),
-				'pass' => $this->getPass(),
-				'host' => $this->getHost(),
-				'port' => $this->getPort(),
-				'path' => $this->getPath(true),
-				'query' => $this->getQuery(true),
-				'fragment' => $this->getFragment(),
-			];
-		}
+		return $this->path;
+	}
+
+	public function getURL() : string
+	{
 		$url = $this->getScheme() . '://';
 		if ($part = $this->getUser()) {
 			$url .= $part;
@@ -201,13 +206,7 @@ class URL
 			$url .= '@';
 		}
 		$url .= $this->getHost();
-		if ( ! \in_array($part = $this->getPort(), [
-			null,
-			80,
-			443,
-		], true)) {
-			$url .= ':' . $part;
-		}
+		$url .= $this->getPortPart();
 		$url .= $this->getPath();
 		if ($part = $this->getQuery()) {
 			$url .= '?' . $part;
