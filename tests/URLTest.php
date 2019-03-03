@@ -1,6 +1,5 @@
 <?php namespace Tests\HTTP;
 
-use Framework\HTTP\Exceptions\URLException;
 use Framework\HTTP\URL;
 use PHPUnit\Framework\TestCase;
 
@@ -30,16 +29,25 @@ class URLTest extends TestCase
 
 	public function testHost()
 	{
-		$this->assertEquals('domain.tld', $this->url->getHost());
-		$this->url->setHost('do-main.com');
-		$this->assertEquals('do-main.com', $this->url->getHost());
-		$this->expectException(URLException::class);
-		$this->url->setHost('in_valid.com');
+		$this->assertEquals('domain.tld:8080', $this->url->getHost());
+		$this->url->setHostname('do-main.com');
+		$this->assertEquals('do-main.com:8080', $this->url->getHost());
+		$this->expectException(\InvalidArgumentException::class);
+		$this->url->setHostname('in_valid.com');
+	}
+
+	public function testHostname()
+	{
+		$this->assertEquals('domain.tld', $this->url->getHostname());
+		$this->url->setHostname('do-main.com');
+		$this->assertEquals('do-main.com', $this->url->getHostname());
+		$this->expectException(\InvalidArgumentException::class);
+		$this->url->setHostname('in_valid.com');
 	}
 
 	public function testInvalidURL()
 	{
-		$this->expectException(URLException::class);
+		$this->expectException(\InvalidArgumentException::class);
 		(new URL('//unknow'));
 	}
 
@@ -57,7 +65,7 @@ class URLTest extends TestCase
 			'scheme' => 'http',
 			'user' => 'user',
 			'pass' => 'pass',
-			'host' => 'domain.tld',
+			'hostname' => 'domain.tld',
 			'port' => 8080,
 			'path' => ['foo', 'bar'],
 			'query' => ['a' => '1', 'b' => '2'],
@@ -76,8 +84,23 @@ class URLTest extends TestCase
 		$this->assertEquals('/a/b/c', $this->url->getPath());
 		$this->url->setPath('/a/b/c/');
 		$this->assertEquals('/a/b/c', $this->url->getPath());
-		$this->url->setPath(['hello', 'bye']);
+		$this->url->setPathSegments(['hello', 'bye']);
 		$this->assertEquals('/hello/bye', $this->url->getPath());
+	}
+
+	public function testPathSegments()
+	{
+		$this->assertEquals(['foo', 'bar'], $this->url->getPathSegments());
+		$this->url->setPath('a/b/c');
+		$this->assertEquals(['a', 'b', 'c'], $this->url->getPathSegments());
+		$this->url->setPath('/a/b/c');
+		$this->assertEquals(['a', 'b', 'c'], $this->url->getPathSegments());
+		$this->url->setPath('a/b/c/');
+		$this->assertEquals(['a', 'b', 'c'], $this->url->getPathSegments());
+		$this->url->setPath('/a/b/c/');
+		$this->assertEquals(['a', 'b', 'c'], $this->url->getPathSegments());
+		$this->url->setPathSegments(['hello', 'bye']);
+		$this->assertEquals(['hello', 'bye'], $this->url->getPathSegments());
 	}
 
 	public function testPort()
@@ -85,7 +108,7 @@ class URLTest extends TestCase
 		$this->assertEquals(8080, $this->url->getPort());
 		$this->url->setPort(80);
 		$this->assertEquals(80, $this->url->getPort());
-		$this->expectException(URLException::class);
+		$this->expectException(\InvalidArgumentException::class);
 		$this->url->setPort(100000);
 	}
 
@@ -96,7 +119,7 @@ class URLTest extends TestCase
 		$this->url->setQuery('?color=red&border=1');
 		$this->assertEquals('color=red&border=1', $this->url->getQuery());
 		$this->assertEquals(['color' => 'red', 'border' => '1'], $this->url->getQueryData());
-		$this->url->setQuery(['color' => 'red', 'border' => 1]);
+		$this->url->setQueryData(['color' => 'red', 'border' => 1]);
 		$this->assertEquals('color=red&border=1', $this->url->getQuery());
 		$this->assertEquals(['color' => 'red', 'border' => 1], $this->url->getQueryData());
 		$this->url->addQuery('border', 2);
@@ -107,7 +130,7 @@ class URLTest extends TestCase
 			['color' => 'blue', 'border' => 2, 'a' => 0],
 			$this->url->getQueryData()
 		);
-		$this->url->removeQuery('a');
+		$this->url->removeQueryData('a');
 		$this->assertEquals('color=blue&border=2', $this->url->getQuery());
 		$this->assertEquals(['color' => 'blue', 'border' => 2], $this->url->getQueryData());
 	}
@@ -119,13 +142,13 @@ class URLTest extends TestCase
 		$this->url->setQuery('?color=red&border=1');
 		$this->assertEquals('border=1', $this->url->getQuery(['border']));
 		$this->assertEquals(['border' => '1'], $this->url->getQueryData(['border']));
-		$this->url->setQuery(['color' => 'red', 'border' => 1]);
+		$this->url->setQueryData(['color' => 'red', 'border' => 1]);
 		$this->assertEquals('border=1', $this->url->getQuery(['border']));
 		$this->assertEquals(['border' => 1], $this->url->getQueryData(['border']));
 		$this->url->setQuery('?color=red&border=1', ['border']);
 		$this->assertEquals('border=1', $this->url->getQuery());
 		$this->assertEquals(['border' => '1'], $this->url->getQueryData());
-		$this->url->setQuery(['color' => 'red', 'border' => 1], ['border']);
+		$this->url->setQueryData(['color' => 'red', 'border' => 1], ['border']);
 		$this->assertEquals('border=1', $this->url->getQuery());
 		$this->assertEquals(['border' => 1], $this->url->getQueryData());
 	}
@@ -135,21 +158,6 @@ class URLTest extends TestCase
 		$this->assertEquals('http', $this->url->getScheme());
 		$this->url->setScheme('https');
 		$this->assertEquals('https', $this->url->getScheme());
-	}
-
-	public function testSegments()
-	{
-		$this->assertEquals(['foo', 'bar'], $this->url->getSegments());
-		$this->url->setPath('a/b/c');
-		$this->assertEquals(['a', 'b', 'c'], $this->url->getSegments());
-		$this->url->setPath('/a/b/c');
-		$this->assertEquals(['a', 'b', 'c'], $this->url->getSegments());
-		$this->url->setPath('a/b/c/');
-		$this->assertEquals(['a', 'b', 'c'], $this->url->getSegments());
-		$this->url->setPath('/a/b/c/');
-		$this->assertEquals(['a', 'b', 'c'], $this->url->getSegments());
-		$this->url->setPath(['hello', 'bye']);
-		$this->assertEquals(['hello', 'bye'], $this->url->getSegments());
 	}
 
 	public function testURL()

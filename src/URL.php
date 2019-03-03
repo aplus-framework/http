@@ -1,11 +1,10 @@
 <?php namespace Framework\HTTP;
 
-use Framework\HTTP\Exceptions\URLException;
-
 /**
  * Class URL.
  *
  * @see     https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Identifying_resources_on_the_Web
+ * @see     https://developer.mozilla.org/en-US/docs/Web/API/URL
  */
 class URL
 {
@@ -16,7 +15,7 @@ class URL
 	/**
 	 * @var string|null
 	 */
-	protected $host;
+	protected $hostname;
 	/**
 	 * @var string|null
 	 */
@@ -24,7 +23,7 @@ class URL
 	/**
 	 * @var array The /paths/of/url
 	 */
-	protected $path = [];
+	protected $pathSegments = [];
 	/**
 	 * @var int|null
 	 */
@@ -32,7 +31,7 @@ class URL
 	/**
 	 * @var array The ?queries
 	 */
-	protected $query = [];
+	protected $queryData = [];
 	/**
 	 * @var string|null
 	 */
@@ -45,13 +44,11 @@ class URL
 	/**
 	 * URL constructor.
 	 *
-	 * @param string|null $url
+	 * @param string $url
 	 */
-	public function __construct(string $url = null)
+	public function __construct(string $url)
 	{
-		if ($url !== null) {
-			$this->setURL($url);
-		}
+		$this->setURL($url);
 	}
 
 	/**
@@ -72,18 +69,18 @@ class URL
 	{
 		if (\is_array($query)) {
 			foreach ($query as $name => $value) {
-				$this->query[$name] = $value;
+				$this->queryData[$name] = $value;
 			}
 			return $this;
 		}
-		$this->query[$query] = $value;
+		$this->queryData[$query] = $value;
 		return $this;
 	}
 
 	protected function filterQuery(array $allowed) : array
 	{
-		return $this->query ?
-			\array_intersect_key($this->query, \array_flip($allowed))
+		return $this->queryData ?
+			\array_intersect_key($this->queryData, \array_flip($allowed))
 			: [];
 	}
 
@@ -108,12 +105,17 @@ class URL
 	 */
 	public function getHost() : ?string
 	{
-		return $this->host;
+		return $this->hostname === null ? null : $this->hostname . $this->getPortPart();
+	}
+
+	public function getHostname() : ?string
+	{
+		return $this->hostname;
 	}
 
 	public function getOrigin() : string
 	{
-		return $this->getScheme() . '://' . $this->getHost() . $this->getPortPart();
+		return $this->getScheme() . '://' . $this->getHost();
 	}
 
 	public function getParsedURL() : array
@@ -122,9 +124,9 @@ class URL
 			'scheme' => $this->getScheme(),
 			'user' => $this->getUser(),
 			'pass' => $this->getPass(),
-			'host' => $this->getHost(),
+			'hostname' => $this->getHostname(),
 			'port' => $this->getPort(),
-			'path' => $this->getSegments(),
+			'path' => $this->getPathSegments(),
 			'query' => $this->getQueryData(),
 			'fragment' => $this->getFragment(),
 		];
@@ -140,7 +142,12 @@ class URL
 
 	public function getPath() : string
 	{
-		return '/' . \implode('/', $this->path);
+		return '/' . \implode('/', $this->pathSegments);
+	}
+
+	public function getPathSegments() : array
+	{
+		return $this->pathSegments;
 	}
 
 	/**
@@ -166,20 +173,21 @@ class URL
 	/**
 	 * Get the "Query" part of the URL.
 	 *
-	 * @param array|null $queries Allowed queries
+	 * @param array|null $allowed_keys Allowed query keys
 	 *
-	 * @return string
+	 * @return string|null
 	 */
-	public function getQuery(array $queries = []) : string
+	public function getQuery(array $allowed_keys = []) : ?string
 	{
-		return \urldecode(\http_build_query(
-			$queries ? $this->filterQuery($queries) : $this->query
+		$query = \urldecode(\http_build_query(
+			$allowed_keys ? $this->filterQuery($allowed_keys) : $this->queryData
 		));
+		return $query === '' ? null : $query;
 	}
 
-	public function getQueryData(array $queries = []) : array
+	public function getQueryData(array $allowed_keys = []) : array
 	{
-		return $queries ? $this->filterQuery($queries) : $this->query;
+		return $allowed_keys ? $this->filterQuery($allowed_keys) : $this->queryData;
 	}
 
 	/**
@@ -188,11 +196,6 @@ class URL
 	public function getScheme() : ?string
 	{
 		return $this->scheme;
-	}
-
-	public function getSegments() : array
-	{
-		return $this->path;
 	}
 
 	public function getURL() : string
@@ -206,7 +209,6 @@ class URL
 			$url .= '@';
 		}
 		$url .= $this->getHost();
-		$url .= $this->getPortPart();
 		$url .= $this->getPath();
 		if ($part = $this->getQuery()) {
 			$url .= '?' . $part;
@@ -226,13 +228,13 @@ class URL
 	}
 
 	/**
-	 * @param string $query
+	 * @param string $key
 	 *
 	 * @return $this
 	 */
-	public function removeQuery(string $query)
+	public function removeQueryData(string $key)
 	{
-		unset($this->query[$query]);
+		unset($this->queryData[$key]);
 		return $this;
 	}
 
@@ -243,25 +245,25 @@ class URL
 	 */
 	public function setFragment(string $fragment)
 	{
-		$this->fragment = $fragment;
+		$this->fragment = \ltrim($fragment, '#');
 		return $this;
 	}
 
 	/**
-	 * @param string $host
+	 * @param string $hostname
 	 *
 	 * @return $this
 	 */
-	public function setHost(string $host)
+	public function setHostname(string $hostname)
 	{
-		if ( ! $filtered_host = \filter_var(
-			$host,
+		if ( ! $filtered = \filter_var(
+			$hostname,
 			\FILTER_VALIDATE_DOMAIN,
 			\FILTER_FLAG_HOSTNAME
 		)) {
-			throw URLException::forInvalidHost($host);
+			throw new \InvalidArgumentException("Invalid URL Hostname: {$hostname}");
 		}
-		$this->host = $filtered_host;
+		$this->hostname = $filtered;
 		return $this;
 	}
 
@@ -277,27 +279,18 @@ class URL
 	}
 
 	/**
-	 * @param $segments
+	 * @param string $segments
 	 *
 	 * @return $this
 	 */
-	public function setPath($segments)
+	public function setPath(string $segments)
 	{
-		if (\is_array($segments)) {
-			$this->path = $segments;
-			return $this;
-		}
-		$segments = \trim($segments, '/');
-		$this->path = \explode('/', $segments);
-		/*if (\end($this->path) === '')
-		{
-			\array_pop($this->path);
-		}
+		return $this->setPathSegments(\explode('/', \trim($segments, '/')));
+	}
 
-		if (isset($this->path[0]) && $this->path[0] === '')
-		{
-			$this->path[0] = '/';
-		}*/
+	public function setPathSegments(array $segments)
+	{
+		$this->pathSegments = $segments;
 		return $this;
 	}
 
@@ -309,27 +302,30 @@ class URL
 	public function setPort(int $port)
 	{
 		if ($port < 1 || $port > 65535) {
-			throw URLException::forInvalidPort($port);
+			throw new \InvalidArgumentException("Invalid URL Port: {$port}");
 		}
 		$this->port = $port;
 		return $this;
 	}
 
 	/**
-	 * @param array|string $query
-	 * @param array|null   $only
+	 * @param string $data
+	 * @param array  $only
 	 *
 	 * @return $this
 	 */
-	public function setQuery($query, array $only = null)
+	public function setQuery(string $data, array $only = [])
 	{
-		if ( ! \is_array($query)) {
-			\parse_str(\trim($query, '?'), $query);
-		}
+		\parse_str(\ltrim($data, '?'), $data);
+		return $this->setQueryData($data, $only);
+	}
+
+	public function setQueryData(array $data, array $only = [])
+	{
 		if ($only) {
-			$query = \array_intersect_key($query, \array_flip($only));
+			$data = \array_intersect_key($data, \array_flip($only));
 		}
-		$this->query = $query;
+		$this->queryData = $data;
 		return $this;
 	}
 
@@ -349,10 +345,10 @@ class URL
 	 *
 	 * @return $this
 	 */
-	public function setURL(string $url)
+	protected function setURL(string $url)
 	{
 		if ( ! $filtered_url = \filter_var($url, \FILTER_VALIDATE_URL)) {
-			throw URLException::forInvalidURL($url);
+			throw new \InvalidArgumentException("Invalid URL: {$url}");
 		}
 		$url = \parse_url($filtered_url);
 		$this->setScheme($url['scheme']);
@@ -362,7 +358,7 @@ class URL
 		if (isset($url['pass'])) {
 			$this->setPass($url['pass']);
 		}
-		$this->setHost($url['host']);
+		$this->setHostname($url['host']);
 		if (isset($url['port'])) {
 			$this->setPort($url['port']);
 		}
@@ -370,7 +366,6 @@ class URL
 			$this->setPath($url['path']);
 		}
 		if (isset($url['query'])) {
-			\parse_str($url['query'], $url['query']);
 			$this->setQuery($url['query']);
 		}
 		if (isset($url['fragment'])) {
