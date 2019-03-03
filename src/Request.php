@@ -517,7 +517,7 @@ class Request extends Message //implements RequestInterface
 			if ($referer) {
 				try {
 					$this->referrer = new URL($referer);
-				} catch (URLException $e) {
+				} catch (\InvalidArgumentException $e) {
 					$this->referrer = false;
 				}
 			}
