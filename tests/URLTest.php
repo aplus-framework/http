@@ -16,6 +16,18 @@ class URLTest extends TestCase
 		$this->url = new URL('http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id');
 	}
 
+	public function testBaseURL()
+	{
+		$this->assertEquals('http://domain.tld:8080/', $this->url->getBaseURL());
+		$this->assertEquals('http://domain.tld:8080', $this->url->getBaseURL(''));
+		$this->assertEquals('http://domain.tld:8080/foo/bar', $this->url->getBaseURL('foo/bar'));
+		$this->url->setScheme('https');
+		$this->url->setPort(443);
+		$this->assertEquals('https://domain.tld/', $this->url->getBaseURL());
+		$this->assertEquals('https://domain.tld', $this->url->getBaseURL(''));
+		$this->assertEquals('https://domain.tld/foo/bar', $this->url->getBaseURL('foo/bar'));
+	}
+
 	public function testHost()
 	{
 		$this->assertEquals('domain.tld', $this->url->getHost());
@@ -29,6 +41,14 @@ class URLTest extends TestCase
 	{
 		$this->expectException(URLException::class);
 		(new URL('//unknow'));
+	}
+
+	public function testOrigin()
+	{
+		$this->assertEquals('http://domain.tld:8080', $this->url->getOrigin());
+		$this->url->setScheme('https');
+		$this->url->setPort(443);
+		$this->assertEquals('https://domain.tld', $this->url->getOrigin());
 	}
 
 	public function testPath()

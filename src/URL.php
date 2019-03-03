@@ -82,15 +82,10 @@ class URL
 
 	public function getBaseURL(string $path = '/') : string
 	{
-		$url = $this->getScheme() . '://' . $this->getHost();
-		if ( ! \in_array($part = $this->getPort(), [
-			null,
-			80,
-			443,
-		])) {
-			$url .= ':' . $part;
+		if ($path && $path !== '/') {
+			$path = '/' . \trim($path, '/');
 		}
-		return $url . $path;
+		return $this->getOrigin() . $path;
 	}
 
 	/**
@@ -107,6 +102,19 @@ class URL
 	public function getHost() : ?string
 	{
 		return $this->host;
+	}
+
+	public function getOrigin() : string
+	{
+		$url = $this->getScheme() . '://' . $this->getHost();
+		if ( ! \in_array($part = $this->getPort(), [
+			null,
+			80,
+			443,
+		], true)) {
+			$url .= ':' . $part;
+		}
+		return $url;
 	}
 
 	/**
@@ -197,7 +205,7 @@ class URL
 			null,
 			80,
 			443,
-		])) {
+		], true)) {
 			$url .= ':' . $part;
 		}
 		$url .= $this->getPath();
