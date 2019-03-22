@@ -10,9 +10,9 @@ abstract class Message
 	/**
 	 * HTTP Message Body.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
-	protected $body = '';
+	protected $body;
 	/**
 	 * HTTP Message Cookies.
 	 *
