@@ -1,7 +1,5 @@
 <?php namespace Framework\HTTP;
 
-use Framework\HTTP\Exceptions\RequestException;
-
 /**
  * Class Request.
  *
@@ -385,7 +383,7 @@ class Request extends Message //implements RequestInterface
 				$type = \INPUT_SERVER;
 				break;
 			default:
-				throw RequestException::forInvalidInputType($type);
+				throw new \InvalidArgumentException("Invalid input type: {$type}");
 		}
 		$type = (array) \filter_input_array($type);
 		\ksort($type);
@@ -771,7 +769,7 @@ class Request extends Message //implements RequestInterface
 	{
 		$filtered_host = $this->getScheme($host) . $host;
 		if ( ! $filtered_host = $this->filter($filtered_host, \FILTER_VALIDATE_URL)) {
-			throw RequestException::forInvalidHost($host);
+			throw new \InvalidArgumentException("Invalid host: {$host}");
 		}
 		$host = \parse_url($filtered_host);
 		$this->host = $host['host'];

@@ -1,8 +1,5 @@
 <?php namespace Framework\HTTP;
 
-use Config\Services;
-use Framework\HTTP\Exceptions\ResponseException;
-
 /**
  * Class Response.
  *
@@ -220,12 +217,12 @@ class Response extends Message //implements ResponseInterface
 	 *
 	 * @see  http://en.wikipedia.org/wiki/Post/Redirect/Get
 	 *
-	 * @todo See:
-	 *       https://github.com/phalcon/cphalcon/blob/caeac66e7db02fd54c44a27cf22a6381654af2ee/phalcon/http/response.zep#L471
-	 *
 	 * @throws \InvalidArgumentException for $with if the type is not array or false
 	 *
 	 * @return $this
+	 *
+	 * @todo See:
+	 *       https://github.com/phalcon/cphalcon/blob/caeac66e7db02fd54c44a27cf22a6381654af2ee/phalcon/http/response.zep#L471
 	 */
 	public function redirect(string $location, array $with = [], int $code = null)
 	{
@@ -324,14 +321,14 @@ class Response extends Message //implements ResponseInterface
 	}
 
 	/**
-	 * @throws \Framework\HTTP\Exceptions\ResponseException
+	 * @throws \LogicException if Response already is sent
 	 *
 	 * @return $this
 	 */
 	public function send()
 	{
 		if ($this->isSent) {
-			throw ResponseException::forResponseSent();
+			throw new \LogicException('Response already is sent');
 		}
 		$this->sendHeaders();
 		$this->sendCookies();
@@ -363,7 +360,7 @@ class Response extends Message //implements ResponseInterface
 	{
 		if (\headers_sent()) {
 			// \var_dump(\headers_list());exit;
-			throw ResponseException::forHeadersSent();
+			throw new \LogicException('Headers already is sent');
 		}
 		// Per spec, MUST be sent with each request, if possible.
 		// http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html
@@ -565,7 +562,7 @@ class Response extends Message //implements ResponseInterface
 	 *                       Set the maximum depth. Must be greater than zero.
 	 *                       </p>
 	 *
-	 * @throws \Framework\HTTP\Exceptions\ResponseException
+	 * @throws \JsonException if json_encode() fails
 	 *
 	 * @return $this
 	 */
@@ -574,10 +571,7 @@ class Response extends Message //implements ResponseInterface
 		if ($options === null) {
 			$options = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
 		}
-		$data = \json_encode($data, $options, $depth);
-		if (\json_last_error() !== \JSON_ERROR_NONE) {
-			throw ResponseException::forJSONError(\json_last_error_msg());
-		}
+		$data = \json_encode($data, $options | \JSON_THROW_ON_ERROR, $depth);
 		$this->setContentType('application/json');
 		$this->setBody($data);
 		return $this;
@@ -619,7 +613,8 @@ class Response extends Message //implements ResponseInterface
 	 * @param int         $code
 	 * @param string|null $reason
 	 *
-	 * @throws \Framework\HTTP\Exceptions\ResponseException
+	 * @throws \InvalidArgumentException if status code is invalid
+	 * @throws \LogicException           is status code is unknown and a reason is not set
 	 *
 	 * @return $this
 	 */
@@ -627,11 +622,11 @@ class Response extends Message //implements ResponseInterface
 	{
 		// Valid range?
 		if ($code < 100 || $code > 599) {
-			throw ResponseException::forInvalidStatusCode($code);
+			throw new \InvalidArgumentException("Invalid status code: {$code}");
 		}
 		//throw new \Exception();
 		if (empty($reason) && empty($this->responseCodes[$code])) {
-			throw ResponseException::forUnknowStatus($code);
+			throw new \LogicException("Unknown status code must have a reason: {$code}");
 		}
 		$this->status['code'] = $code;
 		$this->status['reason'] = $reason ?? $this->responseCodes[$code];

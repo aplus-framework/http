@@ -1,6 +1,5 @@
 <?php namespace Tests\HTTP;
 
-use Framework\HTTP\Exceptions\ResponseException;
 use Framework\HTTP\Response;
 use PHPUnit\Framework\TestCase;
 
@@ -199,15 +198,17 @@ class ResponseTest extends TestCase
 		$this->assertEquals('bar', $this->response->getHeader('X-Custom-2'));
 	}
 
-	public function testHeadersAlreadySent()
+	public function testHeadersAlreadyIsSent()
 	{
-		$this->expectException(ResponseException::class);
+		$this->expectException(\LogicException::class);
+		$this->expectExceptionMessage('Headers already is sent');
 		$this->response->send();
 	}
 
 	public function testInvalidStatusCode()
 	{
-		$this->expectException(ResponseException::class);
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('Invalid status code: 900');
 		$this->response->setStatus(900);
 	}
 
@@ -219,7 +220,8 @@ class ResponseTest extends TestCase
 			'application/json; charset=UTF-8',
 			$this->response->getHeader('Content-Type')
 		);
-		$this->expectException(ResponseException::class);
+		$this->expectException(\JsonException::class);
+		$this->expectExceptionMessage('Malformed UTF-8 characters, possibly incorrectly encoded');
 		// See: https://php.net/manual/pt_BR/function.json-last-error.php#example-4408
 		$this->response->setJSON("\xB1\x31");
 	}
@@ -267,7 +269,8 @@ class ResponseTest extends TestCase
 		], xdebug_get_headers());
 		$this->assertEquals('Hello!', $contents);
 		$this->assertTrue($this->response->isSent());
-		$this->expectException(ResponseException::class);
+		$this->expectException(\LogicException::class);
+		$this->expectExceptionMessage('Response already is sent');
 		$this->response->send();
 	}
 
@@ -284,7 +287,8 @@ class ResponseTest extends TestCase
 
 	public function testUnknowStatus()
 	{
-		$this->expectException(ResponseException::class);
+		$this->expectException(\LogicException::class);
+		$this->expectExceptionMessage('Unknown status code must have a reason: 483');
 		$this->response->setStatus(483);
 	}
 }

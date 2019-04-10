@@ -1,6 +1,5 @@
 <?php namespace Tests\HTTP;
 
-use Framework\HTTP\Exceptions\RequestException;
 use Framework\HTTP\Request;
 use PHPUnit\Framework\TestCase;
 
@@ -314,7 +313,8 @@ class RequestTest extends TestCase
 	public function testHost()
 	{
 		$this->assertEquals('domain.tld', $this->request->getHost());
-		$this->expectException(RequestException::class);
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('Invalid host: ');
 		(new Request(''));
 	}
 
