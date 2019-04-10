@@ -97,7 +97,7 @@ class CookieTest extends TestCase
 	public function testSend()
 	{
 		$this->assertTrue($this->cookie->send());
-		$this->assertEquals(['Set-Cookie: foo=bar'], \xdebug_get_headers());
+		$this->assertEquals(['Set-Cookie: foo=bar'], xdebug_get_headers());
 		(new Cookie('foo', 'abc123'))->setSecure()->setHttpOnly()->send();
 		(new Cookie('foo', 'abc123'))->setExpires('+5 seconds')->send();
 		$this->assertEquals([
@@ -105,7 +105,7 @@ class CookieTest extends TestCase
 			'Set-Cookie: foo=abc123; secure; HttpOnly',
 			'Set-Cookie: foo=abc123; expires='
 			. \date('D, d-M-Y H:i:s', \time() + 5) . ' GMT; Max-Age=5',
-		], \xdebug_get_headers());
+		], xdebug_get_headers());
 		$this->cookie->setDomain('domain.tld')
 			->setPath('/blog')
 			->setSecure()
@@ -116,7 +116,7 @@ class CookieTest extends TestCase
 			->send();
 		$this->assertContains(
 			'Set-Cookie: ' . $this->cookie->getAsString(),
-			\xdebug_get_headers()
+			xdebug_get_headers()
 		);
 	}
 

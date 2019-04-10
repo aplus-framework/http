@@ -207,6 +207,6 @@ class UploadedFile
 		}
 		$this->errorMessage = empty($line)
 			? ''
-			: Services::language()->render('http', $line, [\esc($this->getName())]);
+			: Services::language()->render('http', $line, [esc($this->getName())]);
 	}
 }

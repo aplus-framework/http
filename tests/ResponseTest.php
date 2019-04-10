@@ -264,7 +264,7 @@ class ResponseTest extends TestCase
 			'Content-Type: text/html; charset=UTF-8',
 			'Set-Cookie: session_id=abc123; expires=' . \gmdate('D, d-M-Y H:i:s', \time() + 3600)
 			. ' GMT; Max-Age=3600; path=/',
-		], \xdebug_get_headers());
+		], xdebug_get_headers());
 		$this->assertEquals('Hello!', $contents);
 		$this->assertTrue($this->response->isSent());
 		$this->expectException(ResponseException::class);

@@ -296,7 +296,7 @@ class Response extends Message //implements ResponseInterface
 			$with['errors'] = Services::validation()->getErrors();
 		}
 		if ($with) {
-			\session()->setFlash('$__REDIRECT', $with);
+			session()->setFlash('$__REDIRECT', $with);
 		}
 		return $this;
 	}
@@ -479,7 +479,7 @@ class Response extends Message //implements ResponseInterface
 	{
 		$this->setCookie( // TODO: is secure cookie? Makes based on request?
 			'X-CSRF-Token',
-			\csrf_token($regenerate),
+			csrf_token($regenerate),
 			7200,
 			'',
 			'/',

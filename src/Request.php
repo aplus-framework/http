@@ -1,7 +1,6 @@
 <?php namespace Framework\HTTP;
 
 use Framework\HTTP\Exceptions\RequestException;
-use Framework\HTTP\Exceptions\URLException;
 
 /**
  * Class Request.
@@ -452,7 +451,7 @@ class Request extends Message //implements RequestInterface
 	{
 		static $old;
 		if ($old === null) {
-			$old = (array) \session()->getFlash('$__REDIRECT');
+			$old = (array) session()->getFlash('$__REDIRECT');
 		}
 		if ($key !== null && $old) {
 			//return \array_simple_value($key, $old);
