@@ -1,6 +1,6 @@
-<?php namespace Tests\HTTP\Mocks;
+<?php namespace Tests\HTTP;
 
-class Request extends \Framework\HTTP\Request
+class RequestMock extends \Framework\HTTP\Request
 {
 	protected $body = 'color=red&height=500px&width=800';
 	protected $input = [

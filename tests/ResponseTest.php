@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 class ResponseTest extends TestCase
 {
 	/**
-	 * @var \Framework\HTTP\Response
+	 * @var Response
 	 */
 	protected $response;
 
@@ -41,7 +41,7 @@ class ResponseTest extends TestCase
 
 	public function setUp()
 	{
-		$this->response = new Response(new Mocks\Request());
+		$this->response = new Response(new RequestMock());
 	}
 
 	public function testBody()

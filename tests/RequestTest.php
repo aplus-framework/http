@@ -6,11 +6,11 @@ use PHPUnit\Framework\TestCase;
 class RequestTest extends TestCase
 {
 	/**
-	 * @var \Framework\HTTP\Request
+	 * @var RequestProxyMock
 	 */
 	protected $proxy_request;
 	/**
-	 * @var Mocks\Request
+	 * @var RequestMock
 	 */
 	protected $request;
 
@@ -33,8 +33,8 @@ class RequestTest extends TestCase
 
 	public function setUp()
 	{
-		$this->request = new Mocks\Request();
-		$this->proxy_request = new Mocks\ProxyRequest();
+		$this->request = new RequestMock();
+		$this->proxy_request = new RequestProxyMock();
 	}
 
 	public function testAccept()

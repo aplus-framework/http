@@ -1,6 +1,6 @@
-<?php namespace Tests\HTTP\Mocks;
+<?php namespace Tests\HTTP;
 
-class ProxyRequest extends \Framework\HTTP\Request
+class RequestProxyMock extends RequestMock
 {
 	protected $body = '{"test":123}';
 	protected $input = [
