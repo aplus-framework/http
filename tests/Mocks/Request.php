@@ -7,6 +7,10 @@ class Request extends \Framework\HTTP\Request
 		'POST' => [
 			'username' => 'phpdev',
 			'password' => 'Aw3S0me',
+			'user' => [
+				'name' => 'foo',
+				'city' => 'bar',
+			],
 		],
 		'GET' => [
 			'order_by' => 'title',

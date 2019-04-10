@@ -52,15 +52,15 @@ class Request extends Message //implements RequestInterface
 	 */
 	protected $port;
 	/**
-	 * @var false|\Framework\HTTP\URL
+	 * @var false|URL
 	 */
 	protected $referrer;
 	/**
-	 * @var \Framework\HTTP\URL
+	 * @var URL
 	 */
 	protected $url;
 	/**
-	 * @var \Framework\HTTP\UserAgent
+	 * @var UserAgent
 	 */
 	protected $userAgent;
 
@@ -259,7 +259,7 @@ class Request extends Message //implements RequestInterface
 	/**
 	 * @param string|null $name Input form name
 	 *
-	 * @return array|\Framework\HTTP\UploadedFile|\Framework\HTTP\UploadedFile[]|null
+	 * @return array|UploadedFile|UploadedFile[]|null
 	 */
 	public function getFiles(string $name = null)
 	{
@@ -275,7 +275,7 @@ class Request extends Message //implements RequestInterface
 	/**
 	 * @param string|null $custom_directory
 	 *
-	 * @return \Framework\HTTP\GeoIP
+	 * @return GeoIP
 	 */
 	public function getGeoIP(string $custom_directory = null) : GeoIP
 	{
@@ -314,10 +314,10 @@ class Request extends Message //implements RequestInterface
 		if ($this->input['HEADERS'] === null) {
 			$headers = [];
 			foreach ($this->getServer() as $key => $value) {
-				if (\substr($key, 0, 5) !== 'HTTP_') {
+				if (\strpos($key, 'HTTP_') !== 0) {
 					continue;
 				}
-				$key = \strtr(\substr($key, 5), '_', '-');
+				$key = \strtr(\substr($key, 5), ['_' => '-']);
 				$headers[$this->getHeaderName($key)] = (string) $value;
 			}
 			$this->input['HEADERS'] = $headers;
@@ -506,7 +506,7 @@ class Request extends Message //implements RequestInterface
 	/**
 	 * @param bool $parse
 	 *
-	 * @return \Framework\HTTP\URL|string|null
+	 * @return string|URL|null
 	 */
 	public function getReferrer(bool $parse = false)
 	{
@@ -548,8 +548,7 @@ class Request extends Message //implements RequestInterface
 			$data = [];
 			foreach ($name as $n) {
 				$data[$n] = $this->filter(
-				//\array_simple_value($n, $this->input[$type]),
-					$this->input[$type][$n] ?? null,
+					\ArraySimple::value($n, $this->input[$type]),
 					$filter,
 					$filter_options
 				);
@@ -557,8 +556,7 @@ class Request extends Message //implements RequestInterface
 			return $data;
 		}
 		return $this->filter(
-		//\array_simple_value($name, $this->input[$type]),
-			$this->input[$type][$name] ?? null,
+			\ArraySimple::value($name, $this->input[$type]),
 			$filter,
 			$filter_options
 		);
@@ -590,7 +588,7 @@ class Request extends Message //implements RequestInterface
 	 *
 	 * @param bool $as_object set TRUE to returns the URL object instance
 	 *
-	 * @return \Framework\HTTP\URL|string the URL string or the URL object
+	 * @return string|URL the URL string or the URL object
 	 */
 	public function getURL(bool $as_object = false)
 	{
@@ -613,8 +611,8 @@ class Request extends Message //implements RequestInterface
 	 * @param array $config    Extra configurations passed to the UserAgent object: platforms,
 	 *                         browsers, mobiles, robots
 	 *
-	 * @return \Framework\HTTP\UserAgent|string|null the User Agent string, UserAgent object or
-	 *                                               null if no user-agent header was received
+	 * @return string|UserAgent|null the User Agent string, UserAgent object or
+	 *                               null if no user-agent header was received
 	 */
 	public function getUserAgent(bool $as_object = false, array $config = [])
 	{
@@ -704,7 +702,7 @@ class Request extends Message //implements RequestInterface
 		if (empty($string)) {
 			return [];
 		}
-		$quality = \array_reduce(\explode(',', $string, 20), function ($q, $part) {
+		$quality = \array_reduce(\explode(',', $string, 20), static function ($q, $part) {
 			[$value, $priority] = \array_merge(\explode(';q=', $part), [1]);
 			$q[\trim($value)] = (float) $priority;
 			return $q;
@@ -719,7 +717,7 @@ class Request extends Message //implements RequestInterface
 			return [];
 		}
 		// See: https://stackoverflow.com/a/33261775/6027968
-		$walker = function ($array, $fileInfokey, callable $walker) {
+		$walker = static function ($array, $fileInfokey, callable $walker) {
 			$return = [];
 			foreach ($array as $k => $v) {
 				if (\is_array($v)) {
@@ -750,7 +748,7 @@ class Request extends Message //implements RequestInterface
 			}
 		}
 		// See: https://www.sitepoint.com/community/t/-files-array-structure/2728/5
-		$make_objects = function ($array, callable $make_objects) {
+		$make_objects = static function ($array, callable $make_objects) {
 			$return = [];
 			foreach ($array as $k => $v) {
 				if (\is_array($v)) {

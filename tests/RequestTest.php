@@ -385,11 +385,20 @@ class RequestTest extends TestCase
 		$this->assertEquals([
 			'username' => 'phpdev',
 			'password' => 'Aw3S0me',
+			'user' => [
+				'name' => 'foo',
+				'city' => 'bar',
+			],
 		], $this->request->getPOST());
 		$this->assertEquals('Aw3S0me', $this->request->getPOST('password'));
 		$this->assertEquals('phpdev', $this->request->getPOST('username'));
 		$this->assertNull($this->request->getPOST('unknow'));
 		$this->assertEquals(['password' => 'Aw3S0me'], $this->request->getPOST(['password']));
+		$this->assertEquals('foo', $this->request->getPOST('user[name]'));
+		$this->assertEquals(
+			['user[city]' => 'bar', 'username' => 'phpdev'],
+			$this->request->getPOST(['user[city]', 'username'])
+		);
 	}
 
 	public function testProxiedIP()

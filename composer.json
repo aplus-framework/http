@@ -16,7 +16,8 @@
 	"require": {
 		"php": ">=7.3",
 		"ext-geoip": "*",
-		"ext-json": "*"
+		"ext-json": "*",
+		"natanfelles/array-simple": "^0.1"
 	},
 	"require-dev": {
 		"ext-xdebug": "*",
