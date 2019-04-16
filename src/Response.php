@@ -298,7 +298,7 @@ class Response extends Message //implements ResponseInterface
 	/**
 	 * @return string
 	 */
-	public function getStatus() : string
+	public function getStatusLine() : string
 	{
 		return "{$this->statusCode} {$this->statusReason}";
 	}
@@ -312,7 +312,7 @@ class Response extends Message //implements ResponseInterface
 	 *
 	 * @return $this
 	 */
-	public function setStatus(int $code, string $reason = null)
+	public function setStatusLine(int $code, string $reason = null)
 	{
 		$this->setStatusCode($code);
 		if (empty($reason) && empty($this->responseCodes[$code])) {
@@ -513,7 +513,7 @@ class Response extends Message //implements ResponseInterface
 		{
 			$this->setETag(\md5($this->getBody()));
 		}*/
-		\header($this->getProtocol() . ' ' . $this->getStatus());
+		\header($this->getProtocol() . ' ' . $this->getStatusLine());
 		foreach ($this->headers as $name => $value) {
 			\header($name . ($value ? ': ' . $value : ''));
 		}
@@ -607,9 +607,21 @@ class Response extends Message //implements ResponseInterface
 		return $this;
 	}
 
+	public function setContentLanguage(string $language)
+	{
+		$this->setHeader('Content-Language', $language);
+		return $this;
+	}
+
+	public function setContentEncoding(string $encoding)
+	{
+		$this->setHeader('Content-Encoding', $encoding);
+		return $this;
+	}
+
 	public function setCSRFToken(bool $regenerate = false)
 	{
-		$this->setCookie( // TODO: is secure cookie? Makes based on request?
+		$this->setCookie(
 			'X-CSRF-Token',
 			csrf_token($regenerate),
 			7200,
@@ -677,7 +689,7 @@ class Response extends Message //implements ResponseInterface
 	 */
 	public function setNotModified()
 	{
-		$this->setStatus(304, 'Not Modified');
+		$this->setStatusLine(304, 'Not Modified');
 		return $this;
 	}
 }

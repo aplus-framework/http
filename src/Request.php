@@ -18,6 +18,10 @@ class Request extends Message //implements RequestInterface
 	 */
 	protected $auth;
 	/**
+	 * @var false|string|null
+	 */
+	protected $authType;
+	/**
 	 * @var array|false|null
 	 */
 	protected $geoip;
@@ -127,91 +131,43 @@ class Request extends Message //implements RequestInterface
 		return $this->negotiate('ACCEPT', $negotiable);
 	}
 
+	public function getAuthType() : ?string
+	{
+		if ($this->authType === null && $auth = $this->getHeader('Authorization')) {
+			$this->parseAuth($auth);
+		}
+		return $this->authType;
+	}
+
 	public function getBasicAuth() : ?array
 	{
-		if ($this->authType === null) {
-			$this->parseAuth();
-		}
-		if ($this->authType === 'basic') {
-			$this->auth;
-		}
-		return null;
+		return $this->getAuthType() === 'Basic'
+			? $this->auth
+			: null;
 	}
 
-	/**
-	 * Get Authorization Header data.
-	 *
-	 * @return array
-	 */
-	public function getAuth() : array
+	public function getDigestAuth() : ?array
 	{
-		if ($this->auth !== null) {
-			return $this->auth;
-		}
-		$auth = $this->getHeader('Authorization');
-		if ($auth) {
-			[$type, $attributes] = \array_pad(\explode(' ', $auth, 2), 2, null);
-			if ($type === 'Basic' && $attributes) {
-				$data = [
-					'type' => $type,
-					'username' => null,
-					'password' => null,
-				];
-				$attributes = \base64_decode($attributes);
-				if ($attributes) {
-					[
-						$data['username'],
-						$data['password'],
-					] = \array_pad(\explode(':', $attributes, 2), 2, null);
-				}
-			} elseif ($type === 'Digest' && $attributes) {
-				$data = [
-					'type' => $type,
-					'username' => null,
-					'realm' => null,
-					'nonce' => null,
-					'uri' => null,
-					'response' => null,
-					'opaque' => null,
-					'qop' => null,
-					'nc' => null,
-					'cnonce' => null,
-				];
-				\preg_match_all(
-					'#(username|realm|nonce|uri|response|opaque|qop|nc|cnonce)=(?:([\'"])([^\2]+?)\2|([^\s,]+))#',
-					$attributes,
-					$matches,
-					\PREG_SET_ORDER
-				);
-				foreach ($matches as $match) {
-					if (isset($match[1], $match[3])) {
-						$data[$match[1]] = $match[3] ?: $match[4] ?? '';
-					}
-				}
-			}
-		}
-		return $this->auth = $data ?? [];
+		return $this->getAuthType() === 'Digest'
+			? $this->auth
+			: null;
 	}
 
-	protected function parseAuth() : ?array
+	protected function parseAuth(string $authorization) : array
 	{
-		$this->authType = false;
-		$auth = $this->getHeader('Authorization');
-		if ($auth) {
-			[$type, $attributes] = \array_pad(\explode(' ', $auth, 2), 2, null);
-			if ($type === 'Basic') {
-				$this->authType = 'basic';
-				$this->auth = $this->parseBasicAuth($attributes);
-			}
-			if ($type === 'Digest') {
-				$this->authType = 'digest';
-				$this->auth = $this->parseDigestAuth($attributes);
-			}
-		}
 		$this->auth = [];
+		[$type, $attributes] = \array_pad(\explode(' ', $authorization, 2), 2, null);
+		if ($type === 'Basic') {
+			$this->authType = $type;
+			$this->auth = $this->parseBasicAuth($attributes);
+		} elseif ($type === 'Digest') {
+			$this->authType = $type;
+			$this->auth = $this->parseDigestAuth($attributes);
+		}
+		return $this->auth;
 	}
 
-	protected function parseBasicAuth(string $attributes)
+	protected function parseBasicAuth(string $attributes) : array
 	{
 		$data = [
 			'username' => null,
@@ -227,7 +183,7 @@ class Request extends Message //implements RequestInterface
 		return $data;
 	}
 
-	protected function parseDigestAuth(string $attributes)
+	protected function parseDigestAuth(string $attributes) : array
 	{
 		$data = [
 			'username' => null,
@@ -757,7 +713,7 @@ class Request extends Message //implements RequestInterface
 	protected function negotiate(string $type, array $negotiable = [])
 	{
 		if ($this->input[$type] === null) {
-			$this->input[$type] = \array_keys($this->parseQValues(
+			$this->input[$type] = \array_keys($this->parseQualityValues(
 				$this->getServer('HTTP_ACCEPT' . ($type !== 'ACCEPT' ? '_' . $type : ''))
 			));
 			$this->input[$type] = \array_map('strtolower', $this->input[$type]);
@@ -778,22 +734,24 @@ class Request extends Message //implements RequestInterface
 	 * @see https://developer.mozilla.org/en-US/docs/Glossary/Quality_values
 	 * @see https://stackoverflow.com/a/33748742/6027968
 	 *
-	 * @too Atualizar . tem uma versão mais no na antigo pacote
-	 *
 	 * @param string|null $string
 	 *
 	 * @return array
 	 */
-	protected function parseQValues(?string $string) : array
+	protected function parseQualityValues(?string $string) : array
 	{
 		if (empty($string)) {
 			return [];
 		}
-		$quality = \array_reduce(\explode(',', $string, 20), static function ($q, $part) {
-			[$value, $priority] = \array_merge(\explode(';q=', $part), [1]);
-			$q[\trim($value)] = (float) $priority;
-			return $q;
-		}, []);
+		$quality = \array_reduce(
+			\explode(',', $string, 20),
+			static function ($qualifier, $part) {
+				[$value, $priority] = \array_merge(\explode(';q=', $part), [1]);
+				$qualifier[\trim($value)] = (float) $priority;
+				return $qualifier;
+			},
+			[]
+		);
 		\arsort($quality);
 		return $quality;
 	}

@@ -211,7 +211,7 @@ class ResponseTest extends TestCase
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		$this->expectExceptionMessage('Invalid status code: 900');
-		$this->response->setStatus(900);
+		$this->response->setStatusCode(900);
 	}
 
 	public function testJSON()
@@ -244,7 +244,7 @@ class ResponseTest extends TestCase
 		$this->response->setNotModified();
 		$this->assertEquals(
 			'304 Not Modified',
-			$this->response->getStatus()
+			$this->response->getStatusLine()
 		);
 	}
 
@@ -278,21 +278,21 @@ class ResponseTest extends TestCase
 
 	public function testStatus()
 	{
-		$this->assertEquals('200 OK', $this->response->getStatus());
+		$this->assertEquals('200 OK', $this->response->getStatusLine());
 		$this->assertEquals(200, $this->response->getStatusCode());
 		$this->assertEquals('OK', $this->response->getStatusReason());
-		$this->response->setStatus(201);
-		$this->assertEquals('201 Created', $this->response->getStatus());
+		$this->response->setStatusLine(201);
+		$this->assertEquals('201 Created', $this->response->getStatusLine());
 		$this->response->setStatusReason('Other');
-		$this->assertEquals('201 Other', $this->response->getStatus());
-		$this->response->setStatus(483, 'Custom');
-		$this->assertEquals('483 Custom', $this->response->getStatus());
+		$this->assertEquals('201 Other', $this->response->getStatusLine());
+		$this->response->setStatusLine(483, 'Custom');
+		$this->assertEquals('483 Custom', $this->response->getStatusLine());
 	}
 
 	public function testUnknownStatus()
 	{
 		$this->expectException(\LogicException::class);
 		$this->expectExceptionMessage('Unknown status code must have a reason: 483');
-		$this->response->setStatus(483);
+		$this->response->setStatusLine(483);
 	}
 }
