@@ -71,8 +71,8 @@ class RequestTest extends TestCase
 			'username' => 'user',
 			'password' => 'pass',
 		];
-		self::assertEquals($expected, $this->request->getBasicAuth());
-		self::assertEquals($expected, $this->request->getBasicAuth());
+		$this->assertEquals($expected, $this->request->getBasicAuth());
+		$this->assertEquals($expected, $this->request->getBasicAuth());
 	}
 
 	public function testBody()
@@ -154,13 +154,13 @@ class RequestTest extends TestCase
 			'nc' => null,
 			'cnonce' => null,
 		];
-		self::assertEquals($expected, $this->request->getDigestAuth());
+		$this->assertEquals($expected, $this->request->getDigestAuth());
 	}
 
 	public function testEmptyAuth()
 	{
-		self::assertNull($this->request->getBasicAuth());
-		self::assertNull($this->request->getDigestAuth());
+		$this->assertNull($this->request->getBasicAuth());
+		$this->assertNull($this->request->getDigestAuth());
 	}
 
 	public function testEncoding()
