@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 class URLTest extends TestCase
 {
 	/**
-	 * @var \Framework\HTTP\URL;
+	 * @var URL;
 	 */
 	protected $url;
 
@@ -48,7 +48,7 @@ class URLTest extends TestCase
 	public function testInvalidURL()
 	{
 		$this->expectException(\InvalidArgumentException::class);
-		(new URL('//unknow'));
+		new URL('//unknown');
 	}
 
 	public function testOrigin()
@@ -123,7 +123,7 @@ class URLTest extends TestCase
 		$this->assertEquals('color=red&border=1', $this->url->getQuery());
 		$this->assertEquals(['color' => 'red', 'border' => 1], $this->url->getQueryData());
 		$this->url->addQuery('border', 2);
-		$this->url->addQuery(['color' => 'blue']);
+		$this->url->addQueries(['color' => 'blue']);
 		$this->url->addQuery('a', 0);
 		$this->assertEquals('color=blue&border=2&a=0', $this->url->getQuery());
 		$this->assertEquals(

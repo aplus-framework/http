@@ -21,13 +21,9 @@ class RequestTest extends TestCase
 
 	public function _testUserAgent()
 	{
-		$this->assertEquals(
-			'Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
-			$this->request->getUserAgent()
-		);
 		$this->assertInstanceOf(
 			\Framework\HTTP\UserAgent::class,
-			$this->request->getUserAgent(true)
+			$this->request->getUserAgent()
 		);
 	}
 
@@ -87,7 +83,12 @@ class RequestTest extends TestCase
 			'color' => 'red',
 			'height' => '500px',
 			'width' => '800',
-		], $this->request->getBody(true));
+		], $this->request->getParsedBody());
+		$this->assertEquals([
+			'color' => 'red',
+			'height' => '500px',
+			'width' => '800',
+		], $this->request->getParsedBody());
 	}
 
 	public function testCharset()
@@ -96,20 +97,20 @@ class RequestTest extends TestCase
 			'utf-8',
 			'iso-8859-1',
 			'*',
-		], $this->request->getCharset());
-		$this->assertEquals('utf-8', $this->request->getCharset([
+		], $this->request->getCharsets());
+		$this->assertEquals('utf-8', $this->request->negotiateCharset([
 			'utf-8',
 			'*',
 		]));
-		$this->assertEquals('utf-8', $this->request->getCharset([
+		$this->assertEquals('utf-8', $this->request->negotiateCharset([
 			'*',
 			'utf-8',
 		]));
-		$this->assertEquals('iso-8859-1', $this->request->getCharset([
+		$this->assertEquals('iso-8859-1', $this->request->negotiateCharset([
 			'foo',
 			'iso-8859-1',
 		]));
-		$this->assertEquals('foo', $this->request->getCharset([
+		$this->assertEquals('foo', $this->request->negotiateCharset([
 			'foo',
 			'bar',
 		]));
@@ -122,18 +123,18 @@ class RequestTest extends TestCase
 
 	public function testCookie()
 	{
+		$this->assertEquals('cart-123', $this->request->getCookie('cart'));
+		$this->assertEquals('abc', $this->request->getCookie('session_id'));
+		$this->assertNull($this->request->getCookie('unknown'));
+	}
+
+	public function testCookies()
+	{
 		$this->assertEquals([
 			'session_id' => 'abc',
 			'cart' => 'cart-123',
 			'status-bar' => 'open',
-		], $this->request->getCookie());
-		$this->assertEquals('cart-123', $this->request->getCookie('cart'));
-		$this->assertEquals('abc', $this->request->getCookie('session_id'));
-		$this->assertNull($this->request->getCookie('unknow'));
-		$this->assertEquals(
-			['status-bar' => 'open', 'session_id' => 'abc'],
-			$this->request->getCookie(['session_id', 'status-bar'])
-		);
+		], $this->request->getCookies());
 	}
 
 	public function testDigestAuth()
@@ -169,20 +170,20 @@ class RequestTest extends TestCase
 		$this->assertEquals([
 			'gzip',
 			'deflate',
-		], $this->request->getEncoding());
-		$this->assertEquals('gzip', $this->request->getEncoding([
+		], $this->request->getEncodings());
+		$this->assertEquals('gzip', $this->request->negotiateEncoding([
 			'gzip',
 			'deflate',
 		]));
-		$this->assertEquals('gzip', $this->request->getEncoding([
+		$this->assertEquals('gzip', $this->request->negotiateEncoding([
 			'deflate',
 			'gzip',
 		]));
-		$this->assertEquals('deflate', $this->request->getEncoding([
+		$this->assertEquals('deflate', $this->request->negotiateEncoding([
 			'foo',
 			'deflate',
 		]));
-		$this->assertEquals('foo', $this->request->getEncoding([
+		$this->assertEquals('foo', $this->request->negotiateEncoding([
 			'foo',
 			'bar',
 		]));
@@ -259,19 +260,19 @@ class RequestTest extends TestCase
 		$this->assertIsArray($this->request->getFiles());
 		$this->assertInstanceOf(
 			\Framework\HTTP\UploadedFile::class,
-			$this->request->getFiles('file')[1]['aa'][0]
+			$this->request->getFiles()['file'][1]['aa'][0]
 		);
 		$this->assertInstanceOf(
 			\Framework\HTTP\UploadedFile::class,
-			$this->request->getFiles('file')[1]['aa'][1]
+			$this->request->getFile('file[1][aa][0]')
 		);
 		$this->assertInstanceOf(
 			\Framework\HTTP\UploadedFile::class,
-			$this->request->getFiles('file')[2]
+			$this->request->getFiles()['file'][2]
 		);
 		$this->assertInstanceOf(
 			\Framework\HTTP\UploadedFile::class,
-			$this->request->getFiles('foo')
+			$this->request->getFile('foo')
 		);
 	}
 
@@ -289,6 +290,11 @@ class RequestTest extends TestCase
 
 	public function testHeader()
 	{
+		$this->assertEquals('abc', $this->request->getHeader('etag'));
+	}
+
+	public function testHeaders()
+	{
 		$this->assertEquals([
 			'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 			'Accept-Charset' => 'utf-8, iso-8859-1;q=0.5, *;q=0.1',
@@ -299,15 +305,7 @@ class RequestTest extends TestCase
 			'Referer' => 'http://domain.tld/contact.html',
 			'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
 			'X-Requested-With' => 'XMLHTTPREQUEST',
-		], $this->request->getHeader());
-		$this->assertEquals([
-			'ETag' => 'abc',
-			'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
-		], $this->request->getHeader([
-			'etag',
-			'user-agent',
-		]));
-		$this->assertEquals('abc', $this->request->getHeader('etag'));
+		], $this->request->getHeaders());
 	}
 
 	public function testHost()
@@ -315,7 +313,7 @@ class RequestTest extends TestCase
 		$this->assertEquals('domain.tld', $this->request->getHost());
 		$this->expectException(\InvalidArgumentException::class);
 		$this->expectExceptionMessage('Invalid host: ');
-		(new Request(''));
+		new Request('');
 	}
 
 	public function testIP()
@@ -326,8 +324,6 @@ class RequestTest extends TestCase
 	public function testIsAJAX()
 	{
 		$this->assertTrue($this->request->isAJAX());
-		$this->assertFalse($this->request->isAJAX(false));
-		$this->assertTrue($this->request->isAJAX(false, 'XMLHTTPREQUEST'));
 		$this->assertFalse($this->proxy_request->isAJAX());
 	}
 
@@ -350,20 +346,20 @@ class RequestTest extends TestCase
 			'es',
 			'en',
 			'en-us',
-		], $this->request->getLanguage());
-		$this->assertEquals('pt-br', $this->request->getLanguage([
+		], $this->request->getLanguages());
+		$this->assertEquals('pt-br', $this->request->negotiateLanguage([
 			'pt-br',
 			'en',
 		]));
-		$this->assertEquals('pt-br', $this->request->getLanguage([
+		$this->assertEquals('pt-br', $this->request->negotiateLanguage([
 			'en',
 			'pt-br',
 		]));
-		$this->assertEquals('pt-br', $this->request->getLanguage([
+		$this->assertEquals('pt-br', $this->request->negotiateLanguage([
 			'foo',
 			'pt-br',
 		]));
-		$this->assertEquals('foo', $this->request->getLanguage([
+		$this->assertEquals('foo', $this->request->negotiateLanguage([
 			'foo',
 			'bar',
 		]));
@@ -409,10 +405,9 @@ class RequestTest extends TestCase
 
 	public function testReferer()
 	{
-		$this->assertEquals('http://domain.tld/contact.html', $this->request->getReferrer());
-		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->request->getReferrer(true));
-		$this->assertNull($this->proxy_request->getReferrer());
-		$this->assertNull($this->proxy_request->getReferrer(true));
+		$this->assertEquals('http://domain.tld/contact.html', $this->request->getReferer());
+		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->request->getReferer());
+		$this->assertNull($this->proxy_request->getReferer());
 	}
 
 	public function testURL()
@@ -421,11 +416,11 @@ class RequestTest extends TestCase
 			'http://domain.tld/blog/posts?order_by=title&order=asc',
 			$this->request->getURL()
 		);
-		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->request->getURL(true));
+		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->request->getURL());
 		$this->assertEquals(
 			'https://real-domain.tld:8080/blog/posts?order_by=title&order=asc',
 			$this->proxy_request->getURL()
 		);
-		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->proxy_request->getURL(true));
+		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->proxy_request->getURL());
 	}
 }

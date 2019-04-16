@@ -81,7 +81,7 @@ class ResponseTest extends TestCase
 
 	public function testCookie()
 	{
-		$this->assertEquals([], $this->response->getCookie());
+		$this->assertEquals([], $this->response->getCookies());
 		$this->response->setCookie('session_id', 'abc');
 		$this->assertEquals([
 			'session_id' => [
@@ -94,7 +94,7 @@ class ResponseTest extends TestCase
 				'httponly' => false,
 				'samesite' => null,
 			],
-		], $this->response->getCookie());
+		], $this->response->getCookies());
 		$this->response->setCookie('cart', '123', 3600, '', '/', true);
 		$this->assertEquals([
 			'name' => 'cart',
@@ -127,7 +127,7 @@ class ResponseTest extends TestCase
 				'httponly' => false,
 				'samesite' => null,
 			],
-		], $this->response->getCookie());
+		], $this->response->getCookies());
 		$this->response->removeCookie('cart');
 		$this->assertNull($this->response->getCookie('cart'));
 		$this->assertEquals([
@@ -141,7 +141,9 @@ class ResponseTest extends TestCase
 				'httponly' => false,
 				'samesite' => null,
 			],
-		], $this->response->getCookie());
+		], $this->response->getCookies());
+		$this->response->removeCookies(['session_id']);
+		$this->assertEquals([], $this->response->getCookies());
 	}
 
 	public function testDate()
@@ -164,10 +166,10 @@ class ResponseTest extends TestCase
 
 	public function testHeader()
 	{
-		$this->assertEquals([], $this->response->getHeader());
+		$this->assertEquals([], $this->response->getHeaders());
 		$this->response->setHeader('content-type', 'text/html');
 		$this->response->setHeader('dnt', 1);
-		$this->response->setHeader([
+		$this->response->setHeaders([
 			'host' => 'http://localhost',
 			'ETag' => 'foo',
 		]);
@@ -176,14 +178,14 @@ class ResponseTest extends TestCase
 			'DNT' => 1,
 			'Host' => 'http://localhost',
 			'ETag' => 'foo',
-		], $this->response->getHeader());
+		], $this->response->getHeaders());
 		$this->response->removeHeader('CONTENT-TYPE');
-		$this->response->removeHeader('etag');
+		$this->response->removeHeaders(['etag']);
 		$this->assertEquals([
 			'DNT' => 1,
 			'Host' => 'http://localhost',
-		], $this->response->getHeader());
-		$this->response->setHeader([
+		], $this->response->getHeaders());
+		$this->response->setHeaders([
 			'x-custom-1' => 'foo',
 			'X-Custom-2' => 'bar',
 		]);
@@ -192,7 +194,7 @@ class ResponseTest extends TestCase
 			'Host' => 'http://localhost',
 			'x-custom-1' => 'foo',
 			'X-Custom-2' => 'bar',
-		], $this->response->getHeader());
+		], $this->response->getHeaders());
 		$this->assertEquals('foo', $this->response->getHeader('x-custom-1'));
 		$this->assertNull($this->response->getHeader('X-Custom-1'));
 		$this->assertEquals('bar', $this->response->getHeader('X-Custom-2'));
@@ -240,10 +242,10 @@ class ResponseTest extends TestCase
 	public function testNotModified()
 	{
 		$this->response->setNotModified();
-		$this->assertEquals([
-			'code' => 304,
-			'reason' => 'Not Modified',
-		], $this->response->getStatus());
+		$this->assertEquals(
+			'304 Not Modified',
+			$this->response->getStatus()
+		);
 	}
 
 	/**
@@ -276,16 +278,18 @@ class ResponseTest extends TestCase
 
 	public function testStatus()
 	{
-		$this->assertEquals(['code' => 200, 'reason' => 'OK'], $this->response->getStatus());
-		$this->assertEquals(200, $this->response->getStatus('code'));
-		$this->assertEquals('OK', $this->response->getStatus('reason'));
+		$this->assertEquals('200 OK', $this->response->getStatus());
+		$this->assertEquals(200, $this->response->getStatusCode());
+		$this->assertEquals('OK', $this->response->getStatusReason());
 		$this->response->setStatus(201);
-		$this->assertEquals(['code' => 201, 'reason' => 'Created'], $this->response->getStatus());
+		$this->assertEquals('201 Created', $this->response->getStatus());
+		$this->response->setStatusReason('Other');
+		$this->assertEquals('201 Other', $this->response->getStatus());
 		$this->response->setStatus(483, 'Custom');
-		$this->assertEquals(['code' => 483, 'reason' => 'Custom'], $this->response->getStatus());
+		$this->assertEquals('483 Custom', $this->response->getStatus());
 	}
 
-	public function testUnknowStatus()
+	public function testUnknownStatus()
 	{
 		$this->expectException(\LogicException::class);
 		$this->expectExceptionMessage('Unknown status code must have a reason: 483');

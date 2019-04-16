@@ -60,20 +60,22 @@ class URL
 	}
 
 	/**
-	 * @param array|string    $query
+	 * @param string          $query
 	 * @param int|string|null $value
 	 *
 	 * @return $this
 	 */
-	public function addQuery($query, $value = null)
+	public function addQuery(string $query, $value = null)
 	{
-		if (\is_array($query)) {
-			foreach ($query as $name => $value) {
-				$this->queryData[$name] = $value;
-			}
-			return $this;
-		}
 		$this->queryData[$query] = $value;
+		return $this;
+	}
+
+	public function addQueries(array $queries)
+	{
+		foreach ($queries as $name => $value) {
+			$this->addQuery($name, $value);
+		}
 		return $this;
 	}
 

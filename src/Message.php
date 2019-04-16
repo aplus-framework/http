@@ -127,9 +127,13 @@ abstract class Message
 
 	abstract public function getBody();
 
-	abstract public function getCookie();
+	abstract public function getCookie(string $name);
 
-	abstract public function getHeader();
+	abstract public function getCookies();
+
+	abstract public function getHeader(string $name);
+
+	abstract public function getHeaders();
 
 	/**
 	 * Gets a header name according with the standards.

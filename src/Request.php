@@ -8,6 +8,10 @@
 class Request extends Message //implements RequestInterface
 {
 	/**
+	 * @var array|null
+	 */
+	protected $parsedBody;
+	/**
 	 * HTTP Authorization Header parsed.
 	 *
 	 * @var array|null
@@ -58,9 +62,17 @@ class Request extends Message //implements RequestInterface
 	 */
 	protected $url;
 	/**
-	 * @var UserAgent
+	 * @var UserAgent|null
 	 */
 	protected $userAgent;
+	/**
+	 * @var bool|null
+	 */
+	protected $isAJAX;
+	/**
+	 * @var bool|null
+	 */
+	protected $isSecure;
 
 	/**
 	 * Request constructor.
@@ -95,7 +107,7 @@ class Request extends Message //implements RequestInterface
 	public function forceHTTPS() : void
 	{
 		if ( ! $this->isSecure()) {
-			\header('Location: ' . $this->getURL(true)->setScheme('https')->getURL(), 301);
+			\header('Location: ' . $this->getURL()->setScheme('https')->getURL(), 301);
 			exit;
 		}
 	}
@@ -112,7 +124,18 @@ class Request extends Message //implements RequestInterface
 	 */
 	public function getAccept(array $negotiable = [])
 	{
-		return $this->negotiable('ACCEPT', $negotiable);
+		return $this->negotiate('ACCEPT', $negotiable);
+	}
+
+	public function getBasicAuth() : ?array
+	{
+		if ($this->authType === null) {
+			$this->parseAuth();
+		}
+		if ($this->authType === 'basic') {
+			$this->auth;
+		}
+		return null;
 	}
 
 	/**
@@ -170,33 +193,97 @@ class Request extends Message //implements RequestInterface
 		return $this->auth = $data ?? [];
 	}
 
-	/**
-	 * @param bool $parse
-	 *
-	 * @return array|string
-	 *
-	 * @codeCoverageIgnore
-	 */
-	public function getBody(bool $parse = false)
+	protected function parseAuth() : ?array
 	{
-		if ($parse) {
-			\parse_str($this->getBody(), $parse);
-			return $parse;
+		$this->authType = false;
+		$auth = $this->getHeader('Authorization');
+		if ($auth) {
+			[$type, $attributes] = \array_pad(\explode(' ', $auth, 2), 2, null);
+			if ($type === 'Basic') {
+				$this->authType = 'basic';
+				$this->auth = $this->parseBasicAuth($attributes);
+			}
+			if ($type === 'Digest') {
+				$this->authType = 'digest';
+				$this->auth = $this->parseDigestAuth($attributes);
+			}
 		}
+		$this->auth = [];
+	}
+
+	protected function parseBasicAuth(string $attributes)
+	{
+		$data = [
+			'username' => null,
+			'password' => null,
+		];
+		$attributes = \base64_decode($attributes);
+		if ($attributes) {
+			[
+				$data['username'],
+				$data['password'],
+			] = \array_pad(\explode(':', $attributes, 2), 2, null);
+		}
+		return $data;
+	}
+
+	protected function parseDigestAuth(string $attributes)
+	{
+		$data = [
+			'username' => null,
+			'realm' => null,
+			'nonce' => null,
+			'uri' => null,
+			'response' => null,
+			'opaque' => null,
+			'qop' => null,
+			'nc' => null,
+			'cnonce' => null,
+		];
+		\preg_match_all(
+			'#(username|realm|nonce|uri|response|opaque|qop|nc|cnonce)=(?:([\'"])([^\2]+?)\2|([^\s,]+))#',
+			$attributes,
+			$matches,
+			\PREG_SET_ORDER
+		);
+		foreach ($matches as $match) {
+			if (isset($match[1], $match[3])) {
+				$data[$match[1]] = $match[3] ?: $match[4] ?? '';
+			}
+		}
+		return $data;
+	}
+
+	public function getBody() : string
+	{
 		if ($this->body === null) {
 			$this->body = \file_get_contents('php://input') ?: '';
 		}
 		return $this->body;
 	}
 
+	public function getParsedBody() : array
+	{
+		if ($this->parsedBody === null) {
+			\parse_str($this->getBody(), $this->parsedBody);
+			return $this->parsedBody;
+		}
+		return $this->parsedBody;
+	}
+
 	/**
 	 * @param array $negotiable
 	 *
-	 * @return array|string
+	 * @return string
 	 */
-	public function getCharset(array $negotiable = [])
+	public function negotiateCharset(array $negotiable) : string
 	{
-		return $this->negotiable('CHARSET', $negotiable);
+		return $this->negotiate('CHARSET', $negotiable);
+	}
+
+	public function getCharsets() : array
+	{
+		return $this->negotiate('CHARSET');
 	}
 
 	/**
@@ -208,15 +295,23 @@ class Request extends Message //implements RequestInterface
 	}
 
 	/**
-	 * @param string|string[]|null $name
-	 * @param int|null             $filter
-	 * @param array|int|null       $filter_options
+	 * @param string         $name
+	 * @param int|null       $filter
+	 * @param array|int|null $filter_options
 	 *
-	 * @return string|string[]|null
+	 * @return string|null
 	 */
-	public function getCookie($name = null, int $filter = null, $filter_options = null)
+	public function getCookie(string $name, int $filter = null, $filter_options = null) : ?string
 	{
 		return $this->getReturn($name, 'COOKIE', $filter, $filter_options);
+	}
+
+	/**
+	 * @return array|string[]
+	 */
+	public function getCookies() : array
+	{
+		return $this->getReturn(null, 'COOKIE');
 	}
 
 	public function getCSRFToken() : ?string
@@ -227,11 +322,16 @@ class Request extends Message //implements RequestInterface
 	/**
 	 * @param array $negotiable
 	 *
-	 * @return array|string
+	 * @return string
 	 */
-	public function getEncoding(array $negotiable = [])
+	public function negotiateEncoding(array $negotiable) : string
 	{
-		return $this->negotiable('ENCODING', $negotiable);
+		return $this->negotiate('ENCODING', $negotiable);
+	}
+
+	public function getEncodings() : array
+	{
+		return $this->negotiate('ENCODING');
 	}
 
 	/**
@@ -255,19 +355,16 @@ class Request extends Message //implements RequestInterface
 	}
 
 	/**
-	 * @param string|null $name Input form name
-	 *
-	 * @return array|UploadedFile|UploadedFile[]|null
+	 * @return array|UploadedFile[]
 	 */
-	public function getFiles(string $name = null)
+	public function getFiles() : array
 	{
-		if ($this->input['FILES'] === null) {
-			$this->input['FILES'] = $this->prepareFiles();
-		}
-		return $name === null
-			? $this->input['FILES']
-			//: \array_simple_value($name, $this->input['FILES']);
-			: $this->input['FILES'][$name] ?? null;
+		return $this->getReturn(null, 'FILES');
+	}
+
+	public function getFile(string $name) : ?UploadedFile
+	{
+		return $this->getReturn($name, 'FILES');
 	}
 
 	/**
@@ -300,34 +397,20 @@ class Request extends Message //implements RequestInterface
 	}
 
 	/**
-	 * @param null           $name
+	 * @param string         $name
 	 * @param int|null       $filter
 	 * @param array|int|null $filter_options
 	 *
 	 * @return array|string|null
 	 */
-	public function getHeader($name = null, int $filter = null, $filter_options = null)
+	public function getHeader(string $name, int $filter = null, $filter_options = null) : ?string
 	{
-		// Populate the HEADERS by the first time
-		if ($this->input['HEADERS'] === null) {
-			$headers = [];
-			foreach ($this->getServer() as $key => $value) {
-				if (\strpos($key, 'HTTP_') !== 0) {
-					continue;
-				}
-				$key = \strtr(\substr($key, 5), ['_' => '-']);
-				$headers[$this->getHeaderName($key)] = (string) $value;
-			}
-			$this->input['HEADERS'] = $headers;
-		}
-		if (\is_array($name)) {
-			foreach ($name as &$n) {
-				$n = $this->getHeaderName($n);
-			}
-		} elseif ($name !== null) {
-			$name = $this->getHeaderName($name);
-		}
-		return $this->getReturn($name, 'HEADERS', $filter, $filter_options);
+		return $this->getReturn($this->getHeaderName($name), 'HEADERS', $filter, $filter_options);
+	}
+
+	public function getHeaders() : array
+	{
+		return $this->getReturn(null, 'HEADERS');
 	}
 
 	/**
@@ -368,24 +451,29 @@ class Request extends Message //implements RequestInterface
 	{
 		switch ($type) {
 			case 'POST':
-				$type = \INPUT_POST;
+				$type = (array) \filter_input_array(\INPUT_POST);
 				break;
 			case 'GET':
-				$type = \INPUT_GET;
+				$type = (array) \filter_input_array(\INPUT_GET);
 				break;
 			case 'COOKIE':
-				$type = \INPUT_COOKIE;
+				$type = (array) \filter_input_array(\INPUT_COOKIE);
 				break;
 			case 'ENV':
-				$type = \INPUT_ENV;
+				$type = (array) \filter_input_array(\INPUT_ENV);
 				break;
 			case 'SERVER':
-				$type = \INPUT_SERVER;
+				$type = (array) \filter_input_array(\INPUT_SERVER);
+				break;
+			case 'HEADERS':
+				$type = $this->getInputHeaders();
+				break;
+			case 'FILES':
+				$type = $this->getInputFiles();
 				break;
 			default:
 				throw new \InvalidArgumentException("Invalid input type: {$type}");
 		}
-		$type = (array) \filter_input_array($type);
 		\ksort($type);
 		return $type;
 	}
@@ -420,11 +508,16 @@ class Request extends Message //implements RequestInterface
 	/**
 	 * @param array $negotiable
 	 *
-	 * @return array|string
+	 * @return string
 	 */
-	public function getLanguage(array $negotiable = [])
+	public function negotiateLanguage(array $negotiable) : string
 	{
-		return $this->negotiable('LANGUAGE', $negotiable);
+		return $this->negotiate('LANGUAGE', $negotiable);
+	}
+
+	public function getLanguages() : array
+	{
+		return $this->negotiate('LANGUAGE');
 	}
 
 	/**
@@ -502,11 +595,9 @@ class Request extends Message //implements RequestInterface
 	}
 
 	/**
-	 * @param bool $parse
-	 *
-	 * @return string|URL|null
+	 * @return URL|null
 	 */
-	public function getReferrer(bool $parse = false)
+	public function getReferer() : ?URL
 	{
 		if ($this->referrer === null) {
 			$this->referrer = false;
@@ -519,10 +610,20 @@ class Request extends Message //implements RequestInterface
 				}
 			}
 		}
-		if ($this->referrer) {
-			return $parse ? $this->referrer : $this->referrer->getURL();
+		return $this->referrer ?: null;
+	}
+
+	protected function getInputHeaders() : array
+	{
+		$headers = [];
+		foreach ($this->getServer() as $key => $value) {
+			if (\strpos($key, 'HTTP_') !== 0) {
+				continue;
+			}
+			$key = \strtr(\substr($key, 5), ['_' => '-']);
+			$headers[$this->getHeaderName($key)] = (string) $value;
 		}
-		return null;
+		return $headers;
 	}
 
 	/**
@@ -584,45 +685,36 @@ class Request extends Message //implements RequestInterface
 	/**
 	 * Gets the requested URL.
 	 *
-	 * @param bool $as_object set TRUE to returns the URL object instance
-	 *
-	 * @return string|URL the URL string or the URL object
+	 * @return URL
 	 */
-	public function getURL(bool $as_object = false)
+	public function getURL() : URL
 	{
 		if ($this->url) {
-			return $as_object ? $this->url : $this->url->getURL();
+			return $this->url;
 		}
 		$url = $this->isSecure() ? 'https' : 'http';
 		$url .= '://' . $this->getHost();
 		$url .= ':' . $this->getPort();
 		$url .= $this->getServer('REQUEST_URI');
-		//\var_dump($url);exit;
-		$this->url = new URL($url);
-		return $as_object ? $this->url : $this->url->getURL();
+		return $this->url = new URL($url);
 	}
 
 	/**
 	 * Gets the User Agent client.
 	 *
-	 * @param bool  $as_object set TRUE to returns the UserAgent object instance
-	 * @param array $config    Extra configurations passed to the UserAgent object: platforms,
-	 *                         browsers, mobiles, robots
-	 *
-	 * @return string|UserAgent|null the User Agent string, UserAgent object or
-	 *                               null if no user-agent header was received
+	 * @return UserAgent|null the UserAgent object or null if no
+	 *                        user-agent header was received
 	 */
-	public function getUserAgent(bool $as_object = false, array $config = [])
+	public function getUserAgent() : ?UserAgent
 	{
+		if ($this->userAgent) {
+			return $this->userAgent;
+		}
 		$user_agent = $this->getServer('HTTP_USER_AGENT');
 		if ($user_agent === null) {
 			return null;
 		}
-		if ($as_object) {
-			return $this->userAgent
-				?? $this->userAgent = new UserAgent($user_agent, $config);
-		}
-		return $user_agent;
+		return $this->userAgent = new UserAgent($user_agent);
 	}
 
 	/**
@@ -631,23 +723,17 @@ class Request extends Message //implements RequestInterface
 	 * The X-Requested-With Header containing the "XMLHttpRequest" value is
 	 * used by various javascript libraries.
 	 *
-	 * You can to set a custom X-Requested-With Header if needed.
-	 *
-	 * @param bool   $lowercase True to compare with lowercase, false otherwise
-	 * @param string $header    X-Requested-With Header Value
-	 *
 	 * @return bool
 	 */
-	public function isAJAX(bool $lowercase = true, string $header = 'XmlHttpRequest') : bool
+	public function isAJAX() : bool
 	{
+		if ($this->isAJAX !== null) {
+			return $this->isAJAX;
+		}
 		$received = $this->getServer('HTTP_X_REQUESTED_WITH');
-		if ($received === null) {
-			return false;
-		}
-		if ($lowercase) {
-			return \strtolower($received) === \strtolower($header);
-		}
-		return $received === $header;
+		return $this->isAJAX = $received
+			? \strtolower($received) === 'xmlhttprequest'
+			: false;
 	}
 
 	/**
@@ -655,8 +741,11 @@ class Request extends Message //implements RequestInterface
 	 */
 	public function isSecure() : bool
 	{
-		return $this->getServer('REQUEST_SCHEME') === 'https'
-			|| $this->getServer('HTTPS') === 'on';
+		if ($this->isSecure !== null) {
+			return $this->isSecure;
+		}
+		return $this->isSecure = ($this->getServer('REQUEST_SCHEME') === 'https'
+			|| $this->getServer('HTTPS') === 'on');
 	}
 
 	/**
@@ -665,7 +754,7 @@ class Request extends Message //implements RequestInterface
 	 *
 	 * @return array|string
 	 */
-	protected function negotiable(string $type, array $negotiable = [])
+	protected function negotiate(string $type, array $negotiable = [])
 	{
 		if ($this->input[$type] === null) {
 			$this->input[$type] = \array_keys($this->parseQValues(
@@ -673,16 +762,16 @@ class Request extends Message //implements RequestInterface
 			));
 			$this->input[$type] = \array_map('strtolower', $this->input[$type]);
 		}
-		if ($negotiable) {
-			$negotiable = \array_map('strtolower', $negotiable);
-			foreach ($this->input[$type] as $item) {
-				if (\in_array($item, $negotiable, true)) {
-					return $item;
-				}
-			}
-			return $negotiable[0];
+		if (empty($negotiable)) {
+			return $this->input[$type];
 		}
-		return $this->input[$type];
+		$negotiable = \array_map('strtolower', $negotiable);
+		foreach ($this->input[$type] as $item) {
+			if (\in_array($item, $negotiable, true)) {
+				return $item;
+			}
+		}
+		return $negotiable[0];
 	}
 
 	/**
@@ -709,7 +798,7 @@ class Request extends Message //implements RequestInterface
 		return $quality;
 	}
 
-	protected function prepareFiles() : array
+	protected function getInputFiles() : array
 	{
 		if (empty($_FILES)) {
 			return [];

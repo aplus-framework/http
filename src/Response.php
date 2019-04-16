@@ -104,24 +104,21 @@ class Response extends Message //implements ResponseInterface
 		599 => 'Network Connect Timeout Error',
 	];
 	/**
-	 * HTTP Status Code and Reason.
+	 * HTTP Status Code.
 	 *
-	 * @var array
+	 * @var int
 	 */
-	protected $status = [
-		'code' => 200,
-		'reason' => 'OK',
-	];
+	protected $statusCode = 200;
+	/**
+	 * HTTP Status Reason.
+	 *
+	 * @var string
+	 */
+	protected $statusReason = 'OK';
 
 	public function __construct(Request $request)
 	{
 		$this->request = $request;
-	}
-
-	public function appendBody(string $content)
-	{
-		$this->body = $this->getBody() . $content;
-		return $this;
 	}
 
 	/**
@@ -133,35 +130,155 @@ class Response extends Message //implements ResponseInterface
 	}
 
 	/**
-	 * @return int
+	 * @param string $body
+	 *
+	 * @return $this
 	 */
-	public function getCacheSeconds() : int
+	public function setBody(string $body)
 	{
-		return $this->cacheSeconds;
+		if (\ob_get_length()) {
+			\ob_clean();
+		}
+		$this->body = $body;
+		return $this;
+	}
+
+	public function prependBody(string $content)
+	{
+		$this->body = $content . $this->getBody();
+		return $this;
+	}
+
+	public function appendBody(string $content)
+	{
+		$this->body = $this->getBody() . $content;
+		return $this;
 	}
 
 	/**
 	 * @param string|null $name cookie name or null to get all
 	 *
-	 * @return array|array[]|null Returns an associative array if a given cookie name is found or
-	 *                            null. If name is null, returns an multi-dimensional array
-	 *                            containing all arrays of cookies.
+	 * @return array|null returns an associative array if a given cookie name is found or null
 	 */
-	public function getCookie(string $name = null) : ?array
+	public function getCookie(string $name) : ?array
 	{
-		return $name === null ? $this->cookies : $this->cookies[$name] ?? null;
+		return $this->cookies[$name] ?? null;
+	}
+
+	public function getCookies() : array
+	{
+		return $this->cookies;
 	}
 
 	/**
-	 * @param string|null $name
+	 * @param string      $name
+	 * @param string      $value
+	 * @param int         $expires
+	 * @param string      $domain
+	 * @param string      $path
+	 * @param bool        $secure
+	 * @param bool        $httponly
+	 * @param string|null $samesite
 	 *
-	 * @return array|int|string|null
+	 * @return $this
 	 */
-	public function getHeader(string $name = null)
+	public function setCookie(
+		string $name,
+		string $value = '',
+		int $expires = 0,
+		string $domain = '',
+		string $path = '/',
+		bool $secure = false,
+		bool $httponly = false,
+		string $samesite = null
+	) {
+		$expires = $expires < 1
+			? \time() - 86500
+			: \time() + $expires;
+		$this->cookies[$name] = [
+			'name' => $name,
+			'value' => $value,
+			'expires' => $expires,
+			'path' => $path,
+			'domain' => $domain,
+			'secure' => $secure,
+			'httponly' => $httponly,
+			'samesite' => $samesite, // TODO: PHP 7.3+
+		];
+		return $this;
+	}
+
+	/**
+	 * @param string $name cookie name
+	 *
+	 * @return $this
+	 */
+	public function removeCookie(string $name)
 	{
-		return $name === null
-			? $this->headers
-			: $this->headers[$this->getHeaderName($name)] ?? null;
+		unset($this->cookies[$name]);
+		return $this;
+	}
+
+	public function removeCookies(array $names)
+	{
+		foreach ($names as $name) {
+			$this->removeCookie($name);
+		}
+		return $this;
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return string|null
+	 */
+	public function getHeader(string $name) : ?string
+	{
+		return $this->headers[$this->getHeaderName($name)] ?? null;
+	}
+
+	public function getHeaders() : array
+	{
+		return $this->headers;
+	}
+
+	/**
+	 * @param string $name
+	 * @param string $value
+	 *
+	 * @return $this
+	 */
+	public function setHeader(string $name, string $value)
+	{
+		$this->headers[$this->getHeaderName($name)] = $value;
+		return $this;
+	}
+
+	public function setHeaders(array $headers)
+	{
+		foreach ($headers as $name => $value) {
+			$this->setHeader($name, $value);
+		}
+		return $this;
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return $this
+	 */
+	public function removeHeader(string $name)
+	{
+		unset($this->headers[$this->getHeaderName($name)]);
+		return $this;
+	}
+
+	public function removeHeaders(array $names)
+	{
+		foreach ($names as $name) {
+			$this->removeHeader($name);
+		}
+		return $this;
 	}
 
 	public function getProtocol() : string
@@ -179,13 +296,62 @@ class Response extends Message //implements ResponseInterface
 	}
 
 	/**
-	 * @param string|null $part "code" or "reason"
-	 *
-	 * @return array|int|string
+	 * @return string
 	 */
-	public function getStatus(string $part = null)
+	public function getStatus() : string
 	{
-		return $part === null ? $this->status : $this->status[$part];
+		return "{$this->statusCode} {$this->statusReason}";
+	}
+
+	/**
+	 * @param int         $code
+	 * @param string|null $reason
+	 *
+	 * @throws \InvalidArgumentException if status code is invalid
+	 * @throws \LogicException           is status code is unknown and a reason is not set
+	 *
+	 * @return $this
+	 */
+	public function setStatus(int $code, string $reason = null)
+	{
+		$this->setStatusCode($code);
+		if (empty($reason) && empty($this->responseCodes[$code])) {
+			throw new \LogicException("Unknown status code must have a reason: {$code}");
+		}
+		$this->setStatusReason($reason ?? $this->responseCodes[$code]);
+		return $this;
+	}
+
+	/**
+	 * @param int $code
+	 *
+	 * @throws \InvalidArgumentException if status code is invalid
+	 *
+	 * @return $this
+	 */
+	public function setStatusCode(int $code)
+	{
+		if ($code < 100 || $code > 599) {
+			throw new \InvalidArgumentException("Invalid status code: {$code}");
+		}
+		$this->statusCode = $code;
+		return $this;
+	}
+
+	public function getStatusCode() : int
+	{
+		return $this->statusCode;
+	}
+
+	public function setStatusReason(string $reason)
+	{
+		$this->statusReason = $reason;
+		return $this;
+	}
+
+	public function getStatusReason() : string
+	{
+		return $this->statusReason;
 	}
 
 	/**
@@ -194,12 +360,6 @@ class Response extends Message //implements ResponseInterface
 	public function isSent() : bool
 	{
 		return $this->isSent;
-	}
-
-	public function prependBody(string $content)
-	{
-		$this->body = $content . $this->getBody();
-		return $this;
 	}
 
 	/**
@@ -299,28 +459,6 @@ class Response extends Message //implements ResponseInterface
 	}
 
 	/**
-	 * @param string $name cookie name
-	 *
-	 * @return $this
-	 */
-	public function removeCookie(string $name)
-	{
-		unset($this->cookies[$name]);
-		return $this;
-	}
-
-	/**
-	 * @param string $name
-	 *
-	 * @return $this
-	 */
-	public function removeHeader(string $name)
-	{
-		unset($this->headers[$this->getHeaderName($name)]);
-		return $this;
-	}
-
-	/**
 	 * @throws \LogicException if Response already is sent
 	 *
 	 * @return $this
@@ -375,9 +513,7 @@ class Response extends Message //implements ResponseInterface
 		{
 			$this->setETag(\md5($this->getBody()));
 		}*/
-		$start_line = $this->getServer('SERVER_PROTOCOL') ?? 'HTTP/1.1';
-		$start_line .= ' ' . $this->getStatus('code') . ' ' . $this->getStatus('reason');
-		\header($start_line);
+		\header($this->getProtocol() . ' ' . $this->getStatus());
 		foreach ($this->headers as $name => $value) {
 			\header($name . ($value ? ': ' . $value : ''));
 		}
@@ -385,16 +521,37 @@ class Response extends Message //implements ResponseInterface
 	}
 
 	/**
-	 * @param string $body
+	 * @param mixed $data
+	 * @param int   $options [optional] <p>
+	 *                       Bitmask consisting of <b>JSON_HEX_QUOT</b>,
+	 *                       <b>JSON_HEX_TAG</b>,
+	 *                       <b>JSON_HEX_AMP</b>,
+	 *                       <b>JSON_HEX_APOS</b>,
+	 *                       <b>JSON_NUMERIC_CHECK</b>,
+	 *                       <b>JSON_PRETTY_PRINT</b>,
+	 *                       <b>JSON_UNESCAPED_SLASHES</b>,
+	 *                       <b>JSON_FORCE_OBJECT</b>,
+	 *                       <b>JSON_UNESCAPED_UNICODE</b>.
+	 *                       <b>JSON_THROW_ON_ERROR</b>
+	 *                       </p>
+	 *                       <p>Default is <b>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE</b>
+	 *                       when null</p>
+	 * @param int   $depth   [optional] <p>
+	 *                       Set the maximum depth. Must be greater than zero.
+	 *                       </p>
+	 *
+	 * @throws \JsonException if json_encode() fails
 	 *
 	 * @return $this
 	 */
-	public function setBody(string $body)
+	public function setJSON($data, int $options = null, int $depth = 512)
 	{
-		if (\ob_get_length()) {
-			\ob_clean();
+		if ($options === null) {
+			$options = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
 		}
-		$this->body = $body;
+		$data = \json_encode($data, $options | \JSON_THROW_ON_ERROR, $depth);
+		$this->setContentType('application/json');
+		$this->setBody($data);
 		return $this;
 	}
 
@@ -421,6 +578,24 @@ class Response extends Message //implements ResponseInterface
 	}
 
 	/**
+	 * @return $this
+	 */
+	public function setNoCache()
+	{
+		$this->setHeader('Cache-Control', 'no-cache, no-store, max-age=0');
+		$this->cacheSeconds = 0;
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getCacheSeconds() : int
+	{
+		return $this->cacheSeconds;
+	}
+
+	/**
 	 * @param string $mime
 	 * @param string $charset
 	 *
@@ -429,46 +604,6 @@ class Response extends Message //implements ResponseInterface
 	public function setContentType(string $mime, string $charset = 'UTF-8')
 	{
 		$this->setHeader('Content-Type', $mime . ($charset ? '; charset=' . $charset : ''));
-		return $this;
-	}
-
-	/**
-	 * @param string      $name
-	 * @param string      $value
-	 * @param int         $expires
-	 * @param string      $domain
-	 * @param string      $path
-	 * @param bool        $secure
-	 * @param bool        $httponly
-	 * @param string|null $samesite
-	 *
-	 * @return $this
-	 */
-	public function setCookie(
-		string $name,
-		string $value = '',
-		int $expires = 0,
-		string $domain = '',
-		string $path = '/',
-		bool $secure = false,
-		bool $httponly = false,
-		string $samesite = null
-	) {
-		if ($expires < 1) {
-			$expires = \time() - 86500;
-		} else {
-			$expires = \time() + $expires;
-		}
-		$this->cookies[$name] = [
-			'name' => $name,
-			'value' => $value,
-			'expires' => $expires,
-			'path' => $path,
-			'domain' => $domain,
-			'secure' => $secure,
-			'httponly' => $httponly,
-			'samesite' => $samesite, // TODO: PHP 7.3+
-		];
 		return $this;
 	}
 
@@ -525,59 +660,6 @@ class Response extends Message //implements ResponseInterface
 	}
 
 	/**
-	 * @param array|string $name
-	 * @param string|null  $value
-	 *
-	 * @return $this
-	 */
-	public function setHeader($name, string $value = null)
-	{
-		if (\is_array($name)) {
-			foreach ($name as $index => $value) {
-				$this->headers[$this->getHeaderName($index)] = $value;
-			}
-			return $this;
-		}
-		$this->headers[$this->getHeaderName($name)] = $value;
-		return $this;
-	}
-
-	/**
-	 * @param mixed $data
-	 * @param int   $options [optional] <p>
-	 *                       Bitmask consisting of <b>JSON_HEX_QUOT</b>,
-	 *                       <b>JSON_HEX_TAG</b>,
-	 *                       <b>JSON_HEX_AMP</b>,
-	 *                       <b>JSON_HEX_APOS</b>,
-	 *                       <b>JSON_NUMERIC_CHECK</b>,
-	 *                       <b>JSON_PRETTY_PRINT</b>,
-	 *                       <b>JSON_UNESCAPED_SLASHES</b>,
-	 *                       <b>JSON_FORCE_OBJECT</b>,
-	 *                       <b>JSON_UNESCAPED_UNICODE</b>.
-	 *                       <b>JSON_THROW_ON_ERROR</b>
-	 *                       </p>
-	 *                       <p>Default is <b>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE</b>
-	 *                       when null</p>
-	 * @param int   $depth   [optional] <p>
-	 *                       Set the maximum depth. Must be greater than zero.
-	 *                       </p>
-	 *
-	 * @throws \JsonException if json_encode() fails
-	 *
-	 * @return $this
-	 */
-	public function setJSON($data, int $options = null, int $depth = 512)
-	{
-		if ($options === null) {
-			$options = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
-		}
-		$data = \json_encode($data, $options | \JSON_THROW_ON_ERROR, $depth);
-		$this->setContentType('application/json');
-		$this->setBody($data);
-		return $this;
-	}
-
-	/**
 	 * @param \DateTime $datetime
 	 *
 	 * @return $this
@@ -593,43 +675,9 @@ class Response extends Message //implements ResponseInterface
 	/**
 	 * @return $this
 	 */
-	public function setNoCache()
-	{
-		$this->setHeader('Cache-Control', 'no-cache, no-store, max-age=0');
-		$this->cacheSeconds = 0;
-		return $this;
-	}
-
-	/**
-	 * @return $this
-	 */
 	public function setNotModified()
 	{
 		$this->setStatus(304, 'Not Modified');
-		return $this;
-	}
-
-	/**
-	 * @param int         $code
-	 * @param string|null $reason
-	 *
-	 * @throws \InvalidArgumentException if status code is invalid
-	 * @throws \LogicException           is status code is unknown and a reason is not set
-	 *
-	 * @return $this
-	 */
-	public function setStatus(int $code, string $reason = null)
-	{
-		// Valid range?
-		if ($code < 100 || $code > 599) {
-			throw new \InvalidArgumentException("Invalid status code: {$code}");
-		}
-		//throw new \Exception();
-		if (empty($reason) && empty($this->responseCodes[$code])) {
-			throw new \LogicException("Unknown status code must have a reason: {$code}");
-		}
-		$this->status['code'] = $code;
-		$this->status['reason'] = $reason ?? $this->responseCodes[$code];
 		return $this;
 	}
 }
