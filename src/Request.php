@@ -120,17 +120,6 @@ class Request extends Message //implements RequestInterface
 	{
 		return $this->getLanguage(Services::language()->getSupportedLocales());
 	}*/
-
-	/**
-	 * @param array $negotiable
-	 *
-	 * @return array|string
-	 */
-	public function getAccept(array $negotiable = [])
-	{
-		return $this->negotiate('ACCEPT', $negotiable);
-	}
-
 	public function getAuthType() : ?string
 	{
 		if ($this->authType === null && $auth = $this->getHeader('Authorization')) {
@@ -228,18 +217,71 @@ class Request extends Message //implements RequestInterface
 	}
 
 	/**
-	 * @param array $negotiable
+	 * @param string $type
 	 *
-	 * @return string
+	 * @return array
 	 */
+	protected function getNegotiableValues(string $type) : array
+	{
+		if ($this->input[$type]) {
+			return $this->input[$type];
+		}
+		$this->input[$type] = \array_keys($this->parseQualityValues(
+			$this->getServer('HTTP_ACCEPT' . ($type !== 'ACCEPT' ? '_' . $type : ''))
+		));
+		$this->input[$type] = \array_map('strtolower', $this->input[$type]);
+		return $this->input[$type];
+	}
+
+	protected function negotiate(string $type, array $negotiable) : string
+	{
+		$negotiable = \array_map('strtolower', $negotiable);
+		foreach ($this->getNegotiableValues($type) as $item) {
+			if (\in_array($item, $negotiable, true)) {
+				return $item;
+			}
+		}
+		return $negotiable[0];
+	}
+
+	public function getAccepts() : array
+	{
+		return $this->getNegotiableValues('ACCEPT');
+	}
+
+	public function negotiateAccept(array $negotiable) : string
+	{
+		return $this->negotiate('ACCEPT', $negotiable);
+	}
+
+	public function getCharsets() : array
+	{
+		return $this->getNegotiableValues('CHARSET');
+	}
+
 	public function negotiateCharset(array $negotiable) : string
 	{
 		return $this->negotiate('CHARSET', $negotiable);
 	}
 
-	public function getCharsets() : array
+	public function getEncodings() : array
 	{
-		return $this->negotiate('CHARSET');
+		return $this->getNegotiableValues('ENCODING');
+	}
+
+	public function negotiateEncoding(array $negotiable) : string
+	{
+		return $this->negotiate('ENCODING', $negotiable);
+	}
+
+	public function getLanguages() : array
+	{
+		return $this->getNegotiableValues('LANGUAGE');
+	}
+
+	public function negotiateLanguage(array $negotiable) : string
+	{
+		return $this->negotiate('LANGUAGE', $negotiable);
 	}
 
 	/**
@@ -278,21 +320,6 @@ class Request extends Message //implements RequestInterface
 	public function validateCSRFToken(string $token) : bool
 	{
 		return $this->getCSRFToken() === $token;
-	}
-
-	/**
-	 * @param array $negotiable
-	 *
-	 * @return string
-	 */
-	public function negotiateEncoding(array $negotiable) : string
-	{
-		return $this->negotiate('ENCODING', $negotiable);
-	}
-
-	public function getEncodings() : array
-	{
-		return $this->negotiate('ENCODING');
 	}
 
 	/**
@@ -464,21 +491,6 @@ class Request extends Message //implements RequestInterface
 			return false;
 		}
 		return $body;
-	}
-
-	/**
-	 * @param array $negotiable
-	 *
-	 * @return string
-	 */
-	public function negotiateLanguage(array $negotiable) : string
-	{
-		return $this->negotiate('LANGUAGE', $negotiable);
-	}
-
-	public function getLanguages() : array
-	{
-		return $this->negotiate('LANGUAGE');
 	}
 
 	/**
@@ -698,32 +710,6 @@ class Request extends Message //implements RequestInterface
 		}
 		return $this->isSecure = ($this->getServer('REQUEST_SCHEME') === 'https'
 			|| $this->getServer('HTTPS') === 'on');
-	}
-
-	/**
-	 * @param string $type
-	 * @param array  $negotiable
-	 *
-	 * @return array|string
-	 */
-	protected function negotiate(string $type, array $negotiable = [])
-	{
-		if ($this->input[$type] === null) {
-			$this->input[$type] = \array_keys($this->parseQualityValues(
-				$this->getServer('HTTP_ACCEPT' . ($type !== 'ACCEPT' ? '_' . $type : ''))
-			));
-			$this->input[$type] = \array_map('strtolower', $this->input[$type]);
-		}
-		if (empty($negotiable)) {
-			return $this->input[$type];
-		}
-		$negotiable = \array_map('strtolower', $negotiable);
-		foreach ($this->input[$type] as $item) {
-			if (\in_array($item, $negotiable, true)) {
-				return $item;
-			}
-		}
-		return $negotiable[0];
 	}
 
 	/**

@@ -35,26 +35,26 @@ class RequestTest extends TestCase
 
 	public function testAccept()
 	{
-		$this->assertEquals([], $this->proxyRequest->getAccept());
+		$this->assertEquals([], $this->proxyRequest->getAccepts());
 		$this->assertEquals([
 			'text/html',
 			'application/xhtml+xml',
 			'application/xml',
 			'*/*',
-		], $this->request->getAccept());
-		$this->assertEquals('text/html', $this->request->getAccept([
+		], $this->request->getAccepts());
+		$this->assertEquals('text/html', $this->request->negotiateAccept([
 			'text/html',
 			'application/xml',
 		]));
-		$this->assertEquals('text/html', $this->request->getAccept([
+		$this->assertEquals('text/html', $this->request->negotiateAccept([
 			'application/xml',
 			'text/html',
 		]));
-		$this->assertEquals('text/html', $this->request->getAccept([
+		$this->assertEquals('text/html', $this->request->negotiateAccept([
 			'foo',
 			'text/html',
 		]));
-		$this->assertEquals('foo', $this->request->getAccept([
+		$this->assertEquals('foo', $this->request->negotiateAccept([
 			'foo',
 			'bar',
 		]));
