@@ -20,6 +20,7 @@ class RequestMock extends \Framework\HTTP\Request
 			'session_id' => 'abc',
 			'cart' => 'cart-123',
 			'status-bar' => 'open',
+			'X-CSRF-Token' => 'token',
 		],
 		'ENV' => [],
 		'SERVER' => [

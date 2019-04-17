@@ -619,12 +619,12 @@ class Response extends Message //implements ResponseInterface
 		return $this;
 	}
 
-	public function setCSRFToken(bool $regenerate = false)
+	public function setCSRFToken(string $token, int $ttl = 7200)
 	{
 		$this->setCookie(
 			'X-CSRF-Token',
-			csrf_token($regenerate),
-			7200,
+			$token,
+			$ttl,
 			'',
 			'/',
 			$this->request->isSecure(),

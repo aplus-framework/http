@@ -8,7 +8,7 @@ class RequestTest extends TestCase
 	/**
 	 * @var RequestProxyMock
 	 */
-	protected $proxy_request;
+	protected $proxyRequest;
 	/**
 	 * @var RequestMock
 	 */
@@ -30,12 +30,12 @@ class RequestTest extends TestCase
 	public function setUp()
 	{
 		$this->request = new RequestMock();
-		$this->proxy_request = new RequestProxyMock();
+		$this->proxyRequest = new RequestProxyMock();
 	}
 
 	public function testAccept()
 	{
-		$this->assertEquals([], $this->proxy_request->getAccept());
+		$this->assertEquals([], $this->proxyRequest->getAccept());
 		$this->assertEquals([
 			'text/html',
 			'application/xhtml+xml',
@@ -133,6 +133,7 @@ class RequestTest extends TestCase
 			'session_id' => 'abc',
 			'cart' => 'cart-123',
 			'status-bar' => 'open',
+			'X-CSRF-Token' => 'token',
 		], $this->request->getCookies());
 	}
 
@@ -322,19 +323,23 @@ class RequestTest extends TestCase
 	public function testIsAJAX()
 	{
 		$this->assertTrue($this->request->isAJAX());
-		$this->assertFalse($this->proxy_request->isAJAX());
+		$this->assertTrue($this->request->isAJAX());
+		$this->assertFalse($this->proxyRequest->isAJAX());
+		$this->assertFalse($this->proxyRequest->isAJAX());
 	}
 
 	public function testIsSecure()
 	{
 		$this->assertFalse($this->request->isSecure());
-		$this->assertTrue($this->proxy_request->isSecure());
+		$this->assertFalse($this->request->isSecure());
+		$this->assertTrue($this->proxyRequest->isSecure());
+		$this->assertTrue($this->proxyRequest->isSecure());
 	}
 
 	public function testJSON()
 	{
 		$this->assertFalse($this->request->getJSON());
-		$this->assertEquals(123, $this->proxy_request->getJSON()->test);
+		$this->assertEquals(123, $this->proxyRequest->getJSON()->test);
 	}
 
 	public function testLanguage()
@@ -371,7 +376,7 @@ class RequestTest extends TestCase
 	public function testPort()
 	{
 		$this->assertEquals(80, $this->request->getPort());
-		$this->assertEquals(8080, $this->proxy_request->getPort());
+		$this->assertEquals(8080, $this->proxyRequest->getPort());
 	}
 
 	public function testPost()
@@ -398,14 +403,14 @@ class RequestTest extends TestCase
 	public function testProxiedIP()
 	{
 		$this->assertNull($this->request->getProxiedIP());
-		$this->assertEquals('192.168.1.2', $this->proxy_request->getProxiedIP());
+		$this->assertEquals('192.168.1.2', $this->proxyRequest->getProxiedIP());
 	}
 
 	public function testReferer()
 	{
 		$this->assertEquals('http://domain.tld/contact.html', $this->request->getReferer());
 		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->request->getReferer());
-		$this->assertNull($this->proxy_request->getReferer());
+		$this->assertNull($this->proxyRequest->getReferer());
 	}
 
 	public function testURL()
@@ -417,8 +422,22 @@ class RequestTest extends TestCase
 		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->request->getURL());
 		$this->assertEquals(
 			'https://real-domain.tld:8080/blog/posts?order_by=title&order=asc',
-			$this->proxy_request->getURL()
+			$this->proxyRequest->getURL()
 		);
-		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->proxy_request->getURL());
+		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->proxyRequest->getURL());
+	}
+
+	public function testCSRFToken()
+	{
+		$this->assertEquals('token', $this->request->getCSRFToken());
+		$this->assertNull($this->proxyRequest->getCSRFToken());
+	}
+
+	public function testValidateCSRFToken()
+	{
+		$this->assertTrue($this->request->validateCSRFToken('token'));
+		$this->assertFalse($this->request->validateCSRFToken('foo'));
+		$this->assertFalse($this->proxyRequest->validateCSRFToken('token'));
+		$this->assertFalse($this->proxyRequest->validateCSRFToken('foo'));
 	}
 }

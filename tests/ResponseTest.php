@@ -146,6 +146,25 @@ class ResponseTest extends TestCase
 		$this->assertEquals([], $this->response->getCookies());
 	}
 
+	public function testCSRFToken()
+	{
+		$this->assertNull($this->response->getCookie('X-CSRF-Token'));
+		$this->response->setCSRFToken('foo');
+		$this->assertEquals(
+			[
+				'name' => 'X-CSRF-Token',
+				'value' => 'foo',
+				'expires' => \time() + 7200,
+				'path' => '/',
+				'domain' => '',
+				'secure' => false,
+				'httponly' => true,
+				'samesite' => 'Strict',
+			],
+			$this->response->getCookie('X-CSRF-Token')
+		);
+	}
+
 	public function testDate()
 	{
 		$this->assertNull($this->response->getHeader('Date'));

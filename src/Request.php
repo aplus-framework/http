@@ -18,7 +18,7 @@ class Request extends Message //implements RequestInterface
 	 */
 	protected $auth;
 	/**
-	 * @var false|string|null
+	 * @var string|null
 	 */
 	protected $authType;
 	/**
@@ -273,6 +273,11 @@ class Request extends Message //implements RequestInterface
 	public function getCSRFToken() : ?string
 	{
 		return $this->getCookie('X-CSRF-Token');
+	}
+
+	public function validateCSRFToken(string $token) : bool
+	{
+		return $this->getCSRFToken() === $token;
 	}
 
 	/**
@@ -617,15 +622,6 @@ class Request extends Message //implements RequestInterface
 		);
 	}
 
-	private function getScheme(string $host) : string
-	{
-		$scheme = \substr($host, 0, 7);
-		if ($scheme === 'http://' || $scheme === 'https:/') {
-			return '';
-		}
-		return 'http://';
-	}
-
 	/**
 	 * @param array|string|null $name
 	 * @param int|null          $filter
@@ -824,5 +820,14 @@ class Request extends Message //implements RequestInterface
 			$this->port = $host['port'];
 		}
 		return $this;
+	}
+
+	private function getScheme(string $host) : string
+	{
+		$scheme = \substr($host, 0, 7);
+		if ($scheme === 'http://' || $scheme === 'https:/') {
+			return '';
+		}
+		return 'http://';
 	}
 }
