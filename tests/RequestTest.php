@@ -19,12 +19,19 @@ class RequestTest extends TestCase
 		$this->assertInstanceOf(\Framework\HTTP\GeoIP::class, $this->request->getGeoIP());
 	}
 
-	public function _testUserAgent()
+	public function testUserAgent()
 	{
 		$this->assertInstanceOf(
 			\Framework\HTTP\UserAgent::class,
 			$this->request->getUserAgent()
 		);
+		$this->assertInstanceOf(
+			\Framework\HTTP\UserAgent::class,
+			$this->request->getUserAgent()
+		);
+		$this->request->input['SERVER']['HTTP_USER_AGENT'] = null;
+		$this->request->userAgent = null;
+		$this->assertNull($this->request->getUserAgent());
 	}
 
 	public function setUp()

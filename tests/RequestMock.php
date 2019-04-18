@@ -50,6 +50,7 @@ class RequestMock extends \Framework\HTTP\Request
 		'ENCODING' => null,
 		'LANGUAGE' => null,
 	];
+	public $userAgent;
 
 	public function setInput(array $input)
 	{
