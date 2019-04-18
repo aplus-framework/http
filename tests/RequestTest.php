@@ -88,6 +88,10 @@ class RequestTest extends TestCase
 			'height' => '500px',
 			'width' => '800',
 		], $this->request->getParsedBody());
+		$this->request->body = null;
+		$this->request->parsedBody = null;
+		$this->assertEquals('', $this->request->getBody());
+		$this->assertEquals([], $this->request->getParsedBody());
 	}
 
 	public function testCharset()
@@ -118,6 +122,11 @@ class RequestTest extends TestCase
 	public function testContentType()
 	{
 		$this->assertEquals('text/html; charset=UTF-8', $this->request->getContentType());
+	}
+
+	public function testProtocol()
+	{
+		$this->assertEquals('HTTP/1.1', $this->request->getProtocol());
 	}
 
 	public function testCookie()
@@ -275,6 +284,12 @@ class RequestTest extends TestCase
 		);
 	}
 
+	public function testEmptyFiles()
+	{
+		$_FILES = [];
+		$this->assertEmpty($this->request->getFiles());
+	}
+
 	public function testGet()
 	{
 		$this->assertEquals([
@@ -310,6 +325,12 @@ class RequestTest extends TestCase
 	public function testHost()
 	{
 		$this->assertEquals('domain.tld', $this->request->getHost());
+		$request = new RequestMock('localhost');
+		$this->assertEquals('localhost', $request->getHost());
+		$this->assertEquals(80, $request->getPort());
+		$request = new RequestMock('https://localhost:81');
+		$this->assertEquals('localhost', $request->getHost());
+		$this->assertEquals(81, $request->getPort());
 		$this->expectException(\InvalidArgumentException::class);
 		$this->expectExceptionMessage('Invalid host: ');
 		new Request('');

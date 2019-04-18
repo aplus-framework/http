@@ -2,8 +2,8 @@
 
 class RequestProxyMock extends RequestMock
 {
-	protected $body = '{"test":123}';
-	protected $input = [
+	public $body = '{"test":123}';
+	public $input = [
 		'POST' => [
 			'username' => 'phpdev',
 			'password' => 'Aw3S0me',

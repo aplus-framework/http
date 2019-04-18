@@ -2,8 +2,9 @@
 
 class RequestMock extends \Framework\HTTP\Request
 {
-	protected $body = 'color=red&height=500px&width=800';
-	protected $input = [
+	public $parsedBody;
+	public $body = 'color=red&height=500px&width=800';
+	public $input = [
 		'POST' => [
 			'username' => 'phpdev',
 			'password' => 'Aw3S0me',
