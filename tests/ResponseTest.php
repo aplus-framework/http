@@ -46,18 +46,37 @@ class ResponseTest extends TestCase
 
 	public function testBody()
 	{
-		// Starts Output Buffer to avoid PHPUnit Test Risk:
-		// "Test code or tested code did not (only) close its own output buffers"
-		//\ob_start();
-		//echo '<p>This will be Lost when call setBody()</p>';
-		$this->assertEquals('', $this->response->getBody());
+		echo '<p>This will be Lost when call setBody()</p>';
+		$this->assertEquals(
+			'<p>This will be Lost when call setBody()</p>',
+			$this->response->getBody()
+		);
 		$this->response->setBody('<h1>Title</h1>');
-		//echo '<p>Content</p>';
-		$this->assertEquals('<h1>Title</h1>', $this->response->getBody());
-		/*if (ob_get_length())
-		{
-			ob_get_clean();
-		}*/
+		$this->assertEquals(
+			'<h1>Title</h1>',
+			$this->response->getBody()
+		);
+		echo 'Foo';
+		$this->assertEquals(
+			'<h1>Title</h1>Foo',
+			$this->response->getBody()
+		);
+		$this->response->appendBody(' Appended');
+		$this->assertEquals(
+			'<h1>Title</h1>Foo Appended',
+			$this->response->getBody()
+		);
+		$this->response->prependBody('Preprended ');
+		$this->assertEquals(
+			'Preprended <h1>Title</h1>Foo Appended',
+			$this->response->getBody()
+		);
+		echo 'Ignored';
+		$this->response->setBody('Replace');
+		$this->assertEquals(
+			'Replace',
+			$this->response->getBody()
+		);
 	}
 
 	public function testCache()
@@ -313,5 +332,18 @@ class ResponseTest extends TestCase
 		$this->expectException(\LogicException::class);
 		$this->expectExceptionMessage('Unknown status code must have a reason: 483');
 		$this->response->setStatusLine(483);
+	}
+
+	public function testSetContents()
+	{
+		$this->assertNull($this->response->getHeader('content-type'));
+		$this->response->setContentType('foo');
+		$this->assertEquals('foo; charset=UTF-8', $this->response->getHeader('content-type'));
+		$this->assertNull($this->response->getHeader('content-language'));
+		$this->response->setContentLanguage('de');
+		$this->assertEquals('de', $this->response->getHeader('content-language'));
+		$this->assertNull($this->response->getHeader('content-encoding'));
+		$this->response->setContentEncoding('gzip');
+		$this->assertEquals('gzip', $this->response->getHeader('content-encoding'));
 	}
 }

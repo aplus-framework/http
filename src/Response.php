@@ -22,7 +22,7 @@ class Response extends Message //implements ResponseInterface
 	 */
 	protected $isSent = false;
 	/**
-	 * @var \Framework\HTTP\Request
+	 * @var Request
 	 */
 	protected $request;
 	/**
@@ -126,7 +126,12 @@ class Response extends Message //implements ResponseInterface
 	 */
 	public function getBody() : string
 	{
-		return $this->body . (\ob_get_length() ? \ob_get_clean() : '');
+		$buffer = '';
+		if (\ob_get_length()) {
+			$buffer = \ob_get_contents();
+			\ob_clean();
+		}
+		return $this->body .= $buffer;
 	}
 
 	/**
@@ -203,7 +208,7 @@ class Response extends Message //implements ResponseInterface
 			'domain' => $domain,
 			'secure' => $secure,
 			'httponly' => $httponly,
-			'samesite' => $samesite, // TODO: PHP 7.3+
+			'samesite' => $samesite ? \ucfirst(\strtolower($samesite)) : null,
 		];
 		return $this;
 	}
@@ -366,12 +371,6 @@ class Response extends Message //implements ResponseInterface
 	 * Sets the HTTP Redirect Response with data accessible in the next HTTP Request.
 	 *
 	 * @param string   $location the Location Header value
-	 * @param array    $with     Array of data that will be available in the next request.
-	 *                           The keys "input" and "errors" are automatically set, containing
-	 *                           the input data of the current Request and errors from the
-	 *                           Validation instance. Set false to disable the automatic values
-	 *                           of a key. Custom values are merged on top of the automatic
-	 *                           values
 	 * @param int|null $code     HTTP Redirect status code. Leave null to determine based on the
 	 *                           current HTTP method and protocol.
 	 *
@@ -384,7 +383,7 @@ class Response extends Message //implements ResponseInterface
 	 * @todo See:
 	 *       https://github.com/phalcon/cphalcon/blob/caeac66e7db02fd54c44a27cf22a6381654af2ee/phalcon/http/response.zep#L471
 	 */
-	public function redirect(string $location, array $with = [], int $code = null)
+	/*public function redirect(string $location, array $with = [], int $code = null)
 	{
 		if (empty($code) &&
 			(float) \str_ireplace(
@@ -456,7 +455,7 @@ class Response extends Message //implements ResponseInterface
 			session()->setFlash('$__REDIRECT', $with);
 		}
 		return $this;
-	}
+	} */
 
 	/**
 	 * @throws \LogicException if Response already is sent
@@ -488,9 +487,10 @@ class Response extends Message //implements ResponseInterface
 	protected function sendCookies() : void
 	{
 		foreach ($this->cookies as $params) {
-			unset($params['samesite']); // TODO: php7.3+
-			$params = \array_values($params);
-			\setcookie(...$params);
+			$name = $params['name'];
+			$value = $params['value'];
+			unset($params['name'], $params['value']);
+			\setcookie($name, $value, $params);
 		}
 	}
 
