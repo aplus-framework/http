@@ -9,14 +9,14 @@ class UploadedFileTest extends TestCase
 	 * @var array
 	 */
 	protected $file = [
-		'name' => 'logo.png',
+		'name' => 'logo.jpg',
 		'type' => 'foo/bar',
 		'size' => 19878,
 		'tmp_name' => __DIR__ . '/files/logo.png',
 		'error' => 0,
 	];
 	/**
-	 * @var \Framework\HTTP\UploadedFile;
+	 * @var UploadedFile;
 	 */
 	protected $uploadedFile;
 
@@ -27,12 +27,23 @@ class UploadedFileTest extends TestCase
 
 	public function testGetClientExtension()
 	{
-		$this->assertEquals('png', $this->uploadedFile->getClientExtension());
+		$this->assertEquals('jpg', $this->uploadedFile->getClientExtension());
+	}
+
+	public function testGetExtension()
+	{
+		$this->assertEquals('png', $this->uploadedFile->getExtension());
+		$this->assertEquals('png', $this->uploadedFile->getExtension());
 	}
 
 	public function testGetClientType()
 	{
-		$this->assertEquals($this->file['type'], $this->uploadedFile->getClientType());
+		$this->assertEquals('foo/bar', $this->uploadedFile->getClientType());
+	}
+
+	public function testGetType()
+	{
+		$this->assertEquals('image/png', $this->uploadedFile->getType());
 	}
 
 	public function testGetError()
@@ -47,22 +58,17 @@ class UploadedFileTest extends TestCase
 
 	public function testGetName()
 	{
-		$this->assertEquals($this->file['name'], $this->uploadedFile->getName());
+		$this->assertEquals('logo.jpg', $this->uploadedFile->getName());
 	}
 
 	public function testGetSize()
 	{
-		$this->assertEquals($this->file['size'], $this->uploadedFile->getSize());
+		$this->assertEquals(19878, $this->uploadedFile->getSize());
 	}
 
 	public function testGetTmpName()
 	{
-		$this->assertEquals($this->file['tmp_name'], $this->uploadedFile->getTmpName());
-	}
-
-	public function testGetType()
-	{
-		$this->assertEquals('image/png', $this->uploadedFile->getType());
+		$this->assertEquals(__DIR__ . '/files/logo.png', $this->uploadedFile->getTmpName());
 	}
 
 	public function testIsMoved()
