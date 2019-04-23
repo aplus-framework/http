@@ -228,11 +228,13 @@ class UserAgent
 		],
 	];
 
-	public function __construct(string $user_agent, array $config = [])
+	/**
+	 * UserAgent constructor.
+	 *
+	 * @param string $user_agent User-Agent string
+	 */
+	public function __construct(string $user_agent)
 	{
-		if ($config) {
-			static::$config = \array_replace_recursive(static::$config, $config);
-		}
 		$this->parse($user_agent);
 	}
 

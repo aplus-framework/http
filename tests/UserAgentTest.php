@@ -65,4 +65,13 @@ class UserAgentTest extends TestCase
 		$this->assertTrue($agent->isMobile());
 		$this->assertTrue($agent->isMobile('android'));
 	}
+
+	public function testUnknown()
+	{
+		$agent = new UserAgent('foo');
+		$this->assertFalse($agent->isBrowser());
+		$this->assertFalse($agent->isRobot());
+		$this->assertFalse($agent->isRobot());
+		$this->assertFalse($agent->isMobile());
+	}
 }
