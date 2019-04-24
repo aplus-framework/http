@@ -502,20 +502,27 @@ class Request extends Message //implements RequestInterface
 	 *
 	 * @param string $key a key name or null to get all data
 	 *
+	 * @see Response::redirect
+	 *
+	 * @throws \LogicException if PHP Session is not active to get redirect data
+	 *
 	 * @return mixed|null an array containing all data, the key value or null if the key was not
 	 *                    found
 	 */
-	public function getOld(string $key = null)
+	public function getRedirectData(string $key = null)
 	{
-		static $old;
-		if ($old === null) {
-			$old = (array) session()->getFlash('$__REDIRECT');
+		static $data;
+		if ($data === null && \session_status() !== \PHP_SESSION_ACTIVE) {
+			throw new \LogicException('Session must be active to get redirect data');
 		}
-		if ($key !== null && $old) {
-			//return \array_simple_value($key, $old);
-			return $old[$key] ?? null;
+		if ($data === null) {
+			$data = $_SESSION['$__REDIRECT'] ?? false;
+			unset($_SESSION['$__REDIRECT']);
 		}
-		return $old;
+		if ($key !== null && $data) {
+			return \ArraySimple::value($key, $data);
+		}
+		return $data ?: null;
 	}
 
 	/**

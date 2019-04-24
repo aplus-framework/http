@@ -10,33 +10,44 @@ class ResponseTest extends TestCase
 	 */
 	protected $response;
 
-	public function _testPostRedirectGet()
+	/**
+	 * @runInSeparateProcess
+	 */
+	public function testPostRedirectGet()
 	{
-		$this->response = new class() extends Response {
-			protected function getServer(string $name)
-			{
-				if ($this->input['SERVER'] === null) {
-					$this->input['SERVER'] = [
-						'REQUEST_METHOD' => 'POST',
-						'SERVER_PROTOCOL' => 'HTTP/1.1',
-					];
-				}
-				return $this->input['SERVER'][$name] ?? null;
-			}
+		$request = new RequestMock();
+		$request->input['SERVER']['REQUEST_METHOD'] = 'POST';
+		$this->response = new class($request) extends Response {
 		};
-		$this->response->redirect('/new');
+		\session_start();
+		$this->response->redirect('/new', ['foo']);
 		$this->assertEquals('/new', $this->response->getHeader('Location'));
-		$this->assertEquals(303, $this->response->getStatus('code'));
+		$this->assertEquals(303, $this->response->getStatusCode());
+		$this->assertEquals(['foo'], $request->getRedirectData());
 	}
 
-	public function _testRedirect()
+	public function testRedirectDataWithoutSession()
+	{
+		$this->expectException(\LogicException::class);
+		$this->expectExceptionMessage('Session must be active to set redirect data');
+		$this->response->redirect('/new', ['foo']);
+	}
+
+	public function testInvalidRedirectCode()
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('Invalid Redirection code: 404');
+		$this->response->redirect('/new', [], 404);
+	}
+
+	public function testRedirect()
 	{
 		$this->response->redirect('/new');
 		$this->assertEquals('/new', $this->response->getHeader('Location'));
-		$this->assertEquals(302, $this->response->getStatus('code'));
-		$this->response->redirect('/other', 301);
+		$this->assertEquals(307, $this->response->getStatusCode());
+		$this->response->redirect('/other', [], 301);
 		$this->assertEquals('/other', $this->response->getHeader('Location'));
-		$this->assertEquals(301, $this->response->getStatus('code'));
+		$this->assertEquals(301, $this->response->getStatusCode());
 	}
 
 	public function setUp()

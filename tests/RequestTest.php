@@ -441,6 +441,34 @@ class RequestTest extends TestCase
 		$this->assertNull($this->proxyRequest->getReferer());
 	}
 
+	/**
+	 * @runInSeparateProcess
+	 */
+	public function testRedirectDataEmpty()
+	{
+		\session_start();
+		$this->assertNull($this->request->getRedirectData());
+	}
+
+	/**
+	 * @runInSeparateProcess
+	 */
+	public function testRedirectData()
+	{
+		\session_start();
+		$_SESSION['$__REDIRECT'] = ['foo' => ['bar' => 'baz']];
+		$this->assertEquals($_SESSION['$__REDIRECT'], $this->request->getRedirectData());
+		$this->assertFalse(isset($_SESSION['$__REDIRECT']));
+		$this->assertEquals(['bar' => 'baz'], $this->request->getRedirectData('foo'));
+	}
+
+	public function testRedirectDataWithoutSession()
+	{
+		$this->expectException(\LogicException::class);
+		$this->expectExceptionMessage('Session must be active to get redirect data');
+		$this->request->getRedirectData();
+	}
+
 	public function testURL()
 	{
 		$this->assertEquals(

@@ -370,92 +370,36 @@ class Response extends Message //implements ResponseInterface
 	/**
 	 * Sets the HTTP Redirect Response with data accessible in the next HTTP Request.
 	 *
-	 * @param string   $location the Location Header value
+	 * @param string   $location Location Header value
+	 * @param array    $data     Session data available on next Request
 	 * @param int|null $code     HTTP Redirect status code. Leave null to determine based on the
-	 *                           current HTTP method and protocol.
+	 *                           current HTTP method.
 	 *
 	 * @see  http://en.wikipedia.org/wiki/Post/Redirect/Get
+	 * @see  Request::getRedirectData
 	 *
-	 * @throws \InvalidArgumentException for $with if the type is not array or false
+	 * @throws \InvalidArgumentException for invalid Redirection code
+	 * @throws \LogicException           if PHP Session is not active to set redirect data
 	 *
 	 * @return $this
-	 *
-	 * @todo See:
-	 *       https://github.com/phalcon/cphalcon/blob/caeac66e7db02fd54c44a27cf22a6381654af2ee/phalcon/http/response.zep#L471
 	 */
-	/*public function redirect(string $location, array $with = [], int $code = null)
+	public function redirect(string $location, array $data = [], int $code = null)
 	{
-		if (empty($code) &&
-			(float) \str_ireplace(
-				'HTTP/',
-				'',
-				(string) $this->getServer('SERVER_PROTOCOL')
-			) >= 1.1) {
-			// See: http://en.wikipedia.org/wiki/Post/Redirect/Get
-			$code = $this->getServer('REQUEST_METHOD') === 'GET' ? 307 : 303;
+		if ($code === null) {
+			$code = $this->request->getServer('REQUEST_METHOD') === 'GET' ? 307 : 303;
 		} elseif ($code < 300 || $code > 308) {
-			$code = 302;
+			throw new \InvalidArgumentException("Invalid Redirection code: {$code}");
 		}
-		$this->setStatus($code);
+		$this->setStatusCode($code);
 		$this->setHeader('Location', $location);
-		if (\array_key_exists('input', $with)) {
-			if ($with['input'] !== false && ! \is_array($with['input'])) {
-				throw new \InvalidArgumentException('Redirect with input must be an array or false.');
+		if ($data) {
+			if (\session_status() !== \PHP_SESSION_ACTIVE) {
+				throw new \LogicException('Session must be active to set redirect data');
 			}
-			if ($with['input'] !== false) {
-				switch ($this->request->getMethod()) {
-					case 'POST':
-						$input = $this->request->getPOST();
-						break;
-					case 'PATCH':
-					case 'PUT':
-						$input = $this->request->getBody(true);
-						break;
-					default:
-						$input = [];
-						break;
-				}
-				if (isset($with['input'])) {
-					$with['input'] = \array_replace_recursive($input, $with['input']);
-				} else {
-					$with['input'] = $input;
-				}
-			} else {
-				unset($with['input']);
-			}
-		} else {
-			switch ($this->request->getMethod()) {
-				case 'POST':
-					$with['input'] = $this->request->getPOST();
-					break;
-				case 'PATCH':
-				case 'PUT':
-					$with['input'] = $this->request->getBody(true);
-					break;
-			}
-		}
-		if (\array_key_exists('errors', $with)) {
-			if ($with['errors'] !== false && ! \is_array($with['errors'])) {
-				throw new \InvalidArgumentException('Redirect with errors must be an array or false.');
-			}
-			if ($with['errors'] !== false) {
-				$errors = Services::validation()->getErrors();
-				if (isset($with['errors'])) {
-					$with['errors'] = \array_replace_recursive($errors, $with['errors']);
-				} else {
-					$with['errors'] = $errors;
-				}
-			} else {
-				unset($with['errors']);
-			}
-		} else {
-			$with['errors'] = Services::validation()->getErrors();
-		}
-		if ($with) {
-			session()->setFlash('$__REDIRECT', $with);
+			$_SESSION['$__REDIRECT'] = $data;
 		}
 		return $this;
-	} */
+	}
 
 	/**
 	 * @throws \LogicException if Response already is sent
