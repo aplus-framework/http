@@ -413,8 +413,6 @@ class Request extends Message //implements RequestInterface
 		if ($this->id !== null) {
 			return $this->id;
 		}
-		// TODO: Use id in Debug collectors tabs - view/database
-		// TODO: Try other Server keys - apache is different
 		$this->id = $this->getServer('HTTP_X_REQUEST_ID');
 		if (empty($this->id)) {
 			$this->id = \md5(\uniqid($this->getIP(), true));
