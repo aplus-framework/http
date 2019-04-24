@@ -14,7 +14,7 @@ class RequestTest extends TestCase
 	 */
 	protected $request;
 
-	public function _testGeoIP()
+	public function testGeoIP()
 	{
 		$this->assertInstanceOf(\Framework\HTTP\GeoIP::class, $this->request->getGeoIP());
 	}

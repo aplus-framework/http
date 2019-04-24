@@ -356,18 +356,12 @@ class Request extends Message //implements RequestInterface
 	}
 
 	/**
-	 * @param string|null $custom_directory
-	 *
 	 * @return GeoIP
 	 */
-	public function getGeoIP(string $custom_directory = null) : GeoIP
+	public function getGeoIP() : GeoIP
 	{
 		if ($this->geoip === null) {
-			// TODO: Remove this testback
-			$ip = $this->getIP();
-			//$ip = '170.82.196.47';
-			$ip = '192.30.252.129';
-			$this->geoip = new GeoIP($ip, $custom_directory);
+			$this->geoip = new GeoIP($this->getIP());
 		}
 		return $this->geoip;
 	}

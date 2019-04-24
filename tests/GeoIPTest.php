@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 class GeoIPTest extends TestCase
 {
 	/**
-	 * @var \Framework\HTTP\GeoIP
+	 * @var GeoIP
 	 */
 	protected static $geoip;
 	/**
