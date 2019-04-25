@@ -872,7 +872,7 @@ class UploadedFile
 			}
 			return $this->extension = $mime_extensions[0];
 		}
-		return $this->extension = \explode('/', $this->getType(), 2)[1] ?? '';
+		return $this->extension = '';
 	}
 
 	/**
