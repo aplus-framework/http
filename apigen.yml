@@ -1,8 +1,0 @@
-parameters:
-  visibilityLevels:
-    - public
-  annotationGroups:
-    - deprecated
-  title: "HTTP docs API"
-  baseUrl: ""
-  overwrite: true
