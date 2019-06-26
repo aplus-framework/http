@@ -181,10 +181,8 @@ class URL
 	 */
 	public function getQuery(array $allowed_keys = []) : ?string
 	{
-		$query = \urldecode(\http_build_query(
-			$allowed_keys ? $this->filterQuery($allowed_keys) : $this->queryData
-		));
-		return $query === '' ? null : $query;
+		$query = $this->getQueryData($allowed_keys);
+		return $query ? \http_build_query($query) : null;
 	}
 
 	public function getQueryData(array $allowed_keys = []) : array
