@@ -1,13 +1,21 @@
 <?php namespace Framework\HTTP\Client;
 
+use Framework\HTTP\Cookie;
 use Framework\HTTP\Message;
+use Framework\HTTP\RequestInterface;
 use Framework\HTTP\URL;
 
-class Request extends Message
+class Request extends Message implements RequestInterface
 {
-	protected $protocol = 1.1;
+	/**
+	 * HTTP Request Method.
+	 *
+	 * @var string
+	 */
 	protected $method = 'GET';
 	/**
+	 * HTTP Request URL.
+	 *
 	 * @var URL
 	 */
 	protected $url;
@@ -58,20 +66,9 @@ class Request extends Message
 		return $this->method;
 	}
 
-	public function getProtocol()
+	public function setProtocol(string $protocol)
 	{
-		return $this->protocol;
-	}
-
-	public function setProtocol(float $protocol)
-	{
-		$this->protocol = $protocol;
-		return $this;
-	}
-
-	public function getBody() : ?string
-	{
-		return $this->body;
+		return parent::setProtocol($protocol);
 	}
 
 	public function setBody($body)
@@ -79,8 +76,7 @@ class Request extends Message
 		if ( ! \is_scalar($body)) {
 			$body = \http_build_query($body);
 		}
-		$this->body = $body;
-		return $this;
+		return parent::setBody($body);
 	}
 
 	/**
@@ -118,84 +114,79 @@ class Request extends Message
 		return $this;
 	}
 
+	public function setPOST(array $data)
+	{
+		// TODO: Implement method
+	}
+
+	public function setFiles(array $files)
+	{
+		['@filename'];
+		// TODO: Implement method
+	}
+
 	public function setContentType(string $mime, string $charset = 'UTF-8')
 	{
 		$this->setHeader('Content-Type', $mime . ($charset ? '; charset=' . $charset : ''));
 		return $this;
 	}
 
-	public function getCookie(string $name) : ?string
+	public function setCookie(Cookie $cookie)
 	{
-		return $this->cookies[$name] ?? null;
-	}
-
-	public function setCookie(string $name, string $value)
-	{
-		$this->cookies[$name] = $value;
+		parent::setCookie($cookie);
 		$this->setCookieHeader();
 		return $this;
 	}
 
+	public function setCookies(array $cookies)
+	{
+		return parent::setCookies($cookies);
+	}
+
 	public function removeCookie(string $name)
 	{
-		unset($this->cookies[$name]);
+		parent::removeCookie($name);
+		$this->setCookieHeader();
+		return $this;
+	}
+
+	public function removeCookies(array $names)
+	{
+		parent::removeCookies($names);
 		$this->setCookieHeader();
 		return $this;
 	}
 
 	protected function setCookieHeader()
 	{
-		$cookie = null;
-		foreach ($this->getCookies() as $name => $value) {
-			$cookie .= $name . '=' . $value . '; ';
+		$line = [];
+		foreach ($this->getCookies() as $cookie) {
+			$line[] = $cookie->getName() . '=' . $cookie->getValue();
 		}
-		if ($cookie) {
-			$cookie = \rtrim($cookie, '; ');
-			return $this->setHeader('Cookie', $cookie);
+		if ($line) {
+			$line = \implode('; ', $line);
+			return $this->setHeader('Cookie', $line);
 		}
 		return $this->removeHeader('Cookie');
 	}
 
-	public function setCookies(array $cookies)
-	{
-		foreach ($cookies as $name => $value) {
-			$this->setCookie($name, $value);
-		}
-		return $this;
-	}
-
-	public function getCookies() : array
-	{
-		return $this->cookies;
-	}
-
-	public function getHeader(string $name) : ?string
-	{
-		return $this->headers[$this->getHeaderName($name)] ?? null;
-	}
-
-	public function getHeaders() : array
-	{
-		return $this->headers;
-	}
-
 	public function setHeader(string $name, string $value)
 	{
-		$this->headers[$this->getHeaderName($name)] = $value;
-		return $this;
+		return parent::setHeader($name, $value);
 	}
 
 	public function setHeaders(array $headers)
 	{
-		foreach ($headers as $name => $value) {
-			$this->setHeader($name, $value);
-		}
-		return $this;
+		return parent::setHeaders($headers);
 	}
 
 	public function removeHeader(string $name)
 	{
-		unset($this->headers[$this->getHeaderName($name)]);
-		return $this;
+		return parent::removeHeader($name);
+	}
+
+	public function removeHeaders(array $names)
+	{
+		return parent::removeHeaders($names);
 	}
 }

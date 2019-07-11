@@ -10,6 +10,9 @@ class Client
 		\CURLOPT_AUTOREFERER => true,
 	];
 	protected $options = [];
+	protected $responseProtocol;
+	protected $responseCode;
+	protected $responseReason;
 	protected $responseHeaders = [];
 
 	public function setOption($option, $value)
@@ -48,12 +51,12 @@ class Client
 		$this->responseHeaders = [];
 	}
 
-	protected function setHTTPVersion(float $version)
+	protected function setHTTPVersion(string $version)
 	{
-		if ($version === 1.0) {
+		if ($version === 'HTTP/1.0') {
 			return $this->setOption(\CURLOPT_HTTP_VERSION, \CURL_HTTP_VERSION_1_0);
 		}
-		if ($version === 1.1) {
+		if ($version === 'HTTP/1.1') {
 			return $this->setOption(\CURLOPT_HTTP_VERSION, \CURL_HTTP_VERSION_1_1);
 		}
 	}
@@ -91,10 +94,12 @@ class Client
 			throw new \RuntimeException(\curl_error($curl), \curl_errno($curl));
 		}
 		//\var_dump(\curl_getinfo($curl, CURLINFO_HEADER_OUT));
-		$status_code = \curl_getinfo($curl, \CURLINFO_HTTP_CODE);
+		//$status_code = \curl_getinfo($curl, \CURLINFO_HTTP_CODE);
 		\curl_close($curl);
 		return new Response(
-			$status_code,
+			$this->responseProtocol,
+			$this->responseCode,
+			$this->responseReason,
 			$this->responseHeaders,
 			$body
 		);
@@ -115,7 +120,13 @@ class Client
 			return \strlen($line);
 		}
 		if (\strpos($trimmed_line, ':') === false) {
-			// TODO: parse protocol and code/reason - HTTP/1.1 200 OK
+			if (\strpos($trimmed_line, 'HTTP/') === 0) {
+				[
+					$this->responseProtocol,
+					$this->responseCode,
+					$this->responseReason,
+				] = \explode(' ', $trimmed_line, 3);
+			}
 			return \strlen($line);
 		}
 		[$name, $value] = \explode(':', $trimmed_line, 2);

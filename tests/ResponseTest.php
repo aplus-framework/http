@@ -1,5 +1,6 @@
 <?php namespace Tests\HTTP;
 
+use Framework\HTTP\Cookie;
 use Framework\HTTP\Response;
 use PHPUnit\Framework\TestCase;
 
@@ -16,7 +17,7 @@ class ResponseTest extends TestCase
 	public function testPostRedirectGet()
 	{
 		$request = new RequestMock();
-		$request->input['SERVER']['REQUEST_METHOD'] = 'POST';
+		$request->setServerVariable('REQUEST_METHOD', 'POST');
 		$this->response = new class($request) extends Response {
 		};
 		\session_start();
@@ -112,68 +113,29 @@ class ResponseTest extends TestCase
 	public function testCookie()
 	{
 		$this->assertEquals([], $this->response->getCookies());
-		$this->response->setCookie('session_id', 'abc');
+		$cookie_1 = new Cookie('session_id', 'abc');
+		$this->response->setCookie($cookie_1);
 		$this->assertEquals([
-			'session_id' => [
-				'name' => 'session_id',
-				'value' => 'abc',
-				'expires' => \time() - 86500,
-				'path' => '/',
-				'domain' => '',
-				'secure' => false,
-				'httponly' => false,
-				'samesite' => null,
-			],
+			'session_id' => $cookie_1,
 		], $this->response->getCookies());
-		$this->response->setCookie('cart', '123', 3600, '', '/', true);
+		$cookie_2 = (new Cookie('cart', '123'))->setExpires(3600)->setPath('/')->setSecure(true);
+		$this->response->setCookie($cookie_2);
+		$this->assertEquals($cookie_2, $this->response->getCookie('cart'));
 		$this->assertEquals([
-			'name' => 'cart',
-			'value' => '123',
-			'expires' => \time() + 3600,
-			'path' => '/',
-			'domain' => '',
-			'secure' => true,
-			'httponly' => false,
-			'samesite' => null,
-		], $this->response->getCookie('cart'));
-		$this->assertEquals([
-			'session_id' => [
-				'name' => 'session_id',
-				'value' => 'abc',
-				'expires' => \time() - 86500,
-				'path' => '/',
-				'domain' => '',
-				'secure' => false,
-				'httponly' => false,
-				'samesite' => null,
-			],
-			'cart' => [
-				'name' => 'cart',
-				'value' => '123',
-				'expires' => \time() + 3600,
-				'path' => '/',
-				'domain' => '',
-				'secure' => true,
-				'httponly' => false,
-				'samesite' => null,
-			],
+			'session_id' => $cookie_1,
+			'cart' => $cookie_2,
 		], $this->response->getCookies());
 		$this->response->removeCookie('cart');
 		$this->assertNull($this->response->getCookie('cart'));
 		$this->assertEquals([
-			'session_id' => [
-				'name' => 'session_id',
-				'value' => 'abc',
-				'expires' => \time() - 86500,
-				'path' => '/',
-				'domain' => '',
-				'secure' => false,
-				'httponly' => false,
-				'samesite' => null,
-			],
+			'session_id' => $cookie_1,
 		], $this->response->getCookies());
 		$this->response->removeCookies(['session_id']);
-		$this->assertEquals([], $this->response->getCookies());
+		$this->assertEmpty($this->response->getCookies());
+		$this->response->setCookies([
+			new Cookie('foo', 'foo'),
+		]);
+		$this->assertNotEmpty($this->response->getCookies());
 	}
 
 	public function testCSRFToken()
@@ -181,17 +143,8 @@ class ResponseTest extends TestCase
 		$this->assertNull($this->response->getCookie('X-CSRF-Token'));
 		$this->response->setCSRFToken('foo');
 		$this->assertEquals(
-			[
-				'name' => 'X-CSRF-Token',
-				'value' => 'foo',
-				'expires' => \time() + 7200,
-				'path' => '/',
-				'domain' => '',
-				'secure' => false,
-				'httponly' => true,
-				'samesite' => 'Strict',
-			],
-			$this->response->getCookie('X-CSRF-Token')
+			'foo',
+			$this->response->getCookie('X-CSRF-Token')->getValue()
 		);
 	}
 
@@ -305,7 +258,9 @@ class ResponseTest extends TestCase
 	public function testSend()
 	{
 		$this->response->setHeader('foo', 'bar');
-		$this->response->setCookie('session_id', 'abc123', 3600);
+		$this->response->setCookie(
+			(new Cookie('session_id', 'abc123'))->setExpires(\time() + 3600)
+		);
 		$this->response->setBody('Hello!');
 		$this->assertFalse($this->response->isSent());
 		\ob_start();
@@ -316,7 +271,7 @@ class ResponseTest extends TestCase
 			'Date: ' . \gmdate('D, d M Y H:i:s') . ' GMT',
 			'Content-Type: text/html; charset=UTF-8',
 			'Set-Cookie: session_id=abc123; expires=' . \gmdate('D, d-M-Y H:i:s', \time() + 3600)
-			. ' GMT; Max-Age=3600; path=/',
+			. ' GMT; Max-Age=3600',
 		], xdebug_get_headers());
 		$this->assertEquals('Hello!', $contents);
 		$this->assertTrue($this->response->isSent());

@@ -5,18 +5,12 @@
  *
  * @see     https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#HTTP_Responses
  */
-class Response extends Message //implements ResponseInterface
+class Response extends Message implements ResponseInterface
 {
 	/**
 	 * @var int
 	 */
 	protected $cacheSeconds = 0;
-	/**
-	 * @var array
-	 */
-	protected $input = [
-		'SERVER' => null,
-	];
 	/**
 	 * @var bool
 	 */
@@ -32,7 +26,7 @@ class Response extends Message //implements ResponseInterface
 	 *
 	 * @var array
 	 */
-	protected $responseCodes = [
+	protected static $responseCodes = [
 		// Information responses
 		100 => 'Continue',
 		101 => 'Switching Protocols',
@@ -134,170 +128,62 @@ class Response extends Message //implements ResponseInterface
 		return $this->body .= $buffer;
 	}
 
-	/**
-	 * @param string $body
-	 *
-	 * @return $this
-	 */
 	public function setBody(string $body)
 	{
 		if (\ob_get_length()) {
 			\ob_clean();
 		}
-		$this->body = $body;
-		return $this;
+		return parent::setBody($body);
 	}
 
 	public function prependBody(string $content)
 	{
-		$this->body = $content . $this->getBody();
-		return $this;
+		return parent::setBody($content . $this->getBody());
 	}
 
 	public function appendBody(string $content)
 	{
-		$this->body = $this->getBody() . $content;
-		return $this;
+		return parent::setBody($this->getBody() . $content);
 	}
 
-	/**
-	 * @param string|null $name cookie name or null to get all
-	 *
-	 * @return array|null returns an associative array if a given cookie name is found or null
-	 */
-	public function getCookie(string $name) : ?array
+	public function setCookie(Cookie $cookie)
 	{
-		return $this->cookies[$name] ?? null;
+		return parent::setCookie($cookie);
 	}
 
-	public function getCookies() : array
+	public function setCookies(array $cookies)
 	{
-		return $this->cookies;
+		return parent::setCookies($cookies);
 	}
 
-	/**
-	 * @param string      $name
-	 * @param string      $value
-	 * @param int         $expires
-	 * @param string      $domain
-	 * @param string      $path
-	 * @param bool        $secure
-	 * @param bool        $httponly
-	 * @param string|null $samesite
-	 *
-	 * @return $this
-	 */
-	public function setCookie(
-		string $name,
-		string $value = '',
-		int $expires = 0,
-		string $domain = '',
-		string $path = '/',
-		bool $secure = false,
-		bool $httponly = false,
-		string $samesite = null
-	) {
-		$expires = $expires < 1
-			? \time() - 86500
-			: \time() + $expires;
-		$this->cookies[$name] = [
-			'name' => $name,
-			'value' => $value,
-			'expires' => $expires,
-			'path' => $path,
-			'domain' => $domain,
-			'secure' => $secure,
-			'httponly' => $httponly,
-			'samesite' => $samesite ? \ucfirst(\strtolower($samesite)) : null,
-		];
-		return $this;
-	}
-
-	/**
-	 * @param string $name cookie name
-	 *
-	 * @return $this
-	 */
 	public function removeCookie(string $name)
 	{
-		unset($this->cookies[$name]);
-		return $this;
+		return parent::removeCookie($name);
 	}
 
 	public function removeCookies(array $names)
 	{
-		foreach ($names as $name) {
-			$this->removeCookie($name);
-		}
-		return $this;
+		return parent::removeCookies($names);
 	}
 
-	/**
-	 * @param string $name
-	 *
-	 * @return string|null
-	 */
-	public function getHeader(string $name) : ?string
-	{
-		return $this->headers[$this->getHeaderName($name)] ?? null;
-	}
-
-	public function getHeaders() : array
-	{
-		return $this->headers;
-	}
-
-	/**
-	 * @param string $name
-	 * @param string $value
-	 *
-	 * @return $this
-	 */
 	public function setHeader(string $name, string $value)
 	{
-		$this->headers[$this->getHeaderName($name)] = $value;
-		return $this;
+		return parent::setHeader($name, $value);
 	}
 
 	public function setHeaders(array $headers)
 	{
-		foreach ($headers as $name => $value) {
-			$this->setHeader($name, $value);
-		}
-		return $this;
+		return parent::setHeaders($headers);
 	}
 
-	/**
-	 * @param string $name
-	 *
-	 * @return $this
-	 */
 	public function removeHeader(string $name)
 	{
-		unset($this->headers[$this->getHeaderName($name)]);
-		return $this;
+		return parent::removeHeader($name);
 	}
 
 	public function removeHeaders(array $names)
 	{
-		foreach ($names as $name) {
-			$this->removeHeader($name);
-		}
-		return $this;
-	}
-
-	public function getProtocol() : string
-	{
-		return $this->getServer('SERVER_PROTOCOL') ?? 'HTTP/1.1';
-	}
-
-	protected function getServer(string $name)
-	{
-		if ($this->input['SERVER'] === null) {
-			$this->input['SERVER'] = (array) \filter_input_array(\INPUT_SERVER);
-			\ksort($this->input['SERVER']);
-		}
-		return $this->input['SERVER'][$name] ?? null;
+		return parent::removeHeaders($names);
 	}
 
 	/**
@@ -320,10 +206,10 @@ class Response extends Message //implements ResponseInterface
 	public function setStatusLine(int $code, string $reason = null)
 	{
 		$this->setStatusCode($code);
-		if (empty($reason) && empty($this->responseCodes[$code])) {
+		if (empty($reason) && empty(static::$responseCodes[$code])) {
 			throw new \LogicException("Unknown status code must have a reason: {$code}");
 		}
-		$this->setStatusReason($reason ?? $this->responseCodes[$code]);
+		$this->setStatusReason($reason ?? static::$responseCodes[$code]);
 		return $this;
 	}
 
@@ -386,7 +272,7 @@ class Response extends Message //implements ResponseInterface
 	public function redirect(string $location, array $data = [], int $code = null)
 	{
 		if ($code === null) {
-			$code = $this->request->getServer('REQUEST_METHOD') === 'GET' ? 307 : 303;
+			$code = $this->request->getServerVariable('REQUEST_METHOD') === 'GET' ? 307 : 303;
 		} elseif ($code < 300 || $code > 308) {
 			throw new \InvalidArgumentException("Invalid Redirection code: {$code}");
 		}
@@ -430,11 +316,8 @@ class Response extends Message //implements ResponseInterface
 
 	protected function sendCookies() : void
 	{
-		foreach ($this->cookies as $params) {
-			$name = $params['name'];
-			$value = $params['value'];
-			unset($params['name'], $params['value']);
-			\setcookie($name, $value, $params);
+		foreach ($this->cookies as $cookie) {
+			$cookie->send();
 		}
 	}
 
@@ -565,16 +448,12 @@ class Response extends Message //implements ResponseInterface
 
 	public function setCSRFToken(string $token, int $ttl = 7200)
 	{
-		$this->setCookie(
-			'X-CSRF-Token',
-			$token,
-			$ttl,
-			'',
-			'/',
-			$this->request->isSecure(),
-			true,
-			'Strict'
-		);
+		$cookie = (new Cookie('X-CSRF-Token', $token))
+			->setExpires(\time() + $ttl)
+			->setSecure($this->request->isSecure())
+			->setHttpOnly()
+			->setSameSite('Strict');
+		$this->setCookie($cookie);
 		return $this;
 	}
 

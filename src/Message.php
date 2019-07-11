@@ -8,15 +8,21 @@
 abstract class Message
 {
 	/**
+	 * HTTP Protocol.
+	 *
+	 * @var string
+	 */
+	protected $protocol = 'HTTP/1.1';
+	/**
 	 * HTTP Message Body.
 	 *
-	 * @var string|null
+	 * @var string
 	 */
-	protected $body;
+	protected $body = '';
 	/**
 	 * HTTP Message Cookies.
 	 *
-	 * @var array
+	 * @var array|Cookie[]
 	 */
 	protected $cookies = [];
 	/**
@@ -32,7 +38,7 @@ abstract class Message
 	 *
 	 * @var array
 	 */
-	protected $standardHeaders = [
+	protected static $standardHeaders = [
 		// General
 		'cache-control' => 'Cache-Control',
 		'connection' => 'Connection',
@@ -125,15 +131,106 @@ abstract class Message
 		'x-request-id' => 'X-Request-ID',
 	];
 
-	abstract public function getBody();
+	public function getHeader(string $name) : ?string
+	{
+		return $this->headers[static::getHeaderName($name)] ?? null;
+	}
 
-	abstract public function getCookie(string $name);
+	public function getHeaders() : array
+	{
+		return $this->headers;
+	}
 
-	abstract public function getCookies();
+	protected function setHeader(string $name, string $value)
+	{
+		$this->headers[static::getHeaderName($name)] = $value;
+		return $this;
+	}
 
-	abstract public function getHeader(string $name);
+	protected function setHeaders(array $headers)
+	{
+		foreach ($headers as $name => $value) {
+			$this->setHeader($name, $value);
+		}
+		return $this;
+	}
 
-	abstract public function getHeaders();
+	protected function removeHeader(string $name)
+	{
+		unset($this->headers[static::getHeaderName($name)]);
+		return $this;
+	}
+
+	protected function removeHeaders(array $names)
+	{
+		foreach ($names as $name) {
+			$this->removeHeader($name);
+		}
+		return $this;
+	}
+
+	public function getCookie(string $name) : ?Cookie
+	{
+		return $this->cookies[$name] ?? null;
+	}
+
+	/**
+	 * @return array|Cookie[]
+	 */
+	public function getCookies() : array
+	{
+		return $this->cookies;
+	}
+
+	protected function setCookie(Cookie $cookie)
+	{
+		$this->cookies[$cookie->getName()] = $cookie;
+		return $this;
+	}
+
+	protected function setCookies(array $cookies)
+	{
+		foreach ($cookies as $cookie) {
+			$this->setCookie($cookie);
+		}
+		return $this;
+	}
+
+	protected function removeCookie(string $name)
+	{
+		unset($this->cookies[$name]);
+		return $this;
+	}
+
+	protected function removeCookies(array $names)
+	{
+		foreach ($names as $name) {
+			$this->removeCookie($name);
+		}
+		return $this;
+	}
+
+	public function getBody() : string
+	{
+		return $this->body;
+	}
+
+	protected function setBody(string $body)
+	{
+		$this->body = $body;
+		return $this;
+	}
+
+	public function getProtocol() : string
+	{
+		return $this->protocol;
+	}
+
+	protected function setProtocol(string $protocol)
+	{
+		$this->protocol = $protocol;
+		return $this;
+	}
 
 	/**
 	 * Gets a header name according with the standards.
@@ -142,10 +239,8 @@ abstract class Message
 	 *
 	 * @return string
 	 */
-	protected function getHeaderName(string $name) : string
+	protected static function getHeaderName(string $name) : string
 	{
-		return $this->standardHeaders[\strtolower($name)] ?? $name;
+		return static::$standardHeaders[\strtolower($name)] ?? $name;
 	}
-
-	abstract public function getProtocol();
 }

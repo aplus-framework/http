@@ -5,15 +5,15 @@
  */
 interface RequestInterface
 {
-	/**
-	 * @return string
-	 */
+	public function getProtocol() : string;
+
 	public function getMethod() : string;
 
-	/**
-	 * @param bool $parse
-	 *
-	 * @return \Framework\HTTP\URL|string
-	 */
-	public function getURL(bool $parse = false);
+	public function getURL() : URL;
+
+	public function getHeader(string $name) : ?string;
+
+	public function getHeaders() : array;
+
+	public function getBody() : string;
 }

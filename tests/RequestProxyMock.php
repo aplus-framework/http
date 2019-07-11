@@ -2,24 +2,10 @@
 
 class RequestProxyMock extends RequestMock
 {
-	public $body = '{"test":123}';
-	public $input = [
-		'POST' => [
-			'username' => 'phpdev',
-			'password' => 'Aw3S0me',
-		],
-		'GET' => [
-			'order_by' => 'title',
-			'order' => 'asc',
-		],
-		'COOKIE' => [
-			'session_id' => 'abc',
-			'cart' => 'cart-123',
-			'status-bar' => 'open',
-		],
-		'ENV' => [],
-		'SERVER' => [
-			'HTTP_HOST' => 'real-domain.tld',
+	protected function prepareServerVariables()
+	{
+		$this->serverVariables = [
+			'HTTP_HOST' => 'real-domain.tld:8080',
 			'HTTP_X_FORWARDED_FOR' => '192.168.1.2',
 			'HTTP_REFERER' => 'invali_d',
 			'REMOTE_ADDR' => '192.168.1.100',
@@ -28,15 +14,19 @@ class RequestProxyMock extends RequestMock
 			'HTTPS' => 'on',
 			'REQUEST_URI' => '/blog/posts?order_by=title&order=asc',
 			'SERVER_PORT' => 8080,
+			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'SERVER_NAME' => 'domain.tld',
-		],
-		// Custom
-		'HEADERS' => null,
-		'FILES' => null,
-		// Content Negotiation
-		'ACCEPT' => null,
-		'CHARSET' => null,
-		'ENCODING' => null,
-		'LANGUAGE' => null,
-	];
+		];
+	}
+
+	protected function prepareBody()
+	{
+		$this->body = '{"test":123}';
+	}
+
+	protected function prepareCookies()
+	{
+		parent::prepareCookies();
+		$this->removeCookie('X-CSRF-Token');
+	}
 }

@@ -5,8 +5,24 @@
  *
  * @see     https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#HTTP_Requests
  */
-class Request extends Message //implements RequestInterface
+class Request extends Message implements RequestInterface
 {
+	/**
+	 * HTTP Request Method.
+	 *
+	 * @var string
+	 */
+	protected $method;
+	/**
+	 * HTTP Request Server Variables.
+	 *
+	 * @var array
+	 */
+	protected $serverVariables = [];
+	protected $post = [];
+	protected $get = [];
+	protected $env = [];
+	protected $files = [];
 	/**
 	 * @var array|null
 	 */
@@ -38,16 +54,7 @@ class Request extends Message //implements RequestInterface
 	/**
 	 * @var array
 	 */
-	protected $input = [
-		'POST' => null,
-		'GET' => null,
-		'COOKIE' => null,
-		'ENV' => null,
-		'SERVER' => null,
-		// Custom
-		'HEADERS' => null,
-		'FILES' => null,
-		// Content Negotiation
+	protected $negotiation = [
 		'ACCEPT' => null,
 		'CHARSET' => null,
 		'ENCODING' => null,
@@ -80,15 +87,90 @@ class Request extends Message //implements RequestInterface
 
 	/**
 	 * Request constructor.
-	 *
-	 * @param string|null $host
 	 */
-	public function __construct(string $host = null)
+	public function __construct()
 	{
-		if ($host === null) {
-			$host = $this->getServer('HTTP_HOST') ?? $this->getServer('SERVER_NAME');
+		$this->prepareServerVariables();
+		$this->prepareStatusLine();
+		$this->prepareHeaders();
+		$this->prepareCookies();
+		$this->prepareUserAgent();
+		$this->prepareBody();
+		$this->preparePOST();
+		$this->prepareGET();
+		$this->prepareENV();
+		$this->prepareFiles();
+	}
+
+	protected function prepareServerVariables()
+	{
+		foreach (\filter_input_array(\INPUT_SERVER) as $key => $value) {
+			$this->serverVariables[$key] = $value;
 		}
-		$this->setHost($host);
+		\ksort($this->serverVariables);
+	}
+
+	protected function prepareStatusLine()
+	{
+		$this->setProtocol($this->getServerVariable('SERVER_PROTOCOL'));
+		$this->setMethod($this->getServerVariable('REQUEST_METHOD'));
+		$url = $this->isSecure() ? 'https' : 'http';
+		$url .= '://' . $this->getServerVariable('HTTP_HOST');
+		//$url .= ':' . $this->getPort();
+		$url .= $this->getServerVariable('REQUEST_URI');
+		$this->setURL($url);
+		$this->setHost($this->getURL()->getHost());
+	}
+
+	protected function prepareHeaders()
+	{
+		foreach ($this->getServerVariables() as $name => $value) {
+			if (\strpos($name, 'HTTP_') !== 0) {
+				continue;
+			}
+			$name = \strtr(\substr($name, 5), ['_' => '-']);
+			$this->setHeader($name, $value);
+		}
+	}
+
+	protected function prepareCookies()
+	{
+		foreach (\filter_input_array(\INPUT_COOKIE) as $name => $value) {
+			$this->setCookie(new Cookie($name, $value));
+		}
+	}
+
+	protected function prepareUserAgent()
+	{
+		$userAgent = $this->getServerVariable('HTTP_USER_AGENT');
+		if ($userAgent) {
+			$this->setUserAgent($userAgent);
+		}
+	}
+
+	protected function prepareBody()
+	{
+		$this->body = \file_get_contents('php://input') ?: '';
+	}
+
+	protected function preparePOST()
+	{
+		$this->post = \filter_input_array(\INPUT_POST);
+	}
+
+	protected function prepareGET()
+	{
+		$this->get = \filter_input_array(\INPUT_GET);
+	}
+
+	protected function prepareENV()
+	{
+		$this->env = \filter_input_array(\INPUT_ENV);
+	}
+
+	protected function prepareFiles()
+	{
+		$this->files = $this->getInputFiles();
 	}
 
 	/**
@@ -199,14 +281,6 @@ class Request extends Message //implements RequestInterface
 		return $data;
 	}
 
-	public function getBody() : string
-	{
-		if ($this->body === null) {
-			$this->body = \file_get_contents('php://input') ?: '';
-		}
-		return $this->body;
-	}
-
 	public function getParsedBody() : array
 	{
 		if ($this->parsedBody === null) {
@@ -223,14 +297,14 @@ class Request extends Message //implements RequestInterface
 	 */
 	protected function getNegotiableValues(string $type) : array
 	{
-		if ($this->input[$type]) {
-			return $this->input[$type];
+		if ($this->negotiation[$type]) {
+			return $this->negotiation[$type];
 		}
-		$this->input[$type] = \array_keys($this->parseQualityValues(
-			$this->getServer('HTTP_ACCEPT' . ($type !== 'ACCEPT' ? '_' . $type : ''))
+		$this->negotiation[$type] = \array_keys($this->parseQualityValues(
+			$this->getServerVariable('HTTP_ACCEPT' . ($type !== 'ACCEPT' ? '_' . $type : ''))
 		));
-		$this->input[$type] = \array_map('strtolower', $this->input[$type]);
-		return $this->input[$type];
+		$this->negotiation[$type] = \array_map('strtolower', $this->negotiation[$type]);
+		return $this->negotiation[$type];
 	}
 
 	protected function negotiate(string $type, array $negotiable) : string
@@ -289,32 +363,12 @@ class Request extends Message //implements RequestInterface
 	 */
 	public function getContentType() : ?string
 	{
-		return $this->getServer('HTTP_CONTENT_TYPE');
-	}
-
-	/**
-	 * @param string         $name
-	 * @param int|null       $filter
-	 * @param array|int|null $filter_options
-	 *
-	 * @return string|null
-	 */
-	public function getCookie(string $name, int $filter = null, $filter_options = null) : ?string
-	{
-		return $this->getReturn($name, 'COOKIE', $filter, $filter_options);
-	}
-
-	/**
-	 * @return array|string[]
-	 */
-	public function getCookies() : array
-	{
-		return $this->getReturn(null, 'COOKIE');
+		return $this->getServerVariable('HTTP_CONTENT_TYPE');
 	}
 
 	public function getCSRFToken() : ?string
 	{
-		return $this->getCookie('X-CSRF-Token');
+		return ($cookie = $this->getCookie('X-CSRF-Token')) ? $cookie->getValue() : null;
 	}
 
 	public function validateCSRFToken(string $token) : bool
@@ -331,7 +385,11 @@ class Request extends Message //implements RequestInterface
 	 */
 	public function getENV($name = null, int $filter = null, $filter_options = null)
 	{
-		return $this->getReturn($name, 'ENV', $filter, $filter_options);
+		return $this->filter(
+			$name === null ? $this->env : \ArraySimple::value($name, $this->env[$name]),
+			$filter,
+			$filter_options
+		);
 	}
 
 	/**
@@ -339,7 +397,7 @@ class Request extends Message //implements RequestInterface
 	 */
 	public function getETag() : ?string
 	{
-		return $this->getServer('HTTP_ETAG');
+		return $this->getServerVariable('HTTP_ETAG');
 	}
 
 	/**
@@ -347,12 +405,12 @@ class Request extends Message //implements RequestInterface
 	 */
 	public function getFiles() : array
 	{
-		return $this->getReturn(null, 'FILES');
+		return $this->files;
 	}
 
 	public function getFile(string $name) : ?UploadedFile
 	{
-		return $this->getReturn($name, 'FILES');
+		return \ArraySimple::value($name, $this->files);
 	}
 
 	/**
@@ -366,33 +424,14 @@ class Request extends Message //implements RequestInterface
 		return $this->geoip;
 	}
 
-	/**
-	 * @param array|string|null $name
-	 * @param int|null          $filter
-	 * @param array|int|null    $filter_options
-	 *
-	 * @return array|string|null
-	 */
-	public function getGET($name = null, int $filter = null, $filter_options = null)
+	public function getQuery(string $name) : ?string
 	{
-		return $this->getReturn($name, 'GET', $filter, $filter_options);
+		return \ArraySimple::value($name, $this->getQueries());
 	}
 
-	/**
-	 * @param string         $name
-	 * @param int|null       $filter
-	 * @param array|int|null $filter_options
-	 *
-	 * @return array|string|null
-	 */
-	public function getHeader(string $name, int $filter = null, $filter_options = null) : ?string
+	public function getQueries() : array
 	{
-		return $this->getReturn($this->getHeaderName($name), 'HEADERS', $filter, $filter_options);
-	}
-
-	public function getHeaders() : array
-	{
-		return $this->getReturn(null, 'HEADERS');
+		return $this->get;
 	}
 
 	/**
@@ -413,7 +452,7 @@ class Request extends Message //implements RequestInterface
 		if ($this->id !== null) {
 			return $this->id;
 		}
-		$this->id = $this->getServer('HTTP_X_REQUEST_ID');
+		$this->id = $this->getServerVariable('HTTP_X_REQUEST_ID');
 		if (empty($this->id)) {
 			$this->id = \md5(\uniqid($this->getIP(), true));
 		}
@@ -421,49 +460,11 @@ class Request extends Message //implements RequestInterface
 	}
 
 	/**
-	 * @param string $type
-	 *
-	 * @return array
-	 *
-	 * @codeCoverageIgnore
-	 */
-	protected function getInput(string $type) : array
-	{
-		switch ($type) {
-			case 'POST':
-				$type = (array) \filter_input_array(\INPUT_POST);
-				break;
-			case 'GET':
-				$type = (array) \filter_input_array(\INPUT_GET);
-				break;
-			case 'COOKIE':
-				$type = (array) \filter_input_array(\INPUT_COOKIE);
-				break;
-			case 'ENV':
-				$type = (array) \filter_input_array(\INPUT_ENV);
-				break;
-			case 'SERVER':
-				$type = (array) \filter_input_array(\INPUT_SERVER);
-				break;
-			case 'HEADERS':
-				$type = $this->getInputHeaders();
-				break;
-			case 'FILES':
-				$type = $this->getInputFiles();
-				break;
-			default:
-				throw new \InvalidArgumentException("Invalid input type: {$type}");
-		}
-		\ksort($type);
-		return $type;
-	}
-
-	/**
 	 * @return string
 	 */
 	public function getIP() : string
 	{
-		return $this->getServer('REMOTE_ADDR');
+		return $this->getServerVariable('REMOTE_ADDR');
 	}
 
 	/**
@@ -492,7 +493,25 @@ class Request extends Message //implements RequestInterface
 	 */
 	public function getMethod() : string
 	{
-		return $this->getServer('REQUEST_METHOD');
+		return $this->method;
+	}
+
+	protected function setMethod(string $method)
+	{
+		$method = \strtoupper($method);
+		if ( ! \in_array($method, [
+			'GET',
+			'HEAD',
+			'POST',
+			'PATCH',
+			'PUT',
+			'DELETE',
+			'OPTIONS',
+		], true)) {
+			throw new \InvalidArgumentException("Invalid HTTP method: {$method}");
+		}
+		$this->method = $method;
+		return $this;
 	}
 
 	/**
@@ -528,7 +547,7 @@ class Request extends Message //implements RequestInterface
 	 */
 	public function getPort() : int
 	{
-		return $this->port ?? $this->getServer('SERVER_PORT');
+		return $this->port ?? $this->getServerVariable('SERVER_PORT');
 	}
 
 	/**
@@ -540,12 +559,11 @@ class Request extends Message //implements RequestInterface
 	 */
 	public function getPOST($name = null, int $filter = null, $filter_options = null)
 	{
-		return $this->getReturn($name, 'POST', $filter, $filter_options);
-	}
-
-	public function getProtocol() : string
-	{
-		return $this->getServer('SERVER_PROTOCOL') ?? 'HTTP/1.1';
+		return $this->filter(
+			$name === null ? $this->post : \ArraySimple::value($name, $this->post),
+			$filter,
+			$filter_options
+		);
 	}
 
 	/**
@@ -559,7 +577,7 @@ class Request extends Message //implements RequestInterface
 			'HTTP_X_CLIENT_IP',
 			'HTTP_X_CLUSTER_CLIENT_IP',
 		] as $header) {
-			if ($header = $this->getServer($header)) {
+			if ($header = $this->getServerVariable($header)) {
 				return $header;
 			}
 		}
@@ -573,7 +591,7 @@ class Request extends Message //implements RequestInterface
 	{
 		if ($this->referrer === null) {
 			$this->referrer = false;
-			$referer = $this->getServer('HTTP_REFERER');
+			$referer = $this->getServerVariable('HTTP_REFERER');
 			if ($referer) {
 				try {
 					$this->referrer = new URL($referer);
@@ -585,64 +603,14 @@ class Request extends Message //implements RequestInterface
 		return $this->referrer ?: null;
 	}
 
-	protected function getInputHeaders() : array
+	public function getServerVariable(string $name) : ?string
 	{
-		$headers = [];
-		foreach ($this->getServer() as $key => $value) {
-			if (\strpos($key, 'HTTP_') !== 0) {
-				continue;
-			}
-			$key = \strtr(\substr($key, 5), ['_' => '-']);
-			$headers[$this->getHeaderName($key)] = (string) $value;
-		}
-		return $headers;
+		return \ArraySimple::value($name, $this->serverVariables);
 	}
 
-	/**
-	 * @param array|string|null $name
-	 * @param string            $type
-	 * @param int|null          $filter
-	 * @param array|int|null    $filter_options
-	 *
-	 * @return array|mixed|null
-	 */
-	protected function getReturn($name, string $type, int $filter = null, $filter_options = null)
+	public function getServerVariables()
 	{
-		// Populate the input TYPE by the first time
-		if ($this->input[$type] === null) {
-			$this->input[$type] = $this->getInput($type);
-		}
-		if ($name === null) {
-			return $this->filter($this->input[$type], $filter, $filter_options);
-		}
-		if (\is_array($name)) {
-			$data = [];
-			foreach ($name as $n) {
-				$data[$n] = $this->filter(
-					\ArraySimple::value($n, $this->input[$type]),
-					$filter,
-					$filter_options
-				);
-			}
-			return $data;
-		}
-		return $this->filter(
-			\ArraySimple::value($name, $this->input[$type]),
-			$filter,
-			$filter_options
-		);
-	}
-
-	/**
-	 * @param array|string|null $name
-	 * @param int|null          $filter
-	 * @param array|int|null    $filter_options
-	 *
-	 * @return array|mixed|null
-	 */
-	public function getServer($name = null, int $filter = null, $filter_options = null)
-	{
-		return $this->getReturn($name, 'SERVER', $filter, $filter_options);
+		return $this->serverVariables;
 	}
 
 	/**
@@ -652,14 +620,21 @@ class Request extends Message //implements RequestInterface
 	 */
 	public function getURL() : URL
 	{
-		if ($this->url) {
-			return $this->url;
+		return $this->url;
+	}
+
+	/**
+	 * @param string|URL $url
+	 *
+	 * @return $this
+	 */
+	protected function setURL($url)
+	{
+		if ( ! $url instanceof URL) {
+			$url = new URL($url);
 		}
-		$url = $this->isSecure() ? 'https' : 'http';
-		$url .= '://' . $this->getHost();
-		$url .= ':' . $this->getPort();
-		$url .= $this->getServer('REQUEST_URI');
-		return $this->url = new URL($url);
+		$this->url = $url;
+		return $this;
 	}
 
 	/**
@@ -670,14 +645,21 @@ class Request extends Message //implements RequestInterface
 	 */
 	public function getUserAgent() : ?UserAgent
 	{
-		if ($this->userAgent) {
-			return $this->userAgent;
+		return $this->userAgent;
+	}
+
+	/**
+	 * @param string|UserAgent $user_agent
+	 *
+	 * @return $this
+	 */
+	protected function setUserAgent($user_agent)
+	{
+		if ( ! $user_agent instanceof UserAgent) {
+			$user_agent = new UserAgent($user_agent);
 		}
-		$user_agent = $this->getServer('HTTP_USER_AGENT');
-		if ($user_agent === null) {
-			return null;
-		}
-		return $this->userAgent = new UserAgent($user_agent);
+		$this->userAgent = $user_agent;
+		return $this;
 	}
 
 	/**
@@ -693,7 +675,7 @@ class Request extends Message //implements RequestInterface
 		if ($this->isAJAX !== null) {
 			return $this->isAJAX;
 		}
-		$received = $this->getServer('HTTP_X_REQUESTED_WITH');
+		$received = $this->getServerVariable('HTTP_X_REQUESTED_WITH');
 		return $this->isAJAX = $received
 			? \strtolower($received) === 'xmlhttprequest'
 			: false;
@@ -707,8 +689,8 @@ class Request extends Message //implements RequestInterface
 		if ($this->isSecure !== null) {
 			return $this->isSecure;
 		}
-		return $this->isSecure = ($this->getServer('REQUEST_SCHEME') === 'https'
-			|| $this->getServer('HTTPS') === 'on');
+		return $this->isSecure = ($this->getServerVariable('REQUEST_SCHEME') === 'https'
+			|| $this->getServerVariable('HTTPS') === 'on');
 	}
 
 	/**
@@ -748,9 +730,9 @@ class Request extends Message //implements RequestInterface
 			foreach ($array as $k => $v) {
 				if (\is_array($v)) {
 					$return[$k] = $walker($v, $fileInfokey, $walker);
-				} else {
-					$return[$k][$fileInfokey] = $v;
+					continue;
 				}
+				$return[$k][$fileInfokey] = $v;
 			}
 			return $return;
 		};
@@ -763,14 +745,14 @@ class Request extends Message //implements RequestInterface
 			if ( ! \is_array($values['error'])) {
 				// normal syntax
 				$files[$name] = $values;
-			} else {
-				// html array feature
-				foreach ($values as $fileInfoKey => $subArray) {
-					$files[$name] = \array_replace_recursive(
-						$files[$name],
-						$walker($subArray, $fileInfoKey, $walker)
-					);
-				}
+				continue;
+			}
+			// html array feature
+			foreach ($values as $fileInfoKey => $subArray) {
+				$files[$name] = \array_replace_recursive(
+					$files[$name],
+					$walker($subArray, $fileInfoKey, $walker)
+				);
 			}
 		}
 		// See: https://www.sitepoint.com/community/t/-files-array-structure/2728/5
@@ -779,9 +761,9 @@ class Request extends Message //implements RequestInterface
 			foreach ($array as $k => $v) {
 				if (\is_array($v)) {
 					$return[$k] = $make_objects($v, $make_objects);
-				} else {
-					return new UploadedFile($array);
+					continue;
 				}
+				return new UploadedFile($array);
 			}
 			return $return;
 		};
@@ -795,7 +777,7 @@ class Request extends Message //implements RequestInterface
 	 */
 	protected function setHost(string $host)
 	{
-		$filtered_host = $this->getScheme($host) . $host;
+		$filtered_host = 'http://' . $host;
 		if ( ! $filtered_host = $this->filter($filtered_host, \FILTER_VALIDATE_URL)) {
 			throw new \InvalidArgumentException("Invalid host: {$host}");
 		}
@@ -805,14 +787,5 @@ class Request extends Message //implements RequestInterface
 			$this->port = $host['port'];
 		}
 		return $this;
-	}
-
-	private function getScheme(string $host) : string
-	{
-		$scheme = \substr($host, 0, 7);
-		if ($scheme === 'http://' || $scheme === 'https:/') {
-			return '';
-		}
-		return 'http://';
 	}
 }

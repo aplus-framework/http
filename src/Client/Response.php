@@ -1,22 +1,36 @@
 <?php namespace Framework\HTTP\Client;
 
+use Framework\HTTP\Cookie;
 use Framework\HTTP\Message;
+use Framework\HTTP\ResponseInterface;
 
-class Response extends Message
+class Response extends Message implements ResponseInterface
 {
+	/**
+	 * @var string
+	 */
+	protected $protocol;
+	/**
+	 * @var int
+	 */
 	protected $statusCode;
+	/**
+	 * @var string
+	 */
+	protected $statusReason;
 
-	public function __construct(int $status, array $headers, string $body = null)
-	{
-		$this->statusCode = $status;
+	public function __construct(
+		string $protocol,
+		int $status,
+		string $reason,
+		array $headers,
+		string $body
+	) {
+		$this->setProtocol($protocol);
+		$this->setStatusCode($status);
+		$this->setStatusReason($reason);
 		$this->setHeaders($headers);
 		$this->setBody($body);
-	}
-
-	public function setBody(?string $body)
-	{
-		$this->body = $body;
-		return $this;
 	}
 
 	public function getStatusCode() : int
@@ -24,9 +38,75 @@ class Response extends Message
 		return $this->statusCode;
 	}
 
-	public function getBody() : ?string
+	protected function setStatusCode(int $statusCode)
 	{
-		return $this->body;
+		$this->statusCode = $statusCode;
+		return $this;
+	}
+
+	public function getStatusReason() : string
+	{
+		return $this->statusReason;
+	}
+
+	protected function setStatusReason(string $statusReason)
+	{
+		$this->statusReason = $statusReason;
+		return $this;
+	}
+
+	protected function setHeader(string $name, string $value)
+	{
+		if (\strtolower($name) === 'set-cookie') {
+			$cookie = $this->parseCookieLine($value);
+			if ($cookie) {
+				$this->setCookie($cookie);
+			}
+		}
+		return parent::setHeader($name, $value);
+	}
+
+	protected function parseCookieLine(string $line) : ?Cookie
+	{
+		$parts = \explode(';', $line);
+		$parts = \array_map('trim', $parts);
+		$cookie = null;
+		foreach ($parts as $key => $part) {
+			[$arg, $val] = \array_pad(\explode('=', $part, 2), 2, null);
+			if ($key === 0 && isset($arg, $val)) {
+				$cookie = new Cookie($arg, $val);
+				continue;
+			}
+			if ($cookie === null && $key > 0) {
+				break;
+			}
+			$arg = \strtolower($arg);
+			if ($arg === 'expires') {
+				$cookie->setExpires($val);
+				continue;
+			}
+			if ($arg === 'domain') {
+				$cookie->setDomain($val);
+				continue;
+			}
+			if ($arg === 'path') {
+				$cookie->setPath($val);
+				continue;
+			}
+			if ($arg === 'httponly') {
+				$cookie->setHttpOnly();
+				continue;
+			}
+			if ($arg === 'secure') {
+				$cookie->setSecure();
+				continue;
+			}
+			if ($arg === 'samesite') {
+				$cookie->setSameSite($val);
+				continue;
+			}
+		}
+		return $cookie;
 	}
 
 	/**
@@ -46,41 +126,5 @@ class Response extends Message
 			return false;
 		}
 		return $body;
-	}
-
-	public function getCookie(string $name)
-	{
-		// TODO: Implement getCookie() method.
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getCookies() : array
-	{
-		return $this->cookies;
-	}
-
-	public function getHeader(string $name) : ?string
-	{
-		return $this->headers[$this->getHeaderName($name)] ?? null;
-	}
-
-	public function getHeaders() : array
-	{
-		return $this->headers;
-	}
-
-	protected function setHeaders(array $headers)
-	{
-		foreach ($headers as $name => $value) {
-			$this->headers[$this->getHeaderName($name)] = $value;
-		}
-		return $this;
-	}
-
-	public function getProtocol()
-	{
-		// TODO: Implement getProtocol() method.
 	}
 }
