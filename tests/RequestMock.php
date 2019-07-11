@@ -69,8 +69,8 @@ class RequestMock extends \Framework\HTTP\Request
 		$this->setCookie(new Cookie('X-CSRF-Token', 'token'));
 	}
 
-	public function setHeader(string $name, string $value)
+	public function setHeader(string $name, string ...$values)
 	{
-		return parent::setHeader($name, $value);
+		return parent::setHeader($name, ...$values);
 	}
 }

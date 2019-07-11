@@ -40,17 +40,17 @@ class RequestTest extends TestCase
 
 	public function testHeaders()
 	{
-		$this->assertEquals([], $this->request->getHeaders());
-		$this->assertNull($this->request->getHeader('foo'));
+		$this->assertEquals([], $this->request->getHeaders('foo'));
+		$this->assertNull($this->request->getHeader('Foo'));
 		$this->request->setHeaders([
-			'Foo' => 'Foo',
-			'content-Type' => 'text/html',
+			'Foo' => ['Foo'],
+			'content-Type' => ['text/html'],
 		]);
 		$this->assertEquals('Foo', $this->request->getHeader('Foo'));
 		$this->assertEquals('text/html', $this->request->getHeader('content-type'));
 		$this->request->removeHeader('content-type');
 		$this->assertNull($this->request->getHeader('content-type'));
-		$this->request->removeHeaders(['Foo']);
+		$this->request->removeHeaders('Foo');
 		$this->assertNull($this->request->getHeader('Foo'));
 	}
 

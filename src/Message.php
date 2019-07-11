@@ -131,42 +131,81 @@ abstract class Message
 		'x-request-id' => 'X-Request-ID',
 	];
 
-	public function getHeader(string $name) : ?string
+	public function getHeader(string $name, bool $first = true) : ?string
 	{
-		return $this->headers[static::getHeaderName($name)] ?? null;
+		$name = static::getHeaderName($name);
+		if (empty($this->headers[$name])) {
+			return null;
+		}
+		$index = $first
+			? \array_key_first($this->headers[$name])
+			: \array_key_last($this->headers[$name]);
+		return $this->headers[$name][$index] ?? null;
 	}
 
-	public function getHeaders() : array
+	public function getHeaders(string $name) : array
+	{
+		return $this->headers[static::getHeaderName($name)] ?? [];
+	}
+
+	public function getAllHeaders() : array
 	{
 		return $this->headers;
 	}
 
-	protected function setHeader(string $name, string $value)
+	protected function setHeader(string $name, string ...$values)
 	{
-		$this->headers[static::getHeaderName($name)] = $value;
+		$this->headers[static::getHeaderName($name)] = $values;
+		return $this;
+	}
+
+	protected function addHeader(string $name, string $value)
+	{
+		$this->headers[static::getHeaderName($name)][] = $value;
 		return $this;
 	}
 
 	protected function setHeaders(array $headers)
 	{
-		foreach ($headers as $name => $value) {
-			$this->setHeader($name, $value);
+		foreach ($headers as $name => $values) {
+			$values = (array) $values;
+			$this->setHeader($name, ...$values);
 		}
 		return $this;
 	}
 
-	protected function removeHeader(string $name)
+	protected function removeHeader(string $name, bool $first = true)
+	{
+		$name = static::getHeaderName($name);
+		if (empty($this->headers[$name])) {
+			return null;
+		}
+		$index = $first
+			? \array_key_first($this->headers[$name])
+			: \array_key_last($this->headers[$name]);
+		unset($this->headers[$name][$index]);
+		return $this;
+	}
+
+	protected function removeHeaders(string $name)
 	{
 		unset($this->headers[static::getHeaderName($name)]);
 		return $this;
 	}
 
-	protected function removeHeaders(array $names)
+	protected function removeAllHeaders()
 	{
-		foreach ($names as $name) {
-			$this->removeHeader($name);
-		}
+		$this->headers = [];
 		return $this;
+	}
+
+	protected function sendHeaders()
+	{
+		foreach ($this->getAllHeaders() as $name => $values) {
+			foreach ($values as $value) {
+				\header("{$name}: {$value}", false);
+			}
+		}
 	}
 
 	public function getCookie(string $name) : ?Cookie
@@ -184,6 +223,7 @@ abstract class Message
 
 	protected function setCookie(Cookie $cookie)
 	{
+		// TODO: name can not be used as key - Cookie allow set a new name. To use a foreach?
 		$this->cookies[$cookie->getName()] = $cookie;
 		return $this;
 	}

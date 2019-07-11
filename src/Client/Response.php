@@ -29,7 +29,9 @@ class Response extends Message implements ResponseInterface
 		$this->setProtocol($protocol);
 		$this->setStatusCode($status);
 		$this->setStatusReason($reason);
-		$this->setHeaders($headers);
+		foreach ($headers as $name => $h) {
+			$this->setHeader($name, ...$h);
+		}
 		$this->setBody($body);
 	}
 
@@ -55,15 +57,17 @@ class Response extends Message implements ResponseInterface
 		return $this;
 	}
 
-	protected function setHeader(string $name, string $value)
+	protected function setHeader(string $name, string ...$values)
 	{
 		if (\strtolower($name) === 'set-cookie') {
-			$cookie = $this->parseCookieLine($value);
-			if ($cookie) {
-				$this->setCookie($cookie);
+			foreach ($values as $value) {
+				$cookie = $this->parseCookieLine($value);
+				if ($cookie) {
+					$this->setCookie($cookie);
+				}
 			}
 		}
-		return parent::setHeader($name, $value);
+		return parent::setHeader($name, ...$values);
 	}
 
 	protected function parseCookieLine(string $line) : ?Cookie

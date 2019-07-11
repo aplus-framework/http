@@ -11,9 +11,11 @@ interface RequestInterface
 
 	public function getURL() : URL;
 
-	public function getHeader(string $name) : ?string;
+	public function getHeader(string $name, bool $first) : ?string;
 
-	public function getHeaders() : array;
+	public function getHeaders(string $name) : array;
+
+	public function getAllHeaders() : array;
 
 	public function getBody() : string;
 }

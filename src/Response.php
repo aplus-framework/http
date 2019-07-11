@@ -166,9 +166,9 @@ class Response extends Message implements ResponseInterface
 		return parent::removeCookies($names);
 	}
 
-	public function setHeader(string $name, string $value)
+	public function setHeader(string $name, string ...$values)
 	{
-		return parent::setHeader($name, $value);
+		return parent::setHeader($name, ...$values);
 	}
 
 	public function setHeaders(array $headers)
@@ -176,14 +176,14 @@ class Response extends Message implements ResponseInterface
 		return parent::setHeaders($headers);
 	}
 
-	public function removeHeader(string $name)
+	public function removeHeader(string $name, bool $first = true)
 	{
-		return parent::removeHeader($name);
+		return parent::removeHeader($name, $first);
 	}
 
-	public function removeHeaders(array $names)
+	public function removeHeaders(string $name)
 	{
-		return parent::removeHeaders($names);
+		return parent::removeHeaders($name);
 	}
 
 	/**
@@ -341,9 +341,7 @@ class Response extends Message implements ResponseInterface
 			$this->setETag(\md5($this->getBody()));
 		}*/
 		\header($this->getProtocol() . ' ' . $this->getStatusLine());
-		foreach ($this->headers as $name => $value) {
-			\header($name . ($value ? ': ' . $value : ''));
-		}
+		parent::sendHeaders();
 		return true;
 	}
 
