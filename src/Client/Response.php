@@ -61,56 +61,13 @@ class Response extends Message implements ResponseInterface
 	{
 		if (\strtolower($name) === 'set-cookie') {
 			foreach ($values as $value) {
-				$cookie = $this->parseCookieLine($value);
+				$cookie = Cookie::parse($value);
 				if ($cookie) {
 					$this->setCookie($cookie);
 				}
 			}
 		}
 		return parent::setHeader($name, ...$values);
-	}
-
-	protected function parseCookieLine(string $line) : ?Cookie
-	{
-		$parts = \explode(';', $line);
-		$parts = \array_map('trim', $parts);
-		$cookie = null;
-		foreach ($parts as $key => $part) {
-			[$arg, $val] = \array_pad(\explode('=', $part, 2), 2, null);
-			if ($key === 0 && isset($arg, $val)) {
-				$cookie = new Cookie($arg, $val);
-				continue;
-			}
-			if ($cookie === null && $key > 0) {
-				break;
-			}
-			$arg = \strtolower($arg);
-			if ($arg === 'expires') {
-				$cookie->setExpires($val);
-				continue;
-			}
-			if ($arg === 'domain') {
-				$cookie->setDomain($val);
-				continue;
-			}
-			if ($arg === 'path') {
-				$cookie->setPath($val);
-				continue;
-			}
-			if ($arg === 'httponly') {
-				$cookie->setHttpOnly();
-				continue;
-			}
-			if ($arg === 'secure') {
-				$cookie->setSecure();
-				continue;
-			}
-			if ($arg === 'samesite') {
-				$cookie->setSameSite($val);
-				continue;
-			}
-		}
-		return $cookie;
 	}
 
 	/**

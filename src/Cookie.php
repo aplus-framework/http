@@ -100,11 +100,41 @@ class Cookie
 	}
 
 	/**
+	 * @param string|null $domain
+	 *
+	 * @return $this
+	 */
+	public function setDomain(?string $domain)
+	{
+		$this->domain = $domain;
+		return $this;
+	}
+
+	/**
 	 * @return \DateTime|null
 	 */
 	public function getExpires() : ?\DateTime
 	{
 		return $this->expires;
+	}
+
+	/**
+	 * @param \DateTime|string|null $expires
+	 *
+	 * @return $this
+	 */
+	public function setExpires($expires)
+	{
+		if ($expires instanceof \DateTime) {
+			$expires = clone $expires;
+			$expires->setTimezone(new \DateTimeZone('UTC'));
+		} elseif (\is_numeric($expires)) {
+			$expires = \DateTime::createFromFormat('U', $expires, new \DateTimeZone('UTC'));
+		} elseif ($expires !== null) {
+			$expires = new \DateTime($expires, new \DateTimeZone('UTC'));
+		}
+		$this->expires = $expires;
+		return $this;
 	}
 
 	/**
@@ -116,11 +146,33 @@ class Cookie
 	}
 
 	/**
+	 * @param string $name
+	 *
+	 * @return $this
+	 */
+	public function setName(string $name)
+	{
+		$this->name = $name;
+		return $this;
+	}
+
+	/**
 	 * @return string|null
 	 */
 	public function getPath() : ?string
 	{
 		return $this->path;
+	}
+
+	/**
+	 * @param string|null $path
+	 *
+	 * @return $this
+	 */
+	public function setPath(?string $path)
+	{
+		$this->path = $path;
+		return $this;
 	}
 
 	/**
@@ -132,6 +184,25 @@ class Cookie
 	}
 
 	/**
+	 * @param string|null $same_site Strict, Lax or Unset
+	 *
+	 * @throws \InvalidArgumentException for invalid $same_site value
+	 *
+	 * @return $this
+	 */
+	public function setSameSite(?string $same_site)
+	{
+		if ($same_site !== null) {
+			$same_site = \ucfirst(\strtolower($same_site));
+			if ( ! \in_array($same_site, ['Strict', 'Lax', 'Unset'])) {
+				throw new \InvalidArgumentException('SameSite must be Strict, Lax or Unset');
+			}
+		}
+		$this->sameSite = $same_site;
+		return $this;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getValue() : string
@@ -140,11 +211,44 @@ class Cookie
 	}
 
 	/**
+	 * @param string $value
+	 *
+	 * @return $this
+	 */
+	public function setValue(string $value)
+	{
+		$this->value = $value;
+		return $this;
+	}
+
+	/**
+	 * @param bool $http_only
+	 *
+	 * @return $this
+	 */
+	public function setHttpOnly(bool $http_only = true)
+	{
+		$this->httpOnly = $http_only;
+		return $this;
+	}
+
+	/**
 	 * @return bool
 	 */
 	public function isHttpOnly() : bool
 	{
 		return $this->httpOnly;
+	}
+
+	/**
+	 * @param bool $secure
+	 *
+	 * @return $this
+	 */
+	public function setSecure(bool $secure = true)
+	{
+		$this->secure = $secure;
+		return $this;
 	}
 
 	/**
@@ -175,106 +279,46 @@ class Cookie
 	}
 
 	/**
-	 * @param string|null $domain
+	 * Parses a Set-Cookie Header line and creates a new Cookie object.
 	 *
-	 * @return $this
+	 * @param string $line
+	 *
+	 * @return Cookie|null
 	 */
-	public function setDomain(?string $domain)
+	public static function parse(string $line) : ?Cookie
 	{
-		$this->domain = $domain;
-		return $this;
-	}
-
-	/**
-	 * @param \DateTime|string|null $expires
-	 *
-	 * @return $this
-	 */
-	public function setExpires($expires)
-	{
-		if ($expires instanceof \DateTime) {
-			$expires = clone $expires;
-			$expires->setTimezone(new \DateTimeZone('UTC'));
-		} elseif (\is_numeric($expires)) {
-			$expires = \DateTime::createFromFormat('U', $expires, new \DateTimeZone('UTC'));
-		} elseif ($expires !== null) {
-			$expires = new \DateTime($expires, new \DateTimeZone('UTC'));
-		}
-		$this->expires = $expires;
-		return $this;
-	}
-
-	/**
-	 * @param bool $http_only
-	 *
-	 * @return $this
-	 */
-	public function setHttpOnly(bool $http_only = true)
-	{
-		$this->httpOnly = $http_only;
-		return $this;
-	}
-
-	/**
-	 * @param string $name
-	 *
-	 * @return $this
-	 */
-	public function setName(string $name)
-	{
-		$this->name = $name;
-		return $this;
-	}
-
-	/**
-	 * @param string|null $path
-	 *
-	 * @return $this
-	 */
-	public function setPath(?string $path)
-	{
-		$this->path = $path;
-		return $this;
-	}
-
-	/**
-	 * @param string|null $same_site Strict, Lax or Unset
-	 *
-	 * @throws \InvalidArgumentException for invalid $same_site value
-	 *
-	 * @return $this
-	 */
-	public function setSameSite(?string $same_site)
-	{
-		if ($same_site !== null) {
-			$same_site = \ucfirst(\strtolower($same_site));
-			if ( ! \in_array($same_site, ['Strict', 'Lax', 'Unset'])) {
-				throw new \InvalidArgumentException('SameSite must be Strict, Lax or Unset');
+		$parts = \array_map('trim', \explode(';', $line));
+		$cookie = null;
+		foreach ($parts as $key => $part) {
+			[$arg, $val] = \array_pad(\explode('=', $part, 2), 2, null);
+			if ($key === 0 && isset($arg, $val)) {
+				$cookie = new Cookie($arg, $val);
+				continue;
+			}
+			if ($cookie === null) {
+				break;
+			}
+			switch (\strtolower($arg)) {
+				case 'expires':
+					$cookie->setExpires($val);
+					break;
+				case 'domain':
+					$cookie->setDomain($val);
+					break;
+				case 'path':
+					$cookie->setPath($val);
+					break;
+				case 'httponly':
+					$cookie->setHttpOnly();
+					break;
+				case 'secure':
+					$cookie->setSecure();
+					break;
+				case 'samesite':
+					$cookie->setSameSite($val);
+					break;
 			}
 		}
-		$this->sameSite = $same_site;
-		return $this;
-	}
-
-	/**
-	 * @param bool $secure
-	 *
-	 * @return $this
-	 */
-	public function setSecure(bool $secure = true)
-	{
-		$this->secure = $secure;
-		return $this;
-	}
-
-	/**
-	 * @param string $value
-	 *
-	 * @return $this
-	 */
-	public function setValue(string $value)
-	{
-		$this->value = $value;
-		return $this;
+		return $cookie;
 	}
 }

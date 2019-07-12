@@ -144,4 +144,18 @@ class CookieTest extends TestCase
 		$this->cookie->setValue(12345);
 		$this->assertEquals('12345', $this->cookie->getValue());
 	}
+
+	public function testParse()
+	{
+		$cookie = Cookie::parse('session_id=35ab1d7a4955d926a3694ab5990c0eb1; expires=Thu, 11-Jul-2019 04:57:19 GMT; Max-Age=0; path=/admin; domain=localhost; secure; HttpOnly; SameSite=Strict');
+		$this->assertEquals('session_id', $cookie->getName());
+		$this->assertEquals('35ab1d7a4955d926a3694ab5990c0eb1', $cookie->getValue());
+		$this->assertEquals('Thu, 11 Jul 2019 04:57:19 +0000', $cookie->getExpires()->format('r'));
+		$this->assertEquals('/admin', $cookie->getPath());
+		$this->assertEquals('localhost', $cookie->getDomain());
+		$this->assertTrue($cookie->isSecure());
+		$this->assertTrue($cookie->isHttpOnly());
+		$this->assertEquals('Strict', $cookie->getSameSite());
+		$this->assertNull(Cookie::parse('foo'));
+	}
 }
