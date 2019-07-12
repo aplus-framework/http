@@ -102,9 +102,14 @@ class Request extends Message implements RequestInterface
 		$this->prepareFiles();
 	}
 
+	protected function filterInput(int $type) : array
+	{
+		return (array) \filter_input_array($type);
+	}
+
 	protected function prepareServerVariables()
 	{
-		foreach (\filter_input_array(\INPUT_SERVER) as $key => $value) {
+		foreach ($this->filterInput(\INPUT_SERVER) as $key => $value) {
 			$this->serverVariables[$key] = $value;
 		}
 		\ksort($this->serverVariables);
@@ -135,7 +140,7 @@ class Request extends Message implements RequestInterface
 
 	protected function prepareCookies()
 	{
-		foreach (\filter_input_array(\INPUT_COOKIE) as $name => $value) {
+		foreach ($this->filterInput(\INPUT_COOKIE) as $name => $value) {
 			$this->setCookie(new Cookie($name, $value));
 		}
 	}
@@ -155,17 +160,17 @@ class Request extends Message implements RequestInterface
 
 	protected function preparePOST()
 	{
-		$this->post = \filter_input_array(\INPUT_POST);
+		$this->post = $this->filterInput(\INPUT_POST);
 	}
 
 	protected function prepareGET()
 	{
-		$this->get = \filter_input_array(\INPUT_GET);
+		$this->get = $this->filterInput(\INPUT_GET);
 	}
 
 	protected function prepareENV()
 	{
-		$this->env = \filter_input_array(\INPUT_ENV);
+		$this->env = $this->filterInput(\INPUT_ENV);
 	}
 
 	protected function prepareFiles()

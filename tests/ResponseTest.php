@@ -187,18 +187,21 @@ class ResponseTest extends TestCase
 			'DNT' => ['1'],
 			'Host' => ['http://localhost'],
 		], $this->response->getAllHeaders());
+		$this->response->removeHeader('dnt');
+		$this->assertEquals([
+			'Host' => ['http://localhost'],
+		], $this->response->getAllHeaders());
 		$this->response->setHeaders([
-			'x-custom-1' => 'foo',
+			'dnt' => 1,
 			'X-Custom-2' => 'bar',
 		]);
 		$this->assertEquals([
 			'DNT' => ['1'],
 			'Host' => ['http://localhost'],
-			'x-custom-1' => ['foo'],
 			'X-Custom-2' => ['bar'],
 		], $this->response->getAllHeaders());
-		$this->assertEquals('foo', $this->response->getHeader('x-custom-1'));
-		$this->assertNull($this->response->getHeader('X-Custom-1'));
+		$this->assertEquals('1', $this->response->getHeader('dnt'));
+		$this->assertNull($this->response->getHeader('x-Custom-2'));
 		$this->assertEquals('bar', $this->response->getHeader('X-Custom-2'));
 	}
 

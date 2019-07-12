@@ -95,4 +95,11 @@ class RequestTest extends TestCase
 		$this->request->setBody(['a' => 1]);
 		$this->assertEquals('a=1', $this->request->getBody());
 	}
+
+	public function testContentType()
+	{
+		$this->assertNull($this->request->getHeader('content-type'));
+		$this->request->setContentType('text/html');
+		$this->assertEquals('text/html; charset=UTF-8', $this->request->getHeader('content-type'));
+	}
 }

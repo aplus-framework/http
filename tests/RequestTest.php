@@ -42,6 +42,9 @@ class RequestTest extends TestCase
 	{
 		$this->assertEquals('domain.tld', $this->request->getHost());
 		$this->assertEquals('real-domain.tld', $this->proxyRequest->getHost());
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('Invalid host: a_b');
+		$this->request->setHost('a_b');
 	}
 
 	public function testAccept()
@@ -385,6 +388,11 @@ class RequestTest extends TestCase
 	public function testMethod()
 	{
 		$this->assertEquals('GET', $this->request->getMethod());
+		$this->request->setMethod('post');
+		$this->assertEquals('POST', $this->request->getMethod());
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('Invalid HTTP method: FOO');
+		$this->request->setMethod('foo');
 	}
 
 	public function testPort()
