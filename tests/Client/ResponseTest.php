@@ -60,6 +60,19 @@ class ResponseTest extends TestCase
 			'session_id=35ab1d7a4955d926a3694ab5990c0eb1; expires=Thu, 11-Jul-2019 04:57:19 GMT; Max-Age=0; path=/admin; domain=localhost; secure; HttpOnly; SameSite=Strict',
 			'foo=bar; expires=Thu, 11-Jul-2019 04:57:19 GMT; Max-Age=0',
 		], $this->response->getHeaders('set-cookie'));
+		$this->assertEquals(
+			'foo=bar; expires=Thu, 11-Jul-2019 04:57:19 GMT; Max-Age=0',
+			$this->response->getHeader('set-cookie')
+		);
+		$this->assertEquals(
+			'foo=bar; expires=Thu, 11-Jul-2019 04:57:19 GMT; Max-Age=0',
+			$this->response->getHeader('set-cookie', 1)
+		);
+		$this->assertEquals(
+			'session_id=35ab1d7a4955d926a3694ab5990c0eb1; expires=Thu, 11-Jul-2019 04:57:19 GMT; Max-Age=0; path=/admin; domain=localhost; secure; HttpOnly; SameSite=Strict',
+			$this->response->getHeader('set-cookie', 0)
+		);
+		$this->assertNull($this->response->getHeader('set-cookie', 2));
 	}
 
 	public function testBody()

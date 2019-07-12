@@ -131,16 +131,21 @@ abstract class Message
 		'x-request-id' => 'X-Request-ID',
 	];
 
-	public function getHeader(string $name, bool $first = true) : ?string
+	private function makeHeaderIndex(string $name, int $index) : int
+	{
+		if ($index < 0) {
+			$index = \count($this->headers[$name]) + $index;
+		}
+		return $index;
+	}
+
+	public function getHeader(string $name, int $index = -1) : ?string
 	{
 		$name = static::getHeaderName($name);
 		if (empty($this->headers[$name])) {
 			return null;
 		}
-		$index = $first
-			? \array_key_first($this->headers[$name])
-			: \array_key_last($this->headers[$name]);
-		return $this->headers[$name][$index] ?? null;
+		return $this->headers[$name][$this->makeHeaderIndex($name, $index)] ?? null;
 	}
 
 	public function getHeaders(string $name) : array
@@ -174,16 +179,13 @@ abstract class Message
 		return $this;
 	}
 
-	protected function removeHeader(string $name, bool $first = true)
+	protected function removeHeader(string $name, int $index = -1)
 	{
 		$name = static::getHeaderName($name);
 		if (empty($this->headers[$name])) {
 			return null;
 		}
-		$index = $first
-			? \array_key_first($this->headers[$name])
-			: \array_key_last($this->headers[$name]);
-		unset($this->headers[$name][$index]);
+		unset($this->headers[$name][$this->makeHeaderIndex($name, $index)]);
 		return $this;
 	}
 

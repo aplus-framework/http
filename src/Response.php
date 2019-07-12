@@ -176,9 +176,9 @@ class Response extends Message implements ResponseInterface
 		return parent::setHeaders($headers);
 	}
 
-	public function removeHeader(string $name, bool $first = true)
+	public function removeHeader(string $name, int $index = -1)
 	{
-		return parent::removeHeader($name, $first);
+		return parent::removeHeader($name, $index);
 	}
 
 	public function removeHeaders(string $name)
