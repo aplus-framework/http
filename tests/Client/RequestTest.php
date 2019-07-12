@@ -59,6 +59,11 @@ class RequestTest extends TestCase
 		$this->assertNull($this->request->getHeader('content-type'));
 		$this->request->removeHeaders('Foo');
 		$this->assertNull($this->request->getHeader('Foo'));
+		$this->assertEquals([
+			'custom' => ['a', 'b'],
+		], $this->request->getAllHeaders());
+		$this->request->removeAllHeaders();
+		$this->assertEquals([], $this->request->getAllHeaders());
 	}
 
 	public function testCookies()

@@ -133,7 +133,7 @@ abstract class Message
 
 	private function makeHeaderIndex(string $name, int $index) : int
 	{
-		if ($index < 0) {
+		if ($index < 0 && isset($this->headers[$name])) {
 			$index = \count($this->headers[$name]) + $index;
 		}
 		return $index;
@@ -182,10 +182,10 @@ abstract class Message
 	protected function removeHeader(string $name, int $index = -1)
 	{
 		$name = static::getHeaderName($name);
-		if (empty($this->headers[$name])) {
-			return null;
-		}
 		unset($this->headers[$name][$this->makeHeaderIndex($name, $index)]);
+		if (empty($this->headers[$name])) {
+			unset($this->headers[$name]);
+		}
 		return $this;
 	}
 
