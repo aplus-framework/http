@@ -10,7 +10,7 @@ class MessageTest extends TestCase
 	 */
 	protected $message;
 
-	protected function setUp()
+	protected function setUp() : void
 	{
 		$this->message = new MessageMock();
 	}

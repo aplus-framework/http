@@ -11,7 +11,7 @@ class RequestTest extends TestCase
 	 */
 	protected $request;
 
-	protected function setUp()
+	protected function setUp() : void
 	{
 		$this->request = new Request('http://localhost');
 	}

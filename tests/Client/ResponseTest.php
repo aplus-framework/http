@@ -10,7 +10,7 @@ class ResponseTest extends TestCase
 	 */
 	protected $response;
 
-	protected function setUp()
+	protected function setUp() : void
 	{
 		$this->response = new Response(
 			'HTTP/1.1',

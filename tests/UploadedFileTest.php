@@ -34,7 +34,7 @@ class UploadedFileTest extends TestCase
 	 */
 	protected $uploadedFile2;
 
-	protected function setUp()
+	protected function setUp() : void
 	{
 		$this->uploadedFile = new UploadedFile($this->file);
 		$this->uploadedFile2 = new UploadedFile($this->file2);

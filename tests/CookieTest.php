@@ -10,7 +10,7 @@ class CookieTest extends TestCase
 	 */
 	protected $cookie;
 
-	protected function setUp()
+	protected function setUp() : void
 	{
 		$this->cookie = new Cookie('foo', 'bar');
 	}

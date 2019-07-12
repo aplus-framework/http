@@ -51,7 +51,7 @@ class ResponseTest extends TestCase
 		$this->assertEquals(301, $this->response->getStatusCode());
 	}
 
-	public function setUp()
+	public function setUp() : void
 	{
 		$this->response = new Response(new RequestMock());
 	}

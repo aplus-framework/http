@@ -32,7 +32,7 @@ class RequestTest extends TestCase
 		$this->assertNull($this->request->getUserAgent());
 	}
 
-	public function setUp()
+	public function setUp() : void
 	{
 		$this->request = new RequestMock();
 		$this->proxyRequest = new RequestProxyMock();

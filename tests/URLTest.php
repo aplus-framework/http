@@ -10,7 +10,7 @@ class URLTest extends TestCase
 	 */
 	protected $url;
 
-	public function setUp()
+	public function setUp() : void
 	{
 		$this->url = new URL('http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id');
 	}
