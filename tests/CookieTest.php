@@ -30,12 +30,14 @@ class CookieTest extends TestCase
 		$this->cookie->setExpires('+5 seconds');
 		$this->assertInstanceOf(\DateTime::class, $this->cookie->getExpires());
 		$this->assertEquals(\time() + 5, $this->cookie->getExpires()->format('U'));
+		$this->assertFalse($this->cookie->isExpired());
 		$this->cookie->setExpires($time = \time() + 30);
 		$this->assertInstanceOf(\DateTime::class, $this->cookie->getExpires());
 		$this->assertEquals($time, $this->cookie->getExpires()->format('U'));
 		$this->cookie->setExpires($time = new \DateTime('-5 hours'));
 		$this->assertInstanceOf(\DateTime::class, $this->cookie->getExpires());
 		$this->assertEquals(\time() - 5 * 60 * 60, $this->cookie->getExpires()->format('U'));
+		$this->assertTrue($this->cookie->isExpired());
 		$this->cookie->setExpires(null);
 		$this->assertNull($this->cookie->getExpires());
 		$this->expectException(\Exception::class);

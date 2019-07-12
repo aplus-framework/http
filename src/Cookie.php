@@ -138,6 +138,14 @@ class Cookie
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function isExpired() : bool
+	{
+		return $this->getExpires() && \time() > $this->getExpires()->getTimestamp();
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getName() : string
@@ -266,7 +274,7 @@ class Cookie
 	{
 		$expires = $this->getExpires();
 		if ($expires) {
-			$expires = (int) $expires->format('U');
+			$expires = $expires->getTimestamp();
 		}
 		return \setcookie($this->getName(), $this->getValue(), [
 			'expires' => $expires,
