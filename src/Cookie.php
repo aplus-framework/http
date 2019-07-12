@@ -298,12 +298,12 @@ class Cookie
 		$parts = \array_map('trim', \explode(';', $line));
 		$cookie = null;
 		foreach ($parts as $key => $part) {
-			[$arg, $val] = \array_pad(\explode('=', $part, 2), 2, null);
-			if ($key === 0 && isset($arg, $val)) {
-				$cookie = new Cookie($arg, $val);
-				continue;
-			}
-			if ($cookie === null) {
+			[$arg, $val] = static::makeArgumentValue($part);
+			if ($key === 0) {
+				if (isset($arg, $val)) {
+					$cookie = new Cookie($arg, $val);
+					continue;
+				}
 				break;
 			}
 			switch (\strtolower($arg)) {
@@ -328,5 +328,33 @@ class Cookie
 			}
 		}
 		return $cookie;
+	}
+
+	/**
+	 * Create Cookie objects from a Cookie Header line.
+	 *
+	 * @param string $line
+	 *
+	 * @return array|Cookie[]
+	 */
+	public static function create(string $line) : array
+	{
+		$items = \array_map('trim', \explode(';', $line));
+		$cookies = [];
+		foreach ($items as $item) {
+			[$name, $value] = static::makeArgumentValue($item);
+			if (isset($name, $value)) {
+				$cookies[$name] = new Cookie($name, $value);
+			}
+		}
+		return $cookies;
+	}
+
+	protected static function makeArgumentValue(string $part) : array
+	{
+		$part = \array_pad(\explode('=', $part, 2), 2, null);
+		! $part[0] ?: $part[0] = \trim($part[0]);
+		! $part[1] ?: $part[1] = \trim($part[1]);
+		return $part;
 	}
 }

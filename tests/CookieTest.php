@@ -160,4 +160,22 @@ class CookieTest extends TestCase
 		$this->assertEquals('Strict', $cookie->getSameSite());
 		$this->assertNull(Cookie::parse('foo'));
 	}
+
+	public function testCreate()
+	{
+		$cookies = Cookie::create('a=A; b=B;c=C;d;e = E');
+		$this->assertCount(4, $cookies);
+		$this->assertEquals([
+			'A',
+			'B',
+			'C',
+			'E',
+		], [
+			$cookies['a']->getValue(),
+			$cookies['b']->getValue(),
+			$cookies['c']->getValue(),
+			$cookies['e']->getValue(),
+		]);
+		$this->assertCount(0, Cookie::create('foo'));
+	}
 }
