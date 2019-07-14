@@ -25,7 +25,9 @@ class MessageTest extends TestCase
 	public function testHeader()
 	{
 		$this->assertNull($this->message->getHeader('from'));
+		$this->assertFalse($this->message->hasHeader('from'));
 		$this->message->setHeader('from', 'foo@localhost');
+		$this->assertTrue($this->message->hasHeader('from'));
 		$this->assertEquals('foo@localhost', $this->message->getHeader('from'));
 		$this->assertEquals(['foo@localhost'], $this->message->getHeaders('from'));
 		$this->message->setHeader('from', 'bar@localhost');
@@ -105,7 +107,9 @@ class MessageTest extends TestCase
 	{
 		$this->assertEquals([], $this->message->getCookies());
 		$this->assertNull($this->message->getCookie('session'));
+		$this->assertFalse($this->message->hasCookie('session'));
 		$this->message->setCookie(new Cookie('session', 'abc123'));
+		$this->assertTrue($this->message->hasCookie('session'));
 		$this->message->setCookie(new Cookie('custom', 'foo'));
 		$this->assertEquals('abc123', $this->message->getCookie('session')->getValue());
 		$this->assertEquals(['session', 'custom'], \array_keys($this->message->getCookies()));

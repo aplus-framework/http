@@ -139,6 +139,11 @@ abstract class Message
 		return $index;
 	}
 
+	public function hasHeader(string $name) : bool
+	{
+		return ! empty($this->headers[static::getHeaderName($name)]);
+	}
+
 	public function getHeader(string $name, int $index = -1) : ?string
 	{
 		$name = static::getHeaderName($name);
@@ -208,6 +213,11 @@ abstract class Message
 				\header("{$name}: {$value}", false);
 			}
 		}
+	}
+
+	public function hasCookie(string $name) : bool
+	{
+		return (bool) $this->getCookie($name);
 	}
 
 	public function getCookie(string $name) : ?Cookie
