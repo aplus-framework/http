@@ -14,6 +14,10 @@ class UploadedFile
 	 */
 	protected $clientType;
 	/**
+	 * @var string
+	 */
+	protected $clientName;
+	/**
 	 * @var int
 	 */
 	protected $error;
@@ -29,6 +33,10 @@ class UploadedFile
 	 * @var bool
 	 */
 	protected $isMoved = false;
+	/**
+	 * @var string
+	 */
+	protected $destination;
 	/**
 	 * @var string
 	 */
@@ -934,6 +942,11 @@ class UploadedFile
 		return $this->tmpName;
 	}
 
+	public function getDestination() : ?string
+	{
+		return $this->destination;
+	}
+
 	/**
 	 * @return string
 	 */
@@ -965,13 +978,25 @@ class UploadedFile
 	 */
 	public function move(string $destination, bool $overwrite = false) : bool
 	{
-		if ($this->isMoved) {
-			throw new \ErrorException('File already is moved.');
+		$destination = \realpath($destination);
+		if ($destination === false) {
+			return false;
 		}
 		if ($overwrite === false && \is_file($destination)) {
 			return false;
 		}
-		return $this->isMoved = \move_uploaded_file($this->tmpName, $destination);
+		if ($this->isMoved) {
+			$renamed = \rename($this->destination, $destination);
+			if ($renamed) {
+				$this->destination = $destination;
+			}
+			return $renamed;
+		}
+		$this->isMoved = \move_uploaded_file($this->tmpName, $destination);
+		if ($this->isMoved) {
+			$this->destination = $destination;
+		}
+		return $this->isMoved;
 	}
 
 	/**
