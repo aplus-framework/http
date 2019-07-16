@@ -176,32 +176,31 @@ class ResponseTest extends TestCase
 			'ETag' => 'foo',
 		]);
 		$this->assertEquals([
-			'Content-Type' => ['text/html'],
-			'DNT' => ['1'],
-			'Host' => ['http://localhost'],
-			'ETag' => ['foo'],
+			'content-type' => ['text/html'],
+			'dnt' => ['1'],
+			'host' => ['http://localhost'],
+			'etag' => ['foo'],
 		], $this->response->getAllHeaders());
 		$this->response->removeHeaders('CONTENT-TYPE');
 		$this->response->removeHeaders('etag');
 		$this->assertEquals([
-			'DNT' => ['1'],
-			'Host' => ['http://localhost'],
+			'dnt' => ['1'],
+			'host' => ['http://localhost'],
 		], $this->response->getAllHeaders());
 		$this->response->removeHeader('dnt');
 		$this->assertEquals([
-			'Host' => ['http://localhost'],
+			'host' => ['http://localhost'],
 		], $this->response->getAllHeaders());
 		$this->response->setHeaders([
 			'dnt' => 1,
-			'X-Custom-2' => 'bar',
+			'x-custom-2' => 'bar',
 		]);
 		$this->assertEquals([
-			'DNT' => ['1'],
-			'Host' => ['http://localhost'],
-			'X-Custom-2' => ['bar'],
+			'dnt' => ['1'],
+			'host' => ['http://localhost'],
+			'x-custom-2' => ['bar'],
 		], $this->response->getAllHeaders());
 		$this->assertEquals('1', $this->response->getHeader('dnt'));
-		$this->assertNull($this->response->getHeader('x-Custom-2'));
 		$this->assertEquals('bar', $this->response->getHeader('X-Custom-2'));
 	}
 

@@ -11,6 +11,8 @@ interface ResponseInterface
 
 	public function getStatusReason() : string;
 
+	public function getStatusLine() : string;
+
 	public function getHeader(string $name, int $index = -1) : ?string;
 
 	public function getHeaders(string $name) : array;
