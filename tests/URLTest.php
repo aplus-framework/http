@@ -171,4 +171,12 @@ class URLTest extends TestCase
 			$this->url->__toString()
 		);
 	}
+
+	public function testJsonSerializable()
+	{
+		$this->assertEquals(
+			'"http:\/\/user:pass@domain.tld:8080\/foo\/bar?a=1&b=2#id"',
+			\json_encode($this->url)
+		);
+	}
 }

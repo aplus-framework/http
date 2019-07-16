@@ -7,7 +7,7 @@
  * @see     https://developer.mozilla.org/en-US/docs/Web/API/URL
  * @see     https://tools.ietf.org/html/rfc3986#section-3
  */
-class URL
+class URL implements \JsonSerializable
 {
 	/**
 	 * @var string|null The #fragment (id)
@@ -384,5 +384,10 @@ class URL
 	{
 		$this->user = $user;
 		return $this;
+	}
+
+	public function jsonSerialize()
+	{
+		return $this->getURL();
 	}
 }

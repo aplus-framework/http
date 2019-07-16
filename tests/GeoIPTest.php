@@ -116,4 +116,33 @@ class GeoIPTest extends TestCase
 	{
 		$this->assertEquals('America/Los_Angeles', $this->getGeoIP()->getTimezone());
 	}
+
+	public function testJsonSerializable()
+	{
+		$this->assertEquals(
+			<<<JSON
+{
+    "continentCode": "NA",
+    "timezone": "America\\/Los_Angeles",
+    "country": "United States",
+    "countryCode": "US",
+    "countryCode3": "USA",
+    "region": "California",
+    "regionCode": "CA",
+    "postalCode": "94043",
+    "areaCode": 650,
+    "ASN": "AS15169 Google LLC",
+    "DMACode": 807,
+    "IP": "108.177.122.136",
+    "ISP": false,
+    "domain": false,
+    "netSpeed": false,
+    "latitude": 37.4192008972168,
+    "longitude": -122.05740356445312,
+    "ORG": false
+}
+JSON,
+			\json_encode($this->getGeoIP(), \JSON_PRETTY_PRINT)
+		);
+	}
 }

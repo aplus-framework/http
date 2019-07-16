@@ -3,7 +3,7 @@
 /**
  * Class GeoIP.
  */
-class GeoIP
+class GeoIP implements \JsonSerializable
 {
 	/**
 	 * @var string
@@ -219,5 +219,29 @@ class GeoIP
 		$this->ip = $ip;
 		$this->record = \geoip_record_by_name($ip);
 		return $this;
+	}
+
+	public function jsonSerialize()
+	{
+		return [
+			'continentCode' => $this->getContinentCode(),
+			'timezone' => $this->getTimezone(),
+			'country' => $this->getCountry(),
+			'countryCode' => $this->getCountryCode(),
+			'countryCode3' => $this->getCountryCode3(),
+			'region' => $this->getRegion(),
+			'regionCode' => $this->getRegionCode(),
+			'postalCode' => $this->getPostalCode(),
+			'areaCode' => $this->getAreaCode(),
+			'ASN' => $this->getASN(),
+			'DMACode' => $this->getDMACode(),
+			'IP' => $this->getIP(),
+			'ISP' => $this->getISP(),
+			'domain' => $this->getDomain(),
+			'netSpeed' => $this->getNetSpeed(),
+			'latitude' => $this->getLatitude(),
+			'longitude' => $this->getLongitude(),
+			'ORG' => $this->getORG(),
+		];
 	}
 }

@@ -3,7 +3,7 @@
 /**
  * Class UserAgent.
  */
-class UserAgent
+class UserAgent implements \JsonSerializable
 {
 	/**
 	 * @var string|null
@@ -427,5 +427,10 @@ class UserAgent
 		}
 		return isset(static::$config['robots'][$key])
 			&& $this->robot === static::$config['robots'][$key];
+	}
+
+	public function jsonSerialize()
+	{
+		return $this->getAgentString();
 	}
 }

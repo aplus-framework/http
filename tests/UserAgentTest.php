@@ -74,4 +74,14 @@ class UserAgentTest extends TestCase
 		$this->assertFalse($agent->isRobot());
 		$this->assertFalse($agent->isMobile());
 	}
+
+	public function testJsonSerializable()
+	{
+		$this->assertEquals(
+			'"Mozilla\/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; en-us) AppleWebKit\/533.20.25 (KHTML, like Gecko) Version\/5.0.4 Safari\/533.20.27"',
+			\json_encode(new UserAgent(
+				'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27'
+			))
+		);
+	}
 }
