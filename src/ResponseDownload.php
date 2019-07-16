@@ -45,17 +45,24 @@ trait ResponseDownload
 	private $readLength = 1024;
 
 	/**
-	 * Sets a downloadable file.
+	 * Sets a file to download/stream.
 	 *
 	 * @param string $filepath
-	 * @param bool   $acceptRanges Accept HTTP Ranges, partial downloads
-	 * @param int    $delay        Delay between flushs in seconds
+	 * @param bool   $inline       Set Content-Disposition header as "inline". Browsers load the
+	 *                             file in the window. Set true to allow video or audio streams.
+	 * @param bool   $acceptRanges Set Accept-Ranges header to "bytes". Allow partial downloads,
+	 *                             media players to move the time position forward and back and
+	 *                             download managers to continue/download multi-parts
+	 * @param int    $delay        Delay between flushs in microseconds
 	 * @param int    $readLength   Bytes read by flush
+	 *
+	 * @throws \InvalidArgumentException If invalid file path
 	 *
 	 * @return $this
 	 */
 	public function setDownload(
 		string $filepath,
+		bool $inline = false,
 		bool $acceptRanges = true,
 		int $delay = 0,
 		int $readLength = 1024
@@ -69,7 +76,10 @@ trait ResponseDownload
 		$this->filesize = \filesize($this->filepath);
 		$filename = \basename($filepath);
 		$this->setHeader('Last-Modified', \date(\DATE_RFC7231, \filemtime($this->filepath)));
-		$this->setHeader('Content-Disposition', \sprintf('attachment; filename="%s"', $filename));
+		$this->setHeader(
+			'Content-Disposition',
+			$inline ? 'inline' : \sprintf('attachment; filename="%s"', $filename)
+		);
 		$this->setAcceptRanges($acceptRanges);
 		if ($acceptRanges
 			&& $rangeLine = $this->request->getHeader('Range')
@@ -249,6 +259,9 @@ trait ResponseDownload
 			$bytesRead = $bytesLeft > $this->readLength ? $this->readLength : $bytesLeft;
 			$bytesLeft -= $bytesRead;
 			$this->flush($bytesRead);
+			if (\connection_status() !== \CONNECTION_NORMAL) {
+				break;
+			}
 		}
 	}
 
@@ -258,7 +271,7 @@ trait ResponseDownload
 		\ob_flush();
 		\flush();
 		if ($this->delay) {
-			\sleep($this->delay);
+			\usleep($this->delay);
 		}
 	}
 
@@ -266,6 +279,9 @@ trait ResponseDownload
 	{
 		while ( ! \feof($this->handle)) {
 			$this->flush($this->readLength);
+			if (\connection_status() !== \CONNECTION_NORMAL) {
+				break;
+			}
 		}
 	}
 

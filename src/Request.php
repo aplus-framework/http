@@ -153,8 +153,8 @@ class Request extends Message implements RequestInterface
 		$options = null
 	) {
 		$variable = $variable === null
-			? \filter_input_array($type)
-			: \ArraySimple::value($variable, \filter_input_array($type));
+			? (array) \filter_input_array($type)
+			: \ArraySimple::value($variable, (array) \filter_input_array($type));
 		return $filter
 			? \filter_var($variable, $filter, $options)
 			: $variable;
