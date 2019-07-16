@@ -25,9 +25,9 @@ class MessageTest extends TestCase
 	public function testHeader()
 	{
 		$this->assertNull($this->message->getHeader('from'));
-		$this->assertFalse($this->message->hasHeader('from'));
+		$this->assertEquals(0, $this->message->hasHeader('from'));
 		$this->message->setHeader('from', 'foo@localhost');
-		$this->assertTrue($this->message->hasHeader('from'));
+		$this->assertEquals(1, $this->message->hasHeader('from'));
 		$this->assertEquals('foo@localhost', $this->message->getHeader('from'));
 		$this->assertEquals(['foo@localhost'], $this->message->getHeaders('from'));
 		$this->message->setHeader('from', 'bar@localhost');
@@ -50,7 +50,7 @@ class MessageTest extends TestCase
 		$this->assertEquals([], $this->message->getAllHeaders());
 		$this->message->setHeader('from', 'foo@localhost', 'bar@localhost');
 		$this->assertEquals(
-			['From' => ['foo@localhost', 'bar@localhost']],
+			['from' => ['foo@localhost', 'bar@localhost']],
 			$this->message->getAllHeaders()
 		);
 		$this->message->setHeaders([
@@ -59,17 +59,17 @@ class MessageTest extends TestCase
 		]);
 		$this->assertEquals(
 			[
-				'From' => ['foo@localhost', 'bar@localhost'],
-				'Content-Type' => ['application/json', 'text/html'],
-				'Allow' => ['*'],
+				'from' => ['foo@localhost', 'bar@localhost'],
+				'content-type' => ['application/json', 'text/html'],
+				'allow' => ['*'],
 			],
 			$this->message->getAllHeaders()
 		);
 		$this->assertEquals(
 			[
-				'From' => ['foo@localhost', 'bar@localhost'],
-				'Content-Type' => ['application/json', 'text/html'],
-				'Allow' => ['*'],
+				'from' => ['foo@localhost', 'bar@localhost'],
+				'content-type' => ['application/json', 'text/html'],
+				'allow' => ['*'],
 			],
 			$this->message->getAllHeaders()
 		);

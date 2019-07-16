@@ -4,15 +4,28 @@
  * Class Message.
  *
  * @see     https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
+ * @see     https://tools.ietf.org/html/rfc7231
  */
 abstract class Message
 {
 	/**
-	 * HTTP Protocol.
+	 * HTTP Message Protocol.
 	 *
 	 * @var string
 	 */
 	protected $protocol = 'HTTP/1.1';
+	/**
+	 * HTTP Request URL.
+	 *
+	 * @var URL
+	 */
+	protected $url;
+	/**
+	 * HTTP Request Method.
+	 *
+	 * @var string
+	 */
+	protected $method;
 	/**
 	 * HTTP Message Body.
 	 *
@@ -130,6 +143,84 @@ abstract class Message
 		// Custom
 		'x-request-id' => 'X-Request-ID',
 	];
+	/**
+	 * Standard Response Status Codes and Reasons.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+	 *
+	 * @var array
+	 */
+	protected static $responseStatus = [
+		// Information responses
+		100 => 'Continue',
+		101 => 'Switching Protocols',
+		102 => 'Processing',
+		103 => 'Early Hints',
+		// Successful responses
+		200 => 'OK',
+		201 => 'Created',
+		202 => 'Accepted',
+		203 => 'Non-Authoritative Information',
+		204 => 'No Content',
+		205 => 'Reset Content',
+		206 => 'Partial Content',
+		207 => 'Multi-Status',
+		208 => 'Already Reported',
+		226 => 'IM Used',
+		// Redirection messages
+		300 => 'Multiple Choices',
+		301 => 'Moved Permanently',
+		302 => 'Found',
+		303 => 'See Other',
+		304 => 'Not Modified',
+		305 => 'Use Proxy',
+		306 => 'Switch Proxy',
+		307 => 'Temporary Redirect',
+		308 => 'Permanent Redirect',
+		// Client errors responses
+		400 => 'Bad Request',
+		401 => 'Unauthorized',
+		402 => 'Payment Required',
+		403 => 'Forbidden',
+		404 => 'Not Found',
+		405 => 'Method Not Allowed',
+		406 => 'Not Acceptable',
+		407 => 'Proxy Authentication Required',
+		408 => 'Request Timeout',
+		409 => 'Conflict',
+		410 => 'Gone',
+		411 => 'Length Required',
+		412 => 'Precondition Failed',
+		413 => 'Payload Too Large',
+		414 => 'URI Too Large',
+		415 => 'Unsupported Media Type',
+		416 => 'Requested Range Not Satisfiable',
+		417 => 'Expectation Failed',
+		418 => "I'm a teapot",
+		421 => 'Misdirected Request',
+		422 => 'Unprocessable Entity',
+		423 => 'Locked',
+		424 => 'Failed Dependency',
+		426 => 'Upgrade Required',
+		428 => 'Precondition Required',
+		429 => 'Too Many Requests',
+		431 => 'Request Header Fields Too Large',
+		451 => 'Unavailable For Legal Reasons',
+		499 => 'Client Closed Request',
+		// Server error responses
+		500 => 'Internal Server Error',
+		501 => 'Not Implemented',
+		502 => 'Bad Gateway',
+		503 => 'Service Unavailable',
+		504 => 'Gateway Timeout',
+		505 => 'HTTP Version Not Supported',
+		506 => 'Variant Also Negotiates',
+		507 => 'Insufficient Storage',
+		508 => 'Loop Detected',
+		510 => 'Not Extended',
+		511 => 'Network Authentication Required',
+		599 => 'Network Connect Timeout Error',
+	];
 
 	private function makeHeaderIndex(string $name, int $index) : int
 	{
@@ -139,14 +230,17 @@ abstract class Message
 		return $index;
 	}
 
-	public function hasHeader(string $name) : bool
+	public function hasHeader(string $name) : int
 	{
-		return ! empty($this->headers[static::getHeaderName($name)]);
+		$name = \strtolower($name);
+		return empty($this->headers[$name])
+			? 0
+			: \count($this->headers[$name]);
 	}
 
 	public function getHeader(string $name, int $index = -1) : ?string
 	{
-		$name = static::getHeaderName($name);
+		$name = \strtolower($name);
 		if (empty($this->headers[$name])) {
 			return null;
 		}
@@ -155,7 +249,7 @@ abstract class Message
 
 	public function getHeaders(string $name) : array
 	{
-		return $this->headers[static::getHeaderName($name)] ?? [];
+		return $this->headers[\strtolower($name)] ?? [];
 	}
 
 	public function getAllHeaders() : array
@@ -165,13 +259,13 @@ abstract class Message
 
 	protected function setHeader(string $name, string ...$values)
 	{
-		$this->headers[static::getHeaderName($name)] = $values;
+		$this->headers[\strtolower($name)] = $values;
 		return $this;
 	}
 
 	protected function addHeader(string $name, string $value)
 	{
-		$this->headers[static::getHeaderName($name)][] = $value;
+		$this->headers[\strtolower($name)][] = $value;
 		return $this;
 	}
 
@@ -186,7 +280,7 @@ abstract class Message
 
 	protected function removeHeader(string $name, int $index = -1)
 	{
-		$name = static::getHeaderName($name);
+		$name = \strtolower($name);
 		unset($this->headers[$name][$this->makeHeaderIndex($name, $index)]);
 		if (empty($this->headers[$name])) {
 			unset($this->headers[$name]);
@@ -196,7 +290,7 @@ abstract class Message
 
 	protected function removeHeaders(string $name)
 	{
-		unset($this->headers[static::getHeaderName($name)]);
+		unset($this->headers[\strtolower($name)]);
 		return $this;
 	}
 
@@ -206,10 +300,11 @@ abstract class Message
 		return $this;
 	}
 
-	protected function sendHeaders()
+	protected function sendHeaders() : void
 	{
 		foreach ($this->getAllHeaders() as $name => $values) {
 			foreach ($values as $value) {
+				$name = static::getHeaderName($name);
 				\header("{$name}: {$value}", false);
 			}
 		}
@@ -285,14 +380,97 @@ abstract class Message
 	}
 
 	/**
+	 * Gets the HTTP Request Method.
+	 *
+	 * @return string normally one of: GET, HEAD, POST, PATCH, PUT, DELETE or OPTIONS
+	 */
+	protected function getMethod() : string
+	{
+		return $this->method;
+	}
+
+	protected function setMethod(string $method)
+	{
+		$valid = \strtoupper($method);
+		if ( ! \in_array($valid, [
+			'DELETE',
+			'GET',
+			'HEAD',
+			'OPTIONS',
+			'PATCH',
+			'POST',
+			'PUT',
+		], true)) {
+			throw new \InvalidArgumentException("Invalid HTTP Request Method: {$method}");
+		}
+		$this->method = $valid;
+		return $this;
+	}
+
+	/**
+	 * Gets the requested URL.
+	 *
+	 * @return URL
+	 */
+	protected function getURL() : URL
+	{
+		return $this->url;
+	}
+
+	/**
+	 * @param string|URL $url
+	 *
+	 * @return $this
+	 */
+	protected function setURL($url)
+	{
+		if ( ! $url instanceof URL) {
+			$url = new URL($url);
+		}
+		$this->url = $url;
+		return $this;
+	}
+
+	/**
 	 * Gets a header name according with the standards.
 	 *
 	 * @param string $name header name
 	 *
 	 * @return string
 	 */
-	protected static function getHeaderName(string $name) : string
+	public static function getHeaderName(string $name) : string
 	{
 		return static::$standardHeaders[\strtolower($name)] ?? $name;
+	}
+
+	public static function getResponseReason(int $code, string $default = null) : ?string
+	{
+		return static::$responseStatus[$code] ?? $default;
+	}
+
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Glossary/Quality_values
+	 * @see https://stackoverflow.com/a/33748742/6027968
+	 *
+	 * @param string|null $string
+	 *
+	 * @return array
+	 */
+	public static function parseQualityValues(?string $string) : array
+	{
+		if (empty($string)) {
+			return [];
+		}
+		$quality = \array_reduce(
+			\explode(',', $string, 20),
+			static function ($qualifier, $part) {
+				[$value, $priority] = \array_merge(\explode(';q=', $part), [1]);
+				$qualifier[\trim($value)] = (float) $priority;
+				return $qualifier;
+			},
+			[]
+		);
+		\arsort($quality);
+		return $quality;
 	}
 }
