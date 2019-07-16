@@ -14,6 +14,7 @@ class Client
 	protected $responseCode;
 	protected $responseReason;
 	protected $responseHeaders = [];
+	protected $info = [];
 
 	public function setOption($option, $value)
 	{
@@ -26,7 +27,12 @@ class Client
 		return \array_replace($this->defaultOptions, $this->options);
 	}
 
-	public function setBasicAuth(string $username, string $password)
+	public function getInfo() : array
+	{
+		return $this->info;
+	}
+
+	protected function setBasicAuth(string $username, string $password)
 	{
 		$this->setOption(\CURLOPT_USERPWD, $username . ':' . $password);
 		$this->setOption(\CURLOPT_HTTPAUTH, \CURLAUTH_BASIC);
@@ -48,7 +54,11 @@ class Client
 	public function reset() : void
 	{
 		$this->options = [];
+		$this->responseProtocol = null;
+		$this->responseCode = null;
+		$this->responseReason = null;
 		$this->responseHeaders = [];
+		$this->info = [];
 	}
 
 	protected function setHTTPVersion(string $version)
@@ -96,7 +106,8 @@ class Client
 			throw new \RuntimeException(\curl_error($curl), \curl_errno($curl));
 		}
 		//\var_dump(\curl_getinfo($curl, CURLINFO_HEADER_OUT));
-		//$status_code = \curl_getinfo($curl, \CURLINFO_HTTP_CODE);
+		$this->info = \curl_getinfo($curl);
+		\ksort($this->info);
 		\curl_close($curl);
 		return new Response(
 			$this->responseProtocol,

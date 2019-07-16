@@ -29,8 +29,8 @@ class RequestTest extends TestCase
 		$this->request->setMethod('post');
 		$this->assertEquals('POST', $this->request->getMethod());
 		$this->expectException(\InvalidArgumentException::class);
-		$this->expectExceptionMessage('Invalid HTTP method: FOO');
-		$this->request->setMethod('foo');
+		$this->expectExceptionMessage('Invalid HTTP Request Method: Foo');
+		$this->request->setMethod('Foo');
 	}
 
 	public function testURL()

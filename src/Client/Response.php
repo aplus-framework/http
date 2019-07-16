@@ -88,4 +88,9 @@ class Response extends Message implements ResponseInterface
 		}
 		return $body;
 	}
+
+	public function getStatusLine() : string
+	{
+		return $this->getStatusCode() . ' ' . $this->getStatusReason();
+	}
 }

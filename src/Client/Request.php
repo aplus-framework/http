@@ -32,38 +32,22 @@ class Request extends Message implements RequestInterface
 
 	public function setURL($url)
 	{
-		if ( ! $url instanceof URL) {
-			$url = new URL($url);
-		}
-		$this->url = $url;
-		return $this;
+		return parent::setURL($url);
 	}
 
 	public function getURL() : URL
 	{
-		return $this->url;
-	}
-
-	public function setMethod(string $method) : void
-	{
-		$method = \strtoupper($method);
-		if ( ! \in_array($method, [
-			'GET',
-			'HEAD',
-			'POST',
-			'PATCH',
-			'PUT',
-			'DELETE',
-			'OPTIONS',
-		], true)) {
-			throw new \InvalidArgumentException("Invalid HTTP method: {$method}");
-		}
-		$this->method = $method;
+		return parent::getURL();
 	}
 
 	public function getMethod() : string
 	{
 		return $this->method;
+	}
+
+	public function setMethod(string $method)
+	{
+		return parent::setMethod($method);
 	}
 
 	public function setProtocol(string $protocol)
