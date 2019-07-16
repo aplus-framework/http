@@ -36,6 +36,7 @@ class Response extends Message implements ResponseInterface
 	public function __construct(Request $request)
 	{
 		$this->request = $request;
+		$this->setProtocol($this->request->getProtocol());
 	}
 
 	/**
