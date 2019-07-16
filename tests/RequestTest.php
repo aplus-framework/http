@@ -29,6 +29,7 @@ class RequestTest extends TestCase
 			$this->request->getUserAgent()
 		);
 		$this->request->userAgent = null;
+		$this->request->setServerVariable('HTTP_USER_AGENT', null);
 		$this->assertNull($this->request->getUserAgent());
 	}
 
@@ -304,7 +305,7 @@ class RequestTest extends TestCase
 		$this->assertEquals([
 			'order_by' => 'title',
 			'order' => 'asc',
-		], $this->request->getQueries());
+		], $this->request->getQuery());
 		$this->assertEquals('asc', $this->request->getQuery('order'));
 		$this->assertEquals('title', $this->request->getQuery('order_by'));
 		$this->assertNull($this->request->getQuery('unknow'));
@@ -319,16 +320,16 @@ class RequestTest extends TestCase
 	public function testHeaders()
 	{
 		$this->assertEquals([
-			'Accept' => ['text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'],
-			'Accept-Charset' => ['utf-8, iso-8859-1;q=0.5, *;q=0.1'],
-			'Accept-Encoding' => ['gzip, deflate'],
-			'Accept-Language' => ['pt-BR,es;q=0.8,en;q=0.5,en-US;q=0.3'],
-			'Content-Type' => ['text/html; charset=UTF-8'],
-			'ETag' => ['abc'],
-			'Host' => ['domain.tld'],
-			'Referer' => ['http://domain.tld/contact.html'],
-			'User-Agent' => ['Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'],
-			'X-Requested-With' => ['XMLHTTPREQUEST'],
+			'accept' => ['text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'],
+			'accept-charset' => ['utf-8, iso-8859-1;q=0.5, *;q=0.1'],
+			'accept-encoding' => ['gzip, deflate'],
+			'accept-language' => ['pt-BR,es;q=0.8,en;q=0.5,en-US;q=0.3'],
+			'content-type' => ['text/html; charset=UTF-8'],
+			'etag' => ['abc'],
+			'host' => ['domain.tld'],
+			'referer' => ['http://domain.tld/contact.html'],
+			'user-agent' => ['Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'],
+			'x-requested-with' => ['XMLHTTPREQUEST'],
 		], $this->request->getAllHeaders());
 	}
 
@@ -391,8 +392,8 @@ class RequestTest extends TestCase
 		$this->request->setMethod('post');
 		$this->assertEquals('POST', $this->request->getMethod());
 		$this->expectException(\InvalidArgumentException::class);
-		$this->expectExceptionMessage('Invalid HTTP method: FOO');
-		$this->request->setMethod('foo');
+		$this->expectExceptionMessage('Invalid HTTP Request Method: Foo');
+		$this->request->setMethod('Foo');
 	}
 
 	public function testPort()

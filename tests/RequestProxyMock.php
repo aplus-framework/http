@@ -2,9 +2,11 @@
 
 class RequestProxyMock extends RequestMock
 {
-	protected function prepareServerVariables()
+	public $body = '{"test":123}';
+
+	public function __construct()
 	{
-		$this->serverVariables = [
+		$this->input[\INPUT_SERVER] = [
 			'HTTP_HOST' => 'real-domain.tld:8080',
 			'HTTP_X_FORWARDED_FOR' => '192.168.1.2',
 			'HTTP_REFERER' => 'invali_d',
@@ -17,11 +19,7 @@ class RequestProxyMock extends RequestMock
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'SERVER_NAME' => 'domain.tld',
 		];
-	}
-
-	protected function prepareBody()
-	{
-		$this->body = '{"test":123}';
+		parent::__construct();
 	}
 
 	protected function prepareCookies()

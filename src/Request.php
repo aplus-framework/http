@@ -7,24 +7,9 @@
  */
 class Request extends Message implements RequestInterface
 {
-	/**
-	 * HTTP Request Method.
-	 *
-	 * @var string
-	 */
-	protected $method;
-	/**
-	 * HTTP Request Server Variables.
-	 *
-	 * @var array
-	 */
-	protected $serverVariables = [];
-	protected $post = [];
-	protected $get = [];
-	protected $env = [];
 	protected $files = [];
 	/**
-	 * @var array|null
+	 * @var array
 	 */
 	protected $parsedBody;
 	/**
@@ -38,7 +23,7 @@ class Request extends Message implements RequestInterface
 	 */
 	protected $authType;
 	/**
-	 * @var array|false|null
+	 * @var array|false
 	 */
 	protected $geoip;
 	/**
@@ -46,9 +31,13 @@ class Request extends Message implements RequestInterface
 	 */
 	protected $host;
 	/**
+	 * @var int
+	 */
+	protected $port;
+	/**
 	 * Request Identifier.
 	 *
-	 * @var string|null 32 bytes
+	 * @var string 32 bytes
 	 */
 	protected $id;
 	/**
@@ -61,27 +50,19 @@ class Request extends Message implements RequestInterface
 		'LANGUAGE' => null,
 	];
 	/**
-	 * @var int|null
-	 */
-	protected $port;
-	/**
 	 * @var false|URL
 	 */
 	protected $referrer;
 	/**
-	 * @var URL
-	 */
-	protected $url;
-	/**
-	 * @var UserAgent|null
+	 * @var false|UserAgent
 	 */
 	protected $userAgent;
 	/**
-	 * @var bool|null
+	 * @var bool
 	 */
 	protected $isAJAX;
 	/**
-	 * @var bool|null
+	 * @var bool
 	 */
 	protected $isSecure;
 
@@ -90,29 +71,11 @@ class Request extends Message implements RequestInterface
 	 */
 	public function __construct()
 	{
-		$this->prepareServerVariables();
 		$this->prepareStatusLine();
 		$this->prepareHeaders();
 		$this->prepareCookies();
 		$this->prepareUserAgent();
-		$this->prepareBody();
-		$this->preparePOST();
-		$this->prepareGET();
-		$this->prepareENV();
 		$this->prepareFiles();
-	}
-
-	protected function filterInput(int $type) : array
-	{
-		return (array) \filter_input_array($type);
-	}
-
-	protected function prepareServerVariables()
-	{
-		foreach ($this->filterInput(\INPUT_SERVER) as $key => $value) {
-			$this->serverVariables[$key] = $value;
-		}
-		\ksort($this->serverVariables);
 	}
 
 	protected function prepareStatusLine()
@@ -129,7 +92,7 @@ class Request extends Message implements RequestInterface
 
 	protected function prepareHeaders()
 	{
-		foreach ($this->getServerVariables() as $name => $value) {
+		foreach ($this->getServerVariable() as $name => $value) {
 			if (\strpos($name, 'HTTP_') !== 0) {
 				continue;
 			}
@@ -153,24 +116,21 @@ class Request extends Message implements RequestInterface
 		}
 	}
 
-	protected function prepareBody()
+	/**
+	 * @see https://php.net/manual/en/wrappers.php.php#wrappers.php.input
+	 *
+	 * @return string
+	 */
+	public function getBody() : string
 	{
-		$this->body = \file_get_contents('php://input') ?: '';
-	}
-
-	protected function preparePOST()
-	{
-		$this->post = $this->filterInput(\INPUT_POST);
-	}
-
-	protected function prepareGET()
-	{
-		$this->get = $this->filterInput(\INPUT_GET);
-	}
-
-	protected function prepareENV()
-	{
-		$this->env = $this->filterInput(\INPUT_ENV);
+		$contentType = $this->getContentType();
+		if ($contentType
+			&& $this->getMethod() === 'POST'
+			&& \strpos($contentType, 'multipart/form-data;') === 0
+		) {
+			return \http_build_query($this->getPOST() ?? []);
+		}
+		return \file_get_contents('php://input') ?: '';
 	}
 
 	protected function prepareFiles()
@@ -179,22 +139,27 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @param mixed          $variable
+	 * @param int            $type
+	 * @param string|null    $variable
 	 * @param int|null       $filter
 	 * @param array|int|null $options
 	 *
 	 * @return mixed
 	 */
-	protected function filter($variable, int $filter = null, $options = null)
-	{
+	protected function filterInput(
+		int $type,
+		string $variable = null,
+		int $filter = null,
+		$options = null
+	) {
+		$variable = $variable === null
+			? \filter_input_array($type)
+			: \ArraySimple::value($variable, \filter_input_array($type));
 		return $filter
 			? \filter_var($variable, $filter, $options)
 			: $variable;
 	}
 
-	/**
-	 * @codeCoverageIgnore
-	 */
 	public function forceHTTPS() : void
 	{
 		if ( ! $this->isSecure()) {
@@ -203,10 +168,6 @@ class Request extends Message implements RequestInterface
 		}
 	}
 
-	/*public function getBestLanguage(): string
-	{
-		return $this->getLanguage(Services::language()->getSupportedLocales());
-	}*/
 	public function getAuthType() : ?string
 	{
 		if ($this->authType === null && $auth = $this->getHeader('Authorization')) {
@@ -286,13 +247,39 @@ class Request extends Message implements RequestInterface
 		return $data;
 	}
 
-	public function getParsedBody() : array
+	public function getParsedBody(string $name = null, int $filter = null, $filter_options = null)
 	{
+		if ($this->getMethod() === 'POST') {
+			return $this->getPOST($name, $filter, $filter_options);
+		}
 		if ($this->parsedBody === null) {
 			\parse_str($this->getBody(), $this->parsedBody);
-			return $this->parsedBody;
 		}
-		return $this->parsedBody;
+		$variable = $name === null
+			? $this->parsedBody
+			: \ArraySimple::value($name, $this->parsedBody);
+		return $filter
+			? \filter_var($variable, $filter, $filter_options)
+			: $variable;
+	}
+
+	/**
+	 * @param bool $assoc
+	 * @param int  $options
+	 * @param int  $depth
+	 *
+	 * @return array|false|object
+	 */
+	public function getJSON(bool $assoc = false, int $options = null, int $depth = 512)
+	{
+		if ($options === null) {
+			$options = \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES;
+		}
+		$body = \json_decode($this->getBody(), $assoc, $depth, $options);
+		if (\json_last_error() !== \JSON_ERROR_NONE) {
+			return false;
+		}
+		return $body;
 	}
 
 	/**
@@ -305,7 +292,7 @@ class Request extends Message implements RequestInterface
 		if ($this->negotiation[$type]) {
 			return $this->negotiation[$type];
 		}
-		$this->negotiation[$type] = \array_keys($this->parseQualityValues(
+		$this->negotiation[$type] = \array_keys(static::parseQualityValues(
 			$this->getServerVariable('HTTP_ACCEPT' . ($type !== 'ACCEPT' ? '_' . $type : ''))
 		));
 		$this->negotiation[$type] = \array_map('strtolower', $this->negotiation[$type]);
@@ -382,19 +369,15 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @param array|string|null $name
-	 * @param int|null          $filter
-	 * @param array|int|null    $filter_options
+	 * @param string|null    $name
+	 * @param int|null       $filter
+	 * @param array|int|null $filter_options
 	 *
 	 * @return array|mixed|null
 	 */
-	public function getENV($name = null, int $filter = null, $filter_options = null)
+	public function getENV(string $name = null, int $filter = null, $filter_options = null)
 	{
-		return $this->filter(
-			$name === null ? $this->env : \ArraySimple::value($name, $this->env[$name]),
-			$filter,
-			$filter_options
-		);
+		return $this->filterInput(\INPUT_ENV, $name, $filter, $filter_options);
 	}
 
 	/**
@@ -415,7 +398,8 @@ class Request extends Message implements RequestInterface
 
 	public function getFile(string $name) : ?UploadedFile
 	{
-		return \ArraySimple::value($name, $this->files);
+		$file = \ArraySimple::value($name, $this->files);
+		return \is_array($file) ? null : $file;
 	}
 
 	/**
@@ -429,14 +413,9 @@ class Request extends Message implements RequestInterface
 		return $this->geoip;
 	}
 
-	public function getQuery(string $name) : ?string
+	public function getQuery(string $name = null, int $filter = null, $filter_options = null)
 	{
-		return \ArraySimple::value($name, $this->getQueries());
-	}
-
-	public function getQueries() : array
-	{
-		return $this->get;
+		return $this->filterInput(\INPUT_GET, $name, $filter, $filter_options);
 	}
 
 	/**
@@ -472,51 +451,9 @@ class Request extends Message implements RequestInterface
 		return $this->getServerVariable('REMOTE_ADDR');
 	}
 
-	/**
-	 * @param bool $assoc
-	 * @param int  $options
-	 * @param int  $depth
-	 *
-	 * @return array|false|object
-	 */
-	public function getJSON(bool $assoc = false, int $options = null, int $depth = 512)
-	{
-		if ($options === null) {
-			$options = \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES;
-		}
-		$body = \json_decode($this->getBody(), $assoc, $depth, $options);
-		if (\json_last_error() !== \JSON_ERROR_NONE) {
-			return false;
-		}
-		return $body;
-	}
-
-	/**
-	 * Gets the HTTP method.
-	 *
-	 * @return string normally one of: GET, HEAD, POST, PATCH, PUT, DELETE or OPTIONS
-	 */
 	public function getMethod() : string
 	{
-		return $this->method;
-	}
-
-	protected function setMethod(string $method)
-	{
-		$method = \strtoupper($method);
-		if ( ! \in_array($method, [
-			'GET',
-			'HEAD',
-			'POST',
-			'PATCH',
-			'PUT',
-			'DELETE',
-			'OPTIONS',
-		], true)) {
-			throw new \InvalidArgumentException("Invalid HTTP method: {$method}");
-		}
-		$this->method = $method;
-		return $this;
+		return parent::getMethod();
 	}
 
 	/**
@@ -556,19 +493,15 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @param array|string|null $name
-	 * @param int|null          $filter
-	 * @param array|int|null    $filter_options
+	 * @param string|null    $name
+	 * @param int|null       $filter
+	 * @param array|int|null $filter_options
 	 *
 	 * @return array|string|null
 	 */
-	public function getPOST($name = null, int $filter = null, $filter_options = null)
+	public function getPOST(string $name = null, int $filter = null, $filter_options = null)
 	{
-		return $this->filter(
-			$name === null ? $this->post : \ArraySimple::value($name, $this->post),
-			$filter,
-			$filter_options
-		);
+		return $this->filterInput(\INPUT_POST, $name, $filter, $filter_options);
 	}
 
 	/**
@@ -608,14 +541,12 @@ class Request extends Message implements RequestInterface
 		return $this->referrer ?: null;
 	}
 
-	public function getServerVariable(string $name) : ?string
-	{
-		return \ArraySimple::value($name, $this->serverVariables);
-	}
-
-	public function getServerVariables()
-	{
-		return $this->serverVariables;
+	public function getServerVariable(
+		string $name = null,
+		int $filter = null,
+		$filter_options = null
+	) {
+		return $this->filterInput(\INPUT_SERVER, $name, $filter, $filter_options);
 	}
 
 	/**
@@ -625,21 +556,7 @@ class Request extends Message implements RequestInterface
 	 */
 	public function getURL() : URL
 	{
-		return $this->url;
-	}
-
-	/**
-	 * @param string|URL $url
-	 *
-	 * @return $this
-	 */
-	protected function setURL($url)
-	{
-		if ( ! $url instanceof URL) {
-			$url = new URL($url);
-		}
-		$this->url = $url;
-		return $this;
+		return parent::getURL();
 	}
 
 	/**
@@ -650,7 +567,14 @@ class Request extends Message implements RequestInterface
 	 */
 	public function getUserAgent() : ?UserAgent
 	{
-		return $this->userAgent;
+		if ($this->userAgent !== null) {
+			return $this->userAgent;
+		}
+		$userAgent = $this->getServerVariable('HTTP_USER_AGENT');
+		$userAgent
+			? $this->setUserAgent($userAgent)
+			: $this->userAgent = false;
+		return $this->userAgent ?: null;
 	}
 
 	/**
@@ -696,32 +620,6 @@ class Request extends Message implements RequestInterface
 		}
 		return $this->isSecure = ($this->getServerVariable('REQUEST_SCHEME') === 'https'
 			|| $this->getServerVariable('HTTPS') === 'on');
-	}
-
-	/**
-	 * @see https://developer.mozilla.org/en-US/docs/Glossary/Quality_values
-	 * @see https://stackoverflow.com/a/33748742/6027968
-	 *
-	 * @param string|null $string
-	 *
-	 * @return array
-	 */
-	protected function parseQualityValues(?string $string) : array
-	{
-		if (empty($string)) {
-			return [];
-		}
-		$quality = \array_reduce(
-			\explode(',', $string, 20),
-			static function ($qualifier, $part) {
-				[$value, $priority] = \array_merge(\explode(';q=', $part), [1]);
-				$qualifier[\trim($value)] = (float) $priority;
-				return $qualifier;
-			},
-			[]
-		);
-		\arsort($quality);
-		return $quality;
 	}
 
 	protected function getInputFiles() : array
@@ -783,7 +681,7 @@ class Request extends Message implements RequestInterface
 	protected function setHost(string $host)
 	{
 		$filtered_host = 'http://' . $host;
-		if ( ! $filtered_host = $this->filter($filtered_host, \FILTER_VALIDATE_URL)) {
+		if ( ! $filtered_host = \filter_var($filtered_host, \FILTER_VALIDATE_URL)) {
 			throw new \InvalidArgumentException("Invalid host: {$host}");
 		}
 		$host = \parse_url($filtered_host);
