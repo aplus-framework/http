@@ -1,11 +1,11 @@
 {
 	"name": "framework/http",
 	"type": "library",
-	"description": "The HTTP package",
+	"description": "The Framework HTTP Library",
 	"keywords": [
 		"http"
 	],
-	"homepage": "https://gitlab.com/the-framework/http",
+	"homepage": "https://the-framework.gitlab.io/libraries/http.html",
 	"license": "proprietary",
 	"authors": [
 		{
@@ -57,9 +57,9 @@
 	},
 	"support": {
 		"email": "natanfelles@gmail.com",
-		"issues": "https://gitlab.com/the-framework/http/issues",
-		"wiki": "https://gitlab.com/the-framework/packages/http",
-		"source": "https://gitlab.com/the-framework/http",
-		"docs": "https://the-framework.gitlab.io/the-framework/packages/http/docs"
+		"issues": "https://gitlab.com/the-framework/libraries/http/issues",
+		"wiki": "https://gitlab.com/the-framework/libraries/http/wikis/home",
+		"source": "https://gitlab.com/the-framework/libraries/http",
+		"docs": "https://the-framework.gitlab.io/libraries/http/docs/"
 	}
 }
