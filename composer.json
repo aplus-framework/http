@@ -23,7 +23,7 @@
 	},
 	"require-dev": {
 		"ext-xdebug": "*",
-		"framework/coding-standard": "dev-master",
+		"framework/coding-standard": "^1.0",
 		"localheinz/composer-normalize": "^1.1",
 		"phpmd/phpmd": "^2.6",
 		"phpstan/phpstan": "^0.11",
