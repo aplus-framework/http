@@ -4,6 +4,8 @@
  * Trait ResponseDownload.
  *
  * @see https://tools.ietf.org/html/rfc7233
+ *
+ * @property Request $request
  */
 trait ResponseDownload
 {
@@ -285,7 +287,7 @@ trait ResponseDownload
 		}
 	}
 
-	protected function hasDownload() : bool
+	public function hasDownload() : bool
 	{
 		return isset($this->filepath);
 	}
