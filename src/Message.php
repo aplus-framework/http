@@ -230,7 +230,7 @@ abstract class Message
 		return $index;
 	}
 
-	public function hasHeader(string $name) : int
+	public function countHeader(string $name) : int
 	{
 		$name = \strtolower($name);
 		return empty($this->headers[$name])
