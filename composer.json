@@ -39,12 +39,6 @@
 			"Tests\\HTTP\\": "tests/"
 		}
 	},
-	"repositories": [
-		{
-			"type": "composer",
-			"url": "https://the-framework.gitlab.io/satis/"
-		}
-	],
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"scripts": {
