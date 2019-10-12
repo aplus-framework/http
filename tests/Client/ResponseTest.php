@@ -83,4 +83,9 @@ class ResponseTest extends TestCase
 	{
 		$this->assertFalse($this->response->getJSON());
 	}
+
+	public function testStatusLine()
+	{
+		$this->assertEquals('200 OK', $this->response->getStatusLine());
+	}
 }

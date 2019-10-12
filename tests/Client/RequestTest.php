@@ -102,4 +102,37 @@ class RequestTest extends TestCase
 		$this->request->setContentType('text/html');
 		$this->assertEquals('text/html; charset=UTF-8', $this->request->getHeader('content-type'));
 	}
+
+	public function testFiles()
+	{
+		$this->assertFalse($this->request->hasFiles());
+		$this->assertEquals('GET', $this->request->getMethod());
+		$this->assertEquals([], $this->request->getFiles());
+		$this->request->setFiles([__FILE__]);
+		$this->assertTrue($this->request->hasFiles());
+		$this->assertEquals('POST', $this->request->getMethod());
+		$this->assertInstanceOf(\CURLFile::class, $this->request->getFiles()[0]);
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('Path does not match a file: /tmp/unknown-00');
+		$this->request->setFiles(['/tmp/unknown-00']);
+	}
+
+	public function testPOST()
+	{
+		$this->assertEquals('GET', $this->request->getMethod());
+		$this->request->setPOST(['a' => 1, 'b' => 2]);
+		$this->assertEquals('POST', $this->request->getMethod());
+		$this->assertEquals('a=1&b=2', $this->request->getBody());
+	}
+
+	public function testJSON()
+	{
+		$this->assertNull($this->request->getHeader('content-type'));
+		$this->request->setJSON(['a' => 1]);
+		$this->assertEquals(
+			'application/json; charset=UTF-8',
+			$this->request->getHeader('content-type')
+		);
+		$this->assertEquals('{"a":1}', $this->request->getBody());
+	}
 }

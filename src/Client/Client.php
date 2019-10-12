@@ -8,6 +8,7 @@ class Client
 		\CURLOPT_FOLLOWLOCATION => true,
 		\CURLOPT_MAXREDIRS => 1,
 		\CURLOPT_AUTOREFERER => true,
+		\CURLOPT_RETURNTRANSFER => true,
 	];
 	protected $options = [];
 	protected $responseProtocol;
@@ -77,8 +78,10 @@ class Client
 		switch ($request->getMethod()) {
 			case 'POST':
 				$this->setOption(\CURLOPT_POST, true);
-				// TODO: Has files? So must be array
-				$this->setOption(\CURLOPT_POSTFIELDS, $request->getBody());
+				$this->setOption(
+					\CURLOPT_POSTFIELDS,
+					$request->hasFiles() ? $request->getFiles() : $request->getBody()
+				);
 				break;
 			case 'PUT':
 			case 'PATCH':
@@ -87,7 +90,6 @@ class Client
 				break;
 		}
 		$this->setOption(\CURLOPT_CUSTOMREQUEST, $request->getMethod());
-		$this->setOption(\CURLOPT_RETURNTRANSFER, true);
 		$this->setOption(\CURLOPT_HEADER, false);
 		$this->setOption(\CURLOPT_URL, $request->getURL()->getURL());
 		$headers = [];
@@ -100,12 +102,13 @@ class Client
 		$this->setOption(\CURLOPT_HEADERFUNCTION, [$this, 'parseHeaderLine']);
 		$curl = \curl_init();
 		\curl_setopt_array($curl, $this->getOptions());
-		//curl_setopt($curl, CURLINFO_HEADER_OUT, true);
 		$body = \curl_exec($curl);
 		if ($body === false) {
 			throw new \RuntimeException(\curl_error($curl), \curl_errno($curl));
 		}
-		//\var_dump(\curl_getinfo($curl, CURLINFO_HEADER_OUT));
+		if ($this->options[\CURLOPT_RETURNTRANSFER] === false) {
+			$body = '';
+		}
 		$this->info = \curl_getinfo($curl);
 		\ksort($this->info);
 		\curl_close($curl);

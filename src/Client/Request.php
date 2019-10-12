@@ -5,6 +5,9 @@ use Framework\HTTP\Message;
 use Framework\HTTP\RequestInterface;
 use Framework\HTTP\URL;
 
+/**
+ * Class Request.
+ */
 class Request extends Message implements RequestInterface
 {
 	/**
@@ -19,6 +22,12 @@ class Request extends Message implements RequestInterface
 	 * @var URL
 	 */
 	protected $url;
+	/**
+	 * POST files.
+	 *
+	 * @var array
+	 */
+	protected $files = [];
 
 	/**
 	 * Request constructor.
@@ -100,13 +109,32 @@ class Request extends Message implements RequestInterface
 
 	public function setPOST(array $data)
 	{
-		// TODO: Implement method
+		$this->setMethod('POST');
+		$this->setBody($data);
+		return $this;
+	}
+
+	public function hasFiles() : bool
+	{
+		return ! empty($this->files);
+	}
+
+	public function getFiles() : array
+	{
+		return $this->files;
 	}
 
 	public function setFiles(array $files)
 	{
-		['@filename'];
-		// TODO: Implement method
+		$this->setMethod('POST');
+		$this->files = [];
+		foreach ($files as $file) {
+			if ( ! \is_file($file)) {
+				throw new \InvalidArgumentException('Path does not match a file: ' . $file);
+			}
+			$this->files[] = \curl_file_create($file, \mime_content_type($file));
+		}
+		return $this;
 	}
 
 	public function setContentType(string $mime, string $charset = 'UTF-8')
