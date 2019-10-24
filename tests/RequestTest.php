@@ -356,8 +356,14 @@ class RequestTest extends TestCase
 
 	public function testJSON()
 	{
+		$this->assertFalse($this->request->isJSON());
 		$this->assertFalse($this->request->getJSON());
 		$this->assertEquals(123, $this->proxyRequest->getJSON()->test);
+	}
+
+	public function testIsForm()
+	{
+		$this->assertFalse($this->request->isForm());
 	}
 
 	public function testLanguage()

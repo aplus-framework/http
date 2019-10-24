@@ -622,6 +622,21 @@ class Request extends Message implements RequestInterface
 			|| $this->getServerVariable('HTTPS') === 'on');
 	}
 
+	public function isForm() : bool
+	{
+		return $this->parseContentType() === 'application/x-www-form-urlencoded';
+	}
+
+	protected function parseContentType() : ?string
+	{
+		return \explode(';', $this->getContentType(), 2)[0] ?? null;
+	}
+
+	public function isJSON() : bool
+	{
+		return $this->parseContentType() === 'application/json';
+	}
+
 	protected function getInputFiles() : array
 	{
 		if (empty($_FILES)) {
