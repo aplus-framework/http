@@ -4,6 +4,9 @@ use Framework\HTTP\Cookie;
 use Framework\HTTP\Message;
 use Framework\HTTP\ResponseInterface;
 
+/**
+ * Class Response.
+ */
 class Response extends Message implements ResponseInterface
 {
 	/**

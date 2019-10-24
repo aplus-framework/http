@@ -1,5 +1,8 @@
 <?php namespace Framework\HTTP\Client;
 
+/**
+ * Class Client.
+ */
 class Client
 {
 	protected $defaultOptions = [
@@ -17,22 +20,48 @@ class Client
 	protected $responseHeaders = [];
 	protected $info = [];
 
+	/**
+	 * Set cURL options.
+	 *
+	 * @param int   $option cURL CURLOPT_* constant
+	 * @param mixed $value
+	 *
+	 * @return $this
+	 */
 	public function setOption($option, $value)
 	{
 		$this->options[$option] = $value;
 		return $this;
 	}
 
+	/**
+	 * Get default options replaced by custom.
+	 *
+	 * @return array
+	 */
 	public function getOptions() : array
 	{
 		return \array_replace($this->defaultOptions, $this->options);
 	}
 
+	/**
+	 * Get cURL info for the last request.
+	 *
+	 * @return array
+	 */
 	public function getInfo() : array
 	{
 		return $this->info;
 	}
 
+	/**
+	 * Set basic auth credentials.
+	 *
+	 * @param string $username
+	 * @param string $password
+	 *
+	 * @return $this
+	 */
 	protected function setBasicAuth(string $username, string $password)
 	{
 		$this->setOption(\CURLOPT_USERPWD, $username . ':' . $password);
@@ -40,18 +69,35 @@ class Client
 		return $this;
 	}
 
+	/**
+	 * Set cURL timeout.
+	 *
+	 * @param int $timeout
+	 *
+	 * @return $this
+	 */
 	public function setResponseTimeout(int $timeout)
 	{
 		$this->setOption(\CURLOPT_TIMEOUT, $timeout);
 		return $this;
 	}
 
+	/**
+	 * Set cURL connect timeout.
+	 *
+	 * @param int $timeout
+	 *
+	 * @return $this
+	 */
 	public function setRequestTimeout(int $timeout)
 	{
 		$this->setOption(\CURLOPT_CONNECTTIMEOUT, $timeout);
 		return $this;
 	}
 
+	/**
+	 * Reset to default values.
+	 */
 	public function reset() : void
 	{
 		$this->options = [];
@@ -72,6 +118,13 @@ class Client
 		}
 	}
 
+	/**
+	 * Run the Request.
+	 *
+	 * @param Request $request
+	 *
+	 * @return Response
+	 */
 	public function run(Request $request) : Response
 	{
 		$this->setHTTPVersion($request->getProtocol());
