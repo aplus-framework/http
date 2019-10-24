@@ -202,7 +202,7 @@ class Cookie
 	{
 		if ($same_site !== null) {
 			$same_site = \ucfirst(\strtolower($same_site));
-			if ( ! \in_array($same_site, ['Strict', 'Lax', 'Unset'])) {
+			if ( ! \in_array($same_site, ['Strict', 'Lax', 'Unset', 'None'])) {
 				throw new \InvalidArgumentException('SameSite must be Strict, Lax or Unset');
 			}
 		}
