@@ -106,7 +106,8 @@ class Client
 		if ($body === false) {
 			throw new \RuntimeException(\curl_error($curl), \curl_errno($curl));
 		}
-		if ($this->options[\CURLOPT_RETURNTRANSFER] === false) {
+		if (isset($this->options[\CURLOPT_RETURNTRANSFER])
+			&& $this->options[\CURLOPT_RETURNTRANSFER] === false) {
 			$body = '';
 		}
 		$this->info = \curl_getinfo($curl);
