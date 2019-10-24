@@ -82,6 +82,14 @@ class ResponseTest extends TestCase
 	public function testJson()
 	{
 		$this->assertFalse($this->response->getJSON());
+		$this->response = new Response(
+			'HTTP/1.1',
+			200,
+			'OK',
+			[],
+			'{"a":1}'
+		);
+		$this->assertIsObject($this->response->getJSON());
 	}
 
 	public function testStatusLine()
