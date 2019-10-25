@@ -36,6 +36,15 @@ class ClientTest extends TestCase
 			\CURLOPT_AUTOREFERER => true,
 			\CURLOPT_RETURNTRANSFER => false,
 		], $this->client->getOptions());
+		$this->client->reset();
+		$this->assertEquals([
+			\CURLOPT_CONNECTTIMEOUT => 10,
+			\CURLOPT_TIMEOUT => 60,
+			\CURLOPT_FOLLOWLOCATION => true,
+			\CURLOPT_MAXREDIRS => 1,
+			\CURLOPT_AUTOREFERER => true,
+			\CURLOPT_RETURNTRANSFER => true,
+		], $this->client->getOptions());
 	}
 
 	public function testRun()
@@ -50,5 +59,16 @@ class ClientTest extends TestCase
 		$this->assertInstanceOf(Response::class, $response);
 		$this->assertEquals('', $response->getBody());
 		$this->assertGreaterThan(100, \strlen(\ob_get_contents()));
+		$this->assertArrayHasKey('connect_time', $this->client->getInfo());
+	}
+
+	public function testTimeout()
+	{
+		$this->client->setRequestTimeout(10);
+		$this->client->setResponseTimeout(20);
+		$this->assertContains([
+			\CURLOPT_CONNECTTIMEOUT => 10,
+			\CURLOPT_TIMEOUT => 20,
+		], $this->client->getOptions());
 	}
 }

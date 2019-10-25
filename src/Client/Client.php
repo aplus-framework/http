@@ -113,9 +113,10 @@ class Client
 		if ($version === 'HTTP/1.0') {
 			return $this->setOption(\CURLOPT_HTTP_VERSION, \CURL_HTTP_VERSION_1_0);
 		}
-		if ($version === 'HTTP/1.1') {
-			return $this->setOption(\CURLOPT_HTTP_VERSION, \CURL_HTTP_VERSION_1_1);
+		if ($version === 'HTTP/2.0') {
+			return $this->setOption(\CURLOPT_HTTP_VERSION, \CURL_HTTP_VERSION_2_0);
 		}
+		return $this->setOption(\CURLOPT_HTTP_VERSION, \CURL_HTTP_VERSION_1_1);
 	}
 
 	/**
