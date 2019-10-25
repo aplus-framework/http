@@ -81,14 +81,16 @@ class ResponseTest extends TestCase
 
 	public function testJson()
 	{
+		$this->assertFalse($this->response->isJSON());
 		$this->assertFalse($this->response->getJSON());
 		$this->response = new Response(
 			'HTTP/1.1',
 			200,
 			'OK',
-			[],
+			['content-type' => ['application/json']],
 			'{"a":1}'
 		);
+		$this->assertTrue($this->response->isJSON());
 		$this->assertIsObject($this->response->getJSON());
 	}
 

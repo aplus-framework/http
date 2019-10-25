@@ -92,6 +92,11 @@ class Response extends Message implements ResponseInterface
 		return $body;
 	}
 
+	public function isJSON() : bool
+	{
+		return $this->parseContentType() === 'application/json';
+	}
+
 	public function getStatusLine() : string
 	{
 		return $this->getStatusCode() . ' ' . $this->getStatusReason();

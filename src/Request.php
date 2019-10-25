@@ -627,11 +627,6 @@ class Request extends Message implements RequestInterface
 		return $this->parseContentType() === 'application/x-www-form-urlencoded';
 	}
 
-	protected function parseContentType() : ?string
-	{
-		return \explode(';', $this->getContentType(), 2)[0] ?? null;
-	}
-
 	public function isJSON() : bool
 	{
 		return $this->parseContentType() === 'application/json';

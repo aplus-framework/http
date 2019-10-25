@@ -438,6 +438,11 @@ abstract class Message
 		return $this;
 	}
 
+	protected function parseContentType() : ?string
+	{
+		return \explode(';', $this->getHeader('Content-Type'), 2)[0] ?? null;
+	}
+
 	/**
 	 * Gets a header name according with the standards.
 	 *
