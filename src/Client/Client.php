@@ -123,6 +123,8 @@ class Client
 	 *
 	 * @param Request $request
 	 *
+	 * @throws \RuntimeException for curl error
+	 *
 	 * @return Response
 	 */
 	public function run(Request $request) : Response

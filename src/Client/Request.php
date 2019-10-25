@@ -125,6 +125,13 @@ class Request extends Message implements RequestInterface
 		return $this->files;
 	}
 
+	/**
+	 * @param array $files
+	 *
+	 * @throws \InvalidArgumentException for invalid file path
+	 *
+	 * @return $this
+	 */
 	public function setFiles(array $files)
 	{
 		$this->setMethod('POST');

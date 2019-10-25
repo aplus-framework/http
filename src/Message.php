@@ -389,6 +389,13 @@ abstract class Message
 		return $this->method;
 	}
 
+	/**
+	 * @param string $method
+	 *
+	 * @throws \InvalidArgumentException for invalid method
+	 *
+	 * @return $this
+	 */
 	protected function setMethod(string $method)
 	{
 		$valid = \strtoupper($method);

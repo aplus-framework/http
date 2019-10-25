@@ -691,6 +691,8 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @param string $host
 	 *
+	 * @throws \InvalidArgumentException for invalid host
+	 *
 	 * @return $this
 	 */
 	protected function setHost(string $host)

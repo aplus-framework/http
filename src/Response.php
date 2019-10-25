@@ -239,6 +239,9 @@ class Response extends Message implements ResponseInterface
 		}
 	}
 
+	/**
+	 * @throws \LogicException if headers already is sent
+	 */
 	protected function sendHeaders() : void
 	{
 		if (\headers_sent()) {

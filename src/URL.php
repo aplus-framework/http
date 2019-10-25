@@ -253,6 +253,8 @@ class URL implements \JsonSerializable
 	/**
 	 * @param string $hostname
 	 *
+	 * @throws \InvalidArgumentException for invalid URL Hostname
+	 *
 	 * @return $this
 	 */
 	public function setHostname(string $hostname)
@@ -297,6 +299,8 @@ class URL implements \JsonSerializable
 
 	/**
 	 * @param int $port
+	 *
+	 * @throws \InvalidArgumentException for invalid URL Port
 	 *
 	 * @return $this
 	 */
@@ -343,6 +347,8 @@ class URL implements \JsonSerializable
 
 	/**
 	 * @param string $url
+	 *
+	 * @throws \InvalidArgumentException for invalid URL
 	 *
 	 * @return $this
 	 */
