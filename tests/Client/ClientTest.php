@@ -71,4 +71,39 @@ class ClientTest extends TestCase
 			\CURLOPT_TIMEOUT => 20,
 		], $this->client->getOptions());
 	}
+
+	public function testProtocols()
+	{
+		$request = new Request('https://www.google.com');
+		$request->setProtocol('HTTP/1.0');
+		$this->assertEquals('HTTP/1.0', $request->getProtocol());
+		$response = $this->client->run($request);
+		$this->assertEquals('HTTP/1.0', $response->getProtocol());
+		$this->client->reset();
+		$request->setProtocol('HTTP/2.0');
+		$this->assertEquals('HTTP/2.0', $request->getProtocol());
+		$response = $this->client->run($request);
+		$this->assertEquals('HTTP/2', $response->getProtocol());
+	}
+
+	public function testMethods()
+	{
+		$request = new Request('https://www.google.com');
+		$request->setMethod('post');
+		$this->assertEquals('POST', $request->getMethod());
+		$response = $this->client->run($request);
+		$this->assertInstanceOf(Response::class, $response);
+		$request->setMethod('put');
+		$this->assertEquals('PUT', $request->getMethod());
+		$response = $this->client->run($request);
+		$this->assertInstanceOf(Response::class, $response);
+	}
+
+	public function testRunError()
+	{
+		$request = new Request('http://domain.tld');
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage('Could not resolve host: domain.tld');
+		$this->client->run($request);
+	}
 }

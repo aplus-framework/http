@@ -62,12 +62,12 @@ class Client
 	 *
 	 * @return $this
 	 */
-	protected function setBasicAuth(string $username, string $password)
+	/*protected function setBasicAuth(string $username, string $password)
 	{
 		$this->setOption(\CURLOPT_USERPWD, $username . ':' . $password);
 		$this->setOption(\CURLOPT_HTTPAUTH, \CURLAUTH_BASIC);
 		return $this;
-	}
+	}*/
 
 	/**
 	 * Set cURL timeout.
@@ -198,7 +198,7 @@ class Client
 					$this->responseProtocol,
 					$this->responseCode,
 					$this->responseReason,
-				] = \explode(' ', $trimmed_line, 3);
+				] = \array_pad(\explode(' ', $trimmed_line, 3), 3, '');
 			}
 			return \strlen($line);
 		}
