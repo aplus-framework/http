@@ -101,6 +101,8 @@ class URLTest extends TestCase
 		$this->assertEquals(['a', 'b', 'c'], $this->url->getPathSegments());
 		$this->url->setPathSegments(['hello', 'bye']);
 		$this->assertEquals(['hello', 'bye'], $this->url->getPathSegments());
+		$this->assertEquals('bye', $this->url->getPathSegment(1));
+		$this->assertNull($this->url->getPathSegment(2));
 	}
 
 	public function testPort()

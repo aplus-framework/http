@@ -153,6 +153,11 @@ class URL implements \JsonSerializable
 		return $this->pathSegments;
 	}
 
+	public function getPathSegment(int $index) : ?string
+	{
+		return $this->pathSegments[$index] ?? null;
+	}
+
 	/**
 	 * @return int|null
 	 */
