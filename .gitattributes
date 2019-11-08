@@ -4,8 +4,8 @@ tests/ export-ignore
 .gitignore export-ignore
 .gitlab-ci.yml export-ignore
 .php_cs.dist export-ignore
-apigen.yml export-ignore
 docker-compose.yml export-ignore
+documentation.md export-ignore
 phpdoc.dist.xml export-ignore
 phpmd.xml export-ignore
 phpstan.neon.dist export-ignore
