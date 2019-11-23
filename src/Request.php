@@ -365,7 +365,10 @@ class Request extends Message implements RequestInterface
 
 	public function validateCSRFToken(string $token) : bool
 	{
-		return $this->getCSRFToken() === $token;
+		//https://stackoverflow.com/questions/6287903/how-to-properly-add-csrf-token-using-php
+		return $this->getCSRFToken()
+			? \hash_equals($token, $this->getCSRFToken())
+			: false;
 	}
 
 	/**

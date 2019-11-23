@@ -13,6 +13,12 @@ class RequestTest extends TestCase
 	 */
 	protected $request;
 
+	public function setUp() : void
+	{
+		$this->request = new RequestMock();
+		$this->proxyRequest = new RequestProxyMock();
+	}
+
 	public function testGeoIP()
 	{
 		$this->assertInstanceOf(\Framework\HTTP\GeoIP::class, $this->request->getGeoIP());
@@ -31,12 +37,6 @@ class RequestTest extends TestCase
 		$this->request->userAgent = null;
 		$this->request->setServerVariable('HTTP_USER_AGENT', null);
 		$this->assertNull($this->request->getUserAgent());
-	}
-
-	public function setUp() : void
-	{
-		$this->request = new RequestMock();
-		$this->proxyRequest = new RequestProxyMock();
 	}
 
 	public function testHost()

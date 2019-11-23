@@ -148,6 +148,11 @@ class ResponseTest extends TestCase
 		);
 	}
 
+	public function testGenerateCSRFToken()
+	{
+		$this->assertEquals(64, \mb_strlen($this->response->generateCSRFToken()));
+	}
+
 	public function testDate()
 	{
 		$this->assertNull($this->response->getHeader('Date'));

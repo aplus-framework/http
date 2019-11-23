@@ -375,6 +375,11 @@ class Response extends Message implements ResponseInterface
 		return $this;
 	}
 
+	public function generateCSRFToken() : string
+	{
+		return \bin2hex(\random_bytes(32));
+	}
+
 	/**
 	 * @param \DateTime $datetime
 	 *

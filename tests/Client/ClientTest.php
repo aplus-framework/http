@@ -103,7 +103,7 @@ class ClientTest extends TestCase
 	{
 		$request = new Request('http://domain.tld');
 		$this->expectException(\RuntimeException::class);
-		$this->expectExceptionMessage('Could not resolve host: domain.tld');
+		$this->expectExceptionMessage('Failed to connect to domain.tld port 80');
 		$this->client->run($request);
 	}
 }
