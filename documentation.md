@@ -96,19 +96,19 @@ $response->send();
 To send a file as a download in the response, you can call:
 
 ```php
-$response->setDownload('filepath.pdf')
+$response->setDownload('filepath.pdf');
 ```
 
 With the second parameter set to true the content disposition is `inline`, causing the browser to open the file in the window.
 
 ```php
-$response->setDownload('filepath.pdf', true)
+$response->setDownload('filepath.pdf', true);
 ```
 
 The third parameter makes it possible to continue downloads or start downloading a video at a certain time.
 
 ```php
-$response->setDownload('filepath.pdf', true, true)
+$response->setDownload('filepath.pdf', true, true);
 ```
 
  ## URL
