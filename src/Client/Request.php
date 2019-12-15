@@ -126,7 +126,7 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @param array $files
+	 * @param array|string[] $files
 	 *
 	 * @throws \InvalidArgumentException for invalid file path
 	 *

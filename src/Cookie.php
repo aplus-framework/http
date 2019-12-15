@@ -158,7 +158,7 @@ class Cookie
 	 *
 	 * @return $this
 	 */
-	public function setName(string $name)
+	protected function setName(string $name)
 	{
 		$this->name = $name;
 		return $this;

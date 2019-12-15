@@ -41,7 +41,7 @@ abstract class Message
 	/**
 	 * HTTP Message Headers.
 	 *
-	 * @var array
+	 * @var array|array[]
 	 */
 	protected $headers = [];
 	/**
@@ -49,7 +49,7 @@ abstract class Message
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
 	 *
-	 * @var array
+	 * @var array|string[]
 	 */
 	protected static $standardHeaders = [
 		// General
@@ -148,7 +148,7 @@ abstract class Message
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 	 *
-	 * @var array
+	 * @var array|string[]
 	 */
 	protected static $responseStatus = [
 		// Information responses
@@ -330,11 +330,15 @@ abstract class Message
 
 	protected function setCookie(Cookie $cookie)
 	{
-		// TODO: name can not be used as key - Cookie allow set a new name. To use a foreach?
 		$this->cookies[$cookie->getName()] = $cookie;
 		return $this;
 	}
 
+	/**
+	 * @param array|Cookie[] $cookies
+	 *
+	 * @return $this
+	 */
 	protected function setCookies(array $cookies)
 	{
 		foreach ($cookies as $cookie) {
@@ -349,6 +353,11 @@ abstract class Message
 		return $this;
 	}
 
+	/**
+	 * @param array|string[] $names
+	 *
+	 * @return $this
+	 */
 	protected function removeCookies(array $names)
 	{
 		foreach ($names as $name) {

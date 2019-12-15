@@ -56,8 +56,6 @@ class CookieTest extends TestCase
 	public function testName()
 	{
 		$this->assertEquals('foo', $this->cookie->getName());
-		$this->cookie->setName('session_id');
-		$this->assertEquals('session_id', $this->cookie->getName());
 	}
 
 	public function testPath()

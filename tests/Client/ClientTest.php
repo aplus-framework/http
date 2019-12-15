@@ -75,10 +75,10 @@ class ClientTest extends TestCase
 	public function testProtocols()
 	{
 		$request = new Request('https://www.google.com');
-		$request->setProtocol('HTTP/1.0');
-		$this->assertEquals('HTTP/1.0', $request->getProtocol());
+		$request->setProtocol('HTTP/1.1');
+		$this->assertEquals('HTTP/1.1', $request->getProtocol());
 		$response = $this->client->run($request);
-		$this->assertEquals('HTTP/1.0', $response->getProtocol());
+		$this->assertEquals('HTTP/1.1', $response->getProtocol());
 		$this->client->reset();
 		$request->setProtocol('HTTP/2.0');
 		$this->assertEquals('HTTP/2.0', $request->getProtocol());
