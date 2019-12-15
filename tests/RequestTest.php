@@ -102,6 +102,17 @@ class RequestTest extends TestCase
 			'height' => '500px',
 			'width' => '800',
 		], $this->request->getParsedBody());
+		$this->assertEquals('red', $this->request->getParsedBody('color', \FILTER_SANITIZE_STRING));
+		$this->request->setMethod('POST');
+		$this->assertEquals([
+			'username' => 'phpdev',
+			'password' => 'Aw3S0me',
+			'user' => [
+				'name' => 'foo',
+				'city' => 'bar',
+			],
+		], $this->request->getParsedBody());
+		$this->request->setMethod('GET');
 		$this->request->body = '';
 		$this->request->parsedBody = [];
 		$this->assertEquals('', $this->request->getBody());

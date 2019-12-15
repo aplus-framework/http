@@ -484,7 +484,7 @@ class Request extends Message implements RequestInterface
 		if ($key !== null && $data) {
 			return \ArraySimple::value($key, $data);
 		}
-		return $data ?: null;
+		return $data === false ? null : $data;
 	}
 
 	/**
@@ -533,7 +533,7 @@ class Request extends Message implements RequestInterface
 		if ($this->referrer === null) {
 			$this->referrer = false;
 			$referer = $this->getServerVariable('HTTP_REFERER');
-			if ($referer) {
+			if ($referer !== null) {
 				try {
 					$this->referrer = new URL($referer);
 				} catch (\InvalidArgumentException $e) {
@@ -541,7 +541,7 @@ class Request extends Message implements RequestInterface
 				}
 			}
 		}
-		return $this->referrer ?: null;
+		return $this->referrer === false ? null : $this->referrer;
 	}
 
 	public function getServerVariable(
@@ -574,9 +574,7 @@ class Request extends Message implements RequestInterface
 			return $this->userAgent;
 		}
 		$userAgent = $this->getServerVariable('HTTP_USER_AGENT');
-		$userAgent
-			? $this->setUserAgent($userAgent)
-			: $this->userAgent = false;
+		$userAgent ? $this->setUserAgent($userAgent) : $this->userAgent = false;
 		return $this->userAgent ?: null;
 	}
 
