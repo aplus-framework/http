@@ -19,11 +19,6 @@ class RequestTest extends TestCase
 		$this->proxyRequest = new RequestProxyMock();
 	}
 
-	public function testGeoIP()
-	{
-		$this->assertInstanceOf(\Framework\HTTP\GeoIP::class, $this->request->getGeoIP());
-	}
-
 	public function testUserAgent()
 	{
 		$this->assertInstanceOf(

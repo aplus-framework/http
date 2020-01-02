@@ -405,17 +405,6 @@ class Request extends Message implements RequestInterface
 		return \is_array($file) ? null : $file;
 	}
 
-	/**
-	 * @return GeoIP
-	 */
-	public function getGeoIP() : GeoIP
-	{
-		if ($this->geoip === null) {
-			$this->geoip = new GeoIP($this->getIP());
-		}
-		return $this->geoip;
-	}
-
 	public function getQuery(string $name = null, int $filter = null, $filter_options = null)
 	{
 		return $this->filterInput(\INPUT_GET, $name, $filter, $filter_options);
