@@ -111,7 +111,7 @@ The third parameter makes it possible to continue downloads or start downloading
 $response->setDownload('filepath.pdf', true, true);
 ```
 
- ## URL
+## URL
  
 The library has a class for working with URLs.
  
