@@ -5,46 +5,16 @@
  */
 class UserAgent implements \JsonSerializable
 {
-	/**
-	 * @var string|null
-	 */
-	protected $agent;
-	/**
-	 * @var string|null
-	 */
-	protected $browser;
-	/**
-	 * @var string|null
-	 */
-	protected $browserVersion;
-	/**
-	 * @var string|null
-	 */
-	protected $mobile;
-	/**
-	 * @var string|null
-	 */
-	protected $platform;
-	/**
-	 * @var string|null
-	 */
-	protected $robot;
-	/**
-	 * @var bool
-	 */
-	protected $isBrowser = false;
-	/**
-	 * @var bool
-	 */
-	protected $isMobile = false;
-	/**
-	 * @var bool
-	 */
-	protected $isRobot = false;
-	/**
-	 * @var array
-	 */
-	protected static $config = [
+	protected ?string $agent = null;
+	protected ?string $browser = null;
+	protected ?string $browserVersion = null;
+	protected ?string $mobile = null;
+	protected ?string $platform = null;
+	protected ?string $robot = null;
+	protected bool $isBrowser = false;
+	protected bool $isMobile = false;
+	protected bool $isRobot = false;
+	protected static array $config = [
 		'platforms' => [
 			'windows nt 10.0' => 'Windows 10',
 			'windows nt 6.3' => 'Windows 8.1',

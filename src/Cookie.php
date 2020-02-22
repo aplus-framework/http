@@ -10,38 +10,14 @@
  */
 class Cookie
 {
-	/**
-	 * @var string|null
-	 */
-	protected $domain;
-	/**
-	 * @var \DateTime|null
-	 */
-	protected $expires;
-	/**
-	 * @var bool
-	 */
-	protected $httpOnly = false;
-	/**
-	 * @var string
-	 */
-	protected $name;
-	/**
-	 * @var string|null
-	 */
-	protected $path;
-	/**
-	 * @var string|null
-	 */
-	protected $sameSite;
-	/**
-	 * @var bool
-	 */
-	protected $secure = false;
-	/**
-	 * @var string
-	 */
-	protected $value;
+	protected ?string $domain = null;
+	protected ?\DateTime $expires = null;
+	protected bool $httpOnly = false;
+	protected string $name;
+	protected ?string $path = null;
+	protected ?string $sameSite = null;
+	protected bool $secure = false;
+	protected string $value;
 
 	/**
 	 * Cookie constructor.

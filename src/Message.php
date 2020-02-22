@@ -10,40 +10,32 @@ abstract class Message
 {
 	/**
 	 * HTTP Message Protocol.
-	 *
-	 * @var string
 	 */
-	protected $protocol = 'HTTP/1.1';
+	protected string $protocol = 'HTTP/1.1';
 	/**
 	 * HTTP Request URL.
-	 *
-	 * @var URL
 	 */
-	protected $url;
+	protected URL $url;
 	/**
 	 * HTTP Request Method.
-	 *
-	 * @var string
 	 */
-	protected $method;
+	protected string $method;
 	/**
 	 * HTTP Message Body.
-	 *
-	 * @var string
 	 */
-	protected $body = '';
+	protected string $body = '';
 	/**
 	 * HTTP Message Cookies.
 	 *
 	 * @var array|Cookie[]
 	 */
-	protected $cookies = [];
+	protected array $cookies = [];
 	/**
 	 * HTTP Message Headers.
 	 *
 	 * @var array|array[]
 	 */
-	protected $headers = [];
+	protected array $headers = [];
 	/**
 	 * Standard Headers.
 	 *
@@ -51,7 +43,7 @@ abstract class Message
 	 *
 	 * @var array|string[]
 	 */
-	protected static $standardHeaders = [
+	protected static array $standardHeaders = [
 		// General
 		'cache-control' => 'Cache-Control',
 		'connection' => 'Connection',
@@ -150,7 +142,7 @@ abstract class Message
 	 *
 	 * @var array|string[]
 	 */
-	protected static $responseStatus = [
+	protected static array $responseStatus = [
 		// Information responses
 		100 => 'Continue',
 		101 => 'Switching Protocols',

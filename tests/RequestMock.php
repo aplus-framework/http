@@ -2,8 +2,8 @@
 
 class RequestMock extends \Framework\HTTP\Request
 {
-	public $body = 'color=red&height=500px&width=800';
-	public $parsedBody;
+	public string $body = 'color=red&height=500px&width=800';
+	public ?array $parsedBody = null;
 	public $userAgent;
 	protected $input = [
 		\INPUT_SERVER => [

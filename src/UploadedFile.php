@@ -5,60 +5,22 @@
  */
 class UploadedFile
 {
-	/**
-	 * @var string
-	 */
-	protected $clientExtension;
-	/**
-	 * @var string
-	 */
-	protected $clientType;
-	/**
-	 * @var string
-	 */
-	protected $clientName;
-	/**
-	 * @var int
-	 */
-	protected $error;
-	/**
-	 * @var string
-	 */
-	protected $errorMessage;
-	/**
-	 * @var string
-	 */
-	protected $extension;
-	/**
-	 * @var bool
-	 */
-	protected $isMoved = false;
-	/**
-	 * @var string
-	 */
-	protected $destination;
-	/**
-	 * @var string
-	 */
-	protected $name;
-	/**
-	 * @var int
-	 */
-	protected $size;
-	/**
-	 * @var string
-	 */
-	protected $tmpName;
-	/**
-	 * @var string
-	 */
-	protected $type;
+	protected ?string $clientExtension = null;
+	protected ?string $clientType = null;
+	protected ?string $clientName = null;
+	protected int $error;
+	protected ?string $errorMessage = null;
+	protected ?string $extension = null;
+	protected bool $isMoved = false;
+	protected ?string $destination = null;
+	protected ?string $name = null;
+	protected int $size;
+	protected ?string $tmpName = null;
+	protected ?string $type = null;
 	/**
 	 * @see http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
-	 *
-	 * @var array
 	 */
-	protected static $mimeTypes = [
+	protected static array $mimeTypes = [
 		'application/andrew-inset' => ['ez'],
 		'application/applixware' => ['aw'],
 		'application/atom+xml' => ['atom'],

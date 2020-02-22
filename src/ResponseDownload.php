@@ -9,42 +9,21 @@
  */
 trait ResponseDownload
 {
+	private string $filepath;
+	private int $filesize;
+	private bool $acceptRanges = true;
 	/**
-	 * @var string
-	 */
-	private $filepath;
-	/**
-	 * @var int
-	 */
-	private $filesize;
-	/**
-	 * @var bool
-	 */
-	private $acceptRanges = true;
-	/**
-	 * @var array
+	 * @var array|false
 	 */
 	private $byteRanges = [];
-	/**
-	 * @var string
-	 */
-	private $sendType = 'normal';
-	/**
-	 * @var string
-	 */
-	private $boundary;
+	private string $sendType = 'normal';
+	private string $boundary;
 	/**
 	 * @var resource
 	 */
 	private $handle;
-	/**
-	 * @var int
-	 */
-	private $delay = 0;
-	/**
-	 * @var int
-	 */
-	private $readLength = 1024;
+	private int $delay = 0;
+	private int $readLength = 1024;
 
 	/**
 	 * Sets a file to download/stream.

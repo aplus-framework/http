@@ -9,18 +9,9 @@ use Framework\HTTP\ResponseInterface;
  */
 class Response extends Message implements ResponseInterface
 {
-	/**
-	 * @var string
-	 */
-	protected $protocol;
-	/**
-	 * @var int
-	 */
-	protected $statusCode;
-	/**
-	 * @var string
-	 */
-	protected $statusReason;
+	protected string $protocol;
+	protected int $statusCode;
+	protected string $statusReason;
 
 	public function __construct(
 		string $protocol,

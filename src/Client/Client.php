@@ -5,7 +5,7 @@
  */
 class Client
 {
-	protected $defaultOptions = [
+	protected array $defaultOptions = [
 		\CURLOPT_CONNECTTIMEOUT => 10,
 		\CURLOPT_TIMEOUT => 60,
 		\CURLOPT_FOLLOWLOCATION => true,
@@ -13,12 +13,12 @@ class Client
 		\CURLOPT_AUTOREFERER => true,
 		\CURLOPT_RETURNTRANSFER => true,
 	];
-	protected $options = [];
-	protected $responseProtocol;
-	protected $responseCode;
-	protected $responseReason;
-	protected $responseHeaders = [];
-	protected $info = [];
+	protected array $options = [];
+	protected ?string $responseProtocol = null;
+	protected ?string $responseCode = null;
+	protected ?string $responseReason = null;
+	protected array $responseHeaders = [];
+	protected array $info = [];
 
 	/**
 	 * Set cURL options.

@@ -10,37 +10,22 @@
 class URL implements \JsonSerializable
 {
 	/**
-	 * @var string|null The #fragment (id)
+	 * The #fragment (id).
 	 */
-	protected $fragment;
+	protected ?string $fragment = null;
+	protected ?string $hostname = null;
+	protected ?string $pass = null;
 	/**
-	 * @var string|null
+	 * The /paths/of/url.
 	 */
-	protected $hostname;
+	protected array $pathSegments = [];
+	protected ?int $port = null;
 	/**
-	 * @var string|null
+	 *  The ?queries.
 	 */
-	protected $pass;
-	/**
-	 * @var array The /paths/of/url
-	 */
-	protected $pathSegments = [];
-	/**
-	 * @var int|null
-	 */
-	protected $port;
-	/**
-	 * @var array The ?queries
-	 */
-	protected $queryData = [];
-	/**
-	 * @var string|null
-	 */
-	protected $scheme;
-	/**
-	 * @var string|null
-	 */
-	protected $user;
+	protected array $queryData = [];
+	protected ?string $scheme = null;
+	protected ?string $user = null;
 
 	/**
 	 * URL constructor.

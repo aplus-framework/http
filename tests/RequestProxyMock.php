@@ -2,7 +2,7 @@
 
 class RequestProxyMock extends RequestMock
 {
-	public $body = '{"test":123}';
+	public string $body = '{"test":123}';
 
 	public function __construct()
 	{

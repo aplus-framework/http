@@ -7,43 +7,20 @@
  */
 class Request extends Message implements RequestInterface
 {
-	protected $files = [];
-	/**
-	 * @var array
-	 */
-	protected $parsedBody;
+	protected array $files = [];
+	protected ?array $parsedBody = null;
 	/**
 	 * HTTP Authorization Header parsed.
-	 *
-	 * @var array|null
 	 */
-	protected $auth;
+	protected ?array $auth = null;
+	protected ?string $authType = null;
+	protected string $host;
+	protected int $port;
 	/**
-	 * @var string|null
+	 * Request Identifier. 32 bytes.
 	 */
-	protected $authType;
-	/**
-	 * @var array|false
-	 */
-	protected $geoip;
-	/**
-	 * @var string
-	 */
-	protected $host;
-	/**
-	 * @var int
-	 */
-	protected $port;
-	/**
-	 * Request Identifier.
-	 *
-	 * @var string 32 bytes
-	 */
-	protected $id;
-	/**
-	 * @var array
-	 */
-	protected $negotiation = [
+	protected ?string $id = null;
+	protected array $negotiation = [
 		'ACCEPT' => null,
 		'CHARSET' => null,
 		'ENCODING' => null,
@@ -57,14 +34,8 @@ class Request extends Message implements RequestInterface
 	 * @var false|UserAgent
 	 */
 	protected $userAgent;
-	/**
-	 * @var bool
-	 */
-	protected $isAJAX;
-	/**
-	 * @var bool
-	 */
-	protected $isSecure;
+	protected ?bool $isAJAX = null;
+	protected ?bool $isSecure = null;
 
 	/**
 	 * Request constructor.

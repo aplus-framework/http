@@ -12,22 +12,16 @@ class Request extends Message implements RequestInterface
 {
 	/**
 	 * HTTP Request Method.
-	 *
-	 * @var string
 	 */
-	protected $method = 'GET';
+	protected string $method = 'GET';
 	/**
 	 * HTTP Request URL.
-	 *
-	 * @var URL
 	 */
-	protected $url;
+	protected URL $url;
 	/**
 	 * POST files.
-	 *
-	 * @var array
 	 */
-	protected $files = [];
+	protected array $files = [];
 
 	/**
 	 * Request constructor.

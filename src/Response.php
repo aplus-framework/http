@@ -8,30 +8,17 @@
 class Response extends Message implements ResponseInterface
 {
 	use ResponseDownload;
-	/**
-	 * @var int
-	 */
-	protected $cacheSeconds = 0;
-	/**
-	 * @var bool
-	 */
-	protected $isSent = false;
-	/**
-	 * @var Request
-	 */
-	protected $request;
+	protected int $cacheSeconds = 0;
+	protected bool $isSent = false;
+	protected Request $request;
 	/**
 	 * HTTP Response Status Code.
-	 *
-	 * @var int
 	 */
-	protected $statusCode = 200;
+	protected int $statusCode = 200;
 	/**
 	 * HTTP Response Status Reason.
-	 *
-	 * @var string
 	 */
-	protected $statusReason = 'OK';
+	protected string $statusReason = 'OK';
 
 	public function __construct(Request $request)
 	{
