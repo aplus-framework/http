@@ -15,7 +15,6 @@
 	],
 	"require": {
 		"php": ">=7.4",
-		"ext-curl": "*",
 		"ext-fileinfo": "*",
 		"ext-geoip": "*",
 		"ext-json": "*",
