@@ -33,7 +33,7 @@ abstract class Message
 	/**
 	 * HTTP Message Headers.
 	 *
-	 * @var array|array[]
+	 * @var array|string[]
 	 */
 	protected array $headers = [];
 	/**
@@ -214,79 +214,38 @@ abstract class Message
 		599 => 'Network Connect Timeout Error',
 	];
 
-	private function makeHeaderIndex(string $name, int $index) : int
+	public function getHeader(string $name) : ?string
 	{
-		if ($index < 0 && isset($this->headers[$name])) {
-			$index = \count($this->headers[$name]) + $index;
-		}
-		return $index;
+		return $this->headers[\strtolower($name)] ?? null;
 	}
 
-	public function countHeader(string $name) : int
-	{
-		$name = \strtolower($name);
-		return empty($this->headers[$name])
-			? 0
-			: \count($this->headers[$name]);
-	}
-
-	public function getHeader(string $name, int $index = -1) : ?string
-	{
-		$name = \strtolower($name);
-		if (empty($this->headers[$name])) {
-			return null;
-		}
-		return $this->headers[$name][$this->makeHeaderIndex($name, $index)] ?? null;
-	}
-
-	public function getHeaders(string $name) : array
-	{
-		return $this->headers[\strtolower($name)] ?? [];
-	}
-
-	public function getAllHeaders() : array
+	public function getHeaders() : array
 	{
 		return $this->headers;
 	}
 
-	protected function setHeader(string $name, string ...$values)
+	protected function setHeader(string $name, string $value)
 	{
-		$this->headers[\strtolower($name)] = $values;
-		return $this;
-	}
-
-	protected function addHeader(string $name, string $value)
-	{
-		$this->headers[\strtolower($name)][] = $value;
+		$this->headers[\strtolower($name)] = $value;
 		return $this;
 	}
 
 	protected function setHeaders(array $headers)
 	{
-		foreach ($headers as $name => $values) {
-			$values = (array) $values;
-			$this->setHeader($name, ...$values);
+		foreach ($headers as $name => $value) {
+			$this->setHeader($name, $value);
 		}
 		return $this;
 	}
 
-	protected function removeHeader(string $name, int $index = -1)
-	{
-		$name = \strtolower($name);
-		unset($this->headers[$name][$this->makeHeaderIndex($name, $index)]);
-		if (empty($this->headers[$name])) {
-			unset($this->headers[$name]);
-		}
-		return $this;
-	}
-
-	protected function removeHeaders(string $name)
+	protected function removeHeader(string $name)
 	{
 		unset($this->headers[\strtolower($name)]);
+
 		return $this;
 	}
 
-	protected function removeAllHeaders()
+	protected function removeHeaders()
 	{
 		$this->headers = [];
 		return $this;
@@ -294,11 +253,9 @@ abstract class Message
 
 	protected function sendHeaders() : void
 	{
-		foreach ($this->getAllHeaders() as $name => $values) {
-			foreach ($values as $value) {
-				$name = static::getHeaderName($name);
-				\header("{$name}: {$value}", false);
-			}
+		foreach ($this->getHeaders() as $name => $value) {
+			$name = static::getHeaderName($name);
+			\header($name . ': ' . $value);
 		}
 	}
 

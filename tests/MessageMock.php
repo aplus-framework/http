@@ -10,9 +10,9 @@ class MessageMock extends Message
 		return parent::setProtocol($protocol);
 	}
 
-	public function setHeader(string $name, string ...$values)
+	public function setHeader(string $name, string $value)
 	{
-		return parent::setHeader($name, ...$values);
+		return parent::setHeader($name, $value);
 	}
 
 	public function setHeaders(array $headers)
@@ -20,24 +20,14 @@ class MessageMock extends Message
 		return parent::setHeaders($headers);
 	}
 
-	public function addHeader(string $name, string $value)
+	public function removeHeader(string $name)
 	{
-		return parent::addHeader($name, $value);
+		return parent::removeHeader($name);
 	}
 
-	public function removeHeader(string $name, int $index = -1)
+	public function removeHeaders()
 	{
-		return parent::removeHeader($name, $index);
-	}
-
-	public function removeHeaders(string $name)
-	{
-		return parent::removeHeaders($name);
-	}
-
-	public function removeAllHeaders()
-	{
-		return parent::removeAllHeaders();
+		return parent::removeHeaders();
 	}
 
 	public function sendHeaders() : void

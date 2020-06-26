@@ -77,9 +77,9 @@ class Response extends Message implements ResponseInterface
 		return parent::removeCookies($names);
 	}
 
-	public function setHeader(string $name, string ...$values)
+	public function setHeader(string $name, string $value)
 	{
-		return parent::setHeader($name, ...$values);
+		return parent::setHeader($name, $value);
 	}
 
 	public function setHeaders(array $headers)
@@ -87,14 +87,14 @@ class Response extends Message implements ResponseInterface
 		return parent::setHeaders($headers);
 	}
 
-	public function removeHeader(string $name, int $index = -1)
+	public function removeHeader(string $name)
 	{
-		return parent::removeHeader($name, $index);
+		return parent::removeHeader($name);
 	}
 
-	public function removeHeaders(string $name)
+	public function removeHeaders()
 	{
-		return parent::removeHeaders($name);
+		return parent::removeHeaders();
 	}
 
 	/**

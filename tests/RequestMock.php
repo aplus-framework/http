@@ -71,9 +71,9 @@ class RequestMock extends \Framework\HTTP\Request
 		return $this->body;
 	}
 
-	public function setHeader(string $name, string ...$values)
+	public function setHeader(string $name, string $value)
 	{
-		return parent::setHeader($name, ...$values);
+		return parent::setHeader($name, $value);
 	}
 
 	public function setMethod(string $method)

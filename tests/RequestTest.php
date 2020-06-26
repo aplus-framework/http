@@ -326,17 +326,17 @@ class RequestTest extends TestCase
 	public function testHeaders()
 	{
 		$this->assertEquals([
-			'accept' => ['text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'],
-			'accept-charset' => ['utf-8, iso-8859-1;q=0.5, *;q=0.1'],
-			'accept-encoding' => ['gzip, deflate'],
-			'accept-language' => ['pt-BR,es;q=0.8,en;q=0.5,en-US;q=0.3'],
-			'content-type' => ['text/html; charset=UTF-8'],
-			'etag' => ['abc'],
-			'host' => ['domain.tld'],
-			'referer' => ['http://domain.tld/contact.html'],
-			'user-agent' => ['Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'],
-			'x-requested-with' => ['XMLHTTPREQUEST'],
-		], $this->request->getAllHeaders());
+			'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+			'accept-charset' => 'utf-8, iso-8859-1;q=0.5, *;q=0.1',
+			'accept-encoding' => 'gzip, deflate',
+			'accept-language' => 'pt-BR,es;q=0.8,en;q=0.5,en-US;q=0.3',
+			'content-type' => 'text/html; charset=UTF-8',
+			'etag' => 'abc',
+			'host' => 'domain.tld',
+			'referer' => 'http://domain.tld/contact.html',
+			'user-agent' => 'Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
+			'x-requested-with' => 'XMLHTTPREQUEST',
+		], $this->request->getHeaders());
 	}
 
 	public function testIP()

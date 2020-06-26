@@ -13,11 +13,9 @@ interface ResponseInterface
 
 	public function getStatusLine() : string;
 
-	public function getHeader(string $name, int $index = -1) : ?string;
+	public function getHeader(string $name) : ?string;
 
-	public function getHeaders(string $name) : array;
-
-	public function getAllHeaders() : array;
+	public function getHeaders() : array;
 
 	public function getBody() : string;
 }
