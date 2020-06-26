@@ -1,5 +1,11 @@
 <?php namespace Framework\HTTP;
 
+use DateTime;
+use DateTimeZone;
+use InvalidArgumentException;
+use JsonException;
+use LogicException;
+
 /**
  * Class Response.
  *
@@ -109,8 +115,8 @@ class Response extends Message implements ResponseInterface
 	 * @param int         $code
 	 * @param string|null $reason
 	 *
-	 * @throws \InvalidArgumentException if status code is invalid
-	 * @throws \LogicException           is status code is unknown and a reason is not set
+	 * @throws InvalidArgumentException if status code is invalid
+	 * @throws LogicException           is status code is unknown and a reason is not set
 	 *
 	 * @return $this
 	 */
@@ -119,7 +125,7 @@ class Response extends Message implements ResponseInterface
 		$this->setStatusCode($code);
 		$reason ?: $reason = static::getResponseReason($code);
 		if (empty($reason)) {
-			throw new \LogicException("Unknown status code must have a reason: {$code}");
+			throw new LogicException("Unknown status code must have a reason: {$code}");
 		}
 		$this->setStatusReason($reason);
 		return $this;
@@ -128,14 +134,14 @@ class Response extends Message implements ResponseInterface
 	/**
 	 * @param int $code
 	 *
-	 * @throws \InvalidArgumentException if status code is invalid
+	 * @throws InvalidArgumentException if status code is invalid
 	 *
 	 * @return $this
 	 */
 	public function setStatusCode(int $code)
 	{
 		if ($code < 100 || $code > 599) {
-			throw new \InvalidArgumentException("Invalid status code: {$code}");
+			throw new InvalidArgumentException("Invalid status code: {$code}");
 		}
 		$this->statusCode = $code;
 		return $this;
@@ -176,8 +182,8 @@ class Response extends Message implements ResponseInterface
 	 * @see  http://en.wikipedia.org/wiki/Post/Redirect/Get
 	 * @see  Request::getRedirectData
 	 *
-	 * @throws \InvalidArgumentException for invalid Redirection code
-	 * @throws \LogicException           if PHP Session is not active to set redirect data
+	 * @throws InvalidArgumentException for invalid Redirection code
+	 * @throws LogicException           if PHP Session is not active to set redirect data
 	 *
 	 * @return $this
 	 */
@@ -186,13 +192,13 @@ class Response extends Message implements ResponseInterface
 		if ($code === null) {
 			$code = $this->request->getServerVariable('REQUEST_METHOD') === 'GET' ? 307 : 303;
 		} elseif ($code < 300 || $code > 308) {
-			throw new \InvalidArgumentException("Invalid Redirection code: {$code}");
+			throw new InvalidArgumentException("Invalid Redirection code: {$code}");
 		}
 		$this->setStatusCode($code);
 		$this->setHeader('Location', $location);
 		if ($data) {
 			if (\session_status() !== \PHP_SESSION_ACTIVE) {
-				throw new \LogicException('Session must be active to set redirect data');
+				throw new LogicException('Session must be active to set redirect data');
 			}
 			$_SESSION['$__REDIRECT'] = $data;
 		}
@@ -200,12 +206,12 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
-	 * @throws \LogicException if Response already is sent
+	 * @throws LogicException if Response already is sent
 	 */
 	public function send() : void
 	{
 		if ($this->isSent) {
-			throw new \LogicException('Response already is sent');
+			throw new LogicException('Response already is sent');
 		}
 		$this->sendHeaders();
 		$this->sendCookies();
@@ -227,18 +233,18 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
-	 * @throws \LogicException if headers already is sent
+	 * @throws LogicException if headers already is sent
 	 */
 	protected function sendHeaders() : void
 	{
 		if (\headers_sent()) {
 			// \var_dump(\headers_list());exit;
-			throw new \LogicException('Headers already is sent');
+			throw new LogicException('Headers already is sent');
 		}
 		// Per spec, MUST be sent with each request, if possible.
 		// http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html
 		if ($this->getHeader('Date') === null) {
-			$this->setDate(\DateTime::createFromFormat('U', \time()));
+			$this->setDate(DateTime::createFromFormat('U', \time()));
 		}
 		if ($this->getHeader('Content-Type') === null) {
 			$this->setContentType('text/html');
@@ -272,7 +278,7 @@ class Response extends Message implements ResponseInterface
 	 *                       Set the maximum depth. Must be greater than zero.
 	 *                       </p>
 	 *
-	 * @throws \JsonException if json_encode() fails
+	 * @throws JsonException if json_encode() fails
 	 *
 	 * @return $this
 	 */
@@ -298,7 +304,7 @@ class Response extends Message implements ResponseInterface
 	 */
 	public function setCache(int $seconds, bool $public = false)
 	{
-		$date = new \DateTime();
+		$date = new DateTime();
 		$date->modify('+' . $seconds . ' seconds');
 		$this->setExpires($date);
 		$this->setHeader(
@@ -368,15 +374,15 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
-	 * @param \DateTime $datetime
+	 * @param DateTime $datetime
 	 *
 	 * @return $this
 	 */
-	public function setDate(\DateTime $datetime)
+	public function setDate(DateTime $datetime)
 	{
 		$date = clone $datetime;
-		$date->setTimezone(new \DateTimeZone('UTC'));
-		$this->setHeader('Date', $date->format(\DateTime::RFC7231));
+		$date->setTimezone(new DateTimeZone('UTC'));
+		$this->setHeader('Date', $date->format(DateTime::RFC7231));
 		return $this;
 	}
 
@@ -392,28 +398,28 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
-	 * @param \DateTime $datetime
+	 * @param DateTime $datetime
 	 *
 	 * @return $this
 	 */
-	public function setExpires(\DateTime $datetime)
+	public function setExpires(DateTime $datetime)
 	{
 		$date = clone $datetime;
-		$date->setTimezone(new \DateTimeZone('UTC'));
-		$this->setHeader('Expires', $date->format(\DateTime::RFC7231));
+		$date->setTimezone(new DateTimeZone('UTC'));
+		$this->setHeader('Expires', $date->format(DateTime::RFC7231));
 		return $this;
 	}
 
 	/**
-	 * @param \DateTime $datetime
+	 * @param DateTime $datetime
 	 *
 	 * @return $this
 	 */
-	public function setLastModified(\DateTime $datetime)
+	public function setLastModified(DateTime $datetime)
 	{
 		$date = clone $datetime;
-		$date->setTimezone(new \DateTimeZone('UTC'));
-		$this->setHeader('Last-Modified', $date->format(\DateTime::RFC7231));
+		$date->setTimezone(new DateTimeZone('UTC'));
+		$this->setHeader('Last-Modified', $date->format(DateTime::RFC7231));
 		return $this;
 	}
 

@@ -1,5 +1,9 @@
 <?php namespace Framework\HTTP;
 
+use DateTime;
+use DateTimeZone;
+use InvalidArgumentException;
+
 /**
  * Class Cookie.
  *
@@ -11,7 +15,7 @@
 class Cookie
 {
 	protected ?string $domain = null;
-	protected ?\DateTime $expires = null;
+	protected ?DateTime $expires = null;
 	protected bool $httpOnly = false;
 	protected string $name;
 	protected ?string $path = null;
@@ -42,7 +46,7 @@ class Cookie
 		$part = $this->getExpires();
 		if ($part !== null) {
 			$string .= '; expires=' . $this->expires->format('D, d-M-Y H:i:s') . ' GMT';
-			$string .= '; Max-Age=' . $this->expires->diff(new \DateTime('-1 second'))->s;
+			$string .= '; Max-Age=' . $this->expires->diff(new DateTime('-1 second'))->s;
 		}
 		$part = $this->getPath();
 		if ($part !== null) {
@@ -87,27 +91,27 @@ class Cookie
 	}
 
 	/**
-	 * @return \DateTime|null
+	 * @return DateTime|null
 	 */
-	public function getExpires() : ?\DateTime
+	public function getExpires() : ?DateTime
 	{
 		return $this->expires;
 	}
 
 	/**
-	 * @param \DateTime|string|null $expires
+	 * @param DateTime|string|null $expires
 	 *
 	 * @return $this
 	 */
 	public function setExpires($expires)
 	{
-		if ($expires instanceof \DateTime) {
+		if ($expires instanceof DateTime) {
 			$expires = clone $expires;
-			$expires->setTimezone(new \DateTimeZone('UTC'));
+			$expires->setTimezone(new DateTimeZone('UTC'));
 		} elseif (\is_numeric($expires)) {
-			$expires = \DateTime::createFromFormat('U', $expires, new \DateTimeZone('UTC'));
+			$expires = DateTime::createFromFormat('U', $expires, new DateTimeZone('UTC'));
 		} elseif ($expires !== null) {
-			$expires = new \DateTime($expires, new \DateTimeZone('UTC'));
+			$expires = new DateTime($expires, new DateTimeZone('UTC'));
 		}
 		$this->expires = $expires;
 		return $this;
@@ -170,7 +174,7 @@ class Cookie
 	/**
 	 * @param string|null $same_site Strict, Lax or Unset
 	 *
-	 * @throws \InvalidArgumentException for invalid $same_site value
+	 * @throws InvalidArgumentException for invalid $same_site value
 	 *
 	 * @return $this
 	 */
@@ -179,7 +183,7 @@ class Cookie
 		if ($same_site !== null) {
 			$same_site = \ucfirst(\strtolower($same_site));
 			if ( ! \in_array($same_site, ['Strict', 'Lax', 'Unset', 'None'])) {
-				throw new \InvalidArgumentException('SameSite must be Strict, Lax, Unset or None');
+				throw new InvalidArgumentException('SameSite must be Strict, Lax, Unset or None');
 			}
 		}
 		$this->sameSite = $same_site;

@@ -1,5 +1,7 @@
 <?php namespace Framework\HTTP;
 
+use InvalidArgumentException;
+
 /**
  * Class URL.
  *
@@ -243,7 +245,7 @@ class URL implements \JsonSerializable
 	/**
 	 * @param string $hostname
 	 *
-	 * @throws \InvalidArgumentException for invalid URL Hostname
+	 * @throws InvalidArgumentException for invalid URL Hostname
 	 *
 	 * @return $this
 	 */
@@ -254,7 +256,7 @@ class URL implements \JsonSerializable
 			\FILTER_VALIDATE_DOMAIN,
 			\FILTER_FLAG_HOSTNAME
 		)) {
-			throw new \InvalidArgumentException("Invalid URL Hostname: {$hostname}");
+			throw new InvalidArgumentException("Invalid URL Hostname: {$hostname}");
 		}
 		$this->hostname = $filtered;
 		return $this;
@@ -290,14 +292,14 @@ class URL implements \JsonSerializable
 	/**
 	 * @param int $port
 	 *
-	 * @throws \InvalidArgumentException for invalid URL Port
+	 * @throws InvalidArgumentException for invalid URL Port
 	 *
 	 * @return $this
 	 */
 	public function setPort(int $port)
 	{
 		if ($port < 1 || $port > 65535) {
-			throw new \InvalidArgumentException("Invalid URL Port: {$port}");
+			throw new InvalidArgumentException("Invalid URL Port: {$port}");
 		}
 		$this->port = $port;
 		return $this;
@@ -338,14 +340,14 @@ class URL implements \JsonSerializable
 	/**
 	 * @param string $url
 	 *
-	 * @throws \InvalidArgumentException for invalid URL
+	 * @throws InvalidArgumentException for invalid URL
 	 *
 	 * @return $this
 	 */
 	protected function setURL(string $url)
 	{
 		if ( ! $filtered_url = \filter_var($url, \FILTER_VALIDATE_URL)) {
-			throw new \InvalidArgumentException("Invalid URL: {$url}");
+			throw new InvalidArgumentException("Invalid URL: {$url}");
 		}
 		$url = \parse_url($filtered_url);
 		$this->setScheme($url['scheme']);

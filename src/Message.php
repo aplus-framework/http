@@ -1,5 +1,7 @@
 <?php namespace Framework\HTTP;
 
+use InvalidArgumentException;
+
 /**
  * Class Message.
  *
@@ -350,7 +352,7 @@ abstract class Message
 	/**
 	 * @param string $method
 	 *
-	 * @throws \InvalidArgumentException for invalid method
+	 * @throws InvalidArgumentException for invalid method
 	 *
 	 * @return $this
 	 */
@@ -366,7 +368,7 @@ abstract class Message
 			'POST',
 			'PUT',
 		], true)) {
-			throw new \InvalidArgumentException("Invalid HTTP Request Method: {$method}");
+			throw new InvalidArgumentException("Invalid HTTP Request Method: {$method}");
 		}
 		$this->method = $valid;
 		return $this;

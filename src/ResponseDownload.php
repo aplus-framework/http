@@ -1,5 +1,7 @@
 <?php namespace Framework\HTTP;
 
+use InvalidArgumentException;
+
 /**
  * Trait ResponseDownload.
  *
@@ -37,7 +39,7 @@ trait ResponseDownload
 	 * @param int    $delay        Delay between flushs in microseconds
 	 * @param int    $readLength   Bytes read by flush
 	 *
-	 * @throws \InvalidArgumentException If invalid file path
+	 * @throws InvalidArgumentException If invalid file path
 	 *
 	 * @return $this
 	 */
@@ -50,7 +52,7 @@ trait ResponseDownload
 	) {
 		$this->filepath = \realpath($filepath);
 		if ($filepath === false || ! \is_file($this->filepath)) {
-			throw new \InvalidArgumentException('Invalid file path: ' . $filepath);
+			throw new InvalidArgumentException('Invalid file path: ' . $filepath);
 		}
 		$this->delay = $delay;
 		$this->readLength = $readLength;

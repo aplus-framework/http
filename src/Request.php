@@ -1,5 +1,8 @@
 <?php namespace Framework\HTTP;
 
+use InvalidArgumentException;
+use LogicException;
+
 /**
  * Class Request.
  *
@@ -426,7 +429,7 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @see Response::redirect
 	 *
-	 * @throws \LogicException if PHP Session is not active to get redirect data
+	 * @throws LogicException if PHP Session is not active to get redirect data
 	 *
 	 * @return mixed|null an array containing all data, the key value or null if the key was not
 	 *                    found
@@ -435,7 +438,7 @@ class Request extends Message implements RequestInterface
 	{
 		static $data;
 		if ($data === null && \session_status() !== \PHP_SESSION_ACTIVE) {
-			throw new \LogicException('Session must be active to get redirect data');
+			throw new LogicException('Session must be active to get redirect data');
 		}
 		if ($data === null) {
 			$data = $_SESSION['$__REDIRECT'] ?? false;
@@ -496,7 +499,7 @@ class Request extends Message implements RequestInterface
 			if ($referer !== null) {
 				try {
 					$this->referrer = new URL($referer);
-				} catch (\InvalidArgumentException $e) {
+				} catch (InvalidArgumentException $e) {
 					$this->referrer = false;
 				}
 			}
@@ -647,7 +650,7 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @param string $host
 	 *
-	 * @throws \InvalidArgumentException for invalid host
+	 * @throws InvalidArgumentException for invalid host
 	 *
 	 * @return $this
 	 */
@@ -655,7 +658,7 @@ class Request extends Message implements RequestInterface
 	{
 		$filtered_host = 'http://' . $host;
 		if ( ! $filtered_host = \filter_var($filtered_host, \FILTER_VALIDATE_URL)) {
-			throw new \InvalidArgumentException("Invalid host: {$host}");
+			throw new InvalidArgumentException("Invalid host: {$host}");
 		}
 		$host = \parse_url($filtered_host);
 		$this->host = $host['host'];
