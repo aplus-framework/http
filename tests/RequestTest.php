@@ -372,6 +372,16 @@ class RequestTest extends TestCase
 		$this->assertFalse($this->request->isForm());
 	}
 
+	public function testIsPOST()
+	{
+		$this->assertFalse($this->request->isPOST());
+	}
+
+	public function testHasFiles()
+	{
+		$this->assertFalse($this->request->hasFiles());
+	}
+
 	public function testLanguage()
 	{
 		$this->assertEquals([

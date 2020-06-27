@@ -373,6 +373,11 @@ class Request extends Message implements RequestInterface
 		return $this->files;
 	}
 
+	public function hasFiles() : bool
+	{
+		return ! empty($this->files);
+	}
+
 	public function getFile(string $name) : ?UploadedFile
 	{
 		$file = \ArraySimple::value($name, $this->files);
@@ -594,6 +599,11 @@ class Request extends Message implements RequestInterface
 	public function isJSON() : bool
 	{
 		return $this->parseContentType() === 'application/json';
+	}
+
+	public function isPOST() : bool
+	{
+		return $this->getMethod() === 'POST';
 	}
 
 	protected function getInputFiles() : array
