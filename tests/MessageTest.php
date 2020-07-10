@@ -24,8 +24,10 @@ class MessageTest extends TestCase
 
 	public function testHeader()
 	{
+		$this->assertFalse($this->message->hasHeader('from'));
 		$this->assertNull($this->message->getHeader('from'));
 		$this->message->setHeader('from', 'foo@localhost');
+		$this->assertTrue($this->message->hasHeader('from'));
 		$this->assertEquals('foo@localhost', $this->message->getHeader('from'));
 		$this->assertEquals(['from' => 'foo@localhost'], $this->message->getHeaders());
 		$this->message->setHeader('from', 'bar@localhost');

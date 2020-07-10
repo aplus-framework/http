@@ -216,6 +216,11 @@ abstract class Message
 		599 => 'Network Connect Timeout Error',
 	];
 
+	public function hasHeader(string $name) : bool
+	{
+		return isset($this->headers[\strtolower($name)]);
+	}
+
 	public function getHeader(string $name) : ?string
 	{
 		return $this->headers[\strtolower($name)] ?? null;
