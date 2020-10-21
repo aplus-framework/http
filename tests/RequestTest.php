@@ -292,9 +292,7 @@ class RequestTest extends TestCase
 				'size' => 0,
 			],
 		];
-		$this->request = new RequestMock([
-			'domain.tld',
-		]);
+		$this->request = new RequestMock();
 		$this->assertIsArray($this->request->getFiles());
 		$this->assertInstanceOf(
 			\Framework\HTTP\UploadedFile::class,
