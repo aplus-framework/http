@@ -15,8 +15,12 @@ class RequestTest extends TestCase
 
 	public function setUp() : void
 	{
-		$this->request = new RequestMock();
-		$this->proxyRequest = new RequestProxyMock();
+		$this->request = new RequestMock([
+			'domain.tld',
+		]);
+		$this->proxyRequest = new RequestProxyMock([
+			'real-domain.tld:8080',
+		]);
 	}
 
 	public function testUserAgent()
@@ -41,6 +45,15 @@ class RequestTest extends TestCase
 		$this->expectException(\InvalidArgumentException::class);
 		$this->expectExceptionMessage('Invalid host: a_b');
 		$this->request->setHost('a_b');
+	}
+
+	public function testInvalidHost()
+	{
+		$this->expectException(\UnexpectedValueException::class);
+		$this->expectExceptionMessage('Invalid Host: domain.tld');
+		$this->request = new RequestMock([
+			'other.tld',
+		]);
 	}
 
 	public function testAccept()
@@ -279,7 +292,9 @@ class RequestTest extends TestCase
 				'size' => 0,
 			],
 		];
-		$this->request = new RequestMock();
+		$this->request = new RequestMock([
+			'domain.tld',
+		]);
 		$this->assertIsArray($this->request->getFiles());
 		$this->assertInstanceOf(
 			\Framework\HTTP\UploadedFile::class,
@@ -302,7 +317,9 @@ class RequestTest extends TestCase
 	public function testEmptyFiles()
 	{
 		$_FILES = [];
-		$this->request = new RequestMock();
+		$this->request = new RequestMock([
+			'domain.tld',
+		]);
 		$this->assertEmpty($this->request->getFiles());
 	}
 

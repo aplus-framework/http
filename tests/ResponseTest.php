@@ -16,7 +16,7 @@ class ResponseTest extends TestCase
 	 */
 	public function testPostRedirectGet()
 	{
-		$request = new RequestMock();
+		$request = new RequestMock(['domain.tld']);
 		$request->setServerVariable('REQUEST_METHOD', 'POST');
 		$this->response = new class($request) extends Response {
 		};
@@ -53,7 +53,7 @@ class ResponseTest extends TestCase
 
 	public function setUp() : void
 	{
-		$this->response = new Response(new RequestMock());
+		$this->response = new Response(new RequestMock(['domain.tld']));
 	}
 
 	public function testBody()

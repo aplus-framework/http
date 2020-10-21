@@ -16,7 +16,9 @@ class ResponseDownloadTest extends TestCase
 
 	protected function setUp() : void
 	{
-		$this->request = new RequestMock();
+		$this->request = new RequestMock([
+			'domain.tld',
+		]);
 		$this->request->setHeader('Range', 'bytes=0-499');
 		$this->response = new class($this->request) extends Response {
 		};

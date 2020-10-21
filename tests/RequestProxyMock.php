@@ -4,7 +4,7 @@ class RequestProxyMock extends RequestMock
 {
 	public string $body = '{"test":123}';
 
-	public function __construct()
+	public function __construct(array $allowed_hosts)
 	{
 		$this->input[\INPUT_SERVER] = [
 			'HTTP_HOST' => 'real-domain.tld:8080',
@@ -19,7 +19,7 @@ class RequestProxyMock extends RequestMock
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'SERVER_NAME' => 'domain.tld',
 		];
-		parent::__construct();
+		parent::__construct($allowed_hosts);
 	}
 
 	protected function prepareCookies()

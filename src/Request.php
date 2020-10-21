@@ -2,6 +2,7 @@
 
 use InvalidArgumentException;
 use LogicException;
+use UnexpectedValueException;
 
 /**
  * Class Request.
@@ -42,14 +43,34 @@ class Request extends Message implements RequestInterface
 
 	/**
 	 * Request constructor.
+	 *
+	 * @param array<string> $allowed_hosts
+	 *
+	 * @throws UnexpectedValueException if invalid Host
 	 */
-	public function __construct()
+	public function __construct(array $allowed_hosts)
 	{
+		$this->validateHost($allowed_hosts);
 		$this->prepareStatusLine();
 		$this->prepareHeaders();
 		$this->prepareCookies();
 		$this->prepareUserAgent();
 		$this->prepareFiles();
+	}
+
+	/**
+	 * Check if Host header is allowed.
+	 *
+	 * @see https://expressionengine.com/blog/http-host-and-server-name-security-issues
+	 *
+	 * @param array<string> $allowed_hosts
+	 */
+	protected function validateHost(array $allowed_hosts) : void
+	{
+		$host = $this->getServerVariable('HTTP_HOST');
+		if ( ! \in_array($host, $allowed_hosts, true)) {
+			throw new UnexpectedValueException('Invalid Host: ' . \htmlentities($host));
+		}
 	}
 
 	protected function prepareStatusLine()
