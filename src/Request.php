@@ -77,7 +77,7 @@ class Request extends Message implements RequestInterface
 		}
 	}
 
-	protected function prepareStatusLine()
+	protected function prepareStatusLine() : void
 	{
 		$this->setProtocol($this->getServerVariable('SERVER_PROTOCOL'));
 		$this->setMethod($this->getServerVariable('REQUEST_METHOD'));
@@ -89,7 +89,7 @@ class Request extends Message implements RequestInterface
 		$this->setHost($this->getURL()->getHost());
 	}
 
-	protected function prepareHeaders()
+	protected function prepareHeaders() : void
 	{
 		foreach ($this->getServerVariable() as $name => $value) {
 			if (\strpos($name, 'HTTP_') !== 0) {
@@ -100,14 +100,14 @@ class Request extends Message implements RequestInterface
 		}
 	}
 
-	protected function prepareCookies()
+	protected function prepareCookies() : void
 	{
 		foreach ($this->filterInput(\INPUT_COOKIE) as $name => $value) {
 			$this->setCookie(new Cookie($name, $value));
 		}
 	}
 
-	protected function prepareUserAgent()
+	protected function prepareUserAgent() : void
 	{
 		$userAgent = $this->getServerVariable('HTTP_USER_AGENT');
 		if ($userAgent) {
@@ -132,7 +132,7 @@ class Request extends Message implements RequestInterface
 		return \file_get_contents('php://input') ?: '';
 	}
 
-	protected function prepareFiles()
+	protected function prepareFiles() : void
 	{
 		$this->files = $this->getInputFiles();
 	}
@@ -162,19 +162,25 @@ class Request extends Message implements RequestInterface
 	public function forceHTTPS() : void
 	{
 		if ( ! $this->isSecure()) {
-			\header('Location: ' . $this->getURL()->setScheme('https')->getURL(), 301);
+			\header('Location: ' . $this->getURL()->setScheme('https')->getURL(), true, 301);
 			exit;
 		}
 	}
 
 	public function getAuthType() : ?string
 	{
-		if ($this->authType === null && $auth = $this->getHeader('Authorization')) {
-			$this->parseAuth($auth);
+		if ($this->authType === null) {
+			$auth = $this->getHeader('Authorization');
+			if ($auth) {
+				$this->parseAuth($auth);
+			}
 		}
 		return $this->authType;
 	}
 
+	/**
+	 * @return array<string>|null
+	 */
 	public function getBasicAuth() : ?array
 	{
 		return $this->getAuthType() === 'Basic'
@@ -182,6 +188,9 @@ class Request extends Message implements RequestInterface
 			: null;
 	}
 
+	/**
+	 * @return array<string>|null
+	 */
 	public function getDigestAuth() : ?array
 	{
 		return $this->getAuthType() === 'Digest'
@@ -189,6 +198,9 @@ class Request extends Message implements RequestInterface
 			: null;
 	}
 
+	/**
+	 * @return array<string>
+	 */
 	protected function parseAuth(string $authorization) : array
 	{
 		$this->auth = [];
@@ -203,6 +215,9 @@ class Request extends Message implements RequestInterface
 		return $this->auth;
 	}
 
+	/**
+	 * @return array<string>
+	 */
 	protected function parseBasicAuth(string $attributes) : array
 	{
 		$data = [
@@ -219,6 +234,9 @@ class Request extends Message implements RequestInterface
 		return $data;
 	}
 
+	/**
+	 * @return array<string>
+	 */
 	protected function parseDigestAuth(string $attributes) : array
 	{
 		$data = [
@@ -298,6 +316,12 @@ class Request extends Message implements RequestInterface
 		return $this->negotiation[$type];
 	}
 
+	/**
+	 * @param string        $type
+	 * @param array<string> $negotiable
+	 *
+	 * @return string
+	 */
 	protected function negotiate(string $type, array $negotiable) : string
 	{
 		$negotiable = \array_map('strtolower', $negotiable);
@@ -309,41 +333,73 @@ class Request extends Message implements RequestInterface
 		return $negotiable[0];
 	}
 
+	/**
+	 * @return array<string>
+	 */
 	public function getAccepts() : array
 	{
 		return $this->getNegotiableValues('ACCEPT');
 	}
 
+	/**
+	 * @param array<string> $negotiable
+	 *
+	 * @return string
+	 */
 	public function negotiateAccept(array $negotiable) : string
 	{
 		return $this->negotiate('ACCEPT', $negotiable);
 	}
 
+	/**
+	 * @return array<string>
+	 */
 	public function getCharsets() : array
 	{
 		return $this->getNegotiableValues('CHARSET');
 	}
 
+	/**
+	 * @param array<string> $negotiable
+	 *
+	 * @return string
+	 */
 	public function negotiateCharset(array $negotiable) : string
 	{
 		return $this->negotiate('CHARSET', $negotiable);
 	}
 
+	/**
+	 * @return array<string>
+	 */
 	public function getEncodings() : array
 	{
 		return $this->getNegotiableValues('ENCODING');
 	}
 
+	/**
+	 * @param array<string> $negotiable
+	 *
+	 * @return string
+	 */
 	public function negotiateEncoding(array $negotiable) : string
 	{
 		return $this->negotiate('ENCODING', $negotiable);
 	}
 
+	/**
+	 * @return array<string>
+	 */
 	public function getLanguages() : array
 	{
 		return $this->getNegotiableValues('LANGUAGE');
 	}
 
+	/**
+	 * @param array<string> $negotiable
+	 *
+	 * @return string
+	 */
 	public function negotiateLanguage(array $negotiable) : string
 	{
 		return $this->negotiate('LANGUAGE', $negotiable);
