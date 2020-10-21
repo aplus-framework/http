@@ -22,7 +22,7 @@ class RequestProxyMock extends RequestMock
 		parent::__construct($allowed_hosts);
 	}
 
-	protected function prepareCookies()
+	protected function prepareCookies() : void
 	{
 		parent::prepareCookies();
 		$this->removeCookie('X-CSRF-Token');
