@@ -14,6 +14,9 @@ class UserAgent implements \JsonSerializable
 	protected bool $isBrowser = false;
 	protected bool $isMobile = false;
 	protected bool $isRobot = false;
+	/**
+	 * @var array|string[][]
+	 */
 	protected static array $config = [
 		'platforms' => [
 			'windows nt 10.0' => 'Windows 10',
@@ -208,11 +211,16 @@ class UserAgent implements \JsonSerializable
 		$this->parse($user_agent);
 	}
 
-	public function __toString()
+	public function __toString() : string
 	{
 		return $this->getAgentString();
 	}
 
+	/**
+	 * @param string $string
+	 *
+	 * @return $this
+	 */
 	protected function parse(string $string)
 	{
 		$this->isBrowser = false;
@@ -227,7 +235,7 @@ class UserAgent implements \JsonSerializable
 		return $this;
 	}
 
-	protected function compileData()
+	protected function compileData() : void
 	{
 		$this->setPlatform();
 		foreach (['setRobot', 'setBrowser', 'setMobile'] as $function) {
@@ -354,7 +362,7 @@ class UserAgent implements \JsonSerializable
 	/**
 	 * Is Browser.
 	 *
-	 * @param string $key
+	 * @param string|null $key
 	 *
 	 * @return bool
 	 */
@@ -370,7 +378,7 @@ class UserAgent implements \JsonSerializable
 	/**
 	 * Is Mobile.
 	 *
-	 * @param string $key
+	 * @param string|null $key
 	 *
 	 * @return bool
 	 */
@@ -386,7 +394,7 @@ class UserAgent implements \JsonSerializable
 	/**
 	 * Is Robot.
 	 *
-	 * @param string $key
+	 * @param string|null $key
 	 *
 	 * @return bool
 	 */

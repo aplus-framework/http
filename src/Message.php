@@ -226,17 +226,31 @@ abstract class Message
 		return $this->headers[\strtolower($name)] ?? null;
 	}
 
+	/**
+	 * @return array|string[]
+	 */
 	public function getHeaders() : array
 	{
 		return $this->headers;
 	}
 
+	/**
+	 * @param string $name
+	 * @param string $value
+	 *
+	 * @return $this
+	 */
 	protected function setHeader(string $name, string $value)
 	{
 		$this->headers[\strtolower($name)] = $value;
 		return $this;
 	}
 
+	/**
+	 * @param array|string[] $headers
+	 *
+	 * @return $this
+	 */
 	protected function setHeaders(array $headers)
 	{
 		foreach ($headers as $name => $value) {
@@ -245,13 +259,20 @@ abstract class Message
 		return $this;
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return $this
+	 */
 	protected function removeHeader(string $name)
 	{
 		unset($this->headers[\strtolower($name)]);
-
 		return $this;
 	}
 
+	/**
+	 * @return $this
+	 */
 	protected function removeHeaders()
 	{
 		$this->headers = [];
@@ -284,6 +305,11 @@ abstract class Message
 		return $this->cookies;
 	}
 
+	/**
+	 * @param Cookie $cookie
+	 *
+	 * @return $this
+	 */
 	protected function setCookie(Cookie $cookie)
 	{
 		$this->cookies[$cookie->getName()] = $cookie;
@@ -303,6 +329,11 @@ abstract class Message
 		return $this;
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return $this
+	 */
 	protected function removeCookie(string $name)
 	{
 		unset($this->cookies[$name]);
@@ -327,6 +358,11 @@ abstract class Message
 		return $this->body;
 	}
 
+	/**
+	 * @param string $body
+	 *
+	 * @return $this
+	 */
 	protected function setBody(string $body)
 	{
 		$this->body = $body;
@@ -338,6 +374,11 @@ abstract class Message
 		return $this->protocol;
 	}
 
+	/**
+	 * @param string $protocol
+	 *
+	 * @return $this
+	 */
 	protected function setProtocol(string $protocol)
 	{
 		$this->protocol = $protocol;
@@ -431,7 +472,7 @@ abstract class Message
 	 *
 	 * @param string|null $string
 	 *
-	 * @return array
+	 * @return array|float[]
 	 */
 	public static function parseQualityValues(?string $string) : array
 	{

@@ -64,11 +64,12 @@ trait ResponseDownload
 			$inline ? 'inline' : \sprintf('attachment; filename="%s"', $filename)
 		);
 		$this->setAcceptRanges($acceptRanges);
-		if ($acceptRanges
-			&& $rangeLine = $this->request->getHeader('Range')
-		) {
-			$this->prepareRange($rangeLine);
-			return $this;
+		if ($acceptRanges) {
+			$rangeLine = $this->request->getHeader('Range');
+			if ($rangeLine) {
+				$this->prepareRange($rangeLine);
+				return $this;
+			}
 		}
 		$this->setHeader('Content-Length', $this->filesize);
 		$this->setHeader('Content-Type', \mime_content_type($this->filepath));

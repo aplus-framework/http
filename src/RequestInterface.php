@@ -13,6 +13,9 @@ interface RequestInterface
 
 	public function getHeader(string $name) : ?string;
 
+	/**
+	 * @return array|string[]
+	 */
 	public function getHeaders() : array;
 
 	public function getBody() : string;

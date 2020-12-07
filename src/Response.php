@@ -2,6 +2,7 @@
 
 use DateTime;
 use DateTimeZone;
+use Exception;
 use InvalidArgumentException;
 use JsonException;
 use LogicException;
@@ -14,6 +15,7 @@ use LogicException;
 class Response extends Message implements ResponseInterface
 {
 	use ResponseDownload;
+
 	protected int $cacheSeconds = 0;
 	protected bool $isSent = false;
 	protected Request $request;
@@ -53,11 +55,21 @@ class Response extends Message implements ResponseInterface
 		return parent::setBody($body);
 	}
 
+	/**
+	 * @param string $content
+	 *
+	 * @return $this
+	 */
 	public function prependBody(string $content)
 	{
 		return parent::setBody($content . $this->getBody());
 	}
 
+	/**
+	 * @param string $content
+	 *
+	 * @return $this
+	 */
 	public function appendBody(string $content)
 	{
 		return parent::setBody($this->getBody() . $content);
@@ -152,6 +164,11 @@ class Response extends Message implements ResponseInterface
 		return $this->statusCode;
 	}
 
+	/**
+	 * @param string $reason
+	 *
+	 * @return $this
+	 */
 	public function setStatusReason(string $reason)
 	{
 		$this->statusReason = $reason;
@@ -174,10 +191,10 @@ class Response extends Message implements ResponseInterface
 	/**
 	 * Sets the HTTP Redirect Response with data accessible in the next HTTP Request.
 	 *
-	 * @param string   $location Location Header value
-	 * @param array    $data     Session data available on next Request
-	 * @param int|null $code     HTTP Redirect status code. Leave null to determine based on the
-	 *                           current HTTP method.
+	 * @param string        $location Location Header value
+	 * @param array|mixed[] $data     Session data available on next Request
+	 * @param int|null      $code     HTTP Redirect status code. Leave null to determine based on
+	 *                                the current HTTP method.
 	 *
 	 * @see  http://en.wikipedia.org/wiki/Post/Redirect/Get
 	 * @see  Request::getRedirectData
@@ -259,24 +276,24 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
-	 * @param mixed $data
-	 * @param int   $options [optional] <p>
-	 *                       Bitmask consisting of <b>JSON_HEX_QUOT</b>,
-	 *                       <b>JSON_HEX_TAG</b>,
-	 *                       <b>JSON_HEX_AMP</b>,
-	 *                       <b>JSON_HEX_APOS</b>,
-	 *                       <b>JSON_NUMERIC_CHECK</b>,
-	 *                       <b>JSON_PRETTY_PRINT</b>,
-	 *                       <b>JSON_UNESCAPED_SLASHES</b>,
-	 *                       <b>JSON_FORCE_OBJECT</b>,
-	 *                       <b>JSON_UNESCAPED_UNICODE</b>.
-	 *                       <b>JSON_THROW_ON_ERROR</b>
-	 *                       </p>
-	 *                       <p>Default is <b>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE</b>
-	 *                       when null</p>
-	 * @param int   $depth   [optional] <p>
-	 *                       Set the maximum depth. Must be greater than zero.
-	 *                       </p>
+	 * @param mixed    $data
+	 * @param int|null $options [optional] <p>
+	 *                          Bitmask consisting of <b>JSON_HEX_QUOT</b>,
+	 *                          <b>JSON_HEX_TAG</b>,
+	 *                          <b>JSON_HEX_AMP</b>,
+	 *                          <b>JSON_HEX_APOS</b>,
+	 *                          <b>JSON_NUMERIC_CHECK</b>,
+	 *                          <b>JSON_PRETTY_PRINT</b>,
+	 *                          <b>JSON_UNESCAPED_SLASHES</b>,
+	 *                          <b>JSON_FORCE_OBJECT</b>,
+	 *                          <b>JSON_UNESCAPED_UNICODE</b>.
+	 *                          <b>JSON_THROW_ON_ERROR</b>
+	 *                          </p>
+	 *                          <p>Default is <b>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE</b>
+	 *                          when null</p>
+	 * @param int      $depth   [optional] <p>
+	 *                          Set the maximum depth. Must be greater than zero.
+	 *                          </p>
 	 *
 	 * @throws JsonException if json_encode() fails
 	 *
@@ -345,18 +362,36 @@ class Response extends Message implements ResponseInterface
 		return $this;
 	}
 
+	/**
+	 * @param string $language
+	 *
+	 * @return $this
+	 */
 	public function setContentLanguage(string $language)
 	{
 		$this->setHeader('Content-Language', $language);
 		return $this;
 	}
 
+	/**
+	 * @param string $encoding
+	 *
+	 * @return $this
+	 */
 	public function setContentEncoding(string $encoding)
 	{
 		$this->setHeader('Content-Encoding', $encoding);
 		return $this;
 	}
 
+	/**
+	 * @param string $token
+	 * @param int    $ttl
+	 *
+	 * @throws Exception
+	 *
+	 * @return $this
+	 */
 	public function setCSRFToken(string $token, int $ttl = 7200)
 	{
 		$cookie = (new Cookie('X-CSRF-Token', $token))

@@ -199,6 +199,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * @param string $authorization
+	 *
 	 * @return array<string>
 	 */
 	protected function parseAuth(string $authorization) : array
@@ -216,6 +218,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * @param string $attributes
+	 *
 	 * @return array<string>
 	 */
 	protected function parseBasicAuth(string $attributes) : array
@@ -235,6 +239,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * @param string $attributes
+	 *
 	 * @return array<string>
 	 */
 	protected function parseDigestAuth(string $attributes) : array
@@ -264,6 +270,13 @@ class Request extends Message implements RequestInterface
 		return $data;
 	}
 
+	/**
+	 * @param string|null $name
+	 * @param int|null    $filter
+	 * @param null        $filter_options
+	 *
+	 * @return array|mixed|string|null
+	 */
 	public function getParsedBody(string $name = null, int $filter = null, $filter_options = null)
 	{
 		if ($this->getMethod() === 'POST') {
@@ -281,11 +294,11 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @param bool $assoc
-	 * @param int  $options
-	 * @param int  $depth
+	 * @param bool     $assoc
+	 * @param int|null $options
+	 * @param int      $depth
 	 *
-	 * @return array|false|object
+	 * @return array|false|mixed[]|object
 	 */
 	public function getJSON(bool $assoc = false, int $options = null, int $depth = 512)
 	{
@@ -302,7 +315,7 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @param string $type
 	 *
-	 * @return array
+	 * @return array|string[]
 	 */
 	protected function getNegotiableValues(string $type) : array
 	{
@@ -465,6 +478,13 @@ class Request extends Message implements RequestInterface
 		return \is_array($file) ? null : $file;
 	}
 
+	/**
+	 * @param string|null $name
+	 * @param int|null    $filter
+	 * @param null        $filter_options
+	 *
+	 * @return array|mixed
+	 */
 	public function getQuery(string $name = null, int $filter = null, $filter_options = null)
 	{
 		return $this->filterInput(\INPUT_GET, $name, $filter, $filter_options);
@@ -567,7 +587,8 @@ class Request extends Message implements RequestInterface
 			'HTTP_X_CLIENT_IP',
 			'HTTP_X_CLUSTER_CLIENT_IP',
 		] as $header) {
-			if ($header = $this->getServerVariable($header)) {
+			$header = $this->getServerVariable($header);
+			if ($header) {
 				return $header;
 			}
 		}
@@ -593,6 +614,13 @@ class Request extends Message implements RequestInterface
 		return $this->referrer === false ? null : $this->referrer;
 	}
 
+	/**
+	 * @param string|null $name
+	 * @param int|null    $filter
+	 * @param null        $filter_options
+	 *
+	 * @return array|mixed
+	 */
 	public function getServerVariable(
 		string $name = null,
 		int $filter = null,
@@ -687,6 +715,9 @@ class Request extends Message implements RequestInterface
 		return $this->getMethod() === 'POST';
 	}
 
+	/**
+	 * @return array|UploadedFile[]
+	 */
 	protected function getInputFiles() : array
 	{
 		if (empty($_FILES)) {
@@ -748,7 +779,8 @@ class Request extends Message implements RequestInterface
 	protected function setHost(string $host)
 	{
 		$filtered_host = 'http://' . $host;
-		if ( ! $filtered_host = \filter_var($filtered_host, \FILTER_VALIDATE_URL)) {
+		$filtered_host = \filter_var($filtered_host, \FILTER_VALIDATE_URL);
+		if ( ! $filtered_host) {
 			throw new InvalidArgumentException("Invalid host: {$host}");
 		}
 		$host = \parse_url($filtered_host);

@@ -2,6 +2,7 @@
 
 use DateTime;
 use DateTimeZone;
+use Exception;
 use InvalidArgumentException;
 
 /**
@@ -100,6 +101,8 @@ class Cookie
 
 	/**
 	 * @param DateTime|string|null $expires
+	 *
+	 * @throws Exception if can not create from format
 	 *
 	 * @return $this
 	 */
@@ -270,6 +273,8 @@ class Cookie
 	 * Parses a Set-Cookie Header line and creates a new Cookie object.
 	 *
 	 * @param string $line
+	 *
+	 * @throws Exception if setExpires fail
 	 *
 	 * @return Cookie|null
 	 */

@@ -19,6 +19,8 @@ class UploadedFile
 	protected ?string $type = null;
 	/**
 	 * @see http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
+	 *
+	 * @var array|array[]
 	 */
 	protected static array $mimeTypes = [
 		'application/andrew-inset' => ['ez'],
@@ -803,6 +805,11 @@ class UploadedFile
 		'x-conference/x-cooltalk' => ['ice'],
 	];
 
+	/**
+	 * UploadedFile constructor.
+	 *
+	 * @param array|mixed[] $file a $_FILE item
+	 */
 	public function __construct(array $file)
 	{
 		$this->name = $file['name'];
@@ -966,7 +973,7 @@ class UploadedFile
 	 *
 	 * @see http://php.net/manual/en/features.file-upload.errors.php
 	 */
-	protected function setErrorMessage(int $code)
+	protected function setErrorMessage(int $code) : void
 	{
 		switch ($code) {
 			case \UPLOAD_ERR_OK:

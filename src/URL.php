@@ -19,11 +19,15 @@ class URL implements \JsonSerializable
 	protected ?string $pass = null;
 	/**
 	 * The /paths/of/url.
+	 *
+	 * @var array|string[]
 	 */
 	protected array $pathSegments = [];
 	protected ?int $port = null;
 	/**
 	 *  The ?queries.
+	 *
+	 * @var array|mixed[]
 	 */
 	protected array $queryData = [];
 	protected ?string $scheme = null;
@@ -59,6 +63,11 @@ class URL implements \JsonSerializable
 		return $this;
 	}
 
+	/**
+	 * @param array|mixed[] $queries
+	 *
+	 * @return $this
+	 */
 	public function addQueries(array $queries)
 	{
 		foreach ($queries as $name => $value) {
@@ -67,6 +76,11 @@ class URL implements \JsonSerializable
 		return $this;
 	}
 
+	/**
+	 * @param array|string[] $allowed
+	 *
+	 * @return array|mixed[]
+	 */
 	protected function filterQuery(array $allowed) : array
 	{
 		return $this->queryData ?
@@ -108,6 +122,9 @@ class URL implements \JsonSerializable
 		return $this->getScheme() . '://' . $this->getHost();
 	}
 
+	/**
+	 * @return array|mixed[]
+	 */
 	public function getParsedURL() : array
 	{
 		return [
@@ -135,6 +152,9 @@ class URL implements \JsonSerializable
 		return '/' . \implode('/', $this->pathSegments);
 	}
 
+	/**
+	 * @return array|string[]
+	 */
 	public function getPathSegments() : array
 	{
 		return $this->pathSegments;
@@ -155,7 +175,8 @@ class URL implements \JsonSerializable
 
 	protected function getPortPart() : string
 	{
-		if ( ! \in_array($part = $this->getPort(), [
+		$part = $this->getPort();
+		if ( ! \in_array($part, [
 			null,
 			80,
 			443,
@@ -168,7 +189,7 @@ class URL implements \JsonSerializable
 	/**
 	 * Get the "Query" part of the URL.
 	 *
-	 * @param array|null $allowed_keys Allowed query keys
+	 * @param array|string[] $allowed_keys Allowed query keys
 	 *
 	 * @return string|null
 	 */
@@ -178,6 +199,11 @@ class URL implements \JsonSerializable
 		return $query ? \http_build_query($query) : null;
 	}
 
+	/**
+	 * @param array|string[] $allowed_keys
+	 *
+	 * @return array|mixed[]
+	 */
 	public function getQueryData(array $allowed_keys = []) : array
 	{
 		return $allowed_keys ? $this->filterQuery($allowed_keys) : $this->queryData;
@@ -194,19 +220,23 @@ class URL implements \JsonSerializable
 	public function getURL() : string
 	{
 		$url = $this->getScheme() . '://';
-		if ($part = $this->getUser()) {
+		$part = $this->getUser();
+		if ($part) {
 			$url .= $part;
-			if ($part = $this->getPass()) {
+			$part = $this->getPass();
+			if ($part) {
 				$url .= ':' . $part;
 			}
 			$url .= '@';
 		}
 		$url .= $this->getHost();
 		$url .= $this->getPath();
-		if ($part = $this->getQuery()) {
+		$part = $this->getQuery();
+		if ($part) {
 			$url .= '?' . $part;
 		}
-		if ($part = $this->getFragment()) {
+		$part = $this->getFragment();
+		if ($part) {
 			$url .= '#' . $part;
 		}
 		return $url;
@@ -251,11 +281,8 @@ class URL implements \JsonSerializable
 	 */
 	public function setHostname(string $hostname)
 	{
-		if ( ! $filtered = \filter_var(
-			$hostname,
-			\FILTER_VALIDATE_DOMAIN,
-			\FILTER_FLAG_HOSTNAME
-		)) {
+		$filtered = \filter_var($hostname, \FILTER_VALIDATE_DOMAIN, \FILTER_FLAG_HOSTNAME);
+		if ( ! $filtered) {
 			throw new InvalidArgumentException("Invalid URL Hostname: {$hostname}");
 		}
 		$this->hostname = $filtered;
@@ -283,6 +310,11 @@ class URL implements \JsonSerializable
 		return $this->setPathSegments(\explode('/', \trim($segments, '/')));
 	}
 
+	/**
+	 * @param array|string[] $segments
+	 *
+	 * @return $this
+	 */
 	public function setPathSegments(array $segments)
 	{
 		$this->pathSegments = $segments;
@@ -306,8 +338,8 @@ class URL implements \JsonSerializable
 	}
 
 	/**
-	 * @param string $data
-	 * @param array  $only
+	 * @param string         $data
+	 * @param array|string[] $only
 	 *
 	 * @return $this
 	 */
@@ -317,6 +349,12 @@ class URL implements \JsonSerializable
 		return $this->setQueryData($data, $only);
 	}
 
+	/**
+	 * @param array|mixed[]  $data
+	 * @param array|string[] $only
+	 *
+	 * @return $this
+	 */
 	public function setQueryData(array $data, array $only = [])
 	{
 		if ($only) {
@@ -346,7 +384,8 @@ class URL implements \JsonSerializable
 	 */
 	protected function setURL(string $url)
 	{
-		if ( ! $filtered_url = \filter_var($url, \FILTER_VALIDATE_URL)) {
+		$filtered_url = \filter_var($url, \FILTER_VALIDATE_URL);
+		if ( ! $filtered_url) {
 			throw new InvalidArgumentException("Invalid URL: {$url}");
 		}
 		$url = \parse_url($filtered_url);
