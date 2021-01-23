@@ -975,35 +975,17 @@ class UploadedFile
 	 */
 	protected function setErrorMessage(int $code) : void
 	{
-		switch ($code) {
-			case \UPLOAD_ERR_OK:
-				$line = '';
-				break;
-			case \UPLOAD_ERR_INI_SIZE:
-				$line = 'uploadErrorIniSize';
-				break;
-			case \UPLOAD_ERR_FORM_SIZE:
-				$line = 'uploadErrorFormSize';
-				break;
-			case \UPLOAD_ERR_PARTIAL:
-				$line = 'uploadErrorPartial';
-				break;
-			case \UPLOAD_ERR_NO_FILE:
-				$line = 'uploadErrorNoFile';
-				break;
-			case \UPLOAD_ERR_NO_TMP_DIR:
-				$line = 'uploadErrorNoTmpDir';
-				break;
-			case \UPLOAD_ERR_CANT_WRITE:
-				$line = 'uploadErrorCantWrite';
-				break;
-			case \UPLOAD_ERR_EXTENSION:
-				$line = 'uploadErrorExtension';
-				break;
-			default:
-				$line = 'uploadErrorUnknown';
-				break;
-		}
+		$line = match ($code) {
+			\UPLOAD_ERR_OK => '',
+			\UPLOAD_ERR_INI_SIZE => 'uploadErrorIniSize',
+			\UPLOAD_ERR_FORM_SIZE => 'uploadErrorFormSize',
+			\UPLOAD_ERR_PARTIAL => 'uploadErrorPartial',
+			\UPLOAD_ERR_NO_FILE => 'uploadErrorNoFile',
+			\UPLOAD_ERR_NO_TMP_DIR => 'uploadErrorNoTmpDir',
+			\UPLOAD_ERR_CANT_WRITE => 'uploadErrorCantWrite',
+			\UPLOAD_ERR_EXTENSION => 'uploadErrorExtension',
+			default => 'uploadErrorUnknown',
+		};
 		$this->errorMessage = $line;
 	}
 }

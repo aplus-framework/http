@@ -106,7 +106,7 @@ class Cookie
 	 *
 	 * @return $this
 	 */
-	public function setExpires($expires)
+	public function setExpires(DateTime | string | null $expires)
 	{
 		if ($expires instanceof DateTime) {
 			$expires = clone $expires;

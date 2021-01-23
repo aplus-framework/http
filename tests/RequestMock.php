@@ -4,7 +4,7 @@ class RequestMock extends \Framework\HTTP\Request
 {
 	public string $body = 'color=red&height=500px&width=800';
 	public ?array $parsedBody = null;
-	public $userAgent;
+	public \Framework\HTTP\UserAgent | false | null $userAgent = null;
 	protected $input = [
 		\INPUT_SERVER => [
 			'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -52,7 +52,7 @@ class RequestMock extends \Framework\HTTP\Request
 		string $name = null,
 		int $filter = null,
 		$options = null
-	) {
+	) : mixed {
 		$variable = $name === null
 			? $this->input[$type]
 			: \ArraySimple::value($name, $this->input[$type]);

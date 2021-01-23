@@ -30,16 +30,10 @@ class Request extends Message implements RequestInterface
 		'ENCODING' => null,
 		'LANGUAGE' => null,
 	];
-	/**
-	 * @var false|URL
-	 */
-	protected $referrer;
-	/**
-	 * @var false|UserAgent
-	 */
-	protected $userAgent;
-	protected ?bool $isAJAX = null;
-	protected ?bool $isSecure = null;
+	protected false | URL | null $referrer = null;
+	protected false | UserAgent | null $userAgent = null;
+	protected bool | null $isAJAX = null;
+	protected bool | null $isSecure = null;
 
 	/**
 	 * Request constructor.
@@ -92,7 +86,7 @@ class Request extends Message implements RequestInterface
 	protected function prepareHeaders() : void
 	{
 		foreach ($this->getServerVariable() as $name => $value) {
-			if (\strpos($name, 'HTTP_') !== 0) {
+			if ( ! \str_starts_with($name, 'HTTP_')) {
 				continue;
 			}
 			$name = \strtr(\substr($name, 5), ['_' => '-']);
@@ -125,7 +119,7 @@ class Request extends Message implements RequestInterface
 		$contentType = $this->getContentType();
 		if ($contentType
 			&& $this->getMethod() === 'POST'
-			&& \strpos($contentType, 'multipart/form-data;') === 0
+			&& \str_starts_with($contentType, 'multipart/form-data;')
 		) {
 			return \http_build_query($this->getPOST() ?? []);
 		}
@@ -150,7 +144,7 @@ class Request extends Message implements RequestInterface
 		string $variable = null,
 		int $filter = null,
 		$options = null
-	) {
+	) : mixed {
 		$variable = $variable === null
 			? (array) \filter_input_array($type)
 			: \ArraySimple::value($variable, (array) \filter_input_array($type));
