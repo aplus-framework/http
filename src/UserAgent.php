@@ -3,7 +3,7 @@
 /**
  * Class UserAgent.
  */
-class UserAgent implements \JsonSerializable
+class UserAgent implements \JsonSerializable, \Stringable
 {
 	protected ?string $agent = null;
 	protected ?string $browser = null;
