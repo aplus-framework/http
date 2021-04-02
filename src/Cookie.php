@@ -13,7 +13,7 @@ use InvalidArgumentException;
  * @see     https://tools.ietf.org/html/rfc6265
  * @see     https://php.net/manual/en/function.setcookie.php
  */
-class Cookie
+class Cookie implements \Stringable
 {
 	protected ?string $domain = null;
 	protected ?DateTime $expires = null;
