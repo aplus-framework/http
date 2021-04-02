@@ -11,12 +11,18 @@ use UnexpectedValueException;
  */
 class Request extends Message implements RequestInterface
 {
+	/**
+	 * @var array|UploadedFile[]
+	 */
 	protected array $files = [];
 	protected ?array $parsedBody = null;
 	/**
 	 * HTTP Authorization Header parsed.
 	 */
 	protected ?array $auth = null;
+	/**
+	 * @var string|null Basic or Digest
+	 */
 	protected ?string $authType = null;
 	protected string $host;
 	protected int $port;
@@ -33,6 +39,11 @@ class Request extends Message implements RequestInterface
 	protected false | URL | null $referrer = null;
 	protected false | UserAgent | null $userAgent = null;
 	protected bool | null $isAJAX = null;
+	/**
+	 * Tell if is a HTTPS connection.
+	 *
+	 * @var bool|null
+	 */
 	protected bool | null $isSecure = null;
 
 	/**
@@ -153,6 +164,9 @@ class Request extends Message implements RequestInterface
 			: $variable;
 	}
 
+	/**
+	 * Force an HTTPS connection on same URL.
+	 */
 	public function forceHTTPS() : void
 	{
 		if ( ! $this->isSecure()) {
@@ -161,6 +175,11 @@ class Request extends Message implements RequestInterface
 		}
 	}
 
+	/**
+	 * Get the Authorization type.
+	 *
+	 * @return string|null Basic, Digest or null for none
+	 */
 	public function getAuthType() : ?string
 	{
 		if ($this->authType === null) {
@@ -173,7 +192,9 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @return array<string>|null
+	 * Get Basic authorization.
+	 *
+	 * @return array<string>|null Two keys: username and password
 	 */
 	public function getBasicAuth() : ?array
 	{
@@ -183,7 +204,10 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @return array<string>|null
+	 * Get Digest authorization.
+	 *
+	 * @return array<string>|null Nine keys: username, realm, nonce, uri, response, opaque, qop,
+	 *                            nc, cnonce
 	 */
 	public function getDigestAuth() : ?array
 	{
@@ -265,6 +289,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Get the Parsed Body or part of it.
+	 *
 	 * @param string|null $name
 	 * @param int|null    $filter
 	 * @param null        $filter_options
@@ -288,6 +314,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Get the request body as JSON.
+	 *
 	 * @param bool     $assoc
 	 * @param int|null $options
 	 * @param int      $depth
@@ -341,6 +369,10 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Get the mime types of the Accept header.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
+	 *
 	 * @return array<string>
 	 */
 	public function getAccepts() : array
@@ -349,9 +381,11 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @param array<string> $negotiable
+	 * Negotiate the Accept header.
 	 *
-	 * @return string
+	 * @param array<string> $negotiable Allowed mime types
+	 *
+	 * @return string The negotiated mime type
 	 */
 	public function negotiateAccept(array $negotiable) : string
 	{
@@ -359,6 +393,10 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Get the Accept-Charset's.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Charset
+	 *
 	 * @return array<string>
 	 */
 	public function getCharsets() : array
@@ -367,9 +405,11 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @param array<string> $negotiable
+	 * Negotiate the Accept-Charset.
 	 *
-	 * @return string
+	 * @param array<string> $negotiable Allowed charsets
+	 *
+	 * @return string The negotiated charset
 	 */
 	public function negotiateCharset(array $negotiable) : string
 	{
@@ -377,6 +417,10 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Get the Accept-Encoding.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding
+	 *
 	 * @return array<string>
 	 */
 	public function getEncodings() : array
@@ -385,9 +429,11 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @param array<string> $negotiable
+	 * Negotiate the Accept-Encoding.
 	 *
-	 * @return string
+	 * @param array<string> $negotiable The allowed encodings
+	 *
+	 * @return string The negotiated encoding
 	 */
 	public function negotiateEncoding(array $negotiable) : string
 	{
@@ -395,6 +441,10 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Get the Accept-Language's.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language
+	 *
 	 * @return array<string>
 	 */
 	public function getLanguages() : array
@@ -403,9 +453,11 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @param array<string> $negotiable
+	 * Negotiated the Accept-Language.
 	 *
-	 * @return string
+	 * @param array<string> $negotiable Allowed languages
+	 *
+	 * @return string The negotiated language
 	 */
 	public function negotiateLanguage(array $negotiable) : string
 	{
@@ -413,6 +465,10 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Get the Content-Type header value.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
+	 *
 	 * @return string|null
 	 */
 	public function getContentType() : ?string
@@ -473,6 +529,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Get the URL GET queries.
+	 *
 	 * @param string|null $name
 	 * @param int|null    $filter
 	 * @param null        $filter_options
@@ -510,6 +568,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Get the connection IP.
+	 *
 	 * @return string
 	 */
 	public function getIP() : string
@@ -551,6 +611,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Get the URL port.
+	 *
 	 * @return int
 	 */
 	public function getPort() : int
@@ -559,6 +621,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Get POST data.
+	 *
 	 * @param string|null    $name
 	 * @param int|null       $filter
 	 * @param array|int|null $filter_options
@@ -571,6 +635,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Get the connection IP via a proxy header.
+	 *
 	 * @return string|null
 	 */
 	public function getProxiedIP() : ?string
@@ -590,6 +656,10 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Get the Referer header.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer
+	 *
 	 * @return URL|null
 	 */
 	public function getReferer() : ?URL
@@ -609,6 +679,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Get $_SERVER variables.
+	 *
 	 * @param string|null $name
 	 * @param int|null    $filter
 	 * @param null        $filter_options
@@ -683,6 +755,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * Say if a connection has HTTPS.
+	 *
 	 * @return bool
 	 */
 	public function isSecure() : bool
@@ -694,16 +768,31 @@ class Request extends Message implements RequestInterface
 			|| $this->getServerVariable('HTTPS') === 'on');
 	}
 
+	/**
+	 * Say if the request is done via an HTML form.
+	 *
+	 * @return bool
+	 */
 	public function isForm() : bool
 	{
 		return $this->parseContentType() === 'application/x-www-form-urlencoded';
 	}
 
+	/**
+	 * Say if the request is a JSON call.
+	 *
+	 * @return bool
+	 */
 	public function isJSON() : bool
 	{
 		return $this->parseContentType() === 'application/json';
 	}
 
+	/**
+	 * Say if the request method is POST.
+	 *
+	 * @return bool
+	 */
 	public function isPOST() : bool
 	{
 		return $this->getMethod() === 'POST';

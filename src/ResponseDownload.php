@@ -269,6 +269,11 @@ trait ResponseDownload
 		}
 	}
 
+	/**
+	 * Tell if Response has a downloadable file.
+	 *
+	 * @return bool
+	 */
 	public function hasDownload() : bool
 	{
 		return isset($this->filepath);

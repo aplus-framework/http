@@ -235,8 +235,12 @@ abstract class Message
 	}
 
 	/**
+	 * Set a Message header.
+	 *
 	 * @param string $name
 	 * @param string $value
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
 	 *
 	 * @return $this
 	 */
@@ -247,6 +251,8 @@ abstract class Message
 	}
 
 	/**
+	 * Set a list of headers.
+	 *
 	 * @param array|string[] $headers
 	 *
 	 * @return $this
@@ -260,6 +266,8 @@ abstract class Message
 	}
 
 	/**
+	 * Remove a header by name.
+	 *
 	 * @param string $name
 	 *
 	 * @return $this
@@ -271,6 +279,8 @@ abstract class Message
 	}
 
 	/**
+	 * Remove many headers by a list of headers.
+	 *
 	 * @return $this
 	 */
 	protected function removeHeaders()
@@ -279,6 +289,9 @@ abstract class Message
 		return $this;
 	}
 
+	/**
+	 * Send the HTTP headers to the output.
+	 */
 	protected function sendHeaders() : void
 	{
 		foreach ($this->getHeaders() as $name => $value) {
@@ -287,17 +300,33 @@ abstract class Message
 		}
 	}
 
+	/**
+	 * Say if the Message has a Cookie.
+	 *
+	 * @param string $name Cookie name
+	 *
+	 * @return bool
+	 */
 	public function hasCookie(string $name) : bool
 	{
 		return (bool) $this->getCookie($name);
 	}
 
+	/**
+	 * Get a Cookie by name.
+	 *
+	 * @param string $name
+	 *
+	 * @return \Framework\HTTP\Cookie|null
+	 */
 	public function getCookie(string $name) : ?Cookie
 	{
 		return $this->cookies[$name] ?? null;
 	}
 
 	/**
+	 * Get all Cookies.
+	 *
 	 * @return array|Cookie[]
 	 */
 	public function getCookies() : array
@@ -306,6 +335,8 @@ abstract class Message
 	}
 
 	/**
+	 * Set a new Cookie.
+	 *
 	 * @param Cookie $cookie
 	 *
 	 * @return $this
@@ -317,6 +348,8 @@ abstract class Message
 	}
 
 	/**
+	 * Set a list of Cookies.
+	 *
 	 * @param array|Cookie[] $cookies
 	 *
 	 * @return $this
@@ -330,6 +363,8 @@ abstract class Message
 	}
 
 	/**
+	 * Remove a Cookie by name.
+	 *
 	 * @param string $name
 	 *
 	 * @return $this
@@ -341,6 +376,8 @@ abstract class Message
 	}
 
 	/**
+	 * Remove many Cookies by names.
+	 *
 	 * @param array|string[] $names
 	 *
 	 * @return $this
@@ -353,12 +390,19 @@ abstract class Message
 		return $this;
 	}
 
+	/**
+	 * Get the Message body.
+	 *
+	 * @return string
+	 */
 	public function getBody() : string
 	{
 		return $this->body;
 	}
 
 	/**
+	 * Set the Message body.
+	 *
 	 * @param string $body
 	 *
 	 * @return $this
@@ -369,13 +413,20 @@ abstract class Message
 		return $this;
 	}
 
+	/**
+	 * Get the HTTP protocol.
+	 *
+	 * @return string
+	 */
 	public function getProtocol() : string
 	{
 		return $this->protocol;
 	}
 
 	/**
-	 * @param string $protocol
+	 * Set the HTTP protocol.
+	 *
+	 * @param string $protocol HTTP/1.1 or HTTP/2
 	 *
 	 * @return $this
 	 */
@@ -396,7 +447,9 @@ abstract class Message
 	}
 
 	/**
-	 * @param string $method
+	 * Set the request method.
+	 *
+	 * @param string $method One of: 'DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT'
 	 *
 	 * @throws InvalidArgumentException for invalid method
 	 *
@@ -431,6 +484,8 @@ abstract class Message
 	}
 
 	/**
+	 * Set the Message URL.
+	 *
 	 * @param string|URL $url
 	 *
 	 * @return $this
@@ -461,6 +516,14 @@ abstract class Message
 		return static::$standardHeaders[\strtolower($name)] ?? $name;
 	}
 
+	/**
+	 * Get the Response reason based on status code.
+	 *
+	 * @param int         $code
+	 * @param string|null $default
+	 *
+	 * @return string|null
+	 */
 	public static function getResponseReason(int $code, string $default = null) : ?string
 	{
 		return static::$responseStatus[$code] ?? $default;

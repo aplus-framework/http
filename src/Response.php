@@ -28,6 +28,11 @@ class Response extends Message implements ResponseInterface
 	 */
 	protected string $statusReason = 'OK';
 
+	/**
+	 * Response constructor.
+	 *
+	 * @param \Framework\HTTP\Request $request
+	 */
 	public function __construct(Request $request)
 	{
 		$this->request = $request;
@@ -35,6 +40,8 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Get the Response body.
+	 *
 	 * @return string
 	 */
 	public function getBody() : string
@@ -47,6 +54,13 @@ class Response extends Message implements ResponseInterface
 		return $this->body .= $buffer;
 	}
 
+	/**
+	 * Set the Response body.
+	 *
+	 * @param string $body
+	 *
+	 * @return \Framework\HTTP\Response
+	 */
 	public function setBody(string $body)
 	{
 		if (\ob_get_length()) {
@@ -56,6 +70,8 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Prepend a string to the body.
+	 *
 	 * @param string $content
 	 *
 	 * @return $this
@@ -66,6 +82,8 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Append a string to the body.
+	 *
 	 * @param string $content
 	 *
 	 * @return $this
@@ -124,6 +142,8 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Set the status line.
+	 *
 	 * @param int         $code
 	 * @param string|null $reason
 	 *
@@ -144,6 +164,8 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Set the status code.
+	 *
 	 * @param int $code
 	 *
 	 * @throws InvalidArgumentException if status code is invalid
@@ -159,12 +181,19 @@ class Response extends Message implements ResponseInterface
 		return $this;
 	}
 
+	/**
+	 * Get the status code.
+	 *
+	 * @return int
+	 */
 	public function getStatusCode() : int
 	{
 		return $this->statusCode;
 	}
 
 	/**
+	 * Set a custom status reason.
+	 *
 	 * @param string $reason
 	 *
 	 * @return $this
@@ -175,12 +204,19 @@ class Response extends Message implements ResponseInterface
 		return $this;
 	}
 
+	/**
+	 * Get the status reason.
+	 *
+	 * @return string
+	 */
 	public function getStatusReason() : string
 	{
 		return $this->statusReason;
 	}
 
 	/**
+	 * Say if the response was sent.
+	 *
 	 * @return bool
 	 */
 	public function isSent() : bool
@@ -223,6 +259,8 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Send the Response headers, cookies and body to the output.
+	 *
 	 * @throws LogicException if Response already is sent
 	 */
 	public function send() : void
@@ -276,6 +314,8 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Set response body and Content-Type as JSON.
+	 *
 	 * @param mixed    $data
 	 * @param int|null $options [optional] <p>
 	 *                          Bitmask consisting of <b>JSON_HEX_QUOT</b>,
@@ -311,6 +351,8 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Set the Cache-Control header.
+	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
 	 * @see https://stackoverflow.com/a/3492459/6027968
 	 *
@@ -333,6 +375,8 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Clear the browser cache.
+	 *
 	 * @return $this
 	 */
 	public function setNoCache()
@@ -343,6 +387,8 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Get the number of seconds the cache is active.
+	 *
 	 * @return int
 	 */
 	public function getCacheSeconds() : int
@@ -351,8 +397,12 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Set the Content-Type header.
+	 *
 	 * @param string $mime
 	 * @param string $charset
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
 	 *
 	 * @return $this
 	 */
@@ -363,7 +413,11 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Set the Content-Language header.
+	 *
 	 * @param string $language
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language
 	 *
 	 * @return $this
 	 */
@@ -374,7 +428,11 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Set the Content-Encoding header.
+	 *
 	 * @param string $encoding
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
 	 *
 	 * @return $this
 	 */
@@ -385,6 +443,8 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Set the CSRF cookie.
+	 *
 	 * @param string $token
 	 * @param int    $ttl
 	 *
@@ -409,7 +469,11 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Set the Date header.
+	 *
 	 * @param DateTime $datetime
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Date
 	 *
 	 * @return $this
 	 */
@@ -422,7 +486,11 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Set the ETag header.
+	 *
 	 * @param string $etag
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag
 	 *
 	 * @return $this
 	 */
@@ -433,7 +501,11 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Se the Expires header.
+	 *
 	 * @param DateTime $datetime
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expires
 	 *
 	 * @return $this
 	 */
@@ -446,7 +518,11 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Set the Last-Modified header.
+	 *
 	 * @param DateTime $datetime
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Last-Modified
 	 *
 	 * @return $this
 	 */
@@ -459,6 +535,8 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Set the status line as "Not Modified".
+	 *
 	 * @return $this
 	 */
 	public function setNotModified()
