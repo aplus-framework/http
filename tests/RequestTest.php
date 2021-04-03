@@ -4,14 +4,8 @@ use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
 {
-	/**
-	 * @var RequestProxyMock
-	 */
-	protected $proxyRequest;
-	/**
-	 * @var RequestMock
-	 */
-	protected $request;
+	protected RequestProxyMock $proxyRequest;
+	protected RequestMock $request;
 
 	public function setUp() : void
 	{

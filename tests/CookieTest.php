@@ -5,10 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class CookieTest extends TestCase
 {
-	/**
-	 * @var \Framework\HTTP\Cookie
-	 */
-	protected $cookie;
+	protected Cookie $cookie;
 
 	protected function setUp() : void
 	{

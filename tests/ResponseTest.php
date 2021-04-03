@@ -6,10 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class ResponseTest extends TestCase
 {
-	/**
-	 * @var Response
-	 */
-	protected $response;
+	protected Response $response;
 
 	/**
 	 * @runInSeparateProcess

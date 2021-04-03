@@ -5,10 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class URLTest extends TestCase
 {
-	/**
-	 * @var URL;
-	 */
-	protected $url;
+	protected URL $url;
 
 	public function setUp() : void
 	{

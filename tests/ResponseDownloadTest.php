@@ -5,14 +5,8 @@ use PHPUnit\Framework\TestCase;
 
 class ResponseDownloadTest extends TestCase
 {
-	/**
-	 * @var Response
-	 */
-	protected $response;
-	/**
-	 * @var RequestMock
-	 */
-	protected $request;
+	protected Response $response;
+	protected RequestMock $request;
 
 	protected function setUp() : void
 	{

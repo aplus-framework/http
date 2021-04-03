@@ -1,10 +1,12 @@
 <?php namespace Tests\HTTP;
 
+use Framework\HTTP\UserAgent;
+
 class RequestMock extends \Framework\HTTP\Request
 {
 	public string $body = 'color=red&height=500px&width=800';
 	public ?array $parsedBody = null;
-	public \Framework\HTTP\UserAgent | false | null $userAgent = null;
+	public UserAgent | false | null $userAgent = null;
 	protected $input = [
 		\INPUT_SERVER => [
 			'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',

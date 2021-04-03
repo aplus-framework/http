@@ -5,34 +5,22 @@ use PHPUnit\Framework\TestCase;
 
 class UploadedFileTest extends TestCase
 {
-	/**
-	 * @var array
-	 */
-	protected $file = [
+	protected array $file = [
 		'name' => 'logo.jpg',
 		'type' => 'foo/bar',
 		'size' => 19878,
 		'tmp_name' => __DIR__ . '/files/logo.png',
 		'error' => \UPLOAD_ERR_OK,
 	];
-	/**
-	 * @var array
-	 */
-	protected $file2 = [
+	protected array $file2 = [
 		'name' => 'file.txt',
 		'type' => 'foo/baz',
 		'size' => 3,
 		'tmp_name' => __DIR__ . '/files/file.txt',
 		'error' => \UPLOAD_ERR_CANT_WRITE,
 	];
-	/**
-	 * @var UploadedFile;
-	 */
-	protected $uploadedFile;
-	/**
-	 * @var UploadedFile;
-	 */
-	protected $uploadedFile2;
+	protected UploadedFile $uploadedFile;
+	protected UploadedFile $uploadedFile2;
 
 	protected function setUp() : void
 	{
