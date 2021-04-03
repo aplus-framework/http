@@ -228,7 +228,7 @@ trait ResponseDownload
 	private function getContentRangeLine(int $fistByte, int $lastByte) : string
 	{
 		return \sprintf(
-			"Content-range: bytes %d-%d/%d\r\n\r\n",
+			"Content-Range: bytes %d-%d/%d\r\n\r\n",
 			$fistByte,
 			$lastByte,
 			$this->filesize
