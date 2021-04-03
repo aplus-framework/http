@@ -11,7 +11,7 @@ class UserAgentTest extends TestCase
 	public function testAgentString()
 	{
 		$agent = new UserAgent($this->userAgent);
-		$this->assertEquals($this->userAgent, $agent->getAgentString());
+		$this->assertEquals($this->userAgent, $agent->getAsString());
 		$this->assertEquals($this->userAgent, $agent->__toString());
 	}
 
@@ -60,6 +60,7 @@ class UserAgentTest extends TestCase
 		$this->assertNull($agent->getRobot());
 		$this->assertEquals('Android', $agent->getMobile());
 		$this->assertEquals($new_agent, $agent->getAgentString());
+		$this->assertEquals($new_agent, $agent->getAsString());
 		$this->assertTrue($agent->isBrowser());
 		$this->assertFalse($agent->isRobot());
 		$this->assertTrue($agent->isMobile());

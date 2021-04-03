@@ -48,7 +48,7 @@ class URL implements \JsonSerializable, \Stringable
 	 */
 	public function __toString() : string
 	{
-		return $this->getURL();
+		return $this->getAsString();
 	}
 
 	/**
@@ -217,7 +217,17 @@ class URL implements \JsonSerializable, \Stringable
 		return $this->scheme;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @deprecated v3.0.0 Use getAsString
+	 */
 	public function getURL() : string
+	{
+		return $this->getAsString();
+	}
+
+	public function getAsString() : string
 	{
 		$url = $this->getScheme() . '://';
 		$part = $this->getUser();
@@ -425,6 +435,6 @@ class URL implements \JsonSerializable, \Stringable
 
 	public function jsonSerialize()
 	{
-		return $this->getURL();
+		return $this->getAsString();
 	}
 }

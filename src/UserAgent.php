@@ -213,7 +213,7 @@ class UserAgent implements \JsonSerializable, \Stringable
 
 	public function __toString() : string
 	{
-		return $this->getAgentString();
+		return $this->getAsString();
 	}
 
 	/**
@@ -303,8 +303,20 @@ class UserAgent implements \JsonSerializable, \Stringable
 	 * Agent String.
 	 *
 	 * @return string
+	 *
+	 * @deprecated v3.0.0 Use getAsString
 	 */
 	public function getAgentString() : string
+	{
+		return $this->getAsString();
+	}
+
+	/**
+	 * Get the User-Agent as string.
+	 *
+	 * @return string
+	 */
+	public function getAsString() : string
 	{
 		return $this->agent;
 	}
@@ -409,6 +421,6 @@ class UserAgent implements \JsonSerializable, \Stringable
 
 	public function jsonSerialize()
 	{
-		return $this->getAgentString();
+		return $this->getAsString();
 	}
 }

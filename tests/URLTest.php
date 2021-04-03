@@ -170,6 +170,10 @@ class URLTest extends TestCase
 		);
 		$this->assertEquals(
 			'http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id',
+			$this->url->getAsString()
+		);
+		$this->assertEquals(
+			'http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id',
 			$this->url->__toString()
 		);
 	}
