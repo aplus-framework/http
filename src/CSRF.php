@@ -66,7 +66,11 @@ class CSRF
 
 	public function verify() : bool
 	{
-		if ($this->getMethod() !== 'POST') {
+		if (\in_array($this->getMethod(), [
+			'GET',
+			'HEAD',
+			'OPTIONS',
+		], true)) {
 			return true;
 		}
 		if ($this->getUserToken() === null) {
