@@ -12,12 +12,15 @@ use LogicException;
 class CSRF
 {
 	protected string $tokenName = 'csrf_token';
+	protected Request $request;
+	protected bool $verified = false;
 
-	public function __construct()
+	public function __construct(Request $request)
 	{
 		if (\session_status() !== \PHP_SESSION_ACTIVE) {
 			throw new LogicException('Session must be active to use CSRF class');
 		}
+		$this->request = $request;
 		if ($this->getToken() === null) {
 			$this->setToken();
 		}
@@ -53,20 +56,14 @@ class CSRF
 		return $this;
 	}
 
-	protected function getMethod() : string
-	{
-		$method = \filter_input(\INPUT_SERVER, 'REQUEST_METHOD');
-		return \strtoupper($method);
-	}
-
 	protected function getUserToken() : ?string
 	{
-		return \filter_input(\INPUT_POST, $this->getTokenName());
+		return $this->request->getParsedBody($this->getTokenName());
 	}
 
 	public function verify() : bool
 	{
-		if (\in_array($this->getMethod(), [
+		if (\in_array($this->request->getMethod(), [
 			'GET',
 			'HEAD',
 			'OPTIONS',
@@ -77,10 +74,29 @@ class CSRF
 			return false;
 		}
 		if (\hash_equals($_SESSION['$']['csrf_token'], $this->getUserToken())) {
-			$this->setToken();
+			if ( ! $this->isVerified()) {
+				$this->setToken();
+				$this->setVerified(true);
+			}
 			return true;
 		}
 		return false;
+	}
+
+	protected function isVerified() : bool
+	{
+		return $this->verified;
+	}
+
+	/**
+	 * @param bool $status
+	 *
+	 * @return $this
+	 */
+	protected function setVerified(bool $status)
+	{
+		$this->verified = $status;
+		return $this;
 	}
 
 	public function input() : string
