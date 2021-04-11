@@ -8,6 +8,7 @@ use LogicException;
  * @see https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html
  * @see https://stackoverflow.com/q/6287903/6027968
  * @see https://portswigger.net/web-security/csrf
+ * @see https://www.netsparker.com/blog/web-security/protecting-website-using-anti-csrf-token/
  */
 class CSRF
 {

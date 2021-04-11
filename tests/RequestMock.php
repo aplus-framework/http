@@ -7,7 +7,7 @@ class RequestMock extends \Framework\HTTP\Request
 	public string $body = 'color=red&height=500px&width=800';
 	public ?array $parsedBody = null;
 	public UserAgent | false | null $userAgent = null;
-	protected $input = [
+	public array $input = [
 		\INPUT_SERVER => [
 			'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 			'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
@@ -34,6 +34,7 @@ class RequestMock extends \Framework\HTTP\Request
 				'name' => 'foo',
 				'city' => 'bar',
 			],
+			'csrf_token' => 'foo',
 		],
 		\INPUT_GET => [
 			'order_by' => 'title',

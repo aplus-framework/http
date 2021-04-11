@@ -113,6 +113,7 @@ class RequestTest extends TestCase
 				'name' => 'foo',
 				'city' => 'bar',
 			],
+			'csrf_token' => 'foo',
 		], $this->request->getParsedBody());
 		$this->request->setMethod('GET');
 		$this->request->body = '';
@@ -442,6 +443,7 @@ class RequestTest extends TestCase
 				'name' => 'foo',
 				'city' => 'bar',
 			],
+			'csrf_token' => 'foo',
 		], $this->request->getPOST());
 		$this->assertEquals('Aw3S0me', $this->request->getPOST('password'));
 		$this->assertEquals('phpdev', $this->request->getPOST('username'));
