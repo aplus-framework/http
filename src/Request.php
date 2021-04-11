@@ -476,11 +476,23 @@ class Request extends Message implements RequestInterface
 		return $this->getServerVariable('HTTP_CONTENT_TYPE');
 	}
 
+	/**
+	 * @return string|null
+	 *
+	 * @deprecated Use CSRF class
+	 */
 	public function getCSRFToken() : ?string
 	{
 		return ($cookie = $this->getCookie('X-CSRF-Token')) ? $cookie->getValue() : null;
 	}
 
+	/**
+	 * @param string $token
+	 *
+	 * @return bool
+	 *
+	 * @deprecated Use CSRF class
+	 */
 	public function validateCSRFToken(string $token) : bool
 	{
 		//https://stackoverflow.com/questions/6287903/how-to-properly-add-csrf-token-using-php

@@ -451,6 +451,8 @@ class Response extends Message implements ResponseInterface
 	 * @throws Exception
 	 *
 	 * @return $this
+	 *
+	 * @deprecated Use CSRF class
 	 */
 	public function setCSRFToken(string $token, int $ttl = 7200)
 	{
@@ -463,6 +465,13 @@ class Response extends Message implements ResponseInterface
 		return $this;
 	}
 
+	/**
+	 * @throws \Exception
+	 *
+	 * @return string
+	 *
+	 * @deprecated Use CSRF class
+	 */
 	public function generateCSRFToken() : string
 	{
 		return \bin2hex(\random_bytes(32));
