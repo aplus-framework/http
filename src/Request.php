@@ -484,7 +484,7 @@ class Request extends Message implements RequestInterface
 	 */
 	public function getContentType() : ?string
 	{
-		return $this->getServerVariable('HTTP_CONTENT_TYPE');
+		return $this->getHeader('Content-Type');
 	}
 
 	/**
@@ -507,7 +507,7 @@ class Request extends Message implements RequestInterface
 	 */
 	public function getETag() : ?string
 	{
-		return $this->getServerVariable('HTTP_ETAG');
+		return $this->getHeader('ETag');
 	}
 
 	/**
@@ -564,7 +564,7 @@ class Request extends Message implements RequestInterface
 		if ($this->id !== null) {
 			return $this->id;
 		}
-		$this->id = $this->getServerVariable('HTTP_X_REQUEST_ID');
+		$this->id = $this->getHeader('X-Request-ID');
 		if (empty($this->id)) {
 			$this->id = \md5(\uniqid($this->getIP(), true));
 		}
@@ -649,12 +649,12 @@ class Request extends Message implements RequestInterface
 	public function getProxiedIP() : ?string
 	{
 		foreach ([
-			'HTTP_X_FORWARDED_FOR',
-			'HTTP_CLIENT_IP',
-			'HTTP_X_CLIENT_IP',
-			'HTTP_X_CLUSTER_CLIENT_IP',
+			'X-Forwarded-For',
+			'Client-IP',
+			'X-Client-IP',
+			'X-Cluster-Client-IP',
 		] as $header) {
-			$header = $this->getServerVariable($header);
+			$header = $this->getHeader($header);
 			if ($header) {
 				return $header;
 			}
@@ -673,7 +673,7 @@ class Request extends Message implements RequestInterface
 	{
 		if ($this->referrer === null) {
 			$this->referrer = false;
-			$referer = $this->getServerVariable('HTTP_REFERER');
+			$referer = $this->getHeader('Referer');
 			if ($referer !== null) {
 				try {
 					$this->referrer = new URL($referer);
@@ -723,7 +723,7 @@ class Request extends Message implements RequestInterface
 		if ($this->userAgent !== null) {
 			return $this->userAgent;
 		}
-		$userAgent = $this->getServerVariable('HTTP_USER_AGENT');
+		$userAgent = $this->getHeader('User-Agent');
 		$userAgent ? $this->setUserAgent($userAgent) : $this->userAgent = false;
 		return $this->userAgent ?: null;
 	}
@@ -755,7 +755,7 @@ class Request extends Message implements RequestInterface
 		if ($this->isAJAX !== null) {
 			return $this->isAJAX;
 		}
-		$received = $this->getServerVariable('HTTP_X_REQUESTED_WITH');
+		$received = $this->getHeader('X-Requested-With');
 		return $this->isAJAX = $received
 			? \strtolower($received) === 'xmlhttprequest'
 			: false;

@@ -28,7 +28,7 @@ class RequestTest extends TestCase
 			$this->request->getUserAgent()
 		);
 		$this->request->userAgent = null;
-		$this->request->setServerVariable('HTTP_USER_AGENT', null);
+		$this->request->setEmptyHeader('User-Agent');
 		$this->assertNull($this->request->getUserAgent());
 	}
 
