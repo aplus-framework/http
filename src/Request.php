@@ -78,7 +78,7 @@ class Request extends Message implements RequestInterface
 	{
 		$host = $this->getServerVariable('HTTP_HOST');
 		if ( ! \in_array($host, $allowed_hosts, true)) {
-			throw new UnexpectedValueException('Invalid Host: ' . \htmlentities($host));
+			throw new UnexpectedValueException('Invalid Host: ' . $host);
 		}
 	}
 
@@ -154,11 +154,19 @@ class Request extends Message implements RequestInterface
 		int $type,
 		string $variable = null,
 		int $filter = null,
-		$options = null
+		array | int $options = null
 	) : mixed {
+		$input = match ($type) {
+			\INPUT_POST => $_POST,
+			\INPUT_GET => $_GET,
+			\INPUT_COOKIE => $_COOKIE,
+			\INPUT_ENV => $_ENV,
+			\INPUT_SERVER => $_SERVER,
+			default => throw new \InvalidArgumentException('Invalid input type: ' . $type)
+		};
 		$variable = $variable === null
-			? (array) \filter_input_array($type)
-			: \ArraySimple::value($variable, (array) \filter_input_array($type));
+			? $input
+			: \ArraySimple::value($variable, $input);
 		return $filter
 			? \filter_var($variable, $filter, $options)
 			: $variable;
@@ -291,14 +299,17 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Get the Parsed Body or part of it.
 	 *
-	 * @param string|null $name
-	 * @param int|null    $filter
-	 * @param null        $filter_options
+	 * @param string|null    $name
+	 * @param int|null       $filter
+	 * @param array|int|null $filter_options
 	 *
 	 * @return array|mixed|string|null
 	 */
-	public function getParsedBody(string $name = null, int $filter = null, $filter_options = null)
-	{
+	public function getParsedBody(
+		string $name = null,
+		int $filter = null,
+		array | int $filter_options = null
+	) {
 		if ($this->getMethod() === 'POST') {
 			return $this->getPOST($name, $filter, $filter_options);
 		}
@@ -508,8 +519,11 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @return array|mixed|null
 	 */
-	public function getENV(string $name = null, int $filter = null, $filter_options = null)
-	{
+	public function getENV(
+		string $name = null,
+		int $filter = null,
+		array | int $filter_options = null
+	) {
 		return $this->filterInput(\INPUT_ENV, $name, $filter, $filter_options);
 	}
 
@@ -543,14 +557,17 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Get the URL GET queries.
 	 *
-	 * @param string|null $name
-	 * @param int|null    $filter
-	 * @param null        $filter_options
+	 * @param string|null    $name
+	 * @param int|null       $filter
+	 * @param array|int|null $filter_options
 	 *
 	 * @return array|mixed
 	 */
-	public function getQuery(string $name = null, int $filter = null, $filter_options = null)
-	{
+	public function getQuery(
+		string $name = null,
+		int $filter = null,
+		array | int $filter_options = null
+	) {
 		return $this->filterInput(\INPUT_GET, $name, $filter, $filter_options);
 	}
 
@@ -597,7 +614,7 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Gets data from the last request, if it was redirected.
 	 *
-	 * @param string $key a key name or null to get all data
+	 * @param string|null $key a key name or null to get all data
 	 *
 	 * @see Response::redirect
 	 *
@@ -641,8 +658,11 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @return array|string|null
 	 */
-	public function getPOST(string $name = null, int $filter = null, $filter_options = null)
-	{
+	public function getPOST(
+		string $name = null,
+		int $filter = null,
+		array | int $filter_options = null
+	) {
 		return $this->filterInput(\INPUT_POST, $name, $filter, $filter_options);
 	}
 
@@ -693,16 +713,16 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Get $_SERVER variables.
 	 *
-	 * @param string|null $name
-	 * @param int|null    $filter
-	 * @param null        $filter_options
+	 * @param string|null    $name
+	 * @param int|null       $filter
+	 * @param array|int|null $filter_options
 	 *
 	 * @return array|mixed
 	 */
 	public function getServerVariable(
 		string $name = null,
 		int $filter = null,
-		$filter_options = null
+		array | int $filter_options = null
 	) {
 		return $this->filterInput(\INPUT_SERVER, $name, $filter, $filter_options);
 	}
