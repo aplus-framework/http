@@ -300,18 +300,6 @@ class UserAgent implements \JsonSerializable, \Stringable
 	}
 
 	/**
-	 * Agent String.
-	 *
-	 * @return string
-	 *
-	 * @deprecated v3.0.0 Use getAsString
-	 */
-	public function getAgentString() : string
-	{
-		return $this->getAsString();
-	}
-
-	/**
 	 * Get the User-Agent as string.
 	 *
 	 * @return string

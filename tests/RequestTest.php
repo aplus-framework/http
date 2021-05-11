@@ -511,20 +511,6 @@ class RequestTest extends TestCase
 		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->proxyRequest->getURL());
 	}
 
-	public function testCSRFToken()
-	{
-		$this->assertEquals('token', $this->request->getCSRFToken());
-		$this->assertNull($this->proxyRequest->getCSRFToken());
-	}
-
-	public function testValidateCSRFToken()
-	{
-		$this->assertTrue($this->request->validateCSRFToken('token'));
-		$this->assertFalse($this->request->validateCSRFToken('foo'));
-		$this->assertFalse($this->proxyRequest->validateCSRFToken('token'));
-		$this->assertFalse($this->proxyRequest->validateCSRFToken('foo'));
-	}
-
 	public function testId()
 	{
 		$id = $this->request->getId();

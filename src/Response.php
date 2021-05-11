@@ -2,7 +2,6 @@
 
 use DateTime;
 use DateTimeZone;
-use Exception;
 use InvalidArgumentException;
 use JsonException;
 use LogicException;
@@ -440,41 +439,6 @@ class Response extends Message implements ResponseInterface
 	{
 		$this->setHeader('Content-Encoding', $encoding);
 		return $this;
-	}
-
-	/**
-	 * Set the CSRF cookie.
-	 *
-	 * @param string $token
-	 * @param int    $ttl
-	 *
-	 * @throws Exception
-	 *
-	 * @return $this
-	 *
-	 * @deprecated Use CSRF class
-	 */
-	public function setCSRFToken(string $token, int $ttl = 7200)
-	{
-		$cookie = (new Cookie('X-CSRF-Token', $token))
-			->setExpires(\time() + $ttl)
-			->setSecure($this->request->isSecure())
-			->setHttpOnly()
-			->setSameSite('Strict');
-		$this->setCookie($cookie);
-		return $this;
-	}
-
-	/**
-	 * @throws \Exception
-	 *
-	 * @return string
-	 *
-	 * @deprecated Use CSRF class
-	 */
-	public function generateCSRFToken() : string
-	{
-		return \bin2hex(\random_bytes(32));
 	}
 
 	/**

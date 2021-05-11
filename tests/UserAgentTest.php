@@ -59,7 +59,6 @@ class UserAgentTest extends TestCase
 		$this->assertEquals('13.0', $agent->getBrowserVersion());
 		$this->assertNull($agent->getRobot());
 		$this->assertEquals('Android', $agent->getMobile());
-		$this->assertEquals($new_agent, $agent->getAgentString());
 		$this->assertEquals($new_agent, $agent->getAsString());
 		$this->assertTrue($agent->isBrowser());
 		$this->assertFalse($agent->isRobot());

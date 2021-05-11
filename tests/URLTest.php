@@ -159,12 +159,8 @@ class URLTest extends TestCase
 		$this->assertEquals('https', $this->url->getScheme());
 	}
 
-	public function testURL()
+	public function testGetAsString()
 	{
-		$this->assertEquals(
-			'http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id',
-			$this->url->getURL()
-		);
 		$this->assertEquals(
 			'http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id',
 			$this->url->getAsString()

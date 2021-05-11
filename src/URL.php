@@ -217,16 +217,6 @@ class URL implements \JsonSerializable, \Stringable
 		return $this->scheme;
 	}
 
-	/**
-	 * @return string
-	 *
-	 * @deprecated v3.0.0 Use getAsString
-	 */
-	public function getURL() : string
-	{
-		return $this->getAsString();
-	}
-
 	public function getAsString() : string
 	{
 		$url = $this->getScheme() . '://';

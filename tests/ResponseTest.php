@@ -135,21 +135,6 @@ class ResponseTest extends TestCase
 		$this->assertNotEmpty($this->response->getCookies());
 	}
 
-	public function testCSRFToken()
-	{
-		$this->assertNull($this->response->getCookie('X-CSRF-Token'));
-		$this->response->setCSRFToken('foo');
-		$this->assertEquals(
-			'foo',
-			$this->response->getCookie('X-CSRF-Token')->getValue()
-		);
-	}
-
-	public function testGenerateCSRFToken()
-	{
-		$this->assertEquals(64, \mb_strlen($this->response->generateCSRFToken()));
-	}
-
 	public function testDate()
 	{
 		$this->assertNull($this->response->getHeader('Date'));
