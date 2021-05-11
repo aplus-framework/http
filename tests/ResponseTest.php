@@ -20,7 +20,7 @@ class ResponseTest extends TestCase
 		\session_start();
 		$this->response->redirect('/new', ['foo']);
 		$this->assertEquals('/new', $this->response->getHeader('Location'));
-		$this->assertEquals(303, $this->response->getStatusCode());
+		$this->assertEquals(307, $this->response->getStatusCode());
 		$this->assertEquals(['foo'], $request->getRedirectData());
 	}
 

@@ -7,8 +7,16 @@ class RequestMock extends \Framework\HTTP\Request
 	public string $body = 'color=red&height=500px&width=800';
 	public ?array $parsedBody = null;
 	public UserAgent | false | null $userAgent = null;
-	public array $input = [
-		\INPUT_SERVER => [
+
+	public function __construct(array $allowed_hosts = null)
+	{
+		$this->prepareInput();
+		parent::__construct($allowed_hosts);
+	}
+
+	protected function prepareInput()
+	{
+		$_SERVER = [
 			'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 			'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
 			'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,es;q=0.8,en;q=0.5,en-US;q=0.3',
@@ -26,8 +34,8 @@ class RequestMock extends \Framework\HTTP\Request
 			'SERVER_PORT' => 80,
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'SERVER_NAME' => 'domain.tld',
-		],
-		\INPUT_POST => [
+		];
+		$_POST = [
 			'username' => 'phpdev',
 			'password' => 'Aw3S0me',
 			'user' => [
@@ -35,33 +43,27 @@ class RequestMock extends \Framework\HTTP\Request
 				'city' => 'bar',
 			],
 			'csrf_token' => 'foo',
-		],
-		\INPUT_GET => [
+		];
+		$_GET = [
 			'order_by' => 'title',
 			'order' => 'asc',
-		],
-		\INPUT_COOKIE => [
+		];
+		$_COOKIE = [
 			'session_id' => 'abc',
 			'cart' => 'cart-123',
 			'status-bar' => 'open',
 			'X-CSRF-Token' => 'token',
-		],
-		\INPUT_ENV => [
-		],
-	];
+		];
+		$_ENV = [];
+	}
 
-	protected function filterInput(
+	public function filterInput(
 		int $type,
-		string $name = null,
+		string $variable = null,
 		int $filter = null,
-		$options = null
+		array | int $options = null
 	) : mixed {
-		$variable = $name === null
-			? $this->input[$type]
-			: \ArraySimple::value($name, $this->input[$type]);
-		return $filter
-			? \filter_var($variable, $filter, $options)
-			: $variable;
+		return parent::filterInput($type, $variable, $filter, $options);
 	}
 
 	public function setServerVariable(string $name, $value)

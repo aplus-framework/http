@@ -242,7 +242,7 @@ class Response extends Message implements ResponseInterface
 	public function redirect(string $location, array $data = [], int $code = null)
 	{
 		if ($code === null) {
-			$code = $this->request->getServerVariable('REQUEST_METHOD') === 'GET' ? 307 : 303;
+			$code = $this->request->getMethod() === 'GET' ? 307 : 303;
 		} elseif ($code < 300 || $code > 308) {
 			throw new InvalidArgumentException("Invalid Redirection code: {$code}");
 		}

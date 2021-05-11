@@ -1,10 +1,12 @@
 <?php namespace Tests\HTTP;
 
+use Framework\HTTP\UploadedFile;
+use Framework\HTTP\URL;
+use Framework\HTTP\UserAgent;
 use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
 {
-	protected RequestProxyMock $proxyRequest;
 	protected RequestMock $request;
 
 	public function setUp() : void
@@ -12,19 +14,34 @@ class RequestTest extends TestCase
 		$this->request = new RequestMock([
 			'domain.tld',
 		]);
-		$this->proxyRequest = new RequestProxyMock([
-			'real-domain.tld:8080',
-		]);
+	}
+
+	public function testInvalidFilterInputType()
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('Invalid input type: 6');
+		$this->request->filterInput(6);
+	}
+
+	public function testGetInputWithFilter()
+	{
+		$this->assertEquals(
+			'http://domain.tld/contact.html',
+			$this->request->filterInput(\INPUT_SERVER, 'HTTP_REFERER', \FILTER_VALIDATE_URL)
+		);
+		$this->assertFalse(
+			$this->request->filterInput(\INPUT_SERVER, 'HTTP_USER_AGENT', \FILTER_VALIDATE_URL)
+		);
 	}
 
 	public function testUserAgent()
 	{
 		$this->assertInstanceOf(
-			\Framework\HTTP\UserAgent::class,
+			UserAgent::class,
 			$this->request->getUserAgent()
 		);
 		$this->assertInstanceOf(
-			\Framework\HTTP\UserAgent::class,
+			UserAgent::class,
 			$this->request->getUserAgent()
 		);
 		$this->request->userAgent = null;
@@ -35,7 +52,6 @@ class RequestTest extends TestCase
 	public function testHost()
 	{
 		$this->assertEquals('domain.tld', $this->request->getHost());
-		$this->assertEquals('real-domain.tld', $this->proxyRequest->getHost());
 		$this->expectException(\InvalidArgumentException::class);
 		$this->expectExceptionMessage('Invalid host: a_b');
 		$this->request->setHost('a_b');
@@ -52,7 +68,6 @@ class RequestTest extends TestCase
 
 	public function testAccept()
 	{
-		$this->assertEquals([], $this->proxyRequest->getAccepts());
 		$this->assertEquals([
 			'text/html',
 			'application/xhtml+xml',
@@ -290,19 +305,19 @@ class RequestTest extends TestCase
 		$this->request = new RequestMock();
 		$this->assertIsArray($this->request->getFiles());
 		$this->assertInstanceOf(
-			\Framework\HTTP\UploadedFile::class,
+			UploadedFile::class,
 			$this->request->getFiles()['file'][1]['aa'][0]
 		);
 		$this->assertInstanceOf(
-			\Framework\HTTP\UploadedFile::class,
+			UploadedFile::class,
 			$this->request->getFile('file[1][aa][0]')
 		);
 		$this->assertInstanceOf(
-			\Framework\HTTP\UploadedFile::class,
+			UploadedFile::class,
 			$this->request->getFiles()['file'][2]
 		);
 		$this->assertInstanceOf(
-			\Framework\HTTP\UploadedFile::class,
+			UploadedFile::class,
 			$this->request->getFile('foo')
 		);
 	}
@@ -325,7 +340,6 @@ class RequestTest extends TestCase
 		$this->assertEquals('asc', $this->request->getQuery('order'));
 		$this->assertEquals('title', $this->request->getQuery('order_by'));
 		$this->assertNull($this->request->getQuery('unknow'));
-		//$this->assertEquals(['order' => 'asc'], $this->request->getGET(['order']));
 	}
 
 	public function testHeader()
@@ -358,23 +372,18 @@ class RequestTest extends TestCase
 	{
 		$this->assertTrue($this->request->isAJAX());
 		$this->assertTrue($this->request->isAJAX());
-		$this->assertFalse($this->proxyRequest->isAJAX());
-		$this->assertFalse($this->proxyRequest->isAJAX());
 	}
 
 	public function testIsSecure()
 	{
 		$this->assertFalse($this->request->isSecure());
 		$this->assertFalse($this->request->isSecure());
-		$this->assertTrue($this->proxyRequest->isSecure());
-		$this->assertTrue($this->proxyRequest->isSecure());
 	}
 
 	public function testJSON()
 	{
 		$this->assertFalse($this->request->isJSON());
 		$this->assertFalse($this->request->getJSON());
-		$this->assertEquals(123, $this->proxyRequest->getJSON()->test);
 	}
 
 	public function testIsForm()
@@ -431,7 +440,6 @@ class RequestTest extends TestCase
 	public function testPort()
 	{
 		$this->assertEquals(80, $this->request->getPort());
-		$this->assertEquals(8080, $this->proxyRequest->getPort());
 	}
 
 	public function testPost()
@@ -459,14 +467,12 @@ class RequestTest extends TestCase
 	public function testProxiedIP()
 	{
 		$this->assertNull($this->request->getProxiedIP());
-		$this->assertEquals('192.168.1.2', $this->proxyRequest->getProxiedIP());
 	}
 
 	public function testReferer()
 	{
 		$this->assertEquals('http://domain.tld/contact.html', $this->request->getReferer());
-		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->request->getReferer());
-		$this->assertNull($this->proxyRequest->getReferer());
+		$this->assertInstanceOf(URL::class, $this->request->getReferer());
 	}
 
 	/**
@@ -503,12 +509,7 @@ class RequestTest extends TestCase
 			'http://domain.tld/blog/posts?order_by=title&order=asc',
 			(string) $this->request->getURL()
 		);
-		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->request->getURL());
-		$this->assertEquals(
-			'https://real-domain.tld:8080/blog/posts?order_by=title&order=asc',
-			(string) $this->proxyRequest->getURL()
-		);
-		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->proxyRequest->getURL());
+		$this->assertInstanceOf(URL::class, $this->request->getURL());
 	}
 
 	public function testId()
