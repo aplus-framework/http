@@ -130,7 +130,7 @@ class Request extends Message implements RequestInterface
 		$contentType = $this->getContentType();
 		if ($contentType
 			&& $this->getMethod() === 'POST'
-			&& \str_starts_with($contentType, 'multipart/form-data;')
+			&& \str_starts_with($contentType, 'application/x-www-form-urlencoded')
 		) {
 			return \http_build_query($this->getPOST() ?? []);
 		}
