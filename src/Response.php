@@ -252,7 +252,7 @@ class Response extends Message implements ResponseInterface
 			if (\session_status() !== \PHP_SESSION_ACTIVE) {
 				throw new LogicException('Session must be active to set redirect data');
 			}
-			$_SESSION['$__REDIRECT'] = $data;
+			$_SESSION['$']['redirect_data'] = $data;
 		}
 		return $this;
 	}

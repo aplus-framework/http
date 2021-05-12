@@ -490,10 +490,12 @@ class RequestTest extends TestCase
 	public function testRedirectData()
 	{
 		\session_start();
-		$_SESSION['$__REDIRECT'] = ['foo' => ['bar' => 'baz']];
-		$this->assertEquals($_SESSION['$__REDIRECT'], $this->request->getRedirectData());
-		$this->assertFalse(isset($_SESSION['$__REDIRECT']));
+		$_SESSION['$']['redirect_data'] = ['foo' => ['bar' => 'baz']];
+		$this->assertEquals($_SESSION['$']['redirect_data'], $this->request->getRedirectData());
+		$this->assertFalse(isset($_SESSION['$']['redirect_data']));
 		$this->assertEquals(['bar' => 'baz'], $this->request->getRedirectData('foo'));
+		$this->assertEquals('baz', $this->request->getRedirectData('foo[bar]'));
+		$this->assertNull($this->request->getRedirectData('foo[baz]'));
 	}
 
 	public function testRedirectDataWithoutSession()

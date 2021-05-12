@@ -605,8 +605,8 @@ class Request extends Message implements RequestInterface
 			throw new LogicException('Session must be active to get redirect data');
 		}
 		if ($data === null) {
-			$data = $_SESSION['$__REDIRECT'] ?? false;
-			unset($_SESSION['$__REDIRECT']);
+			$data = $_SESSION['$']['redirect_data'] ?? false;
+			unset($_SESSION['$']['redirect_data']);
 		}
 		if ($key !== null && $data) {
 			return \ArraySimple::value($key, $data);
