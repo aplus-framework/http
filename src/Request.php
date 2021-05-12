@@ -134,7 +134,7 @@ class Request extends Message implements RequestInterface
 		) {
 			return \http_build_query($this->getPOST() ?? []);
 		}
-		return \file_get_contents('php://input') ?: '';
+		return \file_get_contents('php://input');
 	}
 
 	protected function prepareFiles() : void
