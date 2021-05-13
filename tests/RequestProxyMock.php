@@ -2,8 +2,6 @@
 
 class RequestProxyMock extends RequestMock
 {
-	public ?string $body = '{"test":123}';
-
 	protected function prepareInput()
 	{
 		parent::prepareInput();

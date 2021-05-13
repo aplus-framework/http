@@ -123,14 +123,17 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @see https://php.net/manual/en/wrappers.php.php#wrappers.php.input
 	 *
-	 * @return string|null
+	 * @return string
 	 */
-	public function getBody() : ?string
+	public function getBody() : string
 	{
+		if ($this->body) {
+			return $this->body;
+		}
 		return \file_get_contents('php://input');
 	}
 
-	public function setBody(?string $body)
+	public function setBody(string $body)
 	{
 		$this->body = $body;
 	}

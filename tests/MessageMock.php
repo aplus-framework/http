@@ -35,7 +35,7 @@ class MessageMock extends Message
 		parent::sendHeaders();
 	}
 
-	public function setBody(string $body)
+	public function setBody(?string $body)
 	{
 		return parent::setBody($body);
 	}

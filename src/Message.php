@@ -25,7 +25,7 @@ abstract class Message
 	/**
 	 * HTTP Message Body.
 	 */
-	protected ?string $body = null;
+	protected string $body = '';
 	/**
 	 * HTTP Message Cookies.
 	 *
@@ -393,9 +393,9 @@ abstract class Message
 	/**
 	 * Get the Message body.
 	 *
-	 * @return string|null Request body as string or null if is not set
+	 * @return string
 	 */
-	public function getBody() : ?string
+	public function getBody() : string
 	{
 		return $this->body;
 	}

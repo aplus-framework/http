@@ -37,6 +37,7 @@ class RequestProxyTest extends TestCase
 
 	public function testJSON()
 	{
+		$this->proxyRequest->setBody('{"test":123}');
 		$this->assertEquals(123, $this->proxyRequest->getJSON()->test);
 	}
 

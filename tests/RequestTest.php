@@ -108,6 +108,8 @@ class RequestTest extends TestCase
 
 	public function testBody()
 	{
+		$this->assertEquals('', $this->request->getBody());
+		$this->request->setBody('color=red&height=500px&width=800');
 		$this->assertEquals('color=red&height=500px&width=800', $this->request->getBody());
 		$this->assertEquals([
 			'color' => 'red',
@@ -131,7 +133,7 @@ class RequestTest extends TestCase
 			'csrf_token' => 'foo',
 		], $this->request->getParsedBody());
 		$this->request->setMethod('GET');
-		$this->request->body = '';
+		$this->request->setBody('');
 		$this->request->parsedBody = [];
 		$this->assertEquals('', $this->request->getBody());
 		$this->assertEquals([], $this->request->getParsedBody());

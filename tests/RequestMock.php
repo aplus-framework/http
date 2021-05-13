@@ -4,7 +4,6 @@ use Framework\HTTP\UserAgent;
 
 class RequestMock extends \Framework\HTTP\Request
 {
-	public ?string $body = 'color=red&height=500px&width=800';
 	public ?array $parsedBody = null;
 	public UserAgent | false | null $userAgent = null;
 
@@ -69,11 +68,6 @@ class RequestMock extends \Framework\HTTP\Request
 	public function setServerVariable(string $name, $value)
 	{
 		$this->input[\INPUT_SERVER][$name] = $value;
-	}
-
-	public function getBody() : string
-	{
-		return $this->body;
 	}
 
 	public function setHeader(string $name, string $value)
