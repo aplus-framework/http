@@ -127,13 +127,6 @@ class Request extends Message implements RequestInterface
 	 */
 	public function getBody() : ?string
 	{
-		$contentType = $this->getContentType();
-		if ($contentType
-			&& $this->getMethod() === 'POST'
-			&& \str_starts_with($contentType, 'application/x-www-form-urlencoded')
-		) {
-			return \http_build_query($this->getPOST() ?? []);
-		}
 		return \file_get_contents('php://input');
 	}
 
