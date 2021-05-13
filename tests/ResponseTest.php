@@ -55,6 +55,7 @@ class ResponseTest extends TestCase
 
 	public function testBody()
 	{
+		$this->assertEquals('', $this->response->getBody());
 		echo '<p>This will be Lost when call setBody()</p>';
 		$this->assertEquals(
 			'<p>This will be Lost when call setBody()</p>',

@@ -78,7 +78,7 @@ class MessageTest extends TestCase
 
 	public function testBody()
 	{
-		$this->assertEquals('', $this->message->getBody());
+		$this->assertNull($this->message->getBody());
 		$this->message->setBody('hello');
 		$this->assertEquals('hello', $this->message->getBody());
 	}

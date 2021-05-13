@@ -123,9 +123,9 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @see https://php.net/manual/en/wrappers.php.php#wrappers.php.input
 	 *
-	 * @return string
+	 * @return string|null
 	 */
-	public function getBody() : string
+	public function getBody() : ?string
 	{
 		$contentType = $this->getContentType();
 		if ($contentType
@@ -135,6 +135,11 @@ class Request extends Message implements RequestInterface
 			return \http_build_query($this->getPOST() ?? []);
 		}
 		return \file_get_contents('php://input');
+	}
+
+	public function setBody(?string $body)
+	{
+		$this->body = $body;
 	}
 
 	protected function prepareFiles() : void
