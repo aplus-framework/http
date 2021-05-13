@@ -54,6 +54,18 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Get the body sent by Response::send.
+	 *
+	 * Most used for tests.
+	 *
+	 * @return string
+	 */
+	public function getSendedBody() : string
+	{
+		return $this->body;
+	}
+
+	/**
 	 * Set the Response body.
 	 *
 	 * @param string $body
