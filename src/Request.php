@@ -66,6 +66,14 @@ class Request extends Message implements RequestInterface
 		$this->prepareFiles();
 	}
 
+	public function __call(string $method, array $arguments)
+	{
+		if ($method === 'setBody') {
+			return $this->setBody(...$arguments);
+		}
+		throw new \BadMethodCallException("Method not found: {$method}");
+	}
+
 	/**
 	 * Check if Host header is allowed.
 	 *
@@ -131,11 +139,6 @@ class Request extends Message implements RequestInterface
 			return $this->body;
 		}
 		return \file_get_contents('php://input');
-	}
-
-	public function setBody(string $body)
-	{
-		$this->body = $body;
 	}
 
 	protected function prepareFiles() : void
