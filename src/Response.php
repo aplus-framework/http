@@ -281,6 +281,7 @@ class Response extends Message implements ResponseInterface
 	protected function sendBody() : void
 	{
 		echo $this->sendedBody = $this->getBody();
+		$this->body = '';
 	}
 
 	protected function sendCookies() : void
