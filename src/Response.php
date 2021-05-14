@@ -26,6 +26,7 @@ class Response extends Message implements ResponseInterface
 	 * HTTP Response Status Reason.
 	 */
 	protected string $statusReason = 'OK';
+	protected ?string $sendedBody = null;
 
 	/**
 	 * Response constructor.
@@ -45,24 +46,15 @@ class Response extends Message implements ResponseInterface
 	 */
 	public function getBody() : string
 	{
+		if ($this->sendedBody !== null) {
+			return $this->sendedBody;
+		}
 		$buffer = '';
 		if (\ob_get_length()) {
 			$buffer = \ob_get_contents();
 			\ob_clean();
 		}
 		return $this->body .= $buffer;
-	}
-
-	/**
-	 * Get the body sent by Response::send.
-	 *
-	 * Most used for tests.
-	 *
-	 * @return string
-	 */
-	public function getSendedBody() : string
-	{
-		return $this->body;
 	}
 
 	/**
@@ -288,7 +280,7 @@ class Response extends Message implements ResponseInterface
 
 	protected function sendBody() : void
 	{
-		echo $this->getBody();
+		echo $this->sendedBody = $this->getBody();
 	}
 
 	protected function sendCookies() : void

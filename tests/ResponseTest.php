@@ -275,15 +275,13 @@ class ResponseTest extends TestCase
 	 */
 	public function testSendedBody()
 	{
+		$this->assertEquals('', $this->response->getBody());
 		echo 'foo';
-		$this->assertEquals('', $this->response->getSendedBody());
 		$this->assertEquals('foo', $this->response->getBody());
 		$this->assertEquals('foo', $this->response->getBody());
-		$this->assertEquals('foo', $this->response->getSendedBody());
 		$this->response->send();
-		$this->assertEquals('foo', $this->response->getSendedBody());
-		$this->assertEquals('foofoo', $this->response->getBody());
-		$this->assertEquals('foofoo', $this->response->getBody());
+		$this->assertEquals('foo', $this->response->getBody());
+		$this->assertEquals('foo', $this->response->getBody());
 	}
 
 	public function testStatus()
