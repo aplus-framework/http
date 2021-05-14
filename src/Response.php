@@ -297,7 +297,6 @@ class Response extends Message implements ResponseInterface
 	protected function sendHeaders() : void
 	{
 		if (\headers_sent()) {
-			// \var_dump(\headers_list());exit;
 			throw new LogicException('Headers already is sent');
 		}
 		// Per spec, MUST be sent with each request, if possible.
@@ -308,11 +307,6 @@ class Response extends Message implements ResponseInterface
 		if ($this->getHeader('Content-Type') === null) {
 			$this->setContentType('text/html');
 		}
-		// Is good to do this?
-		/*if ($this->getCacheSeconds() && empty($this->headers['ETag']))
-		{
-			$this->setETag(\md5($this->getBody()));
-		}*/
 		\header($this->getProtocol() . ' ' . $this->getStatusLine());
 		parent::sendHeaders();
 	}
