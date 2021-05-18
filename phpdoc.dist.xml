@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdocumentor>
-    <title>Framework HTTP Library</title>
+    <title>The Framework HTTP Library</title>
     <parser>
         <target>build/docs-cache</target>
         <markers>
