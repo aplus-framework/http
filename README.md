@@ -1,4 +1,4 @@
-# Framework HTTP Library
+# The Framework HTTP Library
 
 - [Homepage](https://the-framework.gitlab.io/libraries/http.html)
 - [API Documentation](https://the-framework.gitlab.io/libraries/http/docs/)
