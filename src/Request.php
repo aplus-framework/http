@@ -1,5 +1,6 @@
 <?php namespace Framework\HTTP;
 
+use BadMethodCallException;
 use InvalidArgumentException;
 use LogicException;
 use UnexpectedValueException;
@@ -66,12 +67,23 @@ class Request extends Message implements RequestInterface
 		$this->prepareFiles();
 	}
 
+	/**
+	 * @param string $method
+	 * @param array  $arguments
+	 *
+	 * @throws BadMethodCallException for method not allowed or method not found
+	 *
+	 * @return $this
+	 */
 	public function __call(string $method, array $arguments)
 	{
 		if ($method === 'setBody') {
 			return $this->setBody(...$arguments);
 		}
-		throw new \BadMethodCallException("Method not found: {$method}");
+		if (\method_exists($this, $method)) {
+			throw new BadMethodCallException("Method not allowed: {$method}");
+		}
+		throw new BadMethodCallException("Method not found: {$method}");
 	}
 
 	/**

@@ -523,7 +523,14 @@ class RequestTest extends TestCase
 		$this->assertEquals($id, $this->request->getId());
 	}
 
-	public function testCallUnknownMethod()
+	public function testCallMethodNotAllowed()
+	{
+		$this->expectException(\BadMethodCallException::class);
+		$this->expectExceptionMessage('Method not allowed: prepareStatusLine');
+		$this->request->prepareStatusLine();
+	}
+
+	public function testCallMethodNotFound()
 	{
 		$this->expectException(\BadMethodCallException::class);
 		$this->expectExceptionMessage('Method not found: fooBar');
