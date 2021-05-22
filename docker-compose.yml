@@ -1,4 +1,3 @@
----
 version: "3"
 services:
   package:
@@ -7,3 +6,4 @@ services:
     working_dir: /package
     volumes:
       - .:/package
+    tty: true
