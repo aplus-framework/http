@@ -39,7 +39,7 @@ class CSRF
 	 */
 	public function setTokenName(string $tokenName)
 	{
-		$this->tokenName = \htmlspecialchars($tokenName, \ENT_QUOTES);
+		$this->tokenName = \htmlspecialchars($tokenName, \ENT_QUOTES | \ENT_HTML5);
 		return $this;
 	}
 

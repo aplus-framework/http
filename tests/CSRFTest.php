@@ -41,6 +41,8 @@ class CSRFTest extends TestCase
 		$this->assertEquals('csrf_token', $this->csrf->getTokenName());
 		$this->assertInstanceOf(CSRF::class, $this->csrf->setTokenName('custom'));
 		$this->assertEquals('custom', $this->csrf->getTokenName());
+		$this->assertInstanceOf(CSRF::class, $this->csrf->setTokenName("cus'tom"));
+		$this->assertEquals('cus&apos;tom', $this->csrf->getTokenName());
 	}
 
 	/**
