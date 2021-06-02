@@ -15,6 +15,7 @@ class CSRF
 	protected string $tokenName = 'csrf_token';
 	protected Request $request;
 	protected bool $verified = false;
+	protected bool $enabled = true;
 
 	public function __construct(Request $request)
 	{
@@ -64,6 +65,9 @@ class CSRF
 
 	public function verify() : bool
 	{
+		if ($this->isEnabled() === false) {
+			return true;
+		}
 		if (\in_array($this->request->getMethod(), [
 			'GET',
 			'HEAD',
@@ -102,8 +106,28 @@ class CSRF
 
 	public function input() : string
 	{
+		if ($this->isEnabled() === false) {
+			return '';
+		}
 		return '<input type="hidden" name="'
 			. $this->getTokenName() . '" value="'
 			. $this->getToken() . '">';
+	}
+
+	public function isEnabled() : bool
+	{
+		return $this->enabled;
+	}
+
+	public function enable()
+	{
+		$this->enabled = true;
+		return $this;
+	}
+
+	public function disable()
+	{
+		$this->enabled = false;
+		return $this;
 	}
 }
