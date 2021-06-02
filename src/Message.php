@@ -136,6 +136,7 @@ abstract class Message
 		'sec-websocket-version' => 'Sec-WebSocket-Version',
 		// Custom
 		'x-request-id' => 'X-Request-ID',
+		'x-powered-by' => 'X-Powered-By',
 	];
 	/**
 	 * Standard Response Status Codes and Reasons.
@@ -490,7 +491,7 @@ abstract class Message
 	 *
 	 * @return $this
 	 */
-	protected function setURL($url)
+	protected function setURL(string | URL $url)
 	{
 		if ( ! $url instanceof URL) {
 			$url = new URL($url);

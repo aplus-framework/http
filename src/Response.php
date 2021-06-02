@@ -273,7 +273,6 @@ class Response extends Message implements ResponseInterface
 		}
 		$this->sendHeaders();
 		$this->sendCookies();
-		//$this->setBody($this->getBody() . (\ob_get_length() ? \ob_get_clean() : ''));
 		$this->hasDownload() ? $this->sendDownload() : $this->sendBody();
 		$this->isSent = true;
 	}
