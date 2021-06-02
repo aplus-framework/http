@@ -14,10 +14,7 @@ trait ResponseDownload
 	private string $filepath;
 	private int $filesize;
 	private bool $acceptRanges = true;
-	/**
-	 * @var array|false
-	 */
-	private $byteRanges = [];
+	private array | false $byteRanges = [];
 	private string $sendType = 'normal';
 	private string $boundary;
 	/**
@@ -51,7 +48,7 @@ trait ResponseDownload
 		int $readLength = 1024
 	) {
 		$this->filepath = \realpath($filepath);
-		if ($filepath === false || ! \is_file($this->filepath)) {
+		if ($this->filepath === false || ! \is_file($this->filepath)) {
 			throw new InvalidArgumentException('Invalid file path: ' . $filepath);
 		}
 		$this->delay = $delay;
@@ -77,7 +74,7 @@ trait ResponseDownload
 		return $this;
 	}
 
-	private function prepareRange(string $rangeLine)
+	private function prepareRange(string $rangeLine) : void
 	{
 		$this->byteRanges = $this->parseByteRange($rangeLine);
 		if ($this->byteRanges === false) {
@@ -94,7 +91,7 @@ trait ResponseDownload
 		$this->setMultiPart(...$this->byteRanges);
 	}
 
-	private function setAcceptRanges(bool $acceptRanges)
+	private function setAcceptRanges(bool $acceptRanges) : void
 	{
 		$this->acceptRanges = $acceptRanges;
 		$this->setHeader(
@@ -117,9 +114,9 @@ trait ResponseDownload
 	 *
 	 * @return array|false
 	 */
-	private function parseByteRange(string $line)
+	private function parseByteRange(string $line) : array | false
 	{
-		if (\strpos($line, 'bytes=') !== 0) {
+		if ( ! \str_starts_with($line, 'bytes=')) {
 			return false;
 		}
 		$line = \substr($line, 6);
@@ -159,7 +156,7 @@ trait ResponseDownload
 	 *
 	 * @return false|int
 	 */
-	private function validBytePos(string $pos)
+	private function validBytePos(string $pos) : false | int
 	{
 		if ( ! \is_numeric($pos) || $pos < \PHP_INT_MIN || $pos > \PHP_INT_MAX) {
 			return false;
@@ -170,7 +167,7 @@ trait ResponseDownload
 		return (int) $pos;
 	}
 
-	private function setSinglePart(int $firstByte, int $lastByte)
+	private function setSinglePart(int $firstByte, int $lastByte) : void
 	{
 		$this->sendType = 'single';
 		$this->setHeader('Content-Length', $lastByte - $firstByte + 1);
@@ -181,13 +178,13 @@ trait ResponseDownload
 		);
 	}
 
-	private function sendSinglePart()
+	private function sendSinglePart() : void
 	{
 		$this->readBuffer($this->byteRanges[0][0], $this->byteRanges[0][1]);
 		$this->readFile();
 	}
 
-	private function setMultiPart(array ...$byteRanges)
+	private function setMultiPart(array ...$byteRanges) : void
 	{
 		$this->sendType = 'multi';
 		$this->boundary = \md5($this->filepath);
@@ -203,7 +200,7 @@ trait ResponseDownload
 		$this->setHeader('Content-Type', "multipart/x-byteranges; boundary={$this->boundary}");
 	}
 
-	private function sendMultiPart()
+	private function sendMultiPart() : void
 	{
 		$topLine = $this->getMultiPartTopLine();
 		foreach ($this->byteRanges as $range) {
@@ -235,7 +232,7 @@ trait ResponseDownload
 		);
 	}
 
-	private function readBuffer(int $firstByte, int $lastByte)
+	private function readBuffer(int $firstByte, int $lastByte) : void
 	{
 		\fseek($this->handle, $firstByte);
 		$bytesLeft = $lastByte - $firstByte + 1;
@@ -249,7 +246,7 @@ trait ResponseDownload
 		}
 	}
 
-	private function flush(int $length)
+	private function flush(int $length) : void
 	{
 		echo \fread($this->handle, $length);
 		\ob_flush();
@@ -259,7 +256,7 @@ trait ResponseDownload
 		}
 	}
 
-	private function readFile()
+	private function readFile() : void
 	{
 		while ( ! \feof($this->handle)) {
 			$this->flush($this->readLength);
