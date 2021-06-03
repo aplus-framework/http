@@ -250,7 +250,7 @@ class Response extends Message implements ResponseInterface
 		} elseif ($code < 300 || $code > 308) {
 			throw new InvalidArgumentException("Invalid Redirection code: {$code}");
 		}
-		$this->setStatusCode($code);
+		$this->setStatusLine($code);
 		$this->setHeader('Location', $location);
 		if ($data) {
 			if (\session_status() !== \PHP_SESSION_ACTIVE) {

@@ -43,9 +43,11 @@ class ResponseTest extends TestCase
 		$this->response->redirect('/new');
 		$this->assertEquals('/new', $this->response->getHeader('Location'));
 		$this->assertEquals(307, $this->response->getStatusCode());
+		$this->assertEquals('Temporary Redirect', $this->response->getStatusReason());
 		$this->response->redirect('/other', [], 301);
 		$this->assertEquals('/other', $this->response->getHeader('Location'));
 		$this->assertEquals(301, $this->response->getStatusCode());
+		$this->assertEquals('Moved Permanently', $this->response->getStatusReason());
 	}
 
 	public function setUp() : void
