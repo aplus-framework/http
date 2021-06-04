@@ -1,5 +1,6 @@
 <?php namespace Framework\HTTP;
 
+use ArraySimple;
 use BadMethodCallException;
 use InvalidArgumentException;
 use LogicException;
@@ -182,7 +183,7 @@ class Request extends Message implements RequestInterface
 		};
 		$variable = $variable === null
 			? $input
-			: \ArraySimple::value($variable, $input);
+			: ArraySimple::value($variable, $input);
 		return $filter
 			? \filter_var($variable, $filter, $options)
 			: $variable;
@@ -334,7 +335,7 @@ class Request extends Message implements RequestInterface
 		}
 		$variable = $name === null
 			? $this->parsedBody
-			: \ArraySimple::value($name, $this->parsedBody);
+			: ArraySimple::value($name, $this->parsedBody);
 		return $filter
 			? \filter_var($variable, $filter, $filter_options)
 			: $variable;
@@ -541,7 +542,7 @@ class Request extends Message implements RequestInterface
 
 	public function getFile(string $name) : ?UploadedFile
 	{
-		$file = \ArraySimple::value($name, $this->files);
+		$file = ArraySimple::value($name, $this->files);
 		return \is_array($file) ? null : $file;
 	}
 
@@ -625,7 +626,7 @@ class Request extends Message implements RequestInterface
 			unset($_SESSION['$']['redirect_data']);
 		}
 		if ($key !== null && $data) {
-			return \ArraySimple::value($key, $data);
+			return ArraySimple::value($key, $data);
 		}
 		return $data === false ? null : $data;
 	}
@@ -822,6 +823,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * @see https://www.sitepoint.com/community/t/-files-array-structure/2728/5
+	 *
 	 * @return array|UploadedFile[]
 	 */
 	protected function getInputFiles() : array
@@ -829,39 +832,7 @@ class Request extends Message implements RequestInterface
 		if (empty($_FILES)) {
 			return [];
 		}
-		// See: https://stackoverflow.com/a/33261775/6027968
-		$walker = static function ($array, $fileInfokey, callable $walker) {
-			$return = [];
-			foreach ($array as $k => $v) {
-				if (\is_array($v)) {
-					$return[$k] = $walker($v, $fileInfokey, $walker);
-					continue;
-				}
-				$return[$k][$fileInfokey] = $v;
-			}
-			return $return;
-		};
-		$files = [];
-		foreach ($_FILES as $name => $values) {
-			// init for array_merge
-			if ( ! isset($files[$name])) {
-				$files[$name] = [];
-			}
-			if ( ! \is_array($values['error'])) {
-				// normal syntax
-				$files[$name] = $values;
-				continue;
-			}
-			// html array feature
-			foreach ($values as $fileInfoKey => $subArray) {
-				$files[$name] = \array_replace_recursive(
-					$files[$name],
-					$walker($subArray, $fileInfoKey, $walker)
-				);
-			}
-		}
-		// See: https://www.sitepoint.com/community/t/-files-array-structure/2728/5
-		$make_objects = static function ($array, callable $make_objects) {
+		$make_objects = static function (array $array, callable $make_objects) {
 			$return = [];
 			foreach ($array as $k => $v) {
 				if (\is_array($v)) {
@@ -872,7 +843,7 @@ class Request extends Message implements RequestInterface
 			}
 			return $return;
 		};
-		return $make_objects($files, $make_objects);
+		return $make_objects(ArraySimple::files(), $make_objects);
 	}
 
 	/**
