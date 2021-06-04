@@ -61,8 +61,14 @@ class UploadedFileTest extends TestCase
 
 	public function testGetErrorMessage()
 	{
-		$this->assertEquals('', $this->uploadedFile->getErrorMessage());
-		$this->assertEquals('uploadErrorCantWrite', $this->uploadedFile2->getErrorMessage());
+		$this->assertEquals(
+			'There is no error, the file uploaded with success.',
+			$this->uploadedFile->getErrorMessage()
+		);
+		$this->assertEquals(
+			'Failed to write file to disk.',
+			$this->uploadedFile2->getErrorMessage()
+		);
 	}
 
 	public function testGetName()
