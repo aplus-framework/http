@@ -31,7 +31,7 @@ class CSRFTest extends TestCase
 	public function testMakeToken()
 	{
 		$this->prepare();
-		$this->assertEquals(64, \strlen($this->csrf->getToken()));
+		$this->assertEquals(12, \strlen($this->csrf->getToken()));
 	}
 
 	public function testTokenName()
