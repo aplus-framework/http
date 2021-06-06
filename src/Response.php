@@ -40,6 +40,14 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * @return \Framework\HTTP\Request
+	 */
+	public function getRequest() : Request
+	{
+		return $this->request;
+	}
+
+	/**
 	 * Get the Response body.
 	 *
 	 * @return string

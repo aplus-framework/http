@@ -1,12 +1,23 @@
 <?php namespace Tests\HTTP;
 
 use Framework\HTTP\Cookie;
+use Framework\HTTP\Request;
 use Framework\HTTP\Response;
 use PHPUnit\Framework\TestCase;
 
 class ResponseTest extends TestCase
 {
 	protected Response $response;
+
+	public function setUp() : void
+	{
+		$this->response = new Response(new RequestMock(['domain.tld']));
+	}
+
+	public function testRedirectInstance()
+	{
+		$this->assertInstanceOf(Request::class, $this->response->getRequest());
+	}
 
 	/**
 	 * @runInSeparateProcess
@@ -48,11 +59,6 @@ class ResponseTest extends TestCase
 		$this->assertEquals('/other', $this->response->getHeader('Location'));
 		$this->assertEquals(301, $this->response->getStatusCode());
 		$this->assertEquals('Moved Permanently', $this->response->getStatusReason());
-	}
-
-	public function setUp() : void
-	{
-		$this->response = new Response(new RequestMock(['domain.tld']));
 	}
 
 	public function testBody()
