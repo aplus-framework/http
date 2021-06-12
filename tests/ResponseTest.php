@@ -5,7 +5,7 @@ use Framework\HTTP\Request;
 use Framework\HTTP\Response;
 use PHPUnit\Framework\TestCase;
 
-class ResponseTest extends TestCase
+final class ResponseTest extends TestCase
 {
 	protected Response $response;
 
@@ -14,15 +14,15 @@ class ResponseTest extends TestCase
 		$this->response = new Response(new RequestMock(['domain.tld']));
 	}
 
-	public function testRedirectInstance()
+	public function testRedirectInstance() : void
 	{
-		$this->assertInstanceOf(Request::class, $this->response->getRequest());
+		self::assertInstanceOf(Request::class, $this->response->getRequest());
 	}
 
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testPostRedirectGet()
+	public function testPostRedirectGet() : void
 	{
 		$request = new RequestMock(['domain.tld']);
 		$request->setServerVariable('REQUEST_METHOD', 'POST');
@@ -30,148 +30,148 @@ class ResponseTest extends TestCase
 		};
 		\session_start();
 		$this->response->redirect('/new', ['foo']);
-		$this->assertEquals('/new', $this->response->getHeader('Location'));
-		$this->assertEquals(307, $this->response->getStatusCode());
-		$this->assertEquals(['foo'], $request->getRedirectData());
+		self::assertSame('/new', $this->response->getHeader('Location'));
+		self::assertSame(307, $this->response->getStatusCode());
+		self::assertSame(['foo'], $request->getRedirectData());
 	}
 
-	public function testRedirectDataWithoutSession()
+	public function testRedirectDataWithoutSession() : void
 	{
 		$this->expectException(\LogicException::class);
 		$this->expectExceptionMessage('Session must be active to set redirect data');
 		$this->response->redirect('/new', ['foo']);
 	}
 
-	public function testInvalidRedirectCode()
+	public function testInvalidRedirectCode() : void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		$this->expectExceptionMessage('Invalid Redirection code: 404');
 		$this->response->redirect('/new', [], 404);
 	}
 
-	public function testRedirect()
+	public function testRedirect() : void
 	{
 		$this->response->redirect('/new');
-		$this->assertEquals('/new', $this->response->getHeader('Location'));
-		$this->assertEquals(307, $this->response->getStatusCode());
-		$this->assertEquals('Temporary Redirect', $this->response->getStatusReason());
+		self::assertSame('/new', $this->response->getHeader('Location'));
+		self::assertSame(307, $this->response->getStatusCode());
+		self::assertSame('Temporary Redirect', $this->response->getStatusReason());
 		$this->response->redirect('/other', [], 301);
-		$this->assertEquals('/other', $this->response->getHeader('Location'));
-		$this->assertEquals(301, $this->response->getStatusCode());
-		$this->assertEquals('Moved Permanently', $this->response->getStatusReason());
+		self::assertSame('/other', $this->response->getHeader('Location'));
+		self::assertSame(301, $this->response->getStatusCode());
+		self::assertSame('Moved Permanently', $this->response->getStatusReason());
 	}
 
-	public function testBody()
+	public function testBody() : void
 	{
-		$this->assertEquals('', $this->response->getBody());
+		self::assertSame('', $this->response->getBody());
 		echo '<p>This will be Lost when call setBody()</p>';
-		$this->assertEquals(
+		self::assertSame(
 			'<p>This will be Lost when call setBody()</p>',
 			$this->response->getBody()
 		);
 		$this->response->setBody('<h1>Title</h1>');
-		$this->assertEquals(
+		self::assertSame(
 			'<h1>Title</h1>',
 			$this->response->getBody()
 		);
 		echo 'Foo';
-		$this->assertEquals(
+		self::assertSame(
 			'<h1>Title</h1>Foo',
 			$this->response->getBody()
 		);
 		$this->response->appendBody(' Appended');
-		$this->assertEquals(
+		self::assertSame(
 			'<h1>Title</h1>Foo Appended',
 			$this->response->getBody()
 		);
 		$this->response->prependBody('Preprended ');
-		$this->assertEquals(
+		self::assertSame(
 			'Preprended <h1>Title</h1>Foo Appended',
 			$this->response->getBody()
 		);
 		echo 'Ignored';
 		$this->response->setBody('Replace');
-		$this->assertEquals(
+		self::assertSame(
 			'Replace',
 			$this->response->getBody()
 		);
 	}
 
-	public function testCache()
+	public function testCache() : void
 	{
-		$this->assertNull($this->response->getHeader('Cache-Control'));
+		self::assertNull($this->response->getHeader('Cache-Control'));
 		$this->response->setCache(15);
-		$this->assertEquals('private, max-age=15', $this->response->getHeader('Cache-Control'));
-		$this->assertNotEmpty($this->response->getHeader('Expires'));
-		$this->assertEquals(15, $this->response->getCacheSeconds());
+		self::assertSame('private, max-age=15', $this->response->getHeader('Cache-Control'));
+		self::assertNotEmpty($this->response->getHeader('Expires'));
+		self::assertSame(15, $this->response->getCacheSeconds());
 		$this->response->setCache(30, true);
-		$this->assertEquals('public, max-age=30', $this->response->getHeader('Cache-Control'));
-		$this->assertNotEmpty($this->response->getHeader('Expires'));
-		$this->assertEquals(30, $this->response->getCacheSeconds());
+		self::assertSame('public, max-age=30', $this->response->getHeader('Cache-Control'));
+		self::assertNotEmpty($this->response->getHeader('Expires'));
+		self::assertSame(30, $this->response->getCacheSeconds());
 		$this->response->setNoCache();
-		$this->assertEquals(
+		self::assertSame(
 			'no-cache, no-store, max-age=0',
 			$this->response->getHeader('Cache-Control')
 		);
-		$this->assertEquals(0, $this->response->getCacheSeconds());
+		self::assertSame(0, $this->response->getCacheSeconds());
 	}
 
-	public function testCookie()
+	public function testCookie() : void
 	{
-		$this->assertEquals([], $this->response->getCookies());
+		self::assertSame([], $this->response->getCookies());
 		$cookie_1 = new Cookie('session_id', 'abc');
 		$this->response->setCookie($cookie_1);
-		$this->assertEquals([
+		self::assertSame([
 			'session_id' => $cookie_1,
 		], $this->response->getCookies());
 		$cookie_2 = (new Cookie('cart', '123'))->setExpires(3600)->setPath('/')->setSecure(true);
 		$this->response->setCookie($cookie_2);
-		$this->assertEquals($cookie_2, $this->response->getCookie('cart'));
-		$this->assertEquals([
+		self::assertSame($cookie_2, $this->response->getCookie('cart'));
+		self::assertSame([
 			'session_id' => $cookie_1,
 			'cart' => $cookie_2,
 		], $this->response->getCookies());
 		$this->response->removeCookie('cart');
-		$this->assertNull($this->response->getCookie('cart'));
-		$this->assertEquals([
+		self::assertNull($this->response->getCookie('cart'));
+		self::assertSame([
 			'session_id' => $cookie_1,
 		], $this->response->getCookies());
 		$this->response->removeCookies(['session_id']);
-		$this->assertEmpty($this->response->getCookies());
+		self::assertEmpty($this->response->getCookies());
 		$this->response->setCookies([
 			new Cookie('foo', 'foo'),
 		]);
-		$this->assertNotEmpty($this->response->getCookies());
+		self::assertNotEmpty($this->response->getCookies());
 	}
 
-	public function testDate()
+	public function testDate() : void
 	{
-		$this->assertNull($this->response->getHeader('Date'));
+		self::assertNull($this->response->getHeader('Date'));
 		$datetime = new \DateTime('+5 seconds');
 		$this->response->setDate($datetime);
-		$this->assertEquals(
+		self::assertSame(
 			$datetime->format('D, d M Y H:i:s') . ' GMT',
 			$this->response->getHeader('Date')
 		);
 	}
 
-	public function testETag()
+	public function testETag() : void
 	{
-		$this->assertNull($this->response->getHeader('ETag'));
+		self::assertNull($this->response->getHeader('ETag'));
 		$this->response->setETag('foo');
-		$this->assertEquals('foo', $this->response->getHeader('ETag'));
+		self::assertSame('foo', $this->response->getHeader('ETag'));
 	}
 
-	public function testHeader()
+	public function testHeader() : void
 	{
-		$this->assertEquals([], $this->response->getHeaders('content-type'));
+		self::assertSame([], $this->response->getHeaders('content-type'));
 		$this->response->setHeader('content-type', 'text/html');
 		$this->response->setHeader('dnt', 1);
 		$this->response->setHeaders([
 			'host' => 'http://localhost',
 			'ETag' => 'foo',
 		]);
-		$this->assertEquals([
+		self::assertSame([
 			'content-type' => 'text/html',
 			'dnt' => '1',
 			'host' => 'http://localhost',
@@ -179,46 +179,46 @@ class ResponseTest extends TestCase
 		], $this->response->getHeaders());
 		$this->response->removeHeader('CONTENT-TYPE');
 		$this->response->removeHeader('etag');
-		$this->assertEquals([
+		self::assertSame([
 			'dnt' => '1',
 			'host' => 'http://localhost',
 		], $this->response->getHeaders());
 		$this->response->removeHeader('dnt');
-		$this->assertEquals([
+		self::assertSame([
 			'host' => 'http://localhost',
 		], $this->response->getHeaders());
 		$this->response->setHeaders([
 			'dnt' => 1,
 			'x-custom-2' => 'bar',
 		]);
-		$this->assertEquals([
-			'dnt' => '1',
+		self::assertSame([
 			'host' => 'http://localhost',
+			'dnt' => '1',
 			'x-custom-2' => 'bar',
 		], $this->response->getHeaders());
-		$this->assertEquals('1', $this->response->getHeader('dnt'));
-		$this->assertEquals('bar', $this->response->getHeader('X-Custom-2'));
+		self::assertSame('1', $this->response->getHeader('dnt'));
+		self::assertSame('bar', $this->response->getHeader('X-Custom-2'));
 	}
 
-	public function testHeadersAlreadyIsSent()
+	public function testHeadersAlreadyIsSent() : void
 	{
 		$this->expectException(\LogicException::class);
 		$this->expectExceptionMessage('Headers already is sent');
 		$this->response->send();
 	}
 
-	public function testInvalidStatusCode()
+	public function testInvalidStatusCode() : void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		$this->expectExceptionMessage('Invalid status code: 900');
 		$this->response->setStatusCode(900);
 	}
 
-	public function testJSON()
+	public function testJSON() : void
 	{
 		$this->response->setJSON(['test' => 123]);
-		$this->assertEquals('{"test":123}', $this->response->getBody());
-		$this->assertEquals(
+		self::assertSame('{"test":123}', $this->response->getBody());
+		self::assertSame(
 			'application/json; charset=UTF-8',
 			$this->response->getHeader('Content-Type')
 		);
@@ -228,21 +228,21 @@ class ResponseTest extends TestCase
 		$this->response->setJSON("\xB1\x31");
 	}
 
-	public function testLastModified()
+	public function testLastModified() : void
 	{
-		$this->assertNull($this->response->getHeader('Last-Modified'));
+		self::assertNull($this->response->getHeader('Last-Modified'));
 		$datetime = new \DateTime('+5 seconds');
 		$this->response->setLastModified($datetime);
-		$this->assertEquals(
+		self::assertSame(
 			$datetime->format('D, d M Y H:i:s') . ' GMT',
 			$this->response->getHeader('Last-Modified')
 		);
 	}
 
-	public function testNotModified()
+	public function testNotModified() : void
 	{
 		$this->response->setNotModified();
-		$this->assertEquals(
+		self::assertSame(
 			'304 Not Modified',
 			$this->response->getStatusLine()
 		);
@@ -253,26 +253,26 @@ class ResponseTest extends TestCase
 	 *
 	 * @runInSeparateProcess
 	 */
-	public function testSend()
+	public function testSend() : void
 	{
 		$this->response->setHeader('foo', 'bar');
 		$this->response->setCookie(
 			(new Cookie('session_id', 'abc123'))->setExpires(\time() + 3600)
 		);
 		$this->response->setBody('Hello!');
-		$this->assertFalse($this->response->isSent());
+		self::assertFalse($this->response->isSent());
 		\ob_start();
 		$this->response->send();
 		$contents = \ob_get_clean();
-		$this->assertEquals([
+		self::assertSame([
 			'foo: bar',
 			'Date: ' . \gmdate('D, d M Y H:i:s') . ' GMT',
 			'Content-Type: text/html; charset=UTF-8',
 			'Set-Cookie: session_id=abc123; expires=' . \gmdate('D, d-M-Y H:i:s', \time() + 3600)
 			. ' GMT; Max-Age=3600',
 		], xdebug_get_headers());
-		$this->assertEquals('Hello!', $contents);
-		$this->assertTrue($this->response->isSent());
+		self::assertSame('Hello!', $contents);
+		self::assertTrue($this->response->isSent());
 		$this->expectException(\LogicException::class);
 		$this->expectExceptionMessage('Response already is sent');
 		$this->response->send();
@@ -281,47 +281,47 @@ class ResponseTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testSendedBody()
+	public function testSendedBody() : void
 	{
-		$this->assertEquals('', $this->response->getBody());
+		self::assertSame('', $this->response->getBody());
 		echo 'foo';
-		$this->assertEquals('foo', $this->response->getBody());
-		$this->assertEquals('foo', $this->response->getBody());
+		self::assertSame('foo', $this->response->getBody());
+		self::assertSame('foo', $this->response->getBody());
 		$this->response->send();
-		$this->assertEquals('foo', $this->response->getBody());
-		$this->assertEquals('foo', $this->response->getBody());
+		self::assertSame('foo', $this->response->getBody());
+		self::assertSame('foo', $this->response->getBody());
 	}
 
-	public function testStatus()
+	public function testStatus() : void
 	{
-		$this->assertEquals('200 OK', $this->response->getStatusLine());
-		$this->assertEquals(200, $this->response->getStatusCode());
-		$this->assertEquals('OK', $this->response->getStatusReason());
+		self::assertSame('200 OK', $this->response->getStatusLine());
+		self::assertSame(200, $this->response->getStatusCode());
+		self::assertSame('OK', $this->response->getStatusReason());
 		$this->response->setStatusLine(201);
-		$this->assertEquals('201 Created', $this->response->getStatusLine());
+		self::assertSame('201 Created', $this->response->getStatusLine());
 		$this->response->setStatusReason('Other');
-		$this->assertEquals('201 Other', $this->response->getStatusLine());
+		self::assertSame('201 Other', $this->response->getStatusLine());
 		$this->response->setStatusLine(483, 'Custom');
-		$this->assertEquals('483 Custom', $this->response->getStatusLine());
+		self::assertSame('483 Custom', $this->response->getStatusLine());
 	}
 
-	public function testUnknownStatus()
+	public function testUnknownStatus() : void
 	{
 		$this->expectException(\LogicException::class);
 		$this->expectExceptionMessage('Unknown status code must have a reason: 483');
 		$this->response->setStatusLine(483);
 	}
 
-	public function testSetContents()
+	public function testSetContents() : void
 	{
-		$this->assertNull($this->response->getHeader('content-type'));
+		self::assertNull($this->response->getHeader('content-type'));
 		$this->response->setContentType('foo');
-		$this->assertEquals('foo; charset=UTF-8', $this->response->getHeader('content-type'));
-		$this->assertNull($this->response->getHeader('content-language'));
+		self::assertSame('foo; charset=UTF-8', $this->response->getHeader('content-type'));
+		self::assertNull($this->response->getHeader('content-language'));
 		$this->response->setContentLanguage('de');
-		$this->assertEquals('de', $this->response->getHeader('content-language'));
-		$this->assertNull($this->response->getHeader('content-encoding'));
+		self::assertSame('de', $this->response->getHeader('content-language'));
+		self::assertNull($this->response->getHeader('content-encoding'));
 		$this->response->setContentEncoding('gzip');
-		$this->assertEquals('gzip', $this->response->getHeader('content-encoding'));
+		self::assertSame('gzip', $this->response->getHeader('content-encoding'));
 	}
 }

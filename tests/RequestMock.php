@@ -13,7 +13,7 @@ class RequestMock extends \Framework\HTTP\Request
 		parent::__construct($allowed_hosts);
 	}
 
-	protected function prepareInput()
+	protected function prepareInput() : void
 	{
 		$_SERVER = [
 			'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -65,7 +65,7 @@ class RequestMock extends \Framework\HTTP\Request
 		return parent::filterInput($type, $variable, $filter, $options);
 	}
 
-	public function setServerVariable(string $name, $value)
+	public function setServerVariable(string $name, $value) : void
 	{
 		$this->input[\INPUT_SERVER][$name] = $value;
 	}
@@ -75,7 +75,7 @@ class RequestMock extends \Framework\HTTP\Request
 		return parent::setHeader($name, $value);
 	}
 
-	public function setEmptyHeader(string $name)
+	public function setEmptyHeader(string $name) : void
 	{
 		$this->headers[\strtolower($name)] = null;
 	}

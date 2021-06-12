@@ -3,7 +3,7 @@
 use Framework\HTTP\UploadedFile;
 use PHPUnit\Framework\TestCase;
 
-class UploadedFileTest extends TestCase
+final class UploadedFileTest extends TestCase
 {
 	protected array $file = [
 		'name' => 'logo.jpg',
@@ -28,82 +28,82 @@ class UploadedFileTest extends TestCase
 		$this->uploadedFile2 = new UploadedFile($this->file2);
 	}
 
-	public function testGetClientExtension()
+	public function testGetClientExtension() : void
 	{
-		$this->assertEquals('jpg', $this->uploadedFile->getClientExtension());
-		$this->assertEquals('txt', $this->uploadedFile2->getClientExtension());
+		self::assertSame('jpg', $this->uploadedFile->getClientExtension());
+		self::assertSame('txt', $this->uploadedFile2->getClientExtension());
 	}
 
-	public function testGetExtension()
+	public function testGetExtension() : void
 	{
-		$this->assertEquals('png', $this->uploadedFile->getExtension());
-		$this->assertEquals('png', $this->uploadedFile->getExtension());
-		$this->assertEquals('txt', $this->uploadedFile2->getExtension());
+		self::assertSame('png', $this->uploadedFile->getExtension());
+		self::assertSame('png', $this->uploadedFile->getExtension());
+		self::assertSame('txt', $this->uploadedFile2->getExtension());
 	}
 
-	public function testGetClientType()
+	public function testGetClientType() : void
 	{
-		$this->assertEquals('foo/bar', $this->uploadedFile->getClientType());
-		$this->assertEquals('foo/baz', $this->uploadedFile2->getClientType());
+		self::assertSame('foo/bar', $this->uploadedFile->getClientType());
+		self::assertSame('foo/baz', $this->uploadedFile2->getClientType());
 	}
 
-	public function testGetType()
+	public function testGetType() : void
 	{
-		$this->assertEquals('image/png', $this->uploadedFile->getType());
-		$this->assertEquals('text/plain', $this->uploadedFile2->getType());
+		self::assertSame('image/png', $this->uploadedFile->getType());
+		self::assertSame('text/plain', $this->uploadedFile2->getType());
 	}
 
-	public function testGetError()
+	public function testGetError() : void
 	{
-		$this->assertEquals(\UPLOAD_ERR_OK, $this->uploadedFile->getError());
-		$this->assertEquals(\UPLOAD_ERR_CANT_WRITE, $this->uploadedFile2->getError());
+		self::assertSame(\UPLOAD_ERR_OK, $this->uploadedFile->getError());
+		self::assertSame(\UPLOAD_ERR_CANT_WRITE, $this->uploadedFile2->getError());
 	}
 
-	public function testGetErrorMessage()
+	public function testGetErrorMessage() : void
 	{
-		$this->assertEquals(
+		self::assertSame(
 			'There is no error, the file uploaded with success.',
 			$this->uploadedFile->getErrorMessage()
 		);
-		$this->assertEquals(
+		self::assertSame(
 			'Failed to write file to disk.',
 			$this->uploadedFile2->getErrorMessage()
 		);
 	}
 
-	public function testGetName()
+	public function testGetName() : void
 	{
-		$this->assertEquals('logo.jpg', $this->uploadedFile->getName());
-		$this->assertEquals('file.txt', $this->uploadedFile2->getName());
+		self::assertSame('logo.jpg', $this->uploadedFile->getName());
+		self::assertSame('file.txt', $this->uploadedFile2->getName());
 	}
 
-	public function testGetSize()
+	public function testGetSize() : void
 	{
-		$this->assertEquals(19878, $this->uploadedFile->getSize());
-		$this->assertEquals(3, $this->uploadedFile2->getSize());
+		self::assertSame(19878, $this->uploadedFile->getSize());
+		self::assertSame(3, $this->uploadedFile2->getSize());
 	}
 
-	public function testGetTmpName()
+	public function testGetTmpName() : void
 	{
-		$this->assertEquals(__DIR__ . '/files/logo.png', $this->uploadedFile->getTmpName());
-		$this->assertEquals(__DIR__ . '/files/file.txt', $this->uploadedFile2->getTmpName());
+		self::assertSame(__DIR__ . '/files/logo.png', $this->uploadedFile->getTmpName());
+		self::assertSame(__DIR__ . '/files/file.txt', $this->uploadedFile2->getTmpName());
 	}
 
-	public function testIsMoved()
+	public function testIsMoved() : void
 	{
-		$this->assertFalse($this->uploadedFile->isMoved());
-		$this->assertFalse($this->uploadedFile2->isMoved());
+		self::assertFalse($this->uploadedFile->isMoved());
+		self::assertFalse($this->uploadedFile2->isMoved());
 	}
 
-	public function testIsValid()
+	public function testIsValid() : void
 	{
-		$this->assertFalse($this->uploadedFile->isValid());
-		$this->assertFalse($this->uploadedFile2->isValid());
+		self::assertFalse($this->uploadedFile->isValid());
+		self::assertFalse($this->uploadedFile2->isValid());
 	}
 
-	public function testMove()
+	public function testMove() : void
 	{
-		$this->assertFalse($this->uploadedFile->move('/tmp/foo'));
-		$this->assertFalse($this->uploadedFile2->move('/tmp/foo2'));
+		self::assertFalse($this->uploadedFile->move('/tmp/foo'));
+		self::assertFalse($this->uploadedFile2->move('/tmp/foo2'));
 	}
 }

@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class RequestProxyTest extends TestCase
+final class RequestProxyTest extends TestCase
 {
 	protected RequestProxyMock $proxyRequest;
 
@@ -13,55 +13,55 @@ class RequestProxyTest extends TestCase
 		]);
 	}
 
-	public function testHost()
+	public function testHost() : void
 	{
-		$this->assertEquals('real-domain.tld', $this->proxyRequest->getHost());
+		self::assertSame('real-domain.tld', $this->proxyRequest->getHost());
 	}
 
-	public function testAccept()
+	public function testAccept() : void
 	{
-		$this->assertEquals([], $this->proxyRequest->getAccepts());
+		self::assertSame([], $this->proxyRequest->getAccepts());
 	}
 
-	public function testIsAJAX()
+	public function testIsAJAX() : void
 	{
-		$this->assertFalse($this->proxyRequest->isAJAX());
-		$this->assertFalse($this->proxyRequest->isAJAX());
+		self::assertFalse($this->proxyRequest->isAJAX());
+		self::assertFalse($this->proxyRequest->isAJAX());
 	}
 
-	public function testIsSecure()
+	public function testIsSecure() : void
 	{
-		$this->assertTrue($this->proxyRequest->isSecure());
-		$this->assertTrue($this->proxyRequest->isSecure());
+		self::assertTrue($this->proxyRequest->isSecure());
+		self::assertTrue($this->proxyRequest->isSecure());
 	}
 
-	public function testJSON()
+	public function testJSON() : void
 	{
 		$this->proxyRequest->setBody('{"test":123}');
-		$this->assertEquals(123, $this->proxyRequest->getJSON()->test);
+		self::assertSame(123, $this->proxyRequest->getJSON()->test);
 	}
 
-	public function testPort()
+	public function testPort() : void
 	{
-		$this->assertEquals(8080, $this->proxyRequest->getPort());
+		self::assertSame(8080, $this->proxyRequest->getPort());
 	}
 
-	public function testProxiedIP()
+	public function testProxiedIP() : void
 	{
-		$this->assertEquals('192.168.1.2', $this->proxyRequest->getProxiedIP());
+		self::assertSame('192.168.1.2', $this->proxyRequest->getProxiedIP());
 	}
 
-	public function testReferer()
+	public function testReferer() : void
 	{
-		$this->assertNull($this->proxyRequest->getReferer());
+		self::assertNull($this->proxyRequest->getReferer());
 	}
 
-	public function testURL()
+	public function testURL() : void
 	{
-		$this->assertEquals(
+		self::assertSame(
 			'https://real-domain.tld:8080/blog/posts?order_by=title&order=asc',
 			(string) $this->proxyRequest->getURL()
 		);
-		$this->assertInstanceOf(\Framework\HTTP\URL::class, $this->proxyRequest->getURL());
+		self::assertInstanceOf(\Framework\HTTP\URL::class, $this->proxyRequest->getURL());
 	}
 }

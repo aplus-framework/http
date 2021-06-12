@@ -3,7 +3,7 @@
 use Framework\HTTP\Cookie;
 use PHPUnit\Framework\TestCase;
 
-class CookieTest extends TestCase
+final class CookieTest extends TestCase
 {
 	protected Cookie $cookie;
 
@@ -12,92 +12,92 @@ class CookieTest extends TestCase
 		$this->cookie = new Cookie('foo', 'bar');
 	}
 
-	public function testDomain()
+	public function testDomain() : void
 	{
-		$this->assertNull($this->cookie->getDomain());
+		self::assertNull($this->cookie->getDomain());
 		$this->cookie->setDomain('domain.tld');
-		$this->assertEquals('domain.tld', $this->cookie->getDomain());
+		self::assertSame('domain.tld', $this->cookie->getDomain());
 		$this->cookie->setDomain(null);
-		$this->assertNull($this->cookie->getDomain());
+		self::assertNull($this->cookie->getDomain());
 	}
 
-	public function testExpires()
+	public function testExpires() : void
 	{
-		$this->assertNull($this->cookie->getExpires());
+		self::assertNull($this->cookie->getExpires());
 		$this->cookie->setExpires('+5 seconds');
-		$this->assertInstanceOf(\DateTime::class, $this->cookie->getExpires());
-		$this->assertEquals(\time() + 5, $this->cookie->getExpires()->format('U'));
-		$this->assertFalse($this->cookie->isExpired());
+		self::assertInstanceOf(\DateTime::class, $this->cookie->getExpires());
+		self::assertSame((string) (\time() + 5), $this->cookie->getExpires()->format('U'));
+		self::assertFalse($this->cookie->isExpired());
 		$this->cookie->setExpires($time = \time() + 30);
-		$this->assertInstanceOf(\DateTime::class, $this->cookie->getExpires());
-		$this->assertEquals($time, $this->cookie->getExpires()->format('U'));
-		$this->cookie->setExpires($time = new \DateTime('-5 hours'));
-		$this->assertInstanceOf(\DateTime::class, $this->cookie->getExpires());
-		$this->assertEquals(\time() - 5 * 60 * 60, $this->cookie->getExpires()->format('U'));
-		$this->assertTrue($this->cookie->isExpired());
+		self::assertInstanceOf(\DateTime::class, $this->cookie->getExpires());
+		self::assertSame((string) $time, $this->cookie->getExpires()->format('U'));
+		$this->cookie->setExpires(new \DateTime('-5 hours'));
+		self::assertInstanceOf(\DateTime::class, $this->cookie->getExpires());
+		self::assertSame((string) (\time() - 5 * 60 * 60), $this->cookie->getExpires()->format('U'));
+		self::assertTrue($this->cookie->isExpired());
 		$this->cookie->setExpires(null);
-		$this->assertNull($this->cookie->getExpires());
+		self::assertNull($this->cookie->getExpires());
 		$this->expectException(\Exception::class);
 		$this->cookie->setExpires('foo');
 	}
 
-	public function testHttpOnly()
+	public function testHttpOnly() : void
 	{
-		$this->assertFalse($this->cookie->isHttpOnly());
+		self::assertFalse($this->cookie->isHttpOnly());
 		$this->cookie->setHttpOnly();
-		$this->assertTrue($this->cookie->isHttpOnly());
+		self::assertTrue($this->cookie->isHttpOnly());
 		$this->cookie->setHttpOnly(false);
-		$this->assertFalse($this->cookie->isHttpOnly());
+		self::assertFalse($this->cookie->isHttpOnly());
 	}
 
-	public function testName()
+	public function testName() : void
 	{
-		$this->assertEquals('foo', $this->cookie->getName());
+		self::assertSame('foo', $this->cookie->getName());
 	}
 
-	public function testPath()
+	public function testPath() : void
 	{
-		$this->assertNull($this->cookie->getPath());
+		self::assertNull($this->cookie->getPath());
 		$this->cookie->setPath('/blog');
-		$this->assertEquals('/blog', $this->cookie->getPath());
+		self::assertSame('/blog', $this->cookie->getPath());
 		$this->cookie->setPath(null);
-		$this->assertNull($this->cookie->getPath());
+		self::assertNull($this->cookie->getPath());
 	}
 
-	public function testSameSite()
+	public function testSameSite() : void
 	{
-		$this->assertNull($this->cookie->getSameSite());
+		self::assertNull($this->cookie->getSameSite());
 		$this->cookie->setSameSite('sTrIcT');
-		$this->assertEquals('Strict', $this->cookie->getSameSite());
+		self::assertSame('Strict', $this->cookie->getSameSite());
 		$this->cookie->setSameSite('lAx');
-		$this->assertEquals('Lax', $this->cookie->getSameSite());
+		self::assertSame('Lax', $this->cookie->getSameSite());
 		$this->cookie->setSameSite('uNsEt');
-		$this->assertEquals('Unset', $this->cookie->getSameSite());
+		self::assertSame('Unset', $this->cookie->getSameSite());
 		$this->cookie->setSameSite(null);
-		$this->assertNull($this->cookie->getSameSite());
+		self::assertNull($this->cookie->getSameSite());
 		$this->expectException(\InvalidArgumentException::class);
 		$this->cookie->setSameSite('foo');
 	}
 
-	public function testSecure()
+	public function testSecure() : void
 	{
-		$this->assertFalse($this->cookie->isSecure());
+		self::assertFalse($this->cookie->isSecure());
 		$this->cookie->setSecure();
-		$this->assertTrue($this->cookie->isSecure());
+		self::assertTrue($this->cookie->isSecure());
 		$this->cookie->setSecure(false);
-		$this->assertFalse($this->cookie->isSecure());
+		self::assertFalse($this->cookie->isSecure());
 	}
 
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testSend()
+	public function testSend() : void
 	{
-		$this->assertTrue($this->cookie->send());
-		$this->assertEquals(['Set-Cookie: foo=bar'], xdebug_get_headers());
+		self::assertTrue($this->cookie->send());
+		self::assertSame(['Set-Cookie: foo=bar'], xdebug_get_headers());
 		(new Cookie('foo', 'abc123'))->setSecure()->setHttpOnly()->send();
 		(new Cookie('foo', 'abc123'))->setExpires('+5 seconds')->send();
-		$this->assertEquals([
+		self::assertSame([
 			'Set-Cookie: foo=bar',
 			'Set-Cookie: foo=abc123; secure; HttpOnly',
 			'Set-Cookie: foo=abc123; expires='
@@ -111,13 +111,13 @@ class CookieTest extends TestCase
 			->setValue('baz')
 			->setExpires('+30 seconds')
 			->send();
-		$this->assertContains(
+		self::assertContains(
 			'Set-Cookie: ' . $this->cookie->getAsString(),
 			xdebug_get_headers()
 		);
 	}
 
-	public function testString()
+	public function testString() : void
 	{
 		$time = \time() + 30;
 		$expected = 'foo=baz; expires='
@@ -130,37 +130,37 @@ class CookieTest extends TestCase
 			->setSameSite('strict')
 			->setValue('baz')
 			->setExpires($time);
-		$this->assertEquals($expected, $this->cookie->getAsString());
-		$this->assertEquals($expected, (string) $this->cookie);
-		$this->assertInstanceOf(Cookie::class, $this->cookie);
+		self::assertSame($expected, $this->cookie->getAsString());
+		self::assertSame($expected, (string) $this->cookie);
+		self::assertInstanceOf(Cookie::class, $this->cookie);
 	}
 
-	public function testValue()
+	public function testValue() : void
 	{
-		$this->assertEquals('bar', $this->cookie->getValue());
+		self::assertSame('bar', $this->cookie->getValue());
 		$this->cookie->setValue(12345);
-		$this->assertEquals('12345', $this->cookie->getValue());
+		self::assertSame('12345', $this->cookie->getValue());
 	}
 
-	public function testParse()
+	public function testParse() : void
 	{
 		$cookie = Cookie::parse('session_id=35ab1d7a4955d926a3694ab5990c0eb1; expires=Thu, 11-Jul-2019 04:57:19 GMT; Max-Age=0; path=/admin; domain=localhost; secure; HttpOnly; SameSite=Strict');
-		$this->assertEquals('session_id', $cookie->getName());
-		$this->assertEquals('35ab1d7a4955d926a3694ab5990c0eb1', $cookie->getValue());
-		$this->assertEquals('Thu, 11 Jul 2019 04:57:19 +0000', $cookie->getExpires()->format('r'));
-		$this->assertEquals('/admin', $cookie->getPath());
-		$this->assertEquals('localhost', $cookie->getDomain());
-		$this->assertTrue($cookie->isSecure());
-		$this->assertTrue($cookie->isHttpOnly());
-		$this->assertEquals('Strict', $cookie->getSameSite());
-		$this->assertNull(Cookie::parse('foo'));
+		self::assertSame('session_id', $cookie->getName());
+		self::assertSame('35ab1d7a4955d926a3694ab5990c0eb1', $cookie->getValue());
+		self::assertSame('Thu, 11 Jul 2019 04:57:19 +0000', $cookie->getExpires()->format('r'));
+		self::assertSame('/admin', $cookie->getPath());
+		self::assertSame('localhost', $cookie->getDomain());
+		self::assertTrue($cookie->isSecure());
+		self::assertTrue($cookie->isHttpOnly());
+		self::assertSame('Strict', $cookie->getSameSite());
+		self::assertNull(Cookie::parse('foo'));
 	}
 
-	public function testCreate()
+	public function testCreate() : void
 	{
 		$cookies = Cookie::create('a=A; b=B;c=C;d;e = E');
-		$this->assertCount(4, $cookies);
-		$this->assertEquals([
+		self::assertCount(4, $cookies);
+		self::assertSame([
 			'A',
 			'B',
 			'C',
@@ -171,6 +171,6 @@ class CookieTest extends TestCase
 			$cookies['c']->getValue(),
 			$cookies['e']->getValue(),
 		]);
-		$this->assertCount(0, Cookie::create('foo'));
+		self::assertCount(0, Cookie::create('foo'));
 	}
 }
