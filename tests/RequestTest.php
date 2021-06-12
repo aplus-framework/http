@@ -5,7 +5,7 @@ use Framework\HTTP\URL;
 use Framework\HTTP\UserAgent;
 use PHPUnit\Framework\TestCase;
 
-class RequestTest extends TestCase
+final class RequestTest extends TestCase
 {
 	protected RequestMock $request;
 
@@ -16,48 +16,48 @@ class RequestTest extends TestCase
 		]);
 	}
 
-	public function testInvalidFilterInputType()
+	public function testInvalidFilterInputType() : void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		$this->expectExceptionMessage('Invalid input type: 6');
 		$this->request->filterInput(6);
 	}
 
-	public function testGetInputWithFilter()
+	public function testGetInputWithFilter() : void
 	{
-		$this->assertEquals(
+		self::assertSame(
 			'http://domain.tld/contact.html',
 			$this->request->filterInput(\INPUT_SERVER, 'HTTP_REFERER', \FILTER_VALIDATE_URL)
 		);
-		$this->assertFalse(
+		self::assertFalse(
 			$this->request->filterInput(\INPUT_SERVER, 'HTTP_USER_AGENT', \FILTER_VALIDATE_URL)
 		);
 	}
 
-	public function testUserAgent()
+	public function testUserAgent() : void
 	{
-		$this->assertInstanceOf(
+		self::assertInstanceOf(
 			UserAgent::class,
 			$this->request->getUserAgent()
 		);
-		$this->assertInstanceOf(
+		self::assertInstanceOf(
 			UserAgent::class,
 			$this->request->getUserAgent()
 		);
 		$this->request->userAgent = null;
 		$this->request->setEmptyHeader('User-Agent');
-		$this->assertNull($this->request->getUserAgent());
+		self::assertNull($this->request->getUserAgent());
 	}
 
-	public function testHost()
+	public function testHost() : void
 	{
-		$this->assertEquals('domain.tld', $this->request->getHost());
+		self::assertSame('domain.tld', $this->request->getHost());
 		$this->expectException(\InvalidArgumentException::class);
 		$this->expectExceptionMessage('Invalid host: a_b');
 		$this->request->setHost('a_b');
 	}
 
-	public function testInvalidHost()
+	public function testInvalidHost() : void
 	{
 		$this->expectException(\UnexpectedValueException::class);
 		$this->expectExceptionMessage('Invalid Host: domain.tld');
@@ -66,33 +66,33 @@ class RequestTest extends TestCase
 		]);
 	}
 
-	public function testAccept()
+	public function testAccept() : void
 	{
-		$this->assertEquals([
+		self::assertSame([
 			'text/html',
 			'application/xhtml+xml',
 			'application/xml',
 			'*/*',
 		], $this->request->getAccepts());
-		$this->assertEquals('text/html', $this->request->negotiateAccept([
+		self::assertSame('text/html', $this->request->negotiateAccept([
 			'text/html',
 			'application/xml',
 		]));
-		$this->assertEquals('text/html', $this->request->negotiateAccept([
+		self::assertSame('text/html', $this->request->negotiateAccept([
 			'application/xml',
 			'text/html',
 		]));
-		$this->assertEquals('text/html', $this->request->negotiateAccept([
+		self::assertSame('text/html', $this->request->negotiateAccept([
 			'foo',
 			'text/html',
 		]));
-		$this->assertEquals('foo', $this->request->negotiateAccept([
+		self::assertSame('foo', $this->request->negotiateAccept([
 			'foo',
 			'bar',
 		]));
 	}
 
-	public function testBasicAuth()
+	public function testBasicAuth() : void
 	{
 		$this->request->setHeader(
 			'Authorization',
@@ -102,28 +102,28 @@ class RequestTest extends TestCase
 			'username' => 'user',
 			'password' => 'pass',
 		];
-		$this->assertEquals($expected, $this->request->getBasicAuth());
-		$this->assertEquals($expected, $this->request->getBasicAuth());
+		self::assertSame($expected, $this->request->getBasicAuth());
+		self::assertSame($expected, $this->request->getBasicAuth());
 	}
 
-	public function testBody()
+	public function testBody() : void
 	{
-		$this->assertEquals('', $this->request->getBody());
+		self::assertSame('', $this->request->getBody());
 		$this->request->setBody('color=red&height=500px&width=800');
-		$this->assertEquals('color=red&height=500px&width=800', $this->request->getBody());
-		$this->assertEquals([
+		self::assertSame('color=red&height=500px&width=800', $this->request->getBody());
+		self::assertSame([
 			'color' => 'red',
 			'height' => '500px',
 			'width' => '800',
 		], $this->request->getParsedBody());
-		$this->assertEquals([
+		self::assertSame([
 			'color' => 'red',
 			'height' => '500px',
 			'width' => '800',
 		], $this->request->getParsedBody());
-		$this->assertEquals('red', $this->request->getParsedBody('color', \FILTER_SANITIZE_STRING));
+		self::assertSame('red', $this->request->getParsedBody('color', \FILTER_SANITIZE_STRING));
 		$this->request->setMethod('POST');
-		$this->assertEquals([
+		self::assertSame([
 			'username' => 'phpdev',
 			'password' => 'Aw3S0me',
 			'user' => [
@@ -135,58 +135,58 @@ class RequestTest extends TestCase
 		$this->request->setMethod('GET');
 		$this->request->setBody('');
 		$this->request->parsedBody = [];
-		$this->assertEquals('', $this->request->getBody());
-		$this->assertEquals([], $this->request->getParsedBody());
+		self::assertSame('', $this->request->getBody());
+		self::assertSame([], $this->request->getParsedBody());
 	}
 
-	public function testCharset()
+	public function testCharset() : void
 	{
-		$this->assertEquals([
+		self::assertSame([
 			'utf-8',
 			'iso-8859-1',
 			'*',
 		], $this->request->getCharsets());
-		$this->assertEquals('utf-8', $this->request->negotiateCharset([
+		self::assertSame('utf-8', $this->request->negotiateCharset([
 			'utf-8',
 			'*',
 		]));
-		$this->assertEquals('utf-8', $this->request->negotiateCharset([
+		self::assertSame('utf-8', $this->request->negotiateCharset([
 			'*',
 			'utf-8',
 		]));
-		$this->assertEquals('iso-8859-1', $this->request->negotiateCharset([
+		self::assertSame('iso-8859-1', $this->request->negotiateCharset([
 			'foo',
 			'iso-8859-1',
 		]));
-		$this->assertEquals('foo', $this->request->negotiateCharset([
+		self::assertSame('foo', $this->request->negotiateCharset([
 			'foo',
 			'bar',
 		]));
 	}
 
-	public function testContentType()
+	public function testContentType() : void
 	{
-		$this->assertEquals('text/html; charset=UTF-8', $this->request->getContentType());
+		self::assertSame('text/html; charset=UTF-8', $this->request->getContentType());
 	}
 
-	public function testProtocol()
+	public function testProtocol() : void
 	{
-		$this->assertEquals('HTTP/1.1', $this->request->getProtocol());
+		self::assertSame('HTTP/1.1', $this->request->getProtocol());
 	}
 
-	public function testCookie()
+	public function testCookie() : void
 	{
-		$this->assertEquals('cart-123', $this->request->getCookie('cart')->getValue());
-		$this->assertEquals('abc', $this->request->getCookie('session_id')->getValue());
-		$this->assertNull($this->request->getCookie('unknown'));
+		self::assertSame('cart-123', $this->request->getCookie('cart')->getValue());
+		self::assertSame('abc', $this->request->getCookie('session_id')->getValue());
+		self::assertNull($this->request->getCookie('unknown'));
 	}
 
-	public function testCookies()
+	public function testCookies() : void
 	{
-		$this->assertIsArray($this->request->getCookies());
+		self::assertIsArray($this->request->getCookies());
 	}
 
-	public function testDigestAuth()
+	public function testDigestAuth() : void
 	{
 		$this->request->setHeader(
 			'Authorization',
@@ -203,50 +203,50 @@ class RequestTest extends TestCase
 			'nc' => null,
 			'cnonce' => null,
 		];
-		$this->assertEquals($expected, $this->request->getDigestAuth());
+		self::assertSame($expected, $this->request->getDigestAuth());
 	}
 
-	public function testEmptyAuth()
+	public function testEmptyAuth() : void
 	{
-		$this->assertNull($this->request->getBasicAuth());
-		$this->assertNull($this->request->getDigestAuth());
+		self::assertNull($this->request->getBasicAuth());
+		self::assertNull($this->request->getDigestAuth());
 	}
 
-	public function testEncoding()
+	public function testEncoding() : void
 	{
-		$this->assertEquals([
+		self::assertSame([
 			'gzip',
 			'deflate',
 		], $this->request->getEncodings());
-		$this->assertEquals('gzip', $this->request->negotiateEncoding([
+		self::assertSame('gzip', $this->request->negotiateEncoding([
 			'gzip',
 			'deflate',
 		]));
-		$this->assertEquals('gzip', $this->request->negotiateEncoding([
+		self::assertSame('gzip', $this->request->negotiateEncoding([
 			'deflate',
 			'gzip',
 		]));
-		$this->assertEquals('deflate', $this->request->negotiateEncoding([
+		self::assertSame('deflate', $this->request->negotiateEncoding([
 			'foo',
 			'deflate',
 		]));
-		$this->assertEquals('foo', $this->request->negotiateEncoding([
+		self::assertSame('foo', $this->request->negotiateEncoding([
 			'foo',
 			'bar',
 		]));
 	}
 
-	public function testEnv()
+	public function testEnv() : void
 	{
-		$this->assertEquals([], $this->request->getENV());
+		self::assertSame([], $this->request->getENV());
 	}
 
-	public function testEtag()
+	public function testEtag() : void
 	{
-		$this->assertEquals('abc', $this->request->getETag());
+		self::assertSame('abc', $this->request->getETag());
 	}
 
-	public function testFiles()
+	public function testFiles() : void
 	{
 		$_FILES = [
 			'file' => [
@@ -305,57 +305,57 @@ class RequestTest extends TestCase
 			],
 		];
 		$this->request = new RequestMock();
-		$this->assertIsArray($this->request->getFiles());
-		$this->assertInstanceOf(
+		self::assertIsArray($this->request->getFiles());
+		self::assertInstanceOf(
 			UploadedFile::class,
 			$this->request->getFiles()['file'][1]['aa'][0]
 		);
-		$this->assertInstanceOf(
+		self::assertInstanceOf(
 			UploadedFile::class,
 			$this->request->getFile('file[1][aa][0]')
 		);
-		$this->assertInstanceOf(
+		self::assertInstanceOf(
 			UploadedFile::class,
 			$this->request->getFiles()['file'][2]
 		);
-		$this->assertInstanceOf(
+		self::assertInstanceOf(
 			UploadedFile::class,
 			$this->request->getFile('foo')
 		);
 	}
 
-	public function testEmptyFiles()
+	public function testEmptyFiles() : void
 	{
 		$_FILES = [];
 		$this->request = new RequestMock([
 			'domain.tld',
 		]);
-		$this->assertEmpty($this->request->getFiles());
+		self::assertEmpty($this->request->getFiles());
 	}
 
-	public function testQueries()
+	public function testQueries() : void
 	{
-		$this->assertEquals([
+		self::assertSame([
 			'order_by' => 'title',
 			'order' => 'asc',
 		], $this->request->getQuery());
-		$this->assertEquals('asc', $this->request->getQuery('order'));
-		$this->assertEquals('title', $this->request->getQuery('order_by'));
-		$this->assertNull($this->request->getQuery('unknow'));
+		self::assertSame('asc', $this->request->getQuery('order'));
+		self::assertSame('title', $this->request->getQuery('order_by'));
+		self::assertNull($this->request->getQuery('unknow'));
 	}
 
-	public function testHeader()
+	public function testHeader() : void
 	{
-		$this->assertEquals('abc', $this->request->getHeader('etag'));
+		self::assertSame('abc', $this->request->getHeader('etag'));
 	}
 
-	public function testHeaders()
+	public function testHeaders() : void
 	{
-		$this->assertEquals([
+		self::assertSame([
 			'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-			'accept-charset' => 'utf-8, iso-8859-1;q=0.5, *;q=0.1',
 			'accept-encoding' => 'gzip, deflate',
 			'accept-language' => 'pt-BR,es;q=0.8,en;q=0.5,en-US;q=0.3',
+			'accept-charset' => 'utf-8, iso-8859-1;q=0.5, *;q=0.1',
 			'content-type' => 'text/html; charset=UTF-8',
 			'etag' => 'abc',
 			'host' => 'domain.tld',
@@ -365,88 +365,88 @@ class RequestTest extends TestCase
 		], $this->request->getHeaders());
 	}
 
-	public function testIP()
+	public function testIP() : void
 	{
-		$this->assertEquals('192.168.1.100', $this->request->getIP());
+		self::assertSame('192.168.1.100', $this->request->getIP());
 	}
 
-	public function testIsAJAX()
+	public function testIsAJAX() : void
 	{
-		$this->assertTrue($this->request->isAJAX());
-		$this->assertTrue($this->request->isAJAX());
+		self::assertTrue($this->request->isAJAX());
+		self::assertTrue($this->request->isAJAX());
 	}
 
-	public function testIsSecure()
+	public function testIsSecure() : void
 	{
-		$this->assertFalse($this->request->isSecure());
-		$this->assertFalse($this->request->isSecure());
+		self::assertFalse($this->request->isSecure());
+		self::assertFalse($this->request->isSecure());
 	}
 
-	public function testJSON()
+	public function testJSON() : void
 	{
-		$this->assertFalse($this->request->isJSON());
-		$this->assertFalse($this->request->getJSON());
+		self::assertFalse($this->request->isJSON());
+		self::assertFalse($this->request->getJSON());
 	}
 
-	public function testIsForm()
+	public function testIsForm() : void
 	{
-		$this->assertFalse($this->request->isForm());
+		self::assertFalse($this->request->isForm());
 	}
 
-	public function testIsPOST()
+	public function testIsPOST() : void
 	{
-		$this->assertFalse($this->request->isPOST());
+		self::assertFalse($this->request->isPOST());
 	}
 
-	public function testHasFiles()
+	public function testHasFiles() : void
 	{
-		$this->assertFalse($this->request->hasFiles());
+		self::assertFalse($this->request->hasFiles());
 	}
 
-	public function testLanguage()
+	public function testLanguage() : void
 	{
-		$this->assertEquals([
+		self::assertSame([
 			'pt-br',
 			'es',
 			'en',
 			'en-us',
 		], $this->request->getLanguages());
-		$this->assertEquals('pt-br', $this->request->negotiateLanguage([
+		self::assertSame('pt-br', $this->request->negotiateLanguage([
 			'pt-br',
 			'en',
 		]));
-		$this->assertEquals('pt-br', $this->request->negotiateLanguage([
+		self::assertSame('pt-br', $this->request->negotiateLanguage([
 			'en',
 			'pt-br',
 		]));
-		$this->assertEquals('pt-br', $this->request->negotiateLanguage([
+		self::assertSame('pt-br', $this->request->negotiateLanguage([
 			'foo',
 			'pt-br',
 		]));
-		$this->assertEquals('foo', $this->request->negotiateLanguage([
+		self::assertSame('foo', $this->request->negotiateLanguage([
 			'foo',
 			'bar',
 		]));
 	}
 
-	public function testMethod()
+	public function testMethod() : void
 	{
-		$this->assertEquals('GET', $this->request->getMethod());
+		self::assertSame('GET', $this->request->getMethod());
 		$this->request->setMethod('post');
-		$this->assertEquals('POST', $this->request->getMethod());
+		self::assertSame('POST', $this->request->getMethod());
 		$this->expectException(\InvalidArgumentException::class);
 		$this->expectExceptionMessage('Invalid HTTP Request Method: Foo');
 		$this->request->setMethod('Foo');
 	}
 
-	public function testPort()
+	public function testPort() : void
 	{
-		$this->assertEquals(80, $this->request->getPort());
+		self::assertSame(80, $this->request->getPort());
 	}
 
-	public function testPost()
+	public function testPost() : void
 	{
-		$this->assertEquals([
+		self::assertSame([
 			'username' => 'phpdev',
 			'password' => 'Aw3S0me',
 			'user' => [
@@ -455,82 +455,82 @@ class RequestTest extends TestCase
 			],
 			'csrf_token' => 'foo',
 		], $this->request->getPOST());
-		$this->assertEquals('Aw3S0me', $this->request->getPOST('password'));
-		$this->assertEquals('phpdev', $this->request->getPOST('username'));
-		$this->assertNull($this->request->getPOST('unknow'));
-		//$this->assertEquals(['password' => 'Aw3S0me'], $this->request->getPOST(['password']));
-		$this->assertEquals('foo', $this->request->getPOST('user[name]'));
-		/*$this->assertEquals(
+		self::assertSame('Aw3S0me', $this->request->getPOST('password'));
+		self::assertSame('phpdev', $this->request->getPOST('username'));
+		self::assertNull($this->request->getPOST('unknow'));
+		//self::assertSame(['password' => 'Aw3S0me'], $this->request->getPOST(['password']));
+		self::assertSame('foo', $this->request->getPOST('user[name]'));
+		/*self::assertSame(
 			['user[city]' => 'bar', 'username' => 'phpdev'],
 			$this->request->getPOST(['user[city]', 'username'])
 		);*/
 	}
 
-	public function testProxiedIP()
+	public function testProxiedIP() : void
 	{
-		$this->assertNull($this->request->getProxiedIP());
+		self::assertNull($this->request->getProxiedIP());
 	}
 
-	public function testReferer()
+	public function testReferer() : void
 	{
-		$this->assertEquals('http://domain.tld/contact.html', $this->request->getReferer());
-		$this->assertInstanceOf(URL::class, $this->request->getReferer());
+		self::assertSame('http://domain.tld/contact.html', (string) $this->request->getReferer());
+		self::assertInstanceOf(URL::class, $this->request->getReferer());
 	}
 
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testRedirectDataEmpty()
+	public function testRedirectDataEmpty() : void
 	{
 		\session_start();
-		$this->assertNull($this->request->getRedirectData());
+		self::assertNull($this->request->getRedirectData());
 	}
 
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testRedirectData()
+	public function testRedirectData() : void
 	{
 		\session_start();
 		$_SESSION['$']['redirect_data'] = ['foo' => ['bar' => 'baz']];
-		$this->assertEquals($_SESSION['$']['redirect_data'], $this->request->getRedirectData());
-		$this->assertFalse(isset($_SESSION['$']['redirect_data']));
-		$this->assertEquals(['bar' => 'baz'], $this->request->getRedirectData('foo'));
-		$this->assertEquals('baz', $this->request->getRedirectData('foo[bar]'));
-		$this->assertNull($this->request->getRedirectData('foo[baz]'));
+		self::assertSame($_SESSION['$']['redirect_data'], $this->request->getRedirectData());
+		self::assertFalse(isset($_SESSION['$']['redirect_data']));
+		self::assertSame(['bar' => 'baz'], $this->request->getRedirectData('foo'));
+		self::assertSame('baz', $this->request->getRedirectData('foo[bar]'));
+		self::assertNull($this->request->getRedirectData('foo[baz]'));
 	}
 
-	public function testRedirectDataWithoutSession()
+	public function testRedirectDataWithoutSession() : void
 	{
 		$this->expectException(\LogicException::class);
 		$this->expectExceptionMessage('Session must be active to get redirect data');
 		$this->request->getRedirectData();
 	}
 
-	public function testURL()
+	public function testURL() : void
 	{
-		$this->assertEquals(
+		self::assertSame(
 			'http://domain.tld/blog/posts?order_by=title&order=asc',
 			(string) $this->request->getURL()
 		);
-		$this->assertInstanceOf(URL::class, $this->request->getURL());
+		self::assertInstanceOf(URL::class, $this->request->getURL());
 	}
 
-	public function testId()
+	public function testId() : void
 	{
 		$id = $this->request->getId();
-		$this->assertIsString($id);
-		$this->assertEquals($id, $this->request->getId());
+		self::assertIsString($id);
+		self::assertSame($id, $this->request->getId());
 	}
 
-	public function testCallMethodNotAllowed()
+	public function testCallMethodNotAllowed() : void
 	{
 		$this->expectException(\BadMethodCallException::class);
 		$this->expectExceptionMessage('Method not allowed: prepareStatusLine');
 		$this->request->prepareStatusLine();
 	}
 
-	public function testCallMethodNotFound()
+	public function testCallMethodNotFound() : void
 	{
 		$this->expectException(\BadMethodCallException::class);
 		$this->expectExceptionMessage('Method not found: fooBar');

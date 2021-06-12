@@ -3,7 +3,7 @@
 use Framework\HTTP\URL;
 use PHPUnit\Framework\TestCase;
 
-class URLTest extends TestCase
+final class URLTest extends TestCase
 {
 	protected URL $url;
 
@@ -12,53 +12,53 @@ class URLTest extends TestCase
 		$this->url = new URL('http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id');
 	}
 
-	public function testBaseURL()
+	public function testBaseURL() : void
 	{
-		$this->assertEquals('http://domain.tld:8080/', $this->url->getBaseURL());
-		$this->assertEquals('http://domain.tld:8080', $this->url->getBaseURL(''));
-		$this->assertEquals('http://domain.tld:8080/foo/bar', $this->url->getBaseURL('foo/bar'));
+		self::assertSame('http://domain.tld:8080/', $this->url->getBaseURL());
+		self::assertSame('http://domain.tld:8080', $this->url->getBaseURL(''));
+		self::assertSame('http://domain.tld:8080/foo/bar', $this->url->getBaseURL('foo/bar'));
 		$this->url->setScheme('https');
 		$this->url->setPort(443);
-		$this->assertEquals('https://domain.tld/', $this->url->getBaseURL());
-		$this->assertEquals('https://domain.tld', $this->url->getBaseURL(''));
-		$this->assertEquals('https://domain.tld/foo/bar', $this->url->getBaseURL('foo/bar'));
+		self::assertSame('https://domain.tld/', $this->url->getBaseURL());
+		self::assertSame('https://domain.tld', $this->url->getBaseURL(''));
+		self::assertSame('https://domain.tld/foo/bar', $this->url->getBaseURL('foo/bar'));
 	}
 
-	public function testHost()
+	public function testHost() : void
 	{
-		$this->assertEquals('domain.tld:8080', $this->url->getHost());
+		self::assertSame('domain.tld:8080', $this->url->getHost());
 		$this->url->setHostname('do-main.com');
-		$this->assertEquals('do-main.com:8080', $this->url->getHost());
+		self::assertSame('do-main.com:8080', $this->url->getHost());
 		$this->expectException(\InvalidArgumentException::class);
 		$this->url->setHostname('in_valid.com');
 	}
 
-	public function testHostname()
+	public function testHostname() : void
 	{
-		$this->assertEquals('domain.tld', $this->url->getHostname());
+		self::assertSame('domain.tld', $this->url->getHostname());
 		$this->url->setHostname('do-main.com');
-		$this->assertEquals('do-main.com', $this->url->getHostname());
+		self::assertSame('do-main.com', $this->url->getHostname());
 		$this->expectException(\InvalidArgumentException::class);
 		$this->url->setHostname('in_valid.com');
 	}
 
-	public function testInvalidURL()
+	public function testInvalidURL() : void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		new URL('//unknown');
 	}
 
-	public function testOrigin()
+	public function testOrigin() : void
 	{
-		$this->assertEquals('http://domain.tld:8080', $this->url->getOrigin());
+		self::assertSame('http://domain.tld:8080', $this->url->getOrigin());
 		$this->url->setScheme('https');
 		$this->url->setPort(443);
-		$this->assertEquals('https://domain.tld', $this->url->getOrigin());
+		self::assertSame('https://domain.tld', $this->url->getOrigin());
 	}
 
-	public function testParsedURL()
+	public function testParsedURL() : void
 	{
-		$this->assertEquals([
+		self::assertSame([
 			'scheme' => 'http',
 			'user' => 'user',
 			'pass' => 'pass',
@@ -70,110 +70,110 @@ class URLTest extends TestCase
 		], $this->url->getParsedURL());
 	}
 
-	public function testPath()
+	public function testPath() : void
 	{
-		$this->assertEquals('/foo/bar', $this->url->getPath());
+		self::assertSame('/foo/bar', $this->url->getPath());
 		$this->url->setPath('a/b/c');
-		$this->assertEquals('/a/b/c', $this->url->getPath());
+		self::assertSame('/a/b/c', $this->url->getPath());
 		$this->url->setPath('/a/b/c');
-		$this->assertEquals('/a/b/c', $this->url->getPath());
+		self::assertSame('/a/b/c', $this->url->getPath());
 		$this->url->setPath('a/b/c/');
-		$this->assertEquals('/a/b/c', $this->url->getPath());
+		self::assertSame('/a/b/c', $this->url->getPath());
 		$this->url->setPath('/a/b/c/');
-		$this->assertEquals('/a/b/c', $this->url->getPath());
+		self::assertSame('/a/b/c', $this->url->getPath());
 		$this->url->setPathSegments(['hello', 'bye']);
-		$this->assertEquals('/hello/bye', $this->url->getPath());
+		self::assertSame('/hello/bye', $this->url->getPath());
 	}
 
-	public function testPathSegments()
+	public function testPathSegments() : void
 	{
-		$this->assertEquals(['foo', 'bar'], $this->url->getPathSegments());
+		self::assertSame(['foo', 'bar'], $this->url->getPathSegments());
 		$this->url->setPath('a/b/c');
-		$this->assertEquals(['a', 'b', 'c'], $this->url->getPathSegments());
+		self::assertSame(['a', 'b', 'c'], $this->url->getPathSegments());
 		$this->url->setPath('/a/b/c');
-		$this->assertEquals(['a', 'b', 'c'], $this->url->getPathSegments());
+		self::assertSame(['a', 'b', 'c'], $this->url->getPathSegments());
 		$this->url->setPath('a/b/c/');
-		$this->assertEquals(['a', 'b', 'c'], $this->url->getPathSegments());
+		self::assertSame(['a', 'b', 'c'], $this->url->getPathSegments());
 		$this->url->setPath('/a/b/c/');
-		$this->assertEquals(['a', 'b', 'c'], $this->url->getPathSegments());
+		self::assertSame(['a', 'b', 'c'], $this->url->getPathSegments());
 		$this->url->setPathSegments(['hello', 'bye']);
-		$this->assertEquals(['hello', 'bye'], $this->url->getPathSegments());
-		$this->assertEquals('bye', $this->url->getPathSegment(1));
-		$this->assertNull($this->url->getPathSegment(2));
+		self::assertSame(['hello', 'bye'], $this->url->getPathSegments());
+		self::assertSame('bye', $this->url->getPathSegment(1));
+		self::assertNull($this->url->getPathSegment(2));
 	}
 
-	public function testPort()
+	public function testPort() : void
 	{
-		$this->assertEquals(8080, $this->url->getPort());
+		self::assertSame(8080, $this->url->getPort());
 		$this->url->setPort(80);
-		$this->assertEquals(80, $this->url->getPort());
+		self::assertSame(80, $this->url->getPort());
 		$this->expectException(\InvalidArgumentException::class);
 		$this->url->setPort(100000);
 	}
 
-	public function testQuery()
+	public function testQuery() : void
 	{
-		$this->assertEquals('a=1&b=2', $this->url->getQuery());
-		$this->assertEquals(['a' => '1', 'b' => '2'], $this->url->getQueryData());
+		self::assertSame('a=1&b=2', $this->url->getQuery());
+		self::assertSame(['a' => '1', 'b' => '2'], $this->url->getQueryData());
 		$this->url->setQuery('?color=red&border=1');
-		$this->assertEquals('color=red&border=1', $this->url->getQuery());
-		$this->assertEquals(['color' => 'red', 'border' => '1'], $this->url->getQueryData());
+		self::assertSame('color=red&border=1', $this->url->getQuery());
+		self::assertSame(['color' => 'red', 'border' => '1'], $this->url->getQueryData());
 		$this->url->setQueryData(['color' => 'red', 'border' => 1]);
-		$this->assertEquals('color=red&border=1', $this->url->getQuery());
-		$this->assertEquals(['color' => 'red', 'border' => 1], $this->url->getQueryData());
+		self::assertSame('color=red&border=1', $this->url->getQuery());
+		self::assertSame(['color' => 'red', 'border' => 1], $this->url->getQueryData());
 		$this->url->addQuery('border', 2);
 		$this->url->addQueries(['color' => 'blue']);
 		$this->url->addQuery('a', 0);
-		$this->assertEquals('color=blue&border=2&a=0', $this->url->getQuery());
-		$this->assertEquals(
+		self::assertSame('color=blue&border=2&a=0', $this->url->getQuery());
+		self::assertSame(
 			['color' => 'blue', 'border' => 2, 'a' => 0],
 			$this->url->getQueryData()
 		);
 		$this->url->removeQueryData('a');
-		$this->assertEquals('color=blue&border=2', $this->url->getQuery());
-		$this->assertEquals(['color' => 'blue', 'border' => 2], $this->url->getQueryData());
+		self::assertSame('color=blue&border=2', $this->url->getQuery());
+		self::assertSame(['color' => 'blue', 'border' => 2], $this->url->getQueryData());
 	}
 
-	public function testQueryOnly()
+	public function testQueryOnly() : void
 	{
-		$this->assertEquals('b=2', $this->url->getQuery(['b']));
-		$this->assertEquals(['b' => '2'], $this->url->getQueryData(['b']));
+		self::assertSame('b=2', $this->url->getQuery(['b']));
+		self::assertSame(['b' => '2'], $this->url->getQueryData(['b']));
 		$this->url->setQuery('?color=red&border=1');
-		$this->assertEquals('border=1', $this->url->getQuery(['border']));
-		$this->assertEquals(['border' => '1'], $this->url->getQueryData(['border']));
+		self::assertSame('border=1', $this->url->getQuery(['border']));
+		self::assertSame(['border' => '1'], $this->url->getQueryData(['border']));
 		$this->url->setQueryData(['color' => 'red', 'border' => 1]);
-		$this->assertEquals('border=1', $this->url->getQuery(['border']));
-		$this->assertEquals(['border' => 1], $this->url->getQueryData(['border']));
+		self::assertSame('border=1', $this->url->getQuery(['border']));
+		self::assertSame(['border' => 1], $this->url->getQueryData(['border']));
 		$this->url->setQuery('?color=red&border=1', ['border']);
-		$this->assertEquals('border=1', $this->url->getQuery());
-		$this->assertEquals(['border' => '1'], $this->url->getQueryData());
+		self::assertSame('border=1', $this->url->getQuery());
+		self::assertSame(['border' => '1'], $this->url->getQueryData());
 		$this->url->setQueryData(['color' => 'red', 'border' => 1], ['border']);
-		$this->assertEquals('border=1', $this->url->getQuery());
-		$this->assertEquals(['border' => 1], $this->url->getQueryData());
+		self::assertSame('border=1', $this->url->getQuery());
+		self::assertSame(['border' => 1], $this->url->getQueryData());
 	}
 
-	public function testScheme()
+	public function testScheme() : void
 	{
-		$this->assertEquals('http', $this->url->getScheme());
+		self::assertSame('http', $this->url->getScheme());
 		$this->url->setScheme('https');
-		$this->assertEquals('https', $this->url->getScheme());
+		self::assertSame('https', $this->url->getScheme());
 	}
 
-	public function testGetAsString()
+	public function testGetAsString() : void
 	{
-		$this->assertEquals(
+		self::assertSame(
 			'http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id',
 			$this->url->getAsString()
 		);
-		$this->assertEquals(
+		self::assertSame(
 			'http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id',
 			$this->url->__toString()
 		);
 	}
 
-	public function testJsonSerializable()
+	public function testJsonSerializable() : void
 	{
-		$this->assertEquals(
+		self::assertSame(
 			'"http:\/\/user:pass@domain.tld:8080\/foo\/bar?a=1&b=2#id"',
 			\json_encode($this->url)
 		);

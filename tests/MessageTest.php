@@ -3,7 +3,7 @@
 use Framework\HTTP\Cookie;
 use PHPUnit\Framework\TestCase;
 
-class MessageTest extends TestCase
+final class MessageTest extends TestCase
 {
 	protected MessageMock $message;
 
@@ -12,32 +12,32 @@ class MessageTest extends TestCase
 		$this->message = new MessageMock();
 	}
 
-	public function testProtocol()
+	public function testProtocol() : void
 	{
-		$this->assertEquals('HTTP/1.1', $this->message->getProtocol());
+		self::assertSame('HTTP/1.1', $this->message->getProtocol());
 		$this->message->setProtocol('HTTP/2');
-		$this->assertEquals('HTTP/2', $this->message->getProtocol());
+		self::assertSame('HTTP/2', $this->message->getProtocol());
 	}
 
-	public function testHeader()
+	public function testHeader() : void
 	{
-		$this->assertFalse($this->message->hasHeader('from'));
-		$this->assertNull($this->message->getHeader('from'));
+		self::assertFalse($this->message->hasHeader('from'));
+		self::assertNull($this->message->getHeader('from'));
 		$this->message->setHeader('from', 'foo@localhost');
-		$this->assertTrue($this->message->hasHeader('from'));
-		$this->assertEquals('foo@localhost', $this->message->getHeader('from'));
-		$this->assertEquals(['from' => 'foo@localhost'], $this->message->getHeaders());
+		self::assertTrue($this->message->hasHeader('from'));
+		self::assertSame('foo@localhost', $this->message->getHeader('from'));
+		self::assertSame(['from' => 'foo@localhost'], $this->message->getHeaders());
 		$this->message->setHeader('from', 'bar@localhost');
-		$this->assertEquals('bar@localhost', $this->message->getHeader('from'));
+		self::assertSame('bar@localhost', $this->message->getHeader('from'));
 		$this->message->removeHeader('FROM');
-		$this->assertNull($this->message->getHeader('from'));
+		self::assertNull($this->message->getHeader('from'));
 	}
 
-	public function testHeaders()
+	public function testHeaders() : void
 	{
-		$this->assertEquals([], $this->message->getHeaders());
+		self::assertSame([], $this->message->getHeaders());
 		$this->message->setHeader('from', 'foo@localhost');
-		$this->assertEquals(
+		self::assertSame(
 			['from' => 'foo@localhost'],
 			$this->message->getHeaders()
 		);
@@ -45,7 +45,7 @@ class MessageTest extends TestCase
 			'content-type' => 'application/json',
 			'allow' => '*',
 		]);
-		$this->assertEquals(
+		self::assertSame(
 			[
 				'from' => 'foo@localhost',
 				'content-type' => 'application/json',
@@ -54,13 +54,13 @@ class MessageTest extends TestCase
 			$this->message->getHeaders()
 		);
 		$this->message->removeHeaders();
-		$this->assertEquals([], $this->message->getHeaders());
+		self::assertSame([], $this->message->getHeaders());
 	}
 
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testSendHeaders()
+	public function testSendHeaders() : void
 	{
 		$this->message->setHeader('from', 'foo@localhost');
 		$this->message->setHeader('from', 'bar@localhost');
@@ -69,36 +69,36 @@ class MessageTest extends TestCase
 			'allow' => '*',
 		]);
 		$this->message->sendHeaders();
-		$this->assertEquals([
+		self::assertSame([
 			'From: bar@localhost',
 			'Content-Type: application/json',
 			'Allow: *',
 		], xdebug_get_headers());
 	}
 
-	public function testBody()
+	public function testBody() : void
 	{
-		$this->assertEquals('', $this->message->getBody());
+		self::assertSame('', $this->message->getBody());
 		$this->message->setBody('hello');
-		$this->assertEquals('hello', $this->message->getBody());
+		self::assertSame('hello', $this->message->getBody());
 	}
 
-	public function testCookie()
+	public function testCookie() : void
 	{
-		$this->assertEquals([], $this->message->getCookies());
-		$this->assertNull($this->message->getCookie('session'));
-		$this->assertFalse($this->message->hasCookie('session'));
+		self::assertSame([], $this->message->getCookies());
+		self::assertNull($this->message->getCookie('session'));
+		self::assertFalse($this->message->hasCookie('session'));
 		$this->message->setCookie(new Cookie('session', 'abc123'));
-		$this->assertTrue($this->message->hasCookie('session'));
+		self::assertTrue($this->message->hasCookie('session'));
 		$this->message->setCookie(new Cookie('custom', 'foo'));
-		$this->assertEquals('abc123', $this->message->getCookie('session')->getValue());
-		$this->assertEquals(['session', 'custom'], \array_keys($this->message->getCookies()));
+		self::assertSame('abc123', $this->message->getCookie('session')->getValue());
+		self::assertSame(['session', 'custom'], \array_keys($this->message->getCookies()));
 		$this->message->removeCookies([
 			'session',
 			'custom',
 		]);
-		$this->assertEquals([], $this->message->getCookies());
+		self::assertSame([], $this->message->getCookies());
 		$this->message->setCookies([new Cookie('other', 'foo')]);
-		$this->assertEquals(['other'], \array_keys($this->message->getCookies()));
+		self::assertSame(['other'], \array_keys($this->message->getCookies()));
 	}
 }

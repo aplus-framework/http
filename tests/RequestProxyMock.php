@@ -2,7 +2,7 @@
 
 class RequestProxyMock extends RequestMock
 {
-	protected function prepareInput()
+	protected function prepareInput() : void
 	{
 		parent::prepareInput();
 		$_SERVER = [
