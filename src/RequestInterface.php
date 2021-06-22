@@ -14,7 +14,7 @@ interface RequestInterface
 	public function getHeader(string $name) : ?string;
 
 	/**
-	 * @return array|string[]
+	 * @return array<string,string>
 	 */
 	public function getHeaders() : array;
 

@@ -1,6 +1,7 @@
 <?php namespace Framework\HTTP;
 
 use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * Class URL.
@@ -123,7 +124,7 @@ class URL implements \JsonSerializable, \Stringable
 	}
 
 	/**
-	 * @return array|mixed[]
+	 * @return array<string,mixed>
 	 */
 	public function getParsedURL() : array
 	{
@@ -153,7 +154,7 @@ class URL implements \JsonSerializable, \Stringable
 	}
 
 	/**
-	 * @return array|string[]
+	 * @return array<int,string>
 	 */
 	public function getPathSegments() : array
 	{
@@ -189,7 +190,7 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * Get the "Query" part of the URL.
 	 *
-	 * @param array|string[] $allowedKeys Allowed query keys
+	 * @param array<int,string> $allowedKeys Allowed query keys
 	 *
 	 * @return string|null
 	 */
@@ -200,7 +201,7 @@ class URL implements \JsonSerializable, \Stringable
 	}
 
 	/**
-	 * @param array|string[] $allowedKeys
+	 * @param array<int,string> $allowedKeys
 	 *
 	 * @return array|mixed[]
 	 */
@@ -389,14 +390,17 @@ class URL implements \JsonSerializable, \Stringable
 			throw new InvalidArgumentException("Invalid URL: {$url}");
 		}
 		$url = \parse_url($filtered_url);
-		$this->setScheme($url['scheme']);
+		if ($url === false) {
+			throw new RuntimeException("URL could not be parsed: {$filtered_url}");
+		}
+		$this->setScheme($url['scheme']); // @phpstan-ignore-line
 		if (isset($url['user'])) {
 			$this->setUser($url['user']);
 		}
 		if (isset($url['pass'])) {
 			$this->setPass($url['pass']);
 		}
-		$this->setHostname($url['host']);
+		$this->setHostname($url['host']); // @phpstan-ignore-line
 		if (isset($url['port'])) {
 			$this->setPort($url['port']);
 		}

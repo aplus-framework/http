@@ -17,6 +17,11 @@ class CSRF
 	protected bool $verified = false;
 	protected bool $enabled = true;
 
+	/**
+	 * CSRF constructor.
+	 *
+	 * @param Request $request
+	 */
 	public function __construct(Request $request)
 	{
 		if (\session_status() !== \PHP_SESSION_ACTIVE) {
@@ -28,6 +33,9 @@ class CSRF
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getTokenName() : string
 	{
 		return $this->tokenName;
@@ -44,6 +52,9 @@ class CSRF
 		return $this;
 	}
 
+	/**
+	 * @return string|null
+	 */
 	public function getToken() : ?string
 	{
 		return $_SESSION['$']['csrf_token'] ?? null;
@@ -63,6 +74,9 @@ class CSRF
 		return $this->request->getParsedBody($this->getTokenName());
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function verify() : bool
 	{
 		if ($this->isEnabled() === false) {
@@ -104,6 +118,9 @@ class CSRF
 		return $this;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function input() : string
 	{
 		if ($this->isEnabled() === false) {
@@ -114,17 +131,26 @@ class CSRF
 			. $this->getToken() . '">';
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isEnabled() : bool
 	{
 		return $this->enabled;
 	}
 
+	/**
+	 * @return $this
+	 */
 	public function enable()
 	{
 		$this->enabled = true;
 		return $this;
 	}
 
+	/**
+	 * @return $this
+	 */
 	public function disable()
 	{
 		$this->enabled = false;

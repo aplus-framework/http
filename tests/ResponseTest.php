@@ -20,18 +20,21 @@ final class ResponseTest extends TestCase
 	}
 
 	/**
+	 * @see http://en.wikipedia.org/wiki/Post/Redirect/Get
 	 * @runInSeparateProcess
 	 */
 	public function testPostRedirectGet() : void
 	{
+		RequestMock::setInput(\INPUT_SERVER, [
+			'REQUEST_METHOD' => 'POST',
+		]);
 		$request = new RequestMock(['domain.tld']);
-		$request->setServerVariable('REQUEST_METHOD', 'POST');
 		$this->response = new class($request) extends Response {
 		};
 		\session_start();
 		$this->response->redirect('/new', ['foo']);
 		self::assertSame('/new', $this->response->getHeader('Location'));
-		self::assertSame(307, $this->response->getStatusCode());
+		self::assertSame(303, $this->response->getStatusCode());
 		self::assertSame(['foo'], $request->getRedirectData());
 	}
 
@@ -164,9 +167,9 @@ final class ResponseTest extends TestCase
 
 	public function testHeader() : void
 	{
-		self::assertSame([], $this->response->getHeaders('content-type'));
+		self::assertSame([], $this->response->getHeaders());
 		$this->response->setHeader('content-type', 'text/html');
-		$this->response->setHeader('dnt', 1);
+		$this->response->setHeader('dnt', 1); // @phpstan-ignore-line
 		$this->response->setHeaders([
 			'host' => 'http://localhost',
 			'ETag' => 'foo',
@@ -187,7 +190,7 @@ final class ResponseTest extends TestCase
 		self::assertSame([
 			'host' => 'http://localhost',
 		], $this->response->getHeaders());
-		$this->response->setHeaders([
+		$this->response->setHeaders([ // @phpstan-ignore-line
 			'dnt' => 1,
 			'x-custom-2' => 'bar',
 		]);

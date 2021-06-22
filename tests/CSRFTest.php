@@ -63,7 +63,7 @@ final class CSRFTest extends TestCase
 	public function testUserTokenEmpty() : void
 	{
 		$this->prepare();
-		$this->request->input[\INPUT_POST] = [];
+		$_POST = [];
 		self::assertFalse($this->csrf->verify());
 	}
 

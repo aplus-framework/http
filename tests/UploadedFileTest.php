@@ -5,6 +5,9 @@ use PHPUnit\Framework\TestCase;
 
 final class UploadedFileTest extends TestCase
 {
+	/**
+	 * @var array<string,int|string>
+	 */
 	protected array $file = [
 		'name' => 'logo.jpg',
 		'type' => 'foo/bar',
@@ -12,6 +15,9 @@ final class UploadedFileTest extends TestCase
 		'tmp_name' => __DIR__ . '/files/logo.png',
 		'error' => \UPLOAD_ERR_OK,
 	];
+	/**
+	 * @var array<string,int|string>
+	 */
 	protected array $file2 = [
 		'name' => 'file.txt',
 		'type' => 'foo/baz',

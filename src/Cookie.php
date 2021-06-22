@@ -100,23 +100,23 @@ class Cookie implements \Stringable
 	}
 
 	/**
-	 * @param DateTime|string|null $expires
+	 * @param DateTime|int|string|null $expires
 	 *
 	 * @throws Exception if can not create from format
 	 *
 	 * @return $this
 	 */
-	public function setExpires(DateTime | string | null $expires)
+	public function setExpires(DateTime | int | string | null $expires)
 	{
 		if ($expires instanceof DateTime) {
 			$expires = clone $expires;
 			$expires->setTimezone(new DateTimeZone('UTC'));
 		} elseif (\is_numeric($expires)) {
-			$expires = DateTime::createFromFormat('U', $expires, new DateTimeZone('UTC'));
+			$expires = DateTime::createFromFormat('U', (string) $expires, new DateTimeZone('UTC'));
 		} elseif ($expires !== null) {
 			$expires = new DateTime($expires, new DateTimeZone('UTC'));
 		}
-		$this->expires = $expires;
+		$this->expires = $expires; // @phpstan-ignore-line
 		return $this;
 	}
 
@@ -255,18 +255,27 @@ class Cookie implements \Stringable
 	 */
 	public function send() : bool
 	{
-		$expires = $this->getExpires();
-		if ($expires) {
-			$expires = $expires->getTimestamp();
+		$options = [];
+		$value = $this->getExpires();
+		if ($value) {
+			$options['expires'] = $value->getTimestamp();
 		}
-		return \setcookie($this->getName(), $this->getValue(), [
-			'expires' => $expires,
-			'path' => $this->getPath(),
-			'domain' => $this->getDomain(),
-			'secure' => $this->isSecure(),
-			'httponly' => $this->isHttpOnly(),
-			'samesite' => $this->getSameSite(),
-		]);
+		$value = $this->getPath();
+		if ($value !== null) {
+			$options['path'] = $value;
+		}
+		$value = $this->getDomain();
+		if ($value !== null) {
+			$options['domain'] = $value;
+		}
+		$options['secure'] = $this->isSecure();
+		$options['httponly'] = $this->isHttpOnly();
+		$value = $this->getSameSite();
+		if ($value !== null) {
+			$options['samesite'] = $value;
+		}
+		// @phpstan-ignore-next-line
+		return \setcookie($this->getName(), $this->getValue(), $options);
 	}
 
 	/**
@@ -320,7 +329,7 @@ class Cookie implements \Stringable
 	 *
 	 * @param string $line
 	 *
-	 * @return array|Cookie[]
+	 * @return array<string,Cookie>
 	 */
 	public static function create(string $line) : array
 	{
@@ -335,6 +344,11 @@ class Cookie implements \Stringable
 		return $cookies;
 	}
 
+	/**
+	 * @param string $part
+	 *
+	 * @return array<int,string|null>
+	 */
 	protected static function makeArgumentValue(string $part) : array
 	{
 		$part = \array_pad(\explode('=', $part, 2), 2, null);

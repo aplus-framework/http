@@ -808,7 +808,7 @@ class UploadedFile
 	/**
 	 * UploadedFile constructor.
 	 *
-	 * @param array|mixed[] $file a $_FILE item
+	 * @param array<string,mixed> $file a $_FILE item
 	 */
 	public function __construct(array $file)
 	{
@@ -922,7 +922,8 @@ class UploadedFile
 	public function getType() : string
 	{
 		if ($this->type === null) {
-			$this->type = \mime_content_type($this->tmpName);
+			$this->type = \mime_content_type($this->tmpName)
+				?: 'application/octet-stream';
 		}
 		return $this->type;
 	}
@@ -941,7 +942,7 @@ class UploadedFile
 	 * Moves an uploaded file to a new location.
 	 *
 	 * @param string $destination The destination of the moved file
-	 * @param bool   $overwrite
+	 * @param bool $overwrite
 	 *
 	 * @return bool
 	 */

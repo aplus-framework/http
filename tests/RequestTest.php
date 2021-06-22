@@ -44,8 +44,8 @@ final class RequestTest extends TestCase
 			UserAgent::class,
 			$this->request->getUserAgent()
 		);
-		$this->request->userAgent = null;
-		$this->request->setEmptyHeader('User-Agent');
+		$this->request->userAgent = false;
+		$this->request->removeHeader('User-Agent');
 		self::assertNull($this->request->getUserAgent());
 	}
 
@@ -109,6 +109,7 @@ final class RequestTest extends TestCase
 	public function testBody() : void
 	{
 		self::assertSame('', $this->request->getBody());
+		// @phpstan-ignore-next-line
 		$this->request->setBody('color=red&height=500px&width=800');
 		self::assertSame('color=red&height=500px&width=800', $this->request->getBody());
 		self::assertSame([
@@ -133,6 +134,7 @@ final class RequestTest extends TestCase
 			'csrf_token' => 'foo',
 		], $this->request->getParsedBody());
 		$this->request->setMethod('GET');
+		// @phpstan-ignore-next-line
 		$this->request->setBody('');
 		$this->request->parsedBody = [];
 		self::assertSame('', $this->request->getBody());
@@ -308,6 +310,7 @@ final class RequestTest extends TestCase
 		self::assertIsArray($this->request->getFiles());
 		self::assertInstanceOf(
 			UploadedFile::class,
+			// @phpstan-ignore-next-line
 			$this->request->getFiles()['file'][1]['aa'][0]
 		);
 		self::assertInstanceOf(
@@ -316,6 +319,7 @@ final class RequestTest extends TestCase
 		);
 		self::assertInstanceOf(
 			UploadedFile::class,
+			// @phpstan-ignore-next-line
 			$this->request->getFiles()['file'][2]
 		);
 		self::assertInstanceOf(
@@ -527,13 +531,13 @@ final class RequestTest extends TestCase
 	{
 		$this->expectException(\BadMethodCallException::class);
 		$this->expectExceptionMessage('Method not allowed: prepareStatusLine');
-		$this->request->prepareStatusLine();
+		$this->request->prepareStatusLine(); // @phpstan-ignore-line
 	}
 
 	public function testCallMethodNotFound() : void
 	{
 		$this->expectException(\BadMethodCallException::class);
 		$this->expectExceptionMessage('Method not found: fooBar');
-		$this->request->fooBar();
+		$this->request->fooBar(); // @phpstan-ignore-line
 	}
 }

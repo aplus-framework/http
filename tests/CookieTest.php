@@ -138,7 +138,7 @@ final class CookieTest extends TestCase
 	public function testValue() : void
 	{
 		self::assertSame('bar', $this->cookie->getValue());
-		$this->cookie->setValue(12345);
+		$this->cookie->setValue(12345); // @phpstan-ignore-line
 		self::assertSame('12345', $this->cookie->getValue());
 	}
 

@@ -37,8 +37,8 @@ final class RequestProxyTest extends TestCase
 
 	public function testJSON() : void
 	{
-		$this->proxyRequest->setBody('{"test":123}');
-		self::assertSame(123, $this->proxyRequest->getJSON()->test);
+		$this->proxyRequest->setBody('{"test":123}'); // @phpstan-ignore-line
+		self::assertSame(123, $this->proxyRequest->getJSON()->test); // @phpstan-ignore-line
 	}
 
 	public function testPort() : void

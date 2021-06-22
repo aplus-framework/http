@@ -29,13 +29,13 @@ abstract class Message
 	/**
 	 * HTTP Message Cookies.
 	 *
-	 * @var array|Cookie[]
+	 * @var array<string,Cookie>
 	 */
 	protected array $cookies = [];
 	/**
 	 * HTTP Message Headers.
 	 *
-	 * @var array|string[]
+	 * @var array<string,string>
 	 */
 	protected array $headers = [];
 	/**
@@ -43,7 +43,7 @@ abstract class Message
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
 	 *
-	 * @var array|string[]
+	 * @var array<string,string>
 	 */
 	protected static array $standardHeaders = [
 		// General
@@ -143,7 +143,7 @@ abstract class Message
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 	 *
-	 * @var array|string[]
+	 * @var array<int,string>
 	 */
 	protected static array $responseStatus = [
 		// Information responses
@@ -228,7 +228,7 @@ abstract class Message
 	}
 
 	/**
-	 * @return array|string[]
+	 * @return array<string,string>
 	 */
 	public function getHeaders() : array
 	{
@@ -254,7 +254,7 @@ abstract class Message
 	/**
 	 * Set a list of headers.
 	 *
-	 * @param array|string[] $headers
+	 * @param array<string,string> $headers
 	 *
 	 * @return $this
 	 */
@@ -318,7 +318,7 @@ abstract class Message
 	 *
 	 * @param string $name
 	 *
-	 * @return \Framework\HTTP\Cookie|null
+	 * @return Cookie|null
 	 */
 	public function getCookie(string $name) : ?Cookie
 	{
@@ -328,7 +328,7 @@ abstract class Message
 	/**
 	 * Get all Cookies.
 	 *
-	 * @return array|Cookie[]
+	 * @return array<string,Cookie>
 	 */
 	public function getCookies() : array
 	{
@@ -351,7 +351,7 @@ abstract class Message
 	/**
 	 * Set a list of Cookies.
 	 *
-	 * @param array|Cookie[] $cookies
+	 * @param array<int,Cookie> $cookies
 	 *
 	 * @return $this
 	 */
@@ -379,7 +379,7 @@ abstract class Message
 	/**
 	 * Remove many Cookies by names.
 	 *
-	 * @param array|string[] $names
+	 * @param array<int,string> $names
 	 *
 	 * @return $this
 	 */
@@ -536,7 +536,7 @@ abstract class Message
 	 *
 	 * @param string|null $string
 	 *
-	 * @return array|float[]
+	 * @return array<string,float>
 	 */
 	public static function parseQualityValues(?string $string) : array
 	{
@@ -547,7 +547,7 @@ abstract class Message
 			\explode(',', $string, 20),
 			static function ($qualifier, $part) {
 				[$value, $priority] = \array_merge(\explode(';q=', $part), [1]);
-				$qualifier[\trim($value)] = (float) $priority;
+				$qualifier[\trim((string) $value)] = (float) $priority;
 				return $qualifier;
 			},
 			[]

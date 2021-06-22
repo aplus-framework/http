@@ -14,12 +14,17 @@ use UnexpectedValueException;
 class Request extends Message implements RequestInterface
 {
 	/**
-	 * @var array|UploadedFile[]
+	 * @var array<string,array|UploadedFile>
 	 */
 	protected array $files = [];
+	/**
+	 * @var array<string,mixed>|null
+	 */
 	protected ?array $parsedBody = null;
 	/**
 	 * HTTP Authorization Header parsed.
+	 *
+	 * @var array<string,string|null>|null
 	 */
 	protected ?array $auth = null;
 	/**
@@ -32,27 +37,30 @@ class Request extends Message implements RequestInterface
 	 * Request Identifier. 32 bytes.
 	 */
 	protected ?string $id = null;
+	/**
+	 * @var array<string,array|null>
+	 */
 	protected array $negotiation = [
 		'ACCEPT' => null,
 		'CHARSET' => null,
 		'ENCODING' => null,
 		'LANGUAGE' => null,
 	];
-	protected false | URL | null $referrer = null;
-	protected false | UserAgent | null $userAgent = null;
-	protected bool | null $isAJAX = null;
+	protected false | URL $referrer;
+	protected false | UserAgent $userAgent;
+	protected bool $isAJAX;
 	/**
 	 * Tell if is a HTTPS connection.
 	 *
-	 * @var bool|null
+	 * @var bool
 	 */
-	protected bool | null $isSecure = null;
+	protected bool $isSecure;
 
 	/**
 	 * Request constructor.
 	 *
-	 * @param array<string>|null $allowedHosts set allowed hosts if your server dont serve by Host
-	 *                                          header, as Nginx do
+	 * @param array<int,string>|null $allowedHosts set allowed hosts if your server dont serve by
+	 *     Host header, as Nginx do
 	 *
 	 * @throws UnexpectedValueException if invalid Host
 	 */
@@ -70,7 +78,7 @@ class Request extends Message implements RequestInterface
 
 	/**
 	 * @param string $method
-	 * @param array  $arguments
+	 * @param array<int,mixed> $arguments
 	 *
 	 * @throws BadMethodCallException for method not allowed or method not found
 	 *
@@ -93,7 +101,7 @@ class Request extends Message implements RequestInterface
 	 * @see https://expressionengine.com/blog/http-host-and-server-name-security-issues
 	 * @see http://nginx.org/en/docs/http/request_processing.html
 	 *
-	 * @param array<string> $allowedHosts
+	 * @param array<int,string> $allowedHosts
 	 */
 	protected function validateHost(array $allowedHosts) : void
 	{
@@ -151,7 +159,7 @@ class Request extends Message implements RequestInterface
 		if ($this->body) {
 			return $this->body;
 		}
-		return \file_get_contents('php://input');
+		return (string) \file_get_contents('php://input');
 	}
 
 	protected function prepareFiles() : void
@@ -160,10 +168,10 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @param int            $type
-	 * @param string|null    $variable
-	 * @param int|null       $filter
-	 * @param array|int|null $options
+	 * @param int $type
+	 * @param string|null $variable
+	 * @param int|null $filter
+	 * @param array<int,int>|int|null $options
 	 *
 	 * @return mixed
 	 */
@@ -244,7 +252,7 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @param string $authorization
 	 *
-	 * @return array<string>
+	 * @return array<string,string|null>
 	 */
 	protected function parseAuth(string $authorization) : array
 	{
@@ -263,7 +271,7 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @param string $attributes
 	 *
-	 * @return array<string>
+	 * @return array<string,string|null>
 	 */
 	protected function parseBasicAuth(string $attributes) : array
 	{
@@ -284,7 +292,7 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @param string $attributes
 	 *
-	 * @return array<string>
+	 * @return array<string,string|null>
 	 */
 	protected function parseDigestAuth(string $attributes) : array
 	{
@@ -310,15 +318,15 @@ class Request extends Message implements RequestInterface
 				$data[$match[1]] = $match[3] ?: $match[4] ?? '';
 			}
 		}
-		return $data;
+		return $data; // @phpstan-ignore-line
 	}
 
 	/**
 	 * Get the Parsed Body or part of it.
 	 *
-	 * @param string|null    $name
-	 * @param int|null       $filter
-	 * @param array|int|null $filterOptions
+	 * @param string|null $name
+	 * @param int|null $filter
+	 * @param array<int,int>|int|null $filterOptions
 	 *
 	 * @return array|mixed|string|null
 	 */
@@ -344,11 +352,11 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Get the request body as JSON.
 	 *
-	 * @param bool     $assoc
+	 * @param bool $assoc
 	 * @param int|null $options
-	 * @param int      $depth
+	 * @param int $depth
 	 *
-	 * @return array|false|mixed[]|object
+	 * @return array<string,mixed>|false|object
 	 */
 	public function getJSON(bool $assoc = false, int $options = null, int $depth = 512)
 	{
@@ -365,7 +373,7 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @param string $type
 	 *
-	 * @return array|string[]
+	 * @return array<int,string>
 	 */
 	protected function getNegotiableValues(string $type) : array
 	{
@@ -380,8 +388,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @param string        $type
-	 * @param array<string> $negotiable
+	 * @param string $type
+	 * @param array<int,string> $negotiable
 	 *
 	 * @return string
 	 */
@@ -401,7 +409,7 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
 	 *
-	 * @return array<string>
+	 * @return array<int,string>
 	 */
 	public function getAccepts() : array
 	{
@@ -411,7 +419,7 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Negotiate the Accept header.
 	 *
-	 * @param array<string> $negotiable Allowed mime types
+	 * @param array<int,string> $negotiable Allowed mime types
 	 *
 	 * @return string The negotiated mime type
 	 */
@@ -425,7 +433,7 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Charset
 	 *
-	 * @return array<string>
+	 * @return array<int,string>
 	 */
 	public function getCharsets() : array
 	{
@@ -435,7 +443,7 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Negotiate the Accept-Charset.
 	 *
-	 * @param array<string> $negotiable Allowed charsets
+	 * @param array<int,string> $negotiable Allowed charsets
 	 *
 	 * @return string The negotiated charset
 	 */
@@ -449,7 +457,7 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding
 	 *
-	 * @return array<string>
+	 * @return array<int,string>
 	 */
 	public function getEncodings() : array
 	{
@@ -459,7 +467,7 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Negotiate the Accept-Encoding.
 	 *
-	 * @param array<string> $negotiable The allowed encodings
+	 * @param array<int,string> $negotiable The allowed encodings
 	 *
 	 * @return string The negotiated encoding
 	 */
@@ -473,7 +481,7 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language
 	 *
-	 * @return array<string>
+	 * @return array<int,string>
 	 */
 	public function getLanguages() : array
 	{
@@ -483,7 +491,7 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Negotiated the Accept-Language.
 	 *
-	 * @param array<string> $negotiable Allowed languages
+	 * @param array<int,string> $negotiable Allowed languages
 	 *
 	 * @return string The negotiated language
 	 */
@@ -505,9 +513,9 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @param string|null    $name
-	 * @param int|null       $filter
-	 * @param array|int|null $filterOptions
+	 * @param string|null $name
+	 * @param int|null $filter
+	 * @param array<int,int>|int|null $filterOptions
 	 *
 	 * @return array|mixed|null
 	 */
@@ -528,7 +536,7 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @return array|UploadedFile[]
+	 * @return array<string,array|UploadedFile>
 	 */
 	public function getFiles() : array
 	{
@@ -549,11 +557,11 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Get the URL GET queries.
 	 *
-	 * @param string|null    $name
-	 * @param int|null       $filter
-	 * @param array|int|null $filterOptions
+	 * @param string|null $name
+	 * @param int|null $filter
+	 * @param array<int,int>|int|null $filterOptions
 	 *
-	 * @return array|mixed
+	 * @return array|mixed|null
 	 */
 	public function getQuery(
 		string $name = null,
@@ -644,11 +652,11 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Get POST data.
 	 *
-	 * @param string|null    $name
-	 * @param int|null       $filter
-	 * @param array|int|null $filterOptions
+	 * @param string|null $name
+	 * @param int|null $filter
+	 * @param array<int,int>|int|null $filterOptions
 	 *
-	 * @return array|string|null
+	 * @return array|mixed|null
 	 */
 	public function getPOST(
 		string $name = null,
@@ -688,28 +696,28 @@ class Request extends Message implements RequestInterface
 	 */
 	public function getReferer() : ?URL
 	{
-		if ($this->referrer === null) {
+		if ( ! isset($this->referrer)) {
 			$this->referrer = false;
 			$referer = $this->getHeader('Referer');
 			if ($referer !== null) {
 				try {
 					$this->referrer = new URL($referer);
-				} catch (InvalidArgumentException $e) {
+				} catch (InvalidArgumentException) {
 					$this->referrer = false;
 				}
 			}
 		}
-		return $this->referrer === false ? null : $this->referrer;
+		return $this->referrer ?: null;
 	}
 
 	/**
 	 * Get $_SERVER variables.
 	 *
-	 * @param string|null    $name
-	 * @param int|null       $filter
-	 * @param array|int|null $filterOptions
+	 * @param string|null $name
+	 * @param int|null $filter
+	 * @param array<int,int>|int|null $filterOptions
 	 *
-	 * @return array|mixed
+	 * @return array|mixed|null
 	 */
 	public function getServerVariable(
 		string $name = null,
@@ -737,7 +745,7 @@ class Request extends Message implements RequestInterface
 	 */
 	public function getUserAgent() : ?UserAgent
 	{
-		if ($this->userAgent !== null) {
+		if (isset($this->userAgent) && $this->userAgent instanceof UserAgent) {
 			return $this->userAgent;
 		}
 		$userAgent = $this->getHeader('User-Agent');
@@ -746,16 +754,16 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * @param string|UserAgent $user_agent
+	 * @param string|UserAgent $userAgent
 	 *
 	 * @return $this
 	 */
-	protected function setUserAgent($user_agent)
+	protected function setUserAgent(string | UserAgent $userAgent)
 	{
-		if ( ! $user_agent instanceof UserAgent) {
-			$user_agent = new UserAgent($user_agent);
+		if ( ! $userAgent instanceof UserAgent) {
+			$userAgent = new UserAgent($userAgent);
 		}
-		$this->userAgent = $user_agent;
+		$this->userAgent = $userAgent;
 		return $this;
 	}
 
@@ -769,13 +777,12 @@ class Request extends Message implements RequestInterface
 	 */
 	public function isAJAX() : bool
 	{
-		if ($this->isAJAX !== null) {
+		if (isset($this->isAJAX)) {
 			return $this->isAJAX;
 		}
 		$received = $this->getHeader('X-Requested-With');
-		return $this->isAJAX = $received
-			? \strtolower($received) === 'xmlhttprequest'
-			: false;
+		return $this->isAJAX = ($received
+			&& \strtolower($received) === 'xmlhttprequest');
 	}
 
 	/**
@@ -785,7 +792,7 @@ class Request extends Message implements RequestInterface
 	 */
 	public function isSecure() : bool
 	{
-		if ($this->isSecure !== null) {
+		if (isset($this->isSecure)) {
 			return $this->isSecure;
 		}
 		return $this->isSecure = ($this->getServerVariable('REQUEST_SCHEME') === 'https'
@@ -825,14 +832,17 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @see https://www.sitepoint.com/community/t/-files-array-structure/2728/5
 	 *
-	 * @return array|UploadedFile[]
+	 * @return array<string,array|UploadedFile>
 	 */
 	protected function getInputFiles() : array
 	{
 		if (empty($_FILES)) {
 			return [];
 		}
-		$make_objects = static function (array $array, callable $make_objects) {
+		$make_objects = static function (
+			array $array,
+			callable $make_objects
+		) : array | UploadedFile {
 			$return = [];
 			foreach ($array as $k => $v) {
 				if (\is_array($v)) {
@@ -843,7 +853,7 @@ class Request extends Message implements RequestInterface
 			}
 			return $return;
 		};
-		return $make_objects(ArraySimple::files(), $make_objects);
+		return $make_objects(ArraySimple::files(), $make_objects); // @phpstan-ignore-line
 	}
 
 	/**
@@ -861,8 +871,8 @@ class Request extends Message implements RequestInterface
 			throw new InvalidArgumentException("Invalid host: {$host}");
 		}
 		$host = \parse_url($filtered_host);
-		$this->host = $host['host'];
-		if (isset($host['port'])) {
+		$this->host = $host['host']; // @phpstan-ignore-line
+		if (isset($host['port'])) { // @phpstan-ignore-line
 			$this->port = $host['port'];
 		}
 		return $this;

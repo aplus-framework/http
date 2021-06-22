@@ -1,6 +1,7 @@
 <?php namespace Framework\HTTP;
 
 use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * Trait ResponseDownload.
@@ -14,6 +15,9 @@ trait ResponseDownload
 	private string $filepath;
 	private int $filesize;
 	private bool $acceptRanges = true;
+	/**
+	 * @var array<int,array>|false
+	 */
 	private array | false $byteRanges = [];
 	private string $sendType = 'normal';
 	private string $boundary;
@@ -28,13 +32,13 @@ trait ResponseDownload
 	 * Sets a file to download/stream.
 	 *
 	 * @param string $filepath
-	 * @param bool   $inline       Set Content-Disposition header as "inline". Browsers load the
+	 * @param bool $inline Set Content-Disposition header as "inline". Browsers load the
 	 *                             file in the window. Set true to allow video or audio streams.
-	 * @param bool   $acceptRanges Set Accept-Ranges header to "bytes". Allow partial downloads,
+	 * @param bool $acceptRanges Set Accept-Ranges header to "bytes". Allow partial downloads,
 	 *                             media players to move the time position forward and back and
 	 *                             download managers to continue/download multi-parts
-	 * @param int    $delay        Delay between flushs in microseconds
-	 * @param int    $readLength   Bytes read by flush
+	 * @param int $delay Delay between flushs in microseconds
+	 * @param int $readLength Bytes read by flush
 	 *
 	 * @throws InvalidArgumentException If invalid file path
 	 *
@@ -47,15 +51,29 @@ trait ResponseDownload
 		int $delay = 0,
 		int $readLength = 1024
 	) {
-		$this->filepath = \realpath($filepath);
-		if ($this->filepath === false || ! \is_file($this->filepath)) {
+		$realpath = \realpath($filepath);
+		if ($realpath === false || ! \is_file($realpath)) {
 			throw new InvalidArgumentException('Invalid file path: ' . $filepath);
 		}
+		$this->filepath = $realpath;
 		$this->delay = $delay;
 		$this->readLength = $readLength;
-		$this->filesize = \filesize($this->filepath);
+		$filesize = @\filesize($this->filepath);
+		if ($filesize === false) {
+			throw new RuntimeException(
+				"Could not get the file size of '{$this->filepath}'"
+			);
+		}
+		$this->filesize = $filesize;
+		$filemtime = \filemtime($this->filepath);
+		if ($filemtime === false) {
+			throw new RuntimeException(
+				"Could not get the file modification time of '{$this->filepath}'"
+			);
+		}
+		$this->setHeader('Last-Modified', \date(\DATE_RFC7231, $filemtime));
 		$filename = \basename($filepath);
-		$this->setHeader('Last-Modified', \date(\DATE_RFC7231, \filemtime($this->filepath)));
+		$filename = \htmlspecialchars($filename, \ENT_QUOTES | \ENT_HTML5);
 		$this->setHeader(
 			'Content-Disposition',
 			$inline ? 'inline' : \sprintf('attachment; filename="%s"', $filename)
@@ -68,8 +86,11 @@ trait ResponseDownload
 				return $this;
 			}
 		}
-		$this->setHeader('Content-Length', $this->filesize);
-		$this->setHeader('Content-Type', \mime_content_type($this->filepath));
+		$this->setHeader('Content-Length', (string) $this->filesize);
+		$this->setHeader(
+			'Content-Type',
+			\mime_content_type($this->filepath) ?: 'application/octet-stream'
+		);
 		$this->sendType = 'normal';
 		return $this;
 	}
@@ -103,7 +124,7 @@ trait ResponseDownload
 	/**
 	 * Parse the HTTP Range Header line.
 	 *
-	 * Returns an array of two indexes representing first-byte-pos and last-byte-pos.
+	 * Returns arrays of two indexes, representing first-byte-pos and last-byte-pos.
 	 * If return false the Byte Ranges are invalid, the Response must return a 416 (Range Not
 	 * Satisfiable) status.
 	 *
@@ -112,7 +133,8 @@ trait ResponseDownload
 	 *
 	 * @param string $line
 	 *
-	 * @return array|false
+	 * @return array<int,array>|false
+	 * @phpstan-ignore-next-line
 	 */
 	private function parseByteRange(string $line) : array | false
 	{
@@ -148,7 +170,7 @@ trait ResponseDownload
 				return false;
 			}
 		}
-		return $ranges;
+		return $ranges; // @phpstan-ignore-line
 	}
 
 	/**
@@ -170,8 +192,11 @@ trait ResponseDownload
 	private function setSinglePart(int $firstByte, int $lastByte) : void
 	{
 		$this->sendType = 'single';
-		$this->setHeader('Content-Length', $lastByte - $firstByte + 1);
-		$this->setHeader('Content-Type', \mime_content_type($this->filepath));
+		$this->setHeader('Content-Length', (string) ($lastByte - $firstByte + 1));
+		$this->setHeader(
+			'Content-Type',
+			\mime_content_type($this->filepath) ?: 'application/octet-stream'
+		);
 		$this->setHeader(
 			'Content-Range',
 			\sprintf('bytes %d-%d/%d', $firstByte, $lastByte, $this->filesize)
@@ -180,10 +205,14 @@ trait ResponseDownload
 
 	private function sendSinglePart() : void
 	{
+		// @phpstan-ignore-next-line
 		$this->readBuffer($this->byteRanges[0][0], $this->byteRanges[0][1]);
 		$this->readFile();
 	}
 
+	/**
+	 * @param array<int,int> ...$byteRanges
+	 */
 	private function setMultiPart(array ...$byteRanges) : void
 	{
 		$this->sendType = 'multi';
@@ -196,17 +225,17 @@ trait ResponseDownload
 			$length += $range[1] - $range[0] + 1;
 		}
 		$length += \strlen($this->getBoundaryLine());
-		$this->setHeader('Content-Length', $length);
+		$this->setHeader('Content-Length', (string) $length);
 		$this->setHeader('Content-Type', "multipart/x-byteranges; boundary={$this->boundary}");
 	}
 
 	private function sendMultiPart() : void
 	{
 		$topLine = $this->getMultiPartTopLine();
-		foreach ($this->byteRanges as $range) {
+		foreach ((array) $this->byteRanges as $range) {
 			echo $topLine;
-			echo $this->getContentRangeLine($range[0], $range[1]);
-			$this->readBuffer($range[0], $range[1]);
+			echo $this->getContentRangeLine($range[0], $range[1]); // @phpstan-ignore-line
+			$this->readBuffer($range[0], $range[1]); // @phpstan-ignore-line
 		}
 		echo $this->getBoundaryLine();
 	}
@@ -278,7 +307,13 @@ trait ResponseDownload
 
 	protected function sendDownload() : void
 	{
-		$this->handle = \fopen($this->filepath, 'rb');
+		$handle = \fopen($this->filepath, 'rb');
+		if ($handle === false) {
+			throw new RuntimeException(
+				"Could not open a resource for file '{$this->filepath}'"
+			);
+		}
+		$this->handle = $handle;
 		switch ($this->sendType) {
 			case 'multi':
 				$this->sendMultiPart();
@@ -289,8 +324,6 @@ trait ResponseDownload
 			default:
 				$this->readFile();
 		}
-		if ($this->handle) {
-			\fclose($this->handle);
-		}
+		\fclose($this->handle);
 	}
 }

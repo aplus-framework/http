@@ -4,18 +4,16 @@ use Framework\HTTP\UserAgent;
 
 class RequestMock extends \Framework\HTTP\Request
 {
+	/**
+	 * @var array<string,mixed>|null
+	 */
 	public ?array $parsedBody = null;
-	public UserAgent | false | null $userAgent = null;
-
-	public function __construct(array $allowed_hosts = null)
-	{
-		$this->prepareInput();
-		parent::__construct($allowed_hosts);
-	}
-
-	protected function prepareInput() : void
-	{
-		$_SERVER = [
+	public UserAgent | false $userAgent;
+	/**
+	 * @var array<int,array>
+	 */
+	public static array $input = [
+		\INPUT_SERVER => [
 			'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 			'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
 			'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,es;q=0.8,en;q=0.5,en-US;q=0.3',
@@ -33,8 +31,8 @@ class RequestMock extends \Framework\HTTP\Request
 			'SERVER_PORT' => 80,
 			'SERVER_PROTOCOL' => 'HTTP/1.1',
 			'SERVER_NAME' => 'domain.tld',
-		];
-		$_POST = [
+		],
+		\INPUT_POST => [
 			'username' => 'phpdev',
 			'password' => 'Aw3S0me',
 			'user' => [
@@ -42,18 +40,33 @@ class RequestMock extends \Framework\HTTP\Request
 				'city' => 'bar',
 			],
 			'csrf_token' => 'foo',
-		];
-		$_GET = [
+		],
+		\INPUT_GET => [
 			'order_by' => 'title',
 			'order' => 'asc',
-		];
-		$_COOKIE = [
+		],
+		\INPUT_COOKIE => [
 			'session_id' => 'abc',
 			'cart' => 'cart-123',
 			'status-bar' => 'open',
 			'X-CSRF-Token' => 'token',
-		];
-		$_ENV = [];
+		],
+		\INPUT_ENV => [],
+	];
+
+	public function __construct(array $allowedHosts = null)
+	{
+		$this->prepareInput();
+		parent::__construct($allowedHosts);
+	}
+
+	protected function prepareInput() : void
+	{
+		$_SERVER = static::$input[\INPUT_SERVER];
+		$_POST = static::$input[\INPUT_POST];
+		$_GET = static::$input[\INPUT_GET];
+		$_COOKIE = static::$input[\INPUT_COOKIE];
+		$_ENV = static::$input[\INPUT_ENV];
 	}
 
 	public function filterInput(
@@ -65,19 +78,14 @@ class RequestMock extends \Framework\HTTP\Request
 		return parent::filterInput($type, $variable, $filter, $options);
 	}
 
-	public function setServerVariable(string $name, $value) : void
-	{
-		$this->input[\INPUT_SERVER][$name] = $value;
-	}
-
 	public function setHeader(string $name, string $value)
 	{
 		return parent::setHeader($name, $value);
 	}
 
-	public function setEmptyHeader(string $name) : void
+	public function removeHeader(string $name)
 	{
-		$this->headers[\strtolower($name)] = null;
+		return parent::removeHeader($name);
 	}
 
 	public function setMethod(string $method)
@@ -88,5 +96,16 @@ class RequestMock extends \Framework\HTTP\Request
 	public function setHost(string $host)
 	{
 		return parent::setHost($host);
+	}
+
+	/**
+	 * @param int $type One of the INPUT_* constants
+	 * @param array<string,mixed> $variables
+	 */
+	public static function setInput(int $type, array $variables) : void
+	{
+		foreach ($variables as $key => $value) {
+			static::$input[$type][$key] = $value;
+		}
 	}
 }
