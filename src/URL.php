@@ -189,24 +189,24 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * Get the "Query" part of the URL.
 	 *
-	 * @param array|string[] $allowed_keys Allowed query keys
+	 * @param array|string[] $allowedKeys Allowed query keys
 	 *
 	 * @return string|null
 	 */
-	public function getQuery(array $allowed_keys = []) : ?string
+	public function getQuery(array $allowedKeys = []) : ?string
 	{
-		$query = $this->getQueryData($allowed_keys);
+		$query = $this->getQueryData($allowedKeys);
 		return $query ? \http_build_query($query) : null;
 	}
 
 	/**
-	 * @param array|string[] $allowed_keys
+	 * @param array|string[] $allowedKeys
 	 *
 	 * @return array|mixed[]
 	 */
-	public function getQueryData(array $allowed_keys = []) : array
+	public function getQueryData(array $allowedKeys = []) : array
 	{
-		return $allowed_keys ? $this->filterQuery($allowed_keys) : $this->queryData;
+		return $allowedKeys ? $this->filterQuery($allowedKeys) : $this->queryData;
 	}
 
 	/**

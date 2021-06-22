@@ -204,11 +204,11 @@ class UserAgent implements \JsonSerializable, \Stringable
 	/**
 	 * UserAgent constructor.
 	 *
-	 * @param string $user_agent User-Agent string
+	 * @param string $userAgent User-Agent string
 	 */
-	public function __construct(string $user_agent)
+	public function __construct(string $userAgent)
 	{
-		$this->parse($user_agent);
+		$this->parse($userAgent);
 	}
 
 	public function __toString() : string
@@ -371,8 +371,9 @@ class UserAgent implements \JsonSerializable, \Stringable
 		if ($key === null || $this->isBrowser === false) {
 			return $this->isBrowser;
 		}
-		return isset(static::$config['browsers'][$key])
-			&& $this->browser === static::$config['browsers'][$key];
+		$config = static::$config['browsers'] ?? [];
+		return isset($config[$key])
+			&& $this->browser === $config[$key];
 	}
 
 	/**
@@ -387,8 +388,9 @@ class UserAgent implements \JsonSerializable, \Stringable
 		if ($key === null || $this->isMobile === false) {
 			return $this->isMobile;
 		}
-		return isset(static::$config['mobiles'][$key])
-			&& $this->mobile === static::$config['mobiles'][$key];
+		$config = static::$config['mobiles'] ?? [];
+		return isset($config[$key])
+			&& $this->mobile === $config[$key];
 	}
 
 	/**
@@ -403,8 +405,9 @@ class UserAgent implements \JsonSerializable, \Stringable
 		if ($key === null || $this->isRobot === false) {
 			return $this->isRobot;
 		}
-		return isset(static::$config['robots'][$key])
-			&& $this->robot === static::$config['robots'][$key];
+		$config = static::$config['robots'] ?? [];
+		return isset($config[$key])
+			&& $this->robot === $config[$key];
 	}
 
 	public function jsonSerialize()

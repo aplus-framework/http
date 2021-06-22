@@ -175,21 +175,21 @@ class Cookie implements \Stringable
 	}
 
 	/**
-	 * @param string|null $same_site Strict, Lax or Unset
+	 * @param string|null $sameSite Strict, Lax, Unset or None
 	 *
-	 * @throws InvalidArgumentException for invalid $same_site value
+	 * @throws InvalidArgumentException for invalid $sameSite value
 	 *
 	 * @return $this
 	 */
-	public function setSameSite(?string $same_site)
+	public function setSameSite(?string $sameSite)
 	{
-		if ($same_site !== null) {
-			$same_site = \ucfirst(\strtolower($same_site));
-			if ( ! \in_array($same_site, ['Strict', 'Lax', 'Unset', 'None'])) {
+		if ($sameSite !== null) {
+			$sameSite = \ucfirst(\strtolower($sameSite));
+			if ( ! \in_array($sameSite, ['Strict', 'Lax', 'Unset', 'None'])) {
 				throw new InvalidArgumentException('SameSite must be Strict, Lax, Unset or None');
 			}
 		}
-		$this->sameSite = $same_site;
+		$this->sameSite = $sameSite;
 		return $this;
 	}
 
@@ -213,13 +213,13 @@ class Cookie implements \Stringable
 	}
 
 	/**
-	 * @param bool $http_only
+	 * @param bool $httpOnly
 	 *
 	 * @return $this
 	 */
-	public function setHttpOnly(bool $http_only = true)
+	public function setHttpOnly(bool $httpOnly = true)
 	{
-		$this->httpOnly = $http_only;
+		$this->httpOnly = $httpOnly;
 		return $this;
 	}
 

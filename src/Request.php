@@ -51,15 +51,15 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Request constructor.
 	 *
-	 * @param array<string>|null $allowed_hosts set allowed hosts if your server dont serve by Host
+	 * @param array<string>|null $allowedHosts set allowed hosts if your server dont serve by Host
 	 *                                          header, as Nginx do
 	 *
 	 * @throws UnexpectedValueException if invalid Host
 	 */
-	public function __construct(array $allowed_hosts = null)
+	public function __construct(array $allowedHosts = null)
 	{
-		if ($allowed_hosts !== null) {
-			$this->validateHost($allowed_hosts);
+		if ($allowedHosts !== null) {
+			$this->validateHost($allowedHosts);
 		}
 		$this->prepareStatusLine();
 		$this->prepareHeaders();
@@ -93,12 +93,12 @@ class Request extends Message implements RequestInterface
 	 * @see https://expressionengine.com/blog/http-host-and-server-name-security-issues
 	 * @see http://nginx.org/en/docs/http/request_processing.html
 	 *
-	 * @param array<string> $allowed_hosts
+	 * @param array<string> $allowedHosts
 	 */
-	protected function validateHost(array $allowed_hosts) : void
+	protected function validateHost(array $allowedHosts) : void
 	{
 		$host = $this->getServerVariable('HTTP_HOST');
-		if ( ! \in_array($host, $allowed_hosts, true)) {
+		if ( ! \in_array($host, $allowedHosts, true)) {
 			throw new UnexpectedValueException('Invalid Host: ' . $host);
 		}
 	}
@@ -318,17 +318,17 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @param string|null    $name
 	 * @param int|null       $filter
-	 * @param array|int|null $filter_options
+	 * @param array|int|null $filterOptions
 	 *
 	 * @return array|mixed|string|null
 	 */
 	public function getParsedBody(
 		string $name = null,
 		int $filter = null,
-		array | int $filter_options = null
+		array | int $filterOptions = null
 	) {
 		if ($this->getMethod() === 'POST') {
-			return $this->getPOST($name, $filter, $filter_options);
+			return $this->getPOST($name, $filter, $filterOptions);
 		}
 		if ($this->parsedBody === null) {
 			\parse_str($this->getBody(), $this->parsedBody);
@@ -337,7 +337,7 @@ class Request extends Message implements RequestInterface
 			? $this->parsedBody
 			: ArraySimple::value($name, $this->parsedBody);
 		return $filter
-			? \filter_var($variable, $filter, $filter_options)
+			? \filter_var($variable, $filter, $filterOptions)
 			: $variable;
 	}
 
@@ -507,16 +507,16 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @param string|null    $name
 	 * @param int|null       $filter
-	 * @param array|int|null $filter_options
+	 * @param array|int|null $filterOptions
 	 *
 	 * @return array|mixed|null
 	 */
 	public function getENV(
 		string $name = null,
 		int $filter = null,
-		array | int $filter_options = null
+		array | int $filterOptions = null
 	) {
-		return $this->filterInput(\INPUT_ENV, $name, $filter, $filter_options);
+		return $this->filterInput(\INPUT_ENV, $name, $filter, $filterOptions);
 	}
 
 	/**
@@ -551,16 +551,16 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @param string|null    $name
 	 * @param int|null       $filter
-	 * @param array|int|null $filter_options
+	 * @param array|int|null $filterOptions
 	 *
 	 * @return array|mixed
 	 */
 	public function getQuery(
 		string $name = null,
 		int $filter = null,
-		array | int $filter_options = null
+		array | int $filterOptions = null
 	) {
-		return $this->filterInput(\INPUT_GET, $name, $filter, $filter_options);
+		return $this->filterInput(\INPUT_GET, $name, $filter, $filterOptions);
 	}
 
 	/**
@@ -646,16 +646,16 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @param string|null    $name
 	 * @param int|null       $filter
-	 * @param array|int|null $filter_options
+	 * @param array|int|null $filterOptions
 	 *
 	 * @return array|string|null
 	 */
 	public function getPOST(
 		string $name = null,
 		int $filter = null,
-		array | int $filter_options = null
+		array | int $filterOptions = null
 	) {
-		return $this->filterInput(\INPUT_POST, $name, $filter, $filter_options);
+		return $this->filterInput(\INPUT_POST, $name, $filter, $filterOptions);
 	}
 
 	/**
@@ -707,16 +707,16 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @param string|null    $name
 	 * @param int|null       $filter
-	 * @param array|int|null $filter_options
+	 * @param array|int|null $filterOptions
 	 *
 	 * @return array|mixed
 	 */
 	public function getServerVariable(
 		string $name = null,
 		int $filter = null,
-		array | int $filter_options = null
+		array | int $filterOptions = null
 	) {
-		return $this->filterInput(\INPUT_SERVER, $name, $filter, $filter_options);
+		return $this->filterInput(\INPUT_SERVER, $name, $filter, $filterOptions);
 	}
 
 	/**
