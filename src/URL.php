@@ -222,10 +222,10 @@ class URL implements \JsonSerializable, \Stringable
 	{
 		$url = $this->getScheme() . '://';
 		$part = $this->getUser();
-		if ($part) {
+		if ($part !== null) {
 			$url .= $part;
 			$part = $this->getPass();
-			if ($part) {
+			if ($part !== null) {
 				$url .= ':' . $part;
 			}
 			$url .= '@';
@@ -233,11 +233,11 @@ class URL implements \JsonSerializable, \Stringable
 		$url .= $this->getHost();
 		$url .= $this->getPath();
 		$part = $this->getQuery();
-		if ($part) {
+		if ($part !== null) {
 			$url .= '?' . $part;
 		}
 		$part = $this->getFragment();
-		if ($part) {
+		if ($part !== null) {
 			$url .= '#' . $part;
 		}
 		return $url;
