@@ -299,6 +299,8 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
+	 * Send the HTTP headers to the output.
+	 *
 	 * @throws LogicException if headers already is sent
 	 */
 	protected function sendHeaders() : void
@@ -315,7 +317,10 @@ class Response extends Message implements ResponseInterface
 			$this->setContentType('text/html');
 		}
 		\header($this->getProtocol() . ' ' . $this->getStatusLine());
-		parent::sendHeaders();
+		foreach ($this->getHeaders() as $name => $value) {
+			$name = static::getHeaderName($name);
+			\header($name . ': ' . $value);
+		}
 	}
 
 	/**

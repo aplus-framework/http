@@ -291,17 +291,6 @@ abstract class Message
 	}
 
 	/**
-	 * Send the HTTP headers to the output.
-	 */
-	protected function sendHeaders() : void
-	{
-		foreach ($this->getHeaders() as $name => $value) {
-			$name = static::getHeaderName($name);
-			\header($name . ': ' . $value);
-		}
-	}
-
-	/**
 	 * Say if the Message has a Cookie.
 	 *
 	 * @param string $name Cookie name

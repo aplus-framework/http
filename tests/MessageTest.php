@@ -57,25 +57,6 @@ final class MessageTest extends TestCase
 		self::assertSame([], $this->message->getHeaders());
 	}
 
-	/**
-	 * @runInSeparateProcess
-	 */
-	public function testSendHeaders() : void
-	{
-		$this->message->setHeader('from', 'foo@localhost');
-		$this->message->setHeader('from', 'bar@localhost');
-		$this->message->setHeaders([
-			'content-type' => 'application/json',
-			'allow' => '*',
-		]);
-		$this->message->sendHeaders();
-		self::assertSame([
-			'From: bar@localhost',
-			'Content-Type: application/json',
-			'Allow: *',
-		], xdebug_get_headers());
-	}
-
 	public function testBody() : void
 	{
 		self::assertSame('', $this->message->getBody());
