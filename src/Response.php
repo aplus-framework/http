@@ -9,7 +9,7 @@ use LogicException;
 /**
  * Class Response.
  *
- * @see     https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#HTTP_Responses
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#HTTP_Responses
  */
 class Response extends Message implements ResponseInterface
 {
@@ -31,7 +31,7 @@ class Response extends Message implements ResponseInterface
 	/**
 	 * Response constructor.
 	 *
-	 * @param \Framework\HTTP\Request $request
+	 * @param Request $request
 	 */
 	public function __construct(Request $request)
 	{
@@ -40,7 +40,7 @@ class Response extends Message implements ResponseInterface
 	}
 
 	/**
-	 * @return \Framework\HTTP\Request
+	 * @return Request
 	 */
 	public function getRequest() : Request
 	{
@@ -70,7 +70,7 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @param string $body
 	 *
-	 * @return \Framework\HTTP\Response
+	 * @return $this
 	 */
 	public function setBody(string $body)
 	{
@@ -155,11 +155,11 @@ class Response extends Message implements ResponseInterface
 	/**
 	 * Set the status line.
 	 *
-	 * @param int         $code
+	 * @param int $code
 	 * @param string|null $reason
 	 *
 	 * @throws InvalidArgumentException if status code is invalid
-	 * @throws LogicException           is status code is unknown and a reason is not set
+	 * @throws LogicException is status code is unknown and a reason is not set
 	 *
 	 * @return $this
 	 */
@@ -238,16 +238,16 @@ class Response extends Message implements ResponseInterface
 	/**
 	 * Sets the HTTP Redirect Response with data accessible in the next HTTP Request.
 	 *
-	 * @param string        $location Location Header value
-	 * @param array|mixed[] $data     Session data available on next Request
-	 * @param int|null      $code     HTTP Redirect status code. Leave null to determine based on
-	 *                                the current HTTP method.
+	 * @param string $location Location Header value
+	 * @param array|mixed[] $data Session data available on next Request
+	 * @param int|null $code HTTP Redirect status code. Leave null to determine
+	 * based on the current HTTP method.
 	 *
-	 * @see  http://en.wikipedia.org/wiki/Post/Redirect/Get
-	 * @see  Request::getRedirectData
+	 * @see http://en.wikipedia.org/wiki/Post/Redirect/Get
+	 * @see Request::getRedirectData
 	 *
 	 * @throws InvalidArgumentException for invalid Redirection code
-	 * @throws LogicException           if PHP Session is not active to set redirect data
+	 * @throws LogicException if PHP Session is not active to set redirect data
 	 *
 	 * @return $this
 	 */
@@ -321,24 +321,23 @@ class Response extends Message implements ResponseInterface
 	/**
 	 * Set response body and Content-Type as JSON.
 	 *
-	 * @param mixed    $data
+	 * @param mixed $data
 	 * @param int|null $options [optional] <p>
-	 *                          Bitmask consisting of <b>JSON_HEX_QUOT</b>,
-	 *                          <b>JSON_HEX_TAG</b>,
-	 *                          <b>JSON_HEX_AMP</b>,
-	 *                          <b>JSON_HEX_APOS</b>,
-	 *                          <b>JSON_NUMERIC_CHECK</b>,
-	 *                          <b>JSON_PRETTY_PRINT</b>,
-	 *                          <b>JSON_UNESCAPED_SLASHES</b>,
-	 *                          <b>JSON_FORCE_OBJECT</b>,
-	 *                          <b>JSON_UNESCAPED_UNICODE</b>.
-	 *                          <b>JSON_THROW_ON_ERROR</b>
-	 *                          </p>
-	 *                          <p>Default is <b>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE</b>
-	 *                          when null</p>
-	 * @param int      $depth   [optional] <p>
-	 *                          Set the maximum depth. Must be greater than zero.
-	 *                          </p>
+	 * Bitmask consisting of
+	 * <b>JSON_HEX_QUOT</b>,
+	 * <b>JSON_HEX_TAG</b>,
+	 * <b>JSON_HEX_AMP</b>,
+	 * <b>JSON_HEX_APOS</b>,
+	 * <b>JSON_NUMERIC_CHECK</b>,
+	 * <b>JSON_PRETTY_PRINT</b>,
+	 * <b>JSON_UNESCAPED_SLASHES</b>,
+	 * <b>JSON_FORCE_OBJECT</b>,
+	 * <b>JSON_UNESCAPED_UNICODE</b>.
+	 * <b>JSON_THROW_ON_ERROR</b>
+	 * </p>
+	 * <p>Default is <b>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE</b>
+	 * when null</p>
+	 * @param int $depth [optional] Set the maximum depth. Must be greater than zero.
 	 *
 	 * @throws JsonException if json_encode() fails
 	 *
@@ -361,7 +360,7 @@ class Response extends Message implements ResponseInterface
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
 	 * @see https://stackoverflow.com/a/3492459/6027968
 	 *
-	 * @param int  $seconds
+	 * @param int $seconds
 	 * @param bool $public
 	 *
 	 * @return $this

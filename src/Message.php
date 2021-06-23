@@ -5,8 +5,8 @@ use InvalidArgumentException;
 /**
  * Class Message.
  *
- * @see     https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
- * @see     https://tools.ietf.org/html/rfc7231
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
+ * @see https://tools.ietf.org/html/rfc7231
  */
 abstract class Message
 {
@@ -520,7 +520,7 @@ abstract class Message
 	/**
 	 * Get the Response reason based on status code.
 	 *
-	 * @param int         $code
+	 * @param int $code
 	 * @param string|null $default
 	 *
 	 * @return string|null

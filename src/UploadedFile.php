@@ -20,7 +20,7 @@ class UploadedFile
 	/**
 	 * @see http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
 	 *
-	 * @var array|array[]
+	 * @var array<string,array>
 	 */
 	protected static array $mimeTypes = [
 		'application/andrew-inset' => ['ez'],
@@ -875,7 +875,8 @@ class UploadedFile
 	}
 
 	/**
-	 * WARNING! This message should not be showed to the final user. Use Validation errors instead.
+	 * WARNING! This message should not be showed to the final user.
+	 * Use Validation errors instead.
 	 *
 	 * @return string
 	 */

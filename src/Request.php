@@ -9,7 +9,7 @@ use UnexpectedValueException;
 /**
  * Class Request.
  *
- * @see     https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#HTTP_Requests
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#HTTP_Requests
  */
 class Request extends Message implements RequestInterface
 {
@@ -59,8 +59,8 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Request constructor.
 	 *
-	 * @param array<int,string>|null $allowedHosts set allowed hosts if your server dont serve by
-	 *     Host header, as Nginx do
+	 * @param array<int,string>|null $allowedHosts set allowed hosts if your
+	 * server dont serve by Host header, as Nginx do
 	 *
 	 * @throws UnexpectedValueException if invalid Host
 	 */
@@ -239,8 +239,8 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Get Digest authorization.
 	 *
-	 * @return array<string>|null Nine keys: username, realm, nonce, uri, response, opaque, qop,
-	 *                            nc, cnonce
+	 * @return array<string>|null Nine keys: username, realm, nonce, uri,
+	 * response, opaque, qop, nc, cnonce
 	 */
 	public function getDigestAuth() : ?array
 	{
@@ -620,8 +620,8 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @throws LogicException if PHP Session is not active to get redirect data
 	 *
-	 * @return mixed|null an array containing all data, the key value or null if the key was not
-	 *                    found
+	 * @return mixed|null an array containing all data, the key value or null
+	 * if the key was not found
 	 */
 	public function getRedirectData(string $key = null)
 	{
@@ -740,8 +740,8 @@ class Request extends Message implements RequestInterface
 	/**
 	 * Gets the User Agent client.
 	 *
-	 * @return UserAgent|null the UserAgent object or null if no
-	 *                        user-agent header was received
+	 * @return UserAgent|null the UserAgent object or null if no user-agent
+	 * header was received
 	 */
 	public function getUserAgent() : ?UserAgent
 	{

@@ -32,15 +32,16 @@ trait ResponseDownload
 	 * Sets a file to download/stream.
 	 *
 	 * @param string $filepath
-	 * @param bool $inline Set Content-Disposition header as "inline". Browsers load the
-	 *                             file in the window. Set true to allow video or audio streams.
-	 * @param bool $acceptRanges Set Accept-Ranges header to "bytes". Allow partial downloads,
-	 *                             media players to move the time position forward and back and
-	 *                             download managers to continue/download multi-parts
+	 * @param bool $inline Set Content-Disposition header as "inline". Browsers
+	 * load the file in the window. Set true to allow video or audio streams
+	 * @param bool $acceptRanges Set Accept-Ranges header to "bytes". Allow
+	 * partial downloads, media players to move the time position forward and
+	 * back and download managers to continue/download multi-parts
 	 * @param int $delay Delay between flushs in microseconds
 	 * @param int $readLength Bytes read by flush
 	 *
 	 * @throws InvalidArgumentException If invalid file path
+	 * @throws RuntimeException If can not get the file size or modification time
 	 *
 	 * @return $this
 	 */
@@ -125,8 +126,8 @@ trait ResponseDownload
 	 * Parse the HTTP Range Header line.
 	 *
 	 * Returns arrays of two indexes, representing first-byte-pos and last-byte-pos.
-	 * If return false the Byte Ranges are invalid, the Response must return a 416 (Range Not
-	 * Satisfiable) status.
+	 * If return false, the Byte Ranges are invalid, so the Response must return
+	 * a 416 (Range Not Satisfiable) status.
 	 *
 	 * @see https://tools.ietf.org/html/rfc7233#section-2.1
 	 * @see https://tools.ietf.org/html/rfc7233#section-4.4

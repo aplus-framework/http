@@ -6,9 +6,9 @@ use RuntimeException;
 /**
  * Class URL.
  *
- * @see     https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Identifying_resources_on_the_Web
- * @see     https://developer.mozilla.org/en-US/docs/Web/API/URL
- * @see     https://tools.ietf.org/html/rfc3986#section-3
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Identifying_resources_on_the_Web
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/URL
+ * @see https://tools.ietf.org/html/rfc3986#section-3
  */
 class URL implements \JsonSerializable, \Stringable
 {
@@ -21,14 +21,14 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * The /paths/of/url.
 	 *
-	 * @var array|string[]
+	 * @var array<int,string>
 	 */
 	protected array $pathSegments = [];
 	protected ?int $port = null;
 	/**
 	 *  The ?queries.
 	 *
-	 * @var array|mixed[]
+	 * @var array<string,mixed>
 	 */
 	protected array $queryData = [];
 	protected ?string $scheme = null;
@@ -53,7 +53,7 @@ class URL implements \JsonSerializable, \Stringable
 	}
 
 	/**
-	 * @param string          $query
+	 * @param string $query
 	 * @param int|string|null $value
 	 *
 	 * @return $this
@@ -65,7 +65,7 @@ class URL implements \JsonSerializable, \Stringable
 	}
 
 	/**
-	 * @param array|mixed[] $queries
+	 * @param array<string,int|string|null> $queries
 	 *
 	 * @return $this
 	 */
@@ -78,9 +78,9 @@ class URL implements \JsonSerializable, \Stringable
 	}
 
 	/**
-	 * @param array|string[] $allowed
+	 * @param array<int,string> $allowed
 	 *
-	 * @return array|mixed[]
+	 * @return array<string,mixed>
 	 */
 	protected function filterQuery(array $allowed) : array
 	{
@@ -203,7 +203,7 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @param array<int,string> $allowedKeys
 	 *
-	 * @return array|mixed[]
+	 * @return array<string,mixed>
 	 */
 	public function getQueryData(array $allowedKeys = []) : array
 	{
@@ -312,7 +312,7 @@ class URL implements \JsonSerializable, \Stringable
 	}
 
 	/**
-	 * @param array|string[] $segments
+	 * @param array<int,string> $segments
 	 *
 	 * @return $this
 	 */
@@ -339,8 +339,8 @@ class URL implements \JsonSerializable, \Stringable
 	}
 
 	/**
-	 * @param string         $data
-	 * @param array|string[] $only
+	 * @param string $data
+	 * @param array<int,string> $only
 	 *
 	 * @return $this
 	 */
@@ -351,8 +351,8 @@ class URL implements \JsonSerializable, \Stringable
 	}
 
 	/**
-	 * @param array|mixed[]  $data
-	 * @param array|string[] $only
+	 * @param array<string,mixed> $data
+	 * @param array<int,string> $only
 	 *
 	 * @return $this
 	 */
