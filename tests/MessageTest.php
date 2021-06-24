@@ -57,6 +57,40 @@ final class MessageTest extends TestCase
 		self::assertSame([], $this->message->getHeaders());
 	}
 
+	public function testHeaderLine() : void
+	{
+		self::assertNull($this->message->getHeaderLine('content-type'));
+		$this->message->setHeader('content-type', 'text/plain');
+		self::assertSame(
+			'Content-Type: text/plain',
+			$this->message->getHeaderLine('content-type')
+		);
+	}
+
+	public function testHeaderLines() : void
+	{
+		self::assertSame([], $this->message->getHeaders());
+		$this->message->setHeader('from', 'foo@localhost');
+		self::assertSame(
+			['From: foo@localhost'],
+			$this->message->getHeaderLines()
+		);
+		$this->message->setHeaders([
+			'content-type' => 'application/json',
+			'ALLOW' => '*',
+		]);
+		self::assertSame(
+			[
+				'From: foo@localhost',
+				'Content-Type: application/json',
+				'Allow: *',
+			],
+			$this->message->getHeaderLines()
+		);
+		$this->message->removeHeaders();
+		self::assertSame([], $this->message->getHeaders());
+	}
+
 	public function testBody() : void
 	{
 		self::assertSame('', $this->message->getBody());

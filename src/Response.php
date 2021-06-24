@@ -317,9 +317,8 @@ class Response extends Message implements ResponseInterface
 			$this->setContentType('text/html');
 		}
 		\header($this->getProtocol() . ' ' . $this->getStatusLine());
-		foreach ($this->getHeaders() as $name => $value) {
-			$name = static::getHeaderName($name);
-			\header($name . ': ' . $value);
+		foreach ($this->getHeaderLines() as $line) {
+			\header($line);
 		}
 	}
 

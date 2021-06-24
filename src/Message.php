@@ -235,6 +235,29 @@ abstract class Message
 		return $this->headers;
 	}
 
+	public function getHeaderLine(string $name) : ?string
+	{
+		$value = $this->getHeader($name);
+		if ($value === null) {
+			return null;
+		}
+		$name = static::getHeaderName($name);
+		return $name . ': ' . $value;
+	}
+
+	/**
+	 * @return array<int,string>
+	 */
+	public function getHeaderLines() : array
+	{
+		$lines = [];
+		foreach ($this->getHeaders() as $name => $value) {
+			$name = static::getHeaderName($name);
+			$lines[] = $name . ': ' . $value;
+		}
+		return $lines;
+	}
+
 	/**
 	 * Set a Message header.
 	 *
