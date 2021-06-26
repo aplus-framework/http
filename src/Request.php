@@ -542,13 +542,13 @@ class Request extends Message implements RequestInterface
 	 * @param int|null $filter
 	 * @param array<int,int>|int $filterOptions
 	 *
-	 * @return array|mixed|null
+	 * @return mixed
 	 */
 	public function getENV(
 		string $name = null,
 		int $filter = null,
 		array | int $filterOptions = []
-	) {
+	) : mixed {
 		return $this->filterInput(\INPUT_ENV, $name, $filter, $filterOptions);
 	}
 
@@ -589,13 +589,13 @@ class Request extends Message implements RequestInterface
 	 * @param int|null $filter
 	 * @param array<int,int>|int $filterOptions
 	 *
-	 * @return array|mixed|null
+	 * @return mixed
 	 */
 	public function getQuery(
 		string $name = null,
 		int $filter = null,
 		array | int $filterOptions = []
-	) {
+	) : mixed {
 		return $this->filterInput(\INPUT_GET, $name, $filter, $filterOptions);
 	}
 
@@ -686,13 +686,13 @@ class Request extends Message implements RequestInterface
 	 * @param int|null $filter
 	 * @param array<int,int>|int $filterOptions
 	 *
-	 * @return array|mixed|null
+	 * @return mixed
 	 */
 	public function getPOST(
 		string $name = null,
 		int $filter = null,
 		array | int $filterOptions = []
-	) {
+	) : mixed {
 		return $this->filterInput(\INPUT_POST, $name, $filter, $filterOptions);
 	}
 
@@ -748,13 +748,13 @@ class Request extends Message implements RequestInterface
 	 * @param int|null $filter
 	 * @param array<int,int>|int $filterOptions
 	 *
-	 * @return array|mixed|null
+	 * @return mixed
 	 */
 	public function getServerVariable(
 		string $name = null,
 		int $filter = null,
 		array | int $filterOptions = []
-	) {
+	) : mixed {
 		return $this->filterInput(\INPUT_SERVER, $name, $filter, $filterOptions);
 	}
 
