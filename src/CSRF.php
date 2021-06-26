@@ -10,6 +10,7 @@
 namespace Framework\HTTP;
 
 use Exception;
+use JetBrains\PhpStorm\Pure;
 use LogicException;
 
 /**
@@ -48,6 +49,7 @@ class CSRF
 	/**
 	 * @return string
 	 */
+	#[Pure]
 	public function getTokenName() : string
 	{
 		return $this->tokenName;
@@ -67,6 +69,7 @@ class CSRF
 	/**
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getToken() : ?string
 	{
 		return $_SESSION['$']['csrf_token'] ?? null;
@@ -118,6 +121,7 @@ class CSRF
 		return true;
 	}
 
+	#[Pure]
 	protected function isVerified() : bool
 	{
 		return $this->verified;
@@ -137,6 +141,7 @@ class CSRF
 	/**
 	 * @return string
 	 */
+	#[Pure]
 	public function input() : string
 	{
 		if ($this->isEnabled() === false) {
@@ -150,6 +155,7 @@ class CSRF
 	/**
 	 * @return bool
 	 */
+	#[Pure]
 	public function isEnabled() : bool
 	{
 		return $this->enabled;
