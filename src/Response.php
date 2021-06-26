@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of The Framework HTTP Library.
  *
@@ -320,7 +320,7 @@ class Response extends Message implements ResponseInterface
 		// Per spec, MUST be sent with each request, if possible.
 		// http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html
 		if ($this->getHeader('Date') === null) {
-			$this->setDate(DateTime::createFromFormat('U', \time())); // @phpstan-ignore-line
+			$this->setDate(DateTime::createFromFormat('U', (string) \time())); // @phpstan-ignore-line
 		}
 		if ($this->getHeader('Content-Type') === null) {
 			$this->setContentType('text/html');

@@ -82,7 +82,7 @@ class RequestMock extends \Framework\HTTP\Request
 		int $type,
 		string $variable = null,
 		int $filter = null,
-		array | int $options = null
+		array | int $options = []
 	) : mixed {
 		return parent::filterInput($type, $variable, $filter, $options);
 	}

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of The Framework HTTP Library.
  *
@@ -293,7 +293,7 @@ abstract class Message
 	protected function setHeaders(array $headers)
 	{
 		foreach ($headers as $name => $value) {
-			$this->setHeader($name, $value);
+			$this->setHeader((string) $name, (string) $value);
 		}
 		return $this;
 	}

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of The Framework HTTP Library.
  *
@@ -180,7 +180,7 @@ class Request extends Message implements RequestInterface
 	 * @param int $type
 	 * @param string|null $variable
 	 * @param int|null $filter
-	 * @param array<int,int>|int|null $options
+	 * @param array<int,int>|int $options
 	 *
 	 * @return mixed
 	 */
@@ -188,7 +188,7 @@ class Request extends Message implements RequestInterface
 		int $type,
 		string $variable = null,
 		int $filter = null,
-		array | int $options = null
+		array | int $options = []
 	) : mixed {
 		$input = match ($type) {
 			\INPUT_POST => $_POST,
@@ -201,6 +201,9 @@ class Request extends Message implements RequestInterface
 		$variable = $variable === null
 			? $input
 			: ArraySimple::value($variable, $input);
+		if ($options === null) {
+			$options = [];
+		}
 		return $filter
 			? \filter_var($variable, $filter, $options)
 			: $variable;
@@ -342,7 +345,7 @@ class Request extends Message implements RequestInterface
 	public function getParsedBody(
 		string $name = null,
 		int $filter = null,
-		array | int $filterOptions = null
+		array | int $filterOptions = []
 	) {
 		if ($this->getMethod() === 'POST') {
 			return $this->getPOST($name, $filter, $filterOptions);
@@ -524,14 +527,14 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @param string|null $name
 	 * @param int|null $filter
-	 * @param array<int,int>|int|null $filterOptions
+	 * @param array<int,int>|int $filterOptions
 	 *
 	 * @return array|mixed|null
 	 */
 	public function getENV(
 		string $name = null,
 		int $filter = null,
-		array | int $filterOptions = null
+		array | int $filterOptions = []
 	) {
 		return $this->filterInput(\INPUT_ENV, $name, $filter, $filterOptions);
 	}
@@ -568,14 +571,14 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @param string|null $name
 	 * @param int|null $filter
-	 * @param array<int,int>|int|null $filterOptions
+	 * @param array<int,int>|int $filterOptions
 	 *
 	 * @return array|mixed|null
 	 */
 	public function getQuery(
 		string $name = null,
 		int $filter = null,
-		array | int $filterOptions = null
+		array | int $filterOptions = []
 	) {
 		return $this->filterInput(\INPUT_GET, $name, $filter, $filterOptions);
 	}
@@ -663,14 +666,14 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @param string|null $name
 	 * @param int|null $filter
-	 * @param array<int,int>|int|null $filterOptions
+	 * @param array<int,int>|int $filterOptions
 	 *
 	 * @return array|mixed|null
 	 */
 	public function getPOST(
 		string $name = null,
 		int $filter = null,
-		array | int $filterOptions = null
+		array | int $filterOptions = []
 	) {
 		return $this->filterInput(\INPUT_POST, $name, $filter, $filterOptions);
 	}
@@ -724,14 +727,14 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @param string|null $name
 	 * @param int|null $filter
-	 * @param array<int,int>|int|null $filterOptions
+	 * @param array<int,int>|int $filterOptions
 	 *
 	 * @return array|mixed|null
 	 */
 	public function getServerVariable(
 		string $name = null,
 		int $filter = null,
-		array | int $filterOptions = null
+		array | int $filterOptions = []
 	) {
 		return $this->filterInput(\INPUT_SERVER, $name, $filter, $filterOptions);
 	}
