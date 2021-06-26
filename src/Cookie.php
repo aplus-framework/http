@@ -13,6 +13,7 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * Class Cookie.
@@ -84,6 +85,7 @@ class Cookie implements \Stringable
 	/**
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getDomain() : ?string
 	{
 		return $this->domain;
@@ -103,6 +105,7 @@ class Cookie implements \Stringable
 	/**
 	 * @return DateTime|null
 	 */
+	#[Pure]
 	public function getExpires() : ?DateTime
 	{
 		return $this->expires;
@@ -140,6 +143,7 @@ class Cookie implements \Stringable
 	/**
 	 * @return string
 	 */
+	#[Pure]
 	public function getName() : string
 	{
 		return $this->name;
@@ -159,6 +163,7 @@ class Cookie implements \Stringable
 	/**
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getPath() : ?string
 	{
 		return $this->path;
@@ -178,6 +183,7 @@ class Cookie implements \Stringable
 	/**
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getSameSite() : ?string
 	{
 		return $this->sameSite;
@@ -205,6 +211,7 @@ class Cookie implements \Stringable
 	/**
 	 * @return string
 	 */
+	#[Pure]
 	public function getValue() : string
 	{
 		return $this->value;
@@ -235,6 +242,7 @@ class Cookie implements \Stringable
 	/**
 	 * @return bool
 	 */
+	#[Pure]
 	public function isHttpOnly() : bool
 	{
 		return $this->httpOnly;
@@ -254,6 +262,7 @@ class Cookie implements \Stringable
 	/**
 	 * @return bool
 	 */
+	#[Pure]
 	public function isSecure() : bool
 	{
 		return $this->secure;

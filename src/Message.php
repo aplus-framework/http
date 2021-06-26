@@ -10,6 +10,7 @@
 namespace Framework\HTTP;
 
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * Class Message.
@@ -226,11 +227,13 @@ abstract class Message
 		599 => 'Network Connect Timeout Error',
 	];
 
+	#[Pure]
 	public function hasHeader(string $name) : bool
 	{
 		return isset($this->headers[\strtolower($name)]);
 	}
 
+	#[Pure]
 	public function getHeader(string $name) : ?string
 	{
 		return $this->headers[\strtolower($name)] ?? null;
@@ -239,11 +242,13 @@ abstract class Message
 	/**
 	 * @return array<string,string>
 	 */
+	#[Pure]
 	public function getHeaders() : array
 	{
 		return $this->headers;
 	}
 
+	#[Pure]
 	public function getHeaderLine(string $name) : ?string
 	{
 		$value = $this->getHeader($name);
@@ -257,6 +262,7 @@ abstract class Message
 	/**
 	 * @return array<int,string>
 	 */
+	#[Pure]
 	public function getHeaderLines() : array
 	{
 		$lines = [];
@@ -329,6 +335,7 @@ abstract class Message
 	 *
 	 * @return bool
 	 */
+	#[Pure]
 	public function hasCookie(string $name) : bool
 	{
 		return (bool) $this->getCookie($name);
@@ -341,6 +348,7 @@ abstract class Message
 	 *
 	 * @return Cookie|null
 	 */
+	#[Pure]
 	public function getCookie(string $name) : ?Cookie
 	{
 		return $this->cookies[$name] ?? null;
@@ -351,6 +359,7 @@ abstract class Message
 	 *
 	 * @return array<string,Cookie>
 	 */
+	#[Pure]
 	public function getCookies() : array
 	{
 		return $this->cookies;
@@ -417,6 +426,7 @@ abstract class Message
 	 *
 	 * @return string
 	 */
+	#[Pure]
 	public function getBody() : string
 	{
 		return $this->body;
@@ -440,6 +450,7 @@ abstract class Message
 	 *
 	 * @return string
 	 */
+	#[Pure]
 	public function getProtocol() : string
 	{
 		return $this->protocol;
@@ -463,6 +474,7 @@ abstract class Message
 	 *
 	 * @return string normally one of: GET, HEAD, POST, PATCH, PUT, DELETE or OPTIONS
 	 */
+	#[Pure]
 	protected function getMethod() : string
 	{
 		return $this->method;
@@ -500,6 +512,7 @@ abstract class Message
 	 *
 	 * @return URL
 	 */
+	#[Pure]
 	protected function getURL() : URL
 	{
 		return $this->url;
@@ -521,6 +534,7 @@ abstract class Message
 		return $this;
 	}
 
+	#[Pure]
 	protected function parseContentType() : ?string
 	{
 		return \explode(';', $this->getHeader('Content-Type'), 2)[0] ?? null;
@@ -533,6 +547,7 @@ abstract class Message
 	 *
 	 * @return string
 	 */
+	#[Pure]
 	public static function getHeaderName(string $name) : string
 	{
 		return static::$standardHeaders[\strtolower($name)] ?? $name;
@@ -546,6 +561,7 @@ abstract class Message
 	 *
 	 * @return string|null
 	 */
+	#[Pure]
 	public static function getResponseReason(int $code, string $default = null) : ?string
 	{
 		return static::$responseStatus[$code] ?? $default;

@@ -10,6 +10,8 @@
 namespace Framework\HTTP;
 
 use InvalidArgumentException;
+use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\Pure;
 use RuntimeException;
 
 /**
@@ -56,6 +58,7 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @return string
 	 */
+	#[Pure]
 	public function __toString() : string
 	{
 		return $this->getAsString();
@@ -91,6 +94,7 @@ class URL implements \JsonSerializable, \Stringable
 	 *
 	 * @return array<string,mixed>
 	 */
+	#[Pure]
 	protected function filterQuery(array $allowed) : array
 	{
 		return $this->queryData ?
@@ -98,6 +102,7 @@ class URL implements \JsonSerializable, \Stringable
 			: [];
 	}
 
+	#[Pure]
 	public function getBaseURL(string $path = '/') : string
 	{
 		if ($path && $path !== '/') {
@@ -117,16 +122,19 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getHost() : ?string
 	{
 		return $this->hostname === null ? null : $this->hostname . $this->getPortPart();
 	}
 
+	#[Pure]
 	public function getHostname() : ?string
 	{
 		return $this->hostname;
 	}
 
+	#[Pure]
 	public function getOrigin() : string
 	{
 		return $this->getScheme() . '://' . $this->getHost();
@@ -135,6 +143,17 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @return array<string,mixed>
 	 */
+	#[ArrayShape([
+		'scheme' => 'string',
+		'user' => 'null|string',
+		'pass' => 'null|string',
+		'hostname' => 'string',
+		'port' => 'int|null',
+		'path' => 'string[]',
+		'query' => 'mixed[]',
+		'fragment' => 'null|string',
+	])]
+	#[Pure]
 	public function getParsedURL() : array
 	{
 		return [
@@ -152,11 +171,13 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getPass() : ?string
 	{
 		return $this->pass;
 	}
 
+	#[Pure]
 	public function getPath() : string
 	{
 		return '/' . \implode('/', $this->pathSegments);
@@ -165,11 +186,13 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @return array<int,string>
 	 */
+	#[Pure]
 	public function getPathSegments() : array
 	{
 		return $this->pathSegments;
 	}
 
+	#[Pure]
 	public function getPathSegment(int $index) : ?string
 	{
 		return $this->pathSegments[$index] ?? null;
@@ -178,11 +201,13 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @return int|null
 	 */
+	#[Pure]
 	public function getPort() : ?int
 	{
 		return $this->port;
 	}
 
+	#[Pure]
 	protected function getPortPart() : string
 	{
 		$part = $this->getPort();
@@ -203,6 +228,7 @@ class URL implements \JsonSerializable, \Stringable
 	 *
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getQuery(array $allowedKeys = []) : ?string
 	{
 		$query = $this->getQueryData($allowedKeys);
@@ -214,6 +240,7 @@ class URL implements \JsonSerializable, \Stringable
 	 *
 	 * @return array<string,mixed>
 	 */
+	#[Pure]
 	public function getQueryData(array $allowedKeys = []) : array
 	{
 		return $allowedKeys ? $this->filterQuery($allowedKeys) : $this->queryData;
@@ -222,11 +249,13 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getScheme() : ?string
 	{
 		return $this->scheme;
 	}
 
+	#[Pure]
 	public function getAsString() : string
 	{
 		$url = $this->getScheme() . '://';
@@ -255,6 +284,7 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getUser() : ?string
 	{
 		return $this->user;
@@ -436,7 +466,8 @@ class URL implements \JsonSerializable, \Stringable
 		return $this;
 	}
 
-	public function jsonSerialize()
+	#[Pure]
+	public function jsonSerialize() : string
 	{
 		return $this->getAsString();
 	}

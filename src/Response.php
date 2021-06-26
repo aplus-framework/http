@@ -12,6 +12,7 @@ namespace Framework\HTTP;
 use DateTime;
 use DateTimeZone;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Pure;
 use JsonException;
 use LogicException;
 
@@ -51,6 +52,7 @@ class Response extends Message implements ResponseInterface
 	/**
 	 * @return Request
 	 */
+	#[Pure]
 	public function getRequest() : Request
 	{
 		return $this->request;
@@ -156,6 +158,7 @@ class Response extends Message implements ResponseInterface
 	/**
 	 * @return string
 	 */
+	#[Pure]
 	public function getStatusLine() : string
 	{
 		return "{$this->statusCode} {$this->statusReason}";
@@ -206,6 +209,7 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @return int
 	 */
+	#[Pure]
 	public function getStatusCode() : int
 	{
 		return $this->statusCode;
@@ -229,6 +233,7 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @return string
 	 */
+	#[Pure]
 	public function getStatusReason() : string
 	{
 		return $this->statusReason;
@@ -239,6 +244,7 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @return bool
 	 */
+	#[Pure]
 	public function isSent() : bool
 	{
 		return $this->isSent;
@@ -408,6 +414,7 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @return int
 	 */
+	#[Pure]
 	public function getCacheSeconds() : int
 	{
 		return $this->cacheSeconds;

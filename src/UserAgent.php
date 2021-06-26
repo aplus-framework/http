@@ -9,6 +9,8 @@
  */
 namespace Framework\HTTP;
 
+use JetBrains\PhpStorm\Pure;
+
 /**
  * Class UserAgent.
  */
@@ -221,6 +223,7 @@ class UserAgent implements \JsonSerializable, \Stringable
 		$this->parse($userAgent);
 	}
 
+	#[Pure]
 	public function __toString() : string
 	{
 		return $this->getAsString();
@@ -314,6 +317,7 @@ class UserAgent implements \JsonSerializable, \Stringable
 	 *
 	 * @return string
 	 */
+	#[Pure]
 	public function getAsString() : string
 	{
 		return $this->agent;
@@ -324,6 +328,7 @@ class UserAgent implements \JsonSerializable, \Stringable
 	 *
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getBrowser() : ?string
 	{
 		return $this->browser;
@@ -334,6 +339,7 @@ class UserAgent implements \JsonSerializable, \Stringable
 	 *
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getBrowserVersion() : ?string
 	{
 		return $this->browserVersion;
@@ -344,6 +350,7 @@ class UserAgent implements \JsonSerializable, \Stringable
 	 *
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getMobile() : ?string
 	{
 		return $this->mobile;
@@ -354,6 +361,7 @@ class UserAgent implements \JsonSerializable, \Stringable
 	 *
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getPlatform() : ?string
 	{
 		return $this->platform;
@@ -364,6 +372,7 @@ class UserAgent implements \JsonSerializable, \Stringable
 	 *
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getRobot() : ?string
 	{
 		return $this->robot;
@@ -376,6 +385,7 @@ class UserAgent implements \JsonSerializable, \Stringable
 	 *
 	 * @return bool
 	 */
+	#[Pure]
 	public function isBrowser(string $key = null) : bool
 	{
 		if ($key === null || $this->isBrowser === false) {
@@ -393,6 +403,7 @@ class UserAgent implements \JsonSerializable, \Stringable
 	 *
 	 * @return bool
 	 */
+	#[Pure]
 	public function isMobile(string $key = null) : bool
 	{
 		if ($key === null || $this->isMobile === false) {
@@ -410,6 +421,7 @@ class UserAgent implements \JsonSerializable, \Stringable
 	 *
 	 * @return bool
 	 */
+	#[Pure]
 	public function isRobot(string $key = null) : bool
 	{
 		if ($key === null || $this->isRobot === false) {
@@ -420,7 +432,8 @@ class UserAgent implements \JsonSerializable, \Stringable
 			&& $this->robot === $config[$key];
 	}
 
-	public function jsonSerialize()
+	#[Pure]
+	public function jsonSerialize() : string
 	{
 		return $this->getAsString();
 	}

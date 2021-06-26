@@ -9,6 +9,8 @@
  */
 namespace Framework\HTTP;
 
+use JetBrains\PhpStorm\Pure;
+
 /**
  * Class UploadedFile.
  */
@@ -870,6 +872,7 @@ class UploadedFile
 	 *
 	 * @return string
 	 */
+	#[Pure]
 	public function getClientType() : string
 	{
 		return $this->clientType;
@@ -878,6 +881,7 @@ class UploadedFile
 	/**
 	 * @return int
 	 */
+	#[Pure]
 	public function getError() : int
 	{
 		return $this->error;
@@ -900,6 +904,7 @@ class UploadedFile
 	/**
 	 * @return string
 	 */
+	#[Pure]
 	public function getName() : string
 	{
 		return $this->name;
@@ -908,6 +913,7 @@ class UploadedFile
 	/**
 	 * @return int
 	 */
+	#[Pure]
 	public function getSize() : int
 	{
 		return $this->size;
@@ -916,11 +922,13 @@ class UploadedFile
 	/**
 	 * @return string
 	 */
+	#[Pure]
 	public function getTmpName() : string
 	{
 		return $this->tmpName;
 	}
 
+	#[Pure]
 	public function getDestination() : ?string
 	{
 		return $this->destination;
@@ -938,11 +946,13 @@ class UploadedFile
 		return $this->type;
 	}
 
+	#[Pure]
 	public function isMoved() : bool
 	{
 		return $this->isMoved;
 	}
 
+	#[Pure]
 	public function isValid() : bool
 	{
 		return $this->error === \UPLOAD_ERR_OK && \is_uploaded_file($this->tmpName);

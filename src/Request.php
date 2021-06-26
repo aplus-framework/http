@@ -12,6 +12,8 @@ namespace Framework\HTTP;
 use ArraySimple;
 use BadMethodCallException;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\Pure;
 use LogicException;
 use UnexpectedValueException;
 
@@ -282,6 +284,8 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @return array<string,string|null>
 	 */
+	#[ArrayShape(['username' => 'string|null', 'password' => 'string|null'])]
+	#[Pure]
 	protected function parseBasicAuth(string $attributes) : array
 	{
 		$data = [
@@ -303,6 +307,17 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @return array<string,string|null>
 	 */
+	#[ArrayShape([
+		'username' => 'string|null',
+		'realm' => 'string|null',
+		'nonce' => 'string|null',
+		'uri' => 'string|null',
+		'response' => 'string|null',
+		'opaque' => 'string|null',
+		'qop' => 'string|null',
+		'nc' => 'string|null',
+		'cnonce' => 'string|null',
+	])]
 	protected function parseDigestAuth(string $attributes) : array
 	{
 		$data = [
@@ -516,6 +531,7 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getContentType() : ?string
 	{
 		return $this->getHeader('Content-Type');
@@ -539,6 +555,7 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getETag() : ?string
 	{
 		return $this->getHeader('ETag');
@@ -547,11 +564,13 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @return array<string,array|UploadedFile>
 	 */
+	#[Pure]
 	public function getFiles() : array
 	{
 		return $this->files;
 	}
 
+	#[Pure]
 	public function hasFiles() : bool
 	{
 		return ! empty($this->files);
@@ -583,6 +602,7 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @return string
 	 */
+	#[Pure]
 	public function getHost() : string
 	{
 		return $this->host;
@@ -615,6 +635,7 @@ class Request extends Message implements RequestInterface
 		return $this->getServerVariable('REMOTE_ADDR');
 	}
 
+	#[Pure]
 	public function getMethod() : string
 	{
 		return parent::getMethod();
@@ -629,10 +650,10 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @throws LogicException if PHP Session is not active to get redirect data
 	 *
-	 * @return mixed|null an array containing all data, the key value or null
+	 * @return mixed an array containing all data, the key value or null
 	 * if the key was not found
 	 */
-	public function getRedirectData(string $key = null)
+	public function getRedirectData(string $key = null) : mixed
 	{
 		static $data;
 		if ($data === null && \session_status() !== \PHP_SESSION_ACTIVE) {
@@ -680,6 +701,7 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @return string|null
 	 */
+	#[Pure]
 	public function getProxiedIP() : ?string
 	{
 		foreach ([
@@ -741,6 +763,7 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @return URL
 	 */
+	#[Pure]
 	public function getURL() : URL
 	{
 		return parent::getURL();
@@ -813,6 +836,7 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @return bool
 	 */
+	#[Pure]
 	public function isForm() : bool
 	{
 		return $this->parseContentType() === 'application/x-www-form-urlencoded';
@@ -823,6 +847,7 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @return bool
 	 */
+	#[Pure]
 	public function isJSON() : bool
 	{
 		return $this->parseContentType() === 'application/json';
@@ -833,6 +858,7 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @return bool
 	 */
+	#[Pure]
 	public function isPOST() : bool
 	{
 		return $this->getMethod() === 'POST';
