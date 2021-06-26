@@ -240,6 +240,7 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @return array<string>|null Two keys: username and password
 	 */
+	#[ArrayShape(['username' => 'string|null', 'password' => 'string|null'])]
 	public function getBasicAuth() : ?array
 	{
 		return $this->getAuthType() === 'Basic'
@@ -253,6 +254,17 @@ class Request extends Message implements RequestInterface
 	 * @return array<string>|null Nine keys: username, realm, nonce, uri,
 	 * response, opaque, qop, nc, cnonce
 	 */
+	#[ArrayShape([
+		'username' => 'string|null',
+		'realm' => 'string|null',
+		'nonce' => 'string|null',
+		'uri' => 'string|null',
+		'response' => 'string|null',
+		'opaque' => 'string|null',
+		'qop' => 'string|null',
+		'nc' => 'string|null',
+		'cnonce' => 'string|null',
+	])]
 	public function getDigestAuth() : ?array
 	{
 		return $this->getAuthType() === 'Digest'
