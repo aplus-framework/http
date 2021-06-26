@@ -65,9 +65,9 @@ class URL implements \JsonSerializable, \Stringable
 	 * @param string $query
 	 * @param int|string|null $value
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function addQuery(string $query, $value = null)
+	public function addQuery(string $query, $value = null) : static
 	{
 		$this->queryData[$query] = $value;
 		return $this;
@@ -76,9 +76,9 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @param array<string,int|string|null> $queries
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function addQueries(array $queries)
+	public function addQueries(array $queries) : static
 	{
 		foreach ($queries as $name => $value) {
 			$this->addQuery($name, $value);
@@ -263,9 +263,9 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @param string $key
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function removeQueryData(string $key)
+	public function removeQueryData(string $key) : static
 	{
 		unset($this->queryData[$key]);
 		return $this;
@@ -274,9 +274,9 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @param string $fragment
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setFragment(string $fragment)
+	public function setFragment(string $fragment) : static
 	{
 		$this->fragment = \ltrim($fragment, '#');
 		return $this;
@@ -287,9 +287,9 @@ class URL implements \JsonSerializable, \Stringable
 	 *
 	 * @throws InvalidArgumentException for invalid URL Hostname
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setHostname(string $hostname)
+	public function setHostname(string $hostname) : static
 	{
 		$filtered = \filter_var($hostname, \FILTER_VALIDATE_DOMAIN, \FILTER_FLAG_HOSTNAME);
 		if ( ! $filtered) {
@@ -302,9 +302,9 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @param string $pass
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setPass(string $pass)
+	public function setPass(string $pass) : static
 	{
 		$this->pass = $pass;
 		return $this;
@@ -313,9 +313,9 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @param string $segments
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setPath(string $segments)
+	public function setPath(string $segments) : static
 	{
 		return $this->setPathSegments(\explode('/', \trim($segments, '/')));
 	}
@@ -323,9 +323,9 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @param array<int,string> $segments
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setPathSegments(array $segments)
+	public function setPathSegments(array $segments) : static
 	{
 		$this->pathSegments = $segments;
 		return $this;
@@ -336,9 +336,9 @@ class URL implements \JsonSerializable, \Stringable
 	 *
 	 * @throws InvalidArgumentException for invalid URL Port
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setPort(int $port)
+	public function setPort(int $port) : static
 	{
 		if ($port < 1 || $port > 65535) {
 			throw new InvalidArgumentException("Invalid URL Port: {$port}");
@@ -351,9 +351,9 @@ class URL implements \JsonSerializable, \Stringable
 	 * @param string $data
 	 * @param array<int,string> $only
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setQuery(string $data, array $only = [])
+	public function setQuery(string $data, array $only = []) : static
 	{
 		\parse_str(\ltrim($data, '?'), $data);
 		return $this->setQueryData($data, $only);
@@ -363,9 +363,9 @@ class URL implements \JsonSerializable, \Stringable
 	 * @param array<string,mixed> $data
 	 * @param array<int,string> $only
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setQueryData(array $data, array $only = [])
+	public function setQueryData(array $data, array $only = []) : static
 	{
 		if ($only) {
 			$data = \array_intersect_key($data, \array_flip($only));
@@ -377,9 +377,9 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @param string $scheme
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setScheme(string $scheme)
+	public function setScheme(string $scheme) : static
 	{
 		$this->scheme = $scheme;
 		return $this;
@@ -390,9 +390,9 @@ class URL implements \JsonSerializable, \Stringable
 	 *
 	 * @throws InvalidArgumentException for invalid URL
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function setURL(string $url)
+	protected function setURL(string $url) : static
 	{
 		$filtered_url = \filter_var($url, \FILTER_VALIDATE_URL);
 		if ( ! $filtered_url) {
@@ -428,9 +428,9 @@ class URL implements \JsonSerializable, \Stringable
 	/**
 	 * @param string $user
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setUser(string $user)
+	public function setUser(string $user) : static
 	{
 		$this->user = $user;
 		return $this;

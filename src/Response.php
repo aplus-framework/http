@@ -79,9 +79,9 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @param string $body
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setBody(string $body)
+	public function setBody(string $body) : static
 	{
 		if (\ob_get_length()) {
 			\ob_clean();
@@ -94,9 +94,9 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @param string $content
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function prependBody(string $content)
+	public function prependBody(string $content) : static
 	{
 		return parent::setBody($content . $this->getBody());
 	}
@@ -106,49 +106,49 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @param string $content
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function appendBody(string $content)
+	public function appendBody(string $content) : static
 	{
 		return parent::setBody($this->getBody() . $content);
 	}
 
-	public function setCookie(Cookie $cookie)
+	public function setCookie(Cookie $cookie) : static
 	{
 		return parent::setCookie($cookie);
 	}
 
-	public function setCookies(array $cookies)
+	public function setCookies(array $cookies) : static
 	{
 		return parent::setCookies($cookies);
 	}
 
-	public function removeCookie(string $name)
+	public function removeCookie(string $name) : static
 	{
 		return parent::removeCookie($name);
 	}
 
-	public function removeCookies(array $names)
+	public function removeCookies(array $names) : static
 	{
 		return parent::removeCookies($names);
 	}
 
-	public function setHeader(string $name, string $value)
+	public function setHeader(string $name, string $value) : static
 	{
 		return parent::setHeader($name, $value);
 	}
 
-	public function setHeaders(array $headers)
+	public function setHeaders(array $headers) : static
 	{
 		return parent::setHeaders($headers);
 	}
 
-	public function removeHeader(string $name)
+	public function removeHeader(string $name) : static
 	{
 		return parent::removeHeader($name);
 	}
 
-	public function removeHeaders()
+	public function removeHeaders() : static
 	{
 		return parent::removeHeaders();
 	}
@@ -170,9 +170,9 @@ class Response extends Message implements ResponseInterface
 	 * @throws InvalidArgumentException if status code is invalid
 	 * @throws LogicException is status code is unknown and a reason is not set
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setStatusLine(int $code, string $reason = null)
+	public function setStatusLine(int $code, string $reason = null) : static
 	{
 		$this->setStatusCode($code);
 		$reason ?: $reason = static::getResponseReason($code);
@@ -190,9 +190,9 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @throws InvalidArgumentException if status code is invalid
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setStatusCode(int $code)
+	public function setStatusCode(int $code) : static
 	{
 		if ($code < 100 || $code > 599) {
 			throw new InvalidArgumentException("Invalid status code: {$code}");
@@ -216,9 +216,9 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @param string $reason
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setStatusReason(string $reason)
+	public function setStatusReason(string $reason) : static
 	{
 		$this->statusReason = $reason;
 		return $this;
@@ -258,9 +258,9 @@ class Response extends Message implements ResponseInterface
 	 * @throws InvalidArgumentException for invalid Redirection code
 	 * @throws LogicException if PHP Session is not active to set redirect data
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function redirect(string $location, array $data = [], int $code = null)
+	public function redirect(string $location, array $data = [], int $code = null) : static
 	{
 		if ($code === null) {
 			$code = $this->request->getMethod() === 'GET' ? 307 : 303;
@@ -354,9 +354,9 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @throws JsonException if json_encode() fails
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setJSON($data, int $options = null, int $depth = 512)
+	public function setJSON($data, int $options = null, int $depth = 512) : static
 	{
 		if ($options === null) {
 			$options = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
@@ -376,9 +376,9 @@ class Response extends Message implements ResponseInterface
 	 * @param int $seconds
 	 * @param bool $public
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setCache(int $seconds, bool $public = false)
+	public function setCache(int $seconds, bool $public = false) : static
 	{
 		$date = new DateTime();
 		$date->modify('+' . $seconds . ' seconds');
@@ -394,9 +394,9 @@ class Response extends Message implements ResponseInterface
 	/**
 	 * Clear the browser cache.
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setNoCache()
+	public function setNoCache() : static
 	{
 		$this->setHeader('Cache-Control', 'no-cache, no-store, max-age=0');
 		$this->cacheSeconds = 0;
@@ -421,9 +421,9 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setContentType(string $mime, string $charset = 'UTF-8')
+	public function setContentType(string $mime, string $charset = 'UTF-8') : static
 	{
 		$this->setHeader('Content-Type', $mime . ($charset ? '; charset=' . $charset : ''));
 		return $this;
@@ -436,9 +436,9 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setContentLanguage(string $language)
+	public function setContentLanguage(string $language) : static
 	{
 		$this->setHeader('Content-Language', $language);
 		return $this;
@@ -451,9 +451,9 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setContentEncoding(string $encoding)
+	public function setContentEncoding(string $encoding) : static
 	{
 		$this->setHeader('Content-Encoding', $encoding);
 		return $this;
@@ -466,9 +466,9 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Date
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setDate(DateTime $datetime)
+	public function setDate(DateTime $datetime) : static
 	{
 		$date = clone $datetime;
 		$date->setTimezone(new DateTimeZone('UTC'));
@@ -483,9 +483,9 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setETag(string $etag)
+	public function setETag(string $etag) : static
 	{
 		$this->setHeader('ETag', $etag);
 		return $this;
@@ -498,9 +498,9 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expires
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setExpires(DateTime $datetime)
+	public function setExpires(DateTime $datetime) : static
 	{
 		$date = clone $datetime;
 		$date->setTimezone(new DateTimeZone('UTC'));
@@ -515,9 +515,9 @@ class Response extends Message implements ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Last-Modified
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setLastModified(DateTime $datetime)
+	public function setLastModified(DateTime $datetime) : static
 	{
 		$date = clone $datetime;
 		$date->setTimezone(new DateTimeZone('UTC'));
@@ -528,9 +528,9 @@ class Response extends Message implements ResponseInterface
 	/**
 	 * Set the status line as "Not Modified".
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setNotModified()
+	public function setNotModified() : static
 	{
 		$this->setStatusLine(304, 'Not Modified');
 		return $this;

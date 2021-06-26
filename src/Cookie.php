@@ -92,9 +92,9 @@ class Cookie implements \Stringable
 	/**
 	 * @param string|null $domain
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setDomain(?string $domain)
+	public function setDomain(?string $domain) : static
 	{
 		$this->domain = $domain;
 		return $this;
@@ -113,9 +113,9 @@ class Cookie implements \Stringable
 	 *
 	 * @throws Exception if can not create from format
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setExpires(DateTime | int | string | null $expires)
+	public function setExpires(DateTime | int | string | null $expires) : static
 	{
 		if ($expires instanceof DateTime) {
 			$expires = clone $expires;
@@ -148,9 +148,9 @@ class Cookie implements \Stringable
 	/**
 	 * @param string $name
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function setName(string $name)
+	protected function setName(string $name) : static
 	{
 		$this->name = $name;
 		return $this;
@@ -167,9 +167,9 @@ class Cookie implements \Stringable
 	/**
 	 * @param string|null $path
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setPath(?string $path)
+	public function setPath(?string $path) : static
 	{
 		$this->path = $path;
 		return $this;
@@ -188,9 +188,9 @@ class Cookie implements \Stringable
 	 *
 	 * @throws InvalidArgumentException for invalid $sameSite value
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setSameSite(?string $sameSite)
+	public function setSameSite(?string $sameSite) : static
 	{
 		if ($sameSite !== null) {
 			$sameSite = \ucfirst(\strtolower($sameSite));
@@ -213,9 +213,9 @@ class Cookie implements \Stringable
 	/**
 	 * @param string $value
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setValue(string $value)
+	public function setValue(string $value) : static
 	{
 		$this->value = $value;
 		return $this;
@@ -224,9 +224,9 @@ class Cookie implements \Stringable
 	/**
 	 * @param bool $httpOnly
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setHttpOnly(bool $httpOnly = true)
+	public function setHttpOnly(bool $httpOnly = true) : static
 	{
 		$this->httpOnly = $httpOnly;
 		return $this;
@@ -243,9 +243,9 @@ class Cookie implements \Stringable
 	/**
 	 * @param bool $secure
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setSecure(bool $secure = true)
+	public function setSecure(bool $secure = true) : static
 	{
 		$this->secure = $secure;
 		return $this;

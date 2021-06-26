@@ -229,9 +229,9 @@ class UserAgent implements \JsonSerializable, \Stringable
 	/**
 	 * @param string $string
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function parse(string $string)
+	protected function parse(string $string) : static
 	{
 		$this->isBrowser = false;
 		$this->isRobot = false;

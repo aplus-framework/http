@@ -53,9 +53,9 @@ class CSRF
 	/**
 	 * @param string $tokenName
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	public function setTokenName(string $tokenName)
+	public function setTokenName(string $tokenName) : static
 	{
 		$this->tokenName = \htmlspecialchars($tokenName, \ENT_QUOTES | \ENT_HTML5);
 		return $this;
@@ -70,9 +70,9 @@ class CSRF
 	}
 
 	/**
-	 * @return $this
+	 * @return static
 	 */
-	protected function setToken()
+	protected function setToken() : static
 	{
 		$_SESSION['$']['csrf_token'] = \bin2hex(\random_bytes(6));
 		return $this;
@@ -119,9 +119,9 @@ class CSRF
 	/**
 	 * @param bool $status
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function setVerified(bool $status)
+	protected function setVerified(bool $status) : static
 	{
 		$this->verified = $status;
 		return $this;
@@ -149,18 +149,18 @@ class CSRF
 	}
 
 	/**
-	 * @return $this
+	 * @return static
 	 */
-	public function enable()
+	public function enable() : static
 	{
 		$this->enabled = true;
 		return $this;
 	}
 
 	/**
-	 * @return $this
+	 * @return static
 	 */
-	public function disable()
+	public function disable() : static
 	{
 		$this->enabled = false;
 		return $this;

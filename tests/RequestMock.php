@@ -87,22 +87,22 @@ class RequestMock extends \Framework\HTTP\Request
 		return parent::filterInput($type, $variable, $filter, $options);
 	}
 
-	public function setHeader(string $name, string $value)
+	public function setHeader(string $name, string $value) : static
 	{
 		return parent::setHeader($name, $value);
 	}
 
-	public function removeHeader(string $name)
+	public function removeHeader(string $name) : static
 	{
 		return parent::removeHeader($name);
 	}
 
-	public function setMethod(string $method)
+	public function setMethod(string $method) : static
 	{
 		return parent::setMethod($method);
 	}
 
-	public function setHost(string $host)
+	public function setHost(string $host) : static
 	{
 		return parent::setHost($host);
 	}

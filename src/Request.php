@@ -91,7 +91,7 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @throws BadMethodCallException for method not allowed or method not found
 	 *
-	 * @return $this
+	 * @return static
 	 */
 	public function __call(string $method, array $arguments)
 	{
@@ -768,9 +768,9 @@ class Request extends Message implements RequestInterface
 	/**
 	 * @param string|UserAgent $userAgent
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function setUserAgent(string | UserAgent $userAgent)
+	protected function setUserAgent(string | UserAgent $userAgent) : static
 	{
 		if ( ! $userAgent instanceof UserAgent) {
 			$userAgent = new UserAgent($userAgent);
@@ -873,9 +873,9 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @throws InvalidArgumentException for invalid host
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function setHost(string $host)
+	protected function setHost(string $host) : static
 	{
 		$filtered_host = 'http://' . $host;
 		$filtered_host = \filter_var($filtered_host, \FILTER_VALIDATE_URL);

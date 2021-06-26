@@ -275,9 +275,9 @@ abstract class Message
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function setHeader(string $name, string $value)
+	protected function setHeader(string $name, string $value) : static
 	{
 		$this->headers[\strtolower($name)] = $value;
 		return $this;
@@ -288,9 +288,9 @@ abstract class Message
 	 *
 	 * @param array<string,string> $headers
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function setHeaders(array $headers)
+	protected function setHeaders(array $headers) : static
 	{
 		foreach ($headers as $name => $value) {
 			$this->setHeader((string) $name, (string) $value);
@@ -303,9 +303,9 @@ abstract class Message
 	 *
 	 * @param string $name
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function removeHeader(string $name)
+	protected function removeHeader(string $name) : static
 	{
 		unset($this->headers[\strtolower($name)]);
 		return $this;
@@ -314,9 +314,9 @@ abstract class Message
 	/**
 	 * Remove many headers by a list of headers.
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function removeHeaders()
+	protected function removeHeaders() : static
 	{
 		$this->headers = [];
 		return $this;
@@ -361,9 +361,9 @@ abstract class Message
 	 *
 	 * @param Cookie $cookie
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function setCookie(Cookie $cookie)
+	protected function setCookie(Cookie $cookie) : static
 	{
 		$this->cookies[$cookie->getName()] = $cookie;
 		return $this;
@@ -374,9 +374,9 @@ abstract class Message
 	 *
 	 * @param array<int,Cookie> $cookies
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function setCookies(array $cookies)
+	protected function setCookies(array $cookies) : static
 	{
 		foreach ($cookies as $cookie) {
 			$this->setCookie($cookie);
@@ -389,9 +389,9 @@ abstract class Message
 	 *
 	 * @param string $name
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function removeCookie(string $name)
+	protected function removeCookie(string $name) : static
 	{
 		unset($this->cookies[$name]);
 		return $this;
@@ -402,9 +402,9 @@ abstract class Message
 	 *
 	 * @param array<int,string> $names
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function removeCookies(array $names)
+	protected function removeCookies(array $names) : static
 	{
 		foreach ($names as $name) {
 			$this->removeCookie($name);
@@ -427,9 +427,9 @@ abstract class Message
 	 *
 	 * @param string $body
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function setBody(string $body)
+	protected function setBody(string $body) : static
 	{
 		$this->body = $body;
 		return $this;
@@ -450,9 +450,9 @@ abstract class Message
 	 *
 	 * @param string $protocol HTTP/1.1 or HTTP/2
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function setProtocol(string $protocol)
+	protected function setProtocol(string $protocol) : static
 	{
 		$this->protocol = $protocol;
 		return $this;
@@ -475,9 +475,9 @@ abstract class Message
 	 *
 	 * @throws InvalidArgumentException for invalid method
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function setMethod(string $method)
+	protected function setMethod(string $method) : static
 	{
 		$valid = \strtoupper($method);
 		if ( ! \in_array($valid, [
@@ -510,9 +510,9 @@ abstract class Message
 	 *
 	 * @param string|URL $url
 	 *
-	 * @return $this
+	 * @return static
 	 */
-	protected function setURL(string | URL $url)
+	protected function setURL(string | URL $url) : static
 	{
 		if ( ! $url instanceof URL) {
 			$url = new URL($url);

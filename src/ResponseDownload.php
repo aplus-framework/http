@@ -52,7 +52,7 @@ trait ResponseDownload
 	 * @throws InvalidArgumentException If invalid file path
 	 * @throws RuntimeException If can not get the file size or modification time
 	 *
-	 * @return $this
+	 * @return static
 	 */
 	public function setDownload(
 		string $filepath,
@@ -60,7 +60,7 @@ trait ResponseDownload
 		bool $acceptRanges = true,
 		int $delay = 0,
 		int $readLength = 1024
-	) {
+	) : static {
 		$realpath = \realpath($filepath);
 		if ($realpath === false || ! \is_file($realpath)) {
 			throw new InvalidArgumentException('Invalid file path: ' . $filepath);
