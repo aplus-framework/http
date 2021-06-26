@@ -201,9 +201,6 @@ class Request extends Message implements RequestInterface
 		$variable = $variable === null
 			? $input
 			: ArraySimple::value($variable, $input);
-		if ($options === null) {
-			$options = [];
-		}
 		return $filter
 			? \filter_var($variable, $filter, $options)
 			: $variable;
@@ -338,9 +335,9 @@ class Request extends Message implements RequestInterface
 	 *
 	 * @param string|null $name
 	 * @param int|null $filter
-	 * @param array<int,int>|int|null $filterOptions
+	 * @param array<int,int>|int $filterOptions
 	 *
-	 * @return array|mixed|string|null
+	 * @return array<int|string,mixed>|mixed|string|null
 	 */
 	public function getParsedBody(
 		string $name = null,
