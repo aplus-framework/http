@@ -9,6 +9,7 @@
  */
 namespace Framework\HTTP;
 
+use Exception;
 use LogicException;
 
 /**
@@ -30,6 +31,8 @@ class CSRF
 	 * CSRF constructor.
 	 *
 	 * @param Request $request
+	 *
+	 * @throws Exception if cannot get sufficient entropy to generate a new token
 	 */
 	public function __construct(Request $request)
 	{
@@ -70,6 +73,8 @@ class CSRF
 	}
 
 	/**
+	 * @throws Exception if random_bytes cannot get sufficient entropy
+	 *
 	 * @return static
 	 */
 	protected function setToken() : static
@@ -84,6 +89,8 @@ class CSRF
 	}
 
 	/**
+	 * @throws Exception if cannot get sufficient entropy to generate a new token
+	 *
 	 * @return bool
 	 */
 	public function verify() : bool
@@ -101,14 +108,14 @@ class CSRF
 		if ($this->getUserToken() === null) {
 			return false;
 		}
-		if (\hash_equals($_SESSION['$']['csrf_token'], $this->getUserToken())) {
-			if ( ! $this->isVerified()) {
-				$this->setToken();
-				$this->setVerified(true);
-			}
-			return true;
+		if ( ! \hash_equals($_SESSION['$']['csrf_token'], $this->getUserToken())) {
+			return false;
 		}
-		return false;
+		if ( ! $this->isVerified()) {
+			$this->setToken();
+			$this->setVerified();
+		}
+		return true;
 	}
 
 	protected function isVerified() : bool
@@ -121,7 +128,7 @@ class CSRF
 	 *
 	 * @return static
 	 */
-	protected function setVerified(bool $status) : static
+	protected function setVerified(bool $status = true) : static
 	{
 		$this->verified = $status;
 		return $this;
