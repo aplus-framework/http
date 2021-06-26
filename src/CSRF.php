@@ -9,7 +9,6 @@
  */
 namespace Framework\HTTP;
 
-use Exception;
 use JetBrains\PhpStorm\Pure;
 use LogicException;
 
@@ -32,8 +31,6 @@ class CSRF
 	 * CSRF constructor.
 	 *
 	 * @param Request $request
-	 *
-	 * @throws Exception if cannot get sufficient entropy to generate a new token
 	 */
 	public function __construct(Request $request)
 	{
@@ -76,13 +73,17 @@ class CSRF
 	}
 
 	/**
-	 * @throws Exception if random_bytes cannot get sufficient entropy
-	 *
 	 * @return static
 	 */
 	protected function setToken() : static
 	{
-		$_SESSION['$']['csrf_token'] = \bin2hex(\random_bytes(6));
+		$token = '';
+		$alnum = 'abcdefghijklmnopqrstuvxywzABCDEFGHIJKLMNOPQRSTUVXYWZ0123456789';
+		$max = \strlen($alnum) - 1;
+		for ($i = 0; $i < 6; $i++) {
+			$token .= $alnum[\rand(0, $max)];
+		}
+		$_SESSION['$']['csrf_token'] = \bin2hex($token);
 		return $this;
 	}
 
@@ -92,8 +93,6 @@ class CSRF
 	}
 
 	/**
-	 * @throws Exception if cannot get sufficient entropy to generate a new token
-	 *
 	 * @return bool
 	 */
 	public function verify() : bool
