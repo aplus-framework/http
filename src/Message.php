@@ -537,7 +537,12 @@ abstract class Message
 	#[Pure]
 	protected function parseContentType() : ?string
 	{
-		return \explode(';', $this->getHeader('Content-Type'), 2)[0] ?? null;
+		$contentType = $this->getHeader('Content-Type');
+		if ($contentType === null) {
+			return null;
+		}
+		$contentType = \explode(';', $contentType, 2)[0];
+		return \trim($contentType);
 	}
 
 	/**

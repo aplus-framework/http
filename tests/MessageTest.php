@@ -125,4 +125,11 @@ final class MessageTest extends TestCase
 		$this->message->setCookies([new Cookie('other', 'foo')]);
 		self::assertSame(['other'], \array_keys($this->message->getCookies()));
 	}
+
+	public function testParseContentType() : void
+	{
+		self::assertNull($this->message->parseContentType());
+		$this->message->setHeader('Content-Type', 'text/html; charset=UTF-8');
+		self::assertSame('text/html', $this->message->parseContentType());
+	}
 }

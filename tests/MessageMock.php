@@ -63,4 +63,9 @@ class MessageMock extends Message
 	{
 		return parent::removeCookies($names);
 	}
+
+	public function parseContentType() : ?string
+	{
+		return parent::parseContentType();
+	}
 }
