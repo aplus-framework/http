@@ -43,7 +43,7 @@ final class ResponseTest extends TestCase
 		\session_start();
 		$this->response->redirect('/new', ['foo']);
 		self::assertSame('/new', $this->response->getHeader('Location'));
-		self::assertSame(303, $this->response->getStatusCode());
+		self::assertSame(Response::CODE_SEE_OTHER, $this->response->getStatusCode());
 		self::assertSame(['foo'], $request->getRedirectData());
 	}
 
@@ -58,18 +58,18 @@ final class ResponseTest extends TestCase
 	{
 		$this->expectException(\InvalidArgumentException::class);
 		$this->expectExceptionMessage('Invalid Redirection code: 404');
-		$this->response->redirect('/new', [], 404);
+		$this->response->redirect('/new', [], Response::CODE_NOT_FOUND);
 	}
 
 	public function testRedirect() : void
 	{
 		$this->response->redirect('/new');
 		self::assertSame('/new', $this->response->getHeader('Location'));
-		self::assertSame(307, $this->response->getStatusCode());
+		self::assertSame(Response::CODE_TEMPORARY_REDIRECT, $this->response->getStatusCode());
 		self::assertSame('Temporary Redirect', $this->response->getStatusReason());
-		$this->response->redirect('/other', [], 301);
+		$this->response->redirect('/other', [], Response::CODE_MOVED_PERMANENTLY);
 		self::assertSame('/other', $this->response->getHeader('Location'));
-		self::assertSame(301, $this->response->getStatusCode());
+		self::assertSame(Response::CODE_MOVED_PERMANENTLY, $this->response->getStatusCode());
 		self::assertSame('Moved Permanently', $this->response->getStatusReason());
 	}
 
@@ -307,9 +307,9 @@ final class ResponseTest extends TestCase
 	public function testStatus() : void
 	{
 		self::assertSame('200 OK', $this->response->getStatusLine());
-		self::assertSame(200, $this->response->getStatusCode());
+		self::assertSame(Response::CODE_OK, $this->response->getStatusCode());
 		self::assertSame('OK', $this->response->getStatusReason());
-		$this->response->setStatusLine(201);
+		$this->response->setStatusLine(Response::CODE_CREATED);
 		self::assertSame('201 Created', $this->response->getStatusLine());
 		$this->response->setStatusReason('Other');
 		self::assertSame('201 Other', $this->response->getStatusLine());
