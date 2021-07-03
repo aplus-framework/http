@@ -11,6 +11,10 @@ namespace Framework\HTTP;
 
 /**
  * Interface ResponseInterface.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#http_responses
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+ * @see https://datatracker.ietf.org/doc/html/rfc7231#section-6
  */
 interface ResponseInterface
 {

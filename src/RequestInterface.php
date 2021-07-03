@@ -11,6 +11,8 @@ namespace Framework\HTTP;
 
 /**
  * Interface RequestInterface.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#http_requests
  */
 interface RequestInterface
 {
