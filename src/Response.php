@@ -269,8 +269,10 @@ class Response extends Message implements ResponseInterface
 	public function redirect(string $location, array $data = [], int $code = null) : static
 	{
 		if ($code === null) {
-			$code = $this->request->getMethod() === 'GET' ? 307 : 303;
-		} elseif ($code < 300 || $code > 308) {
+			$code = $this->request->getMethod() === 'GET'
+				? static::CODE_TEMPORARY_REDIRECT
+				: static::CODE_SEE_OTHER;
+		} elseif ($code < 300 || $code > 399) {
 			throw new InvalidArgumentException("Invalid Redirection code: {$code}");
 		}
 		$this->setStatusLine($code);
@@ -539,7 +541,7 @@ class Response extends Message implements ResponseInterface
 	 */
 	public function setNotModified() : static
 	{
-		$this->setStatusLine(304, 'Not Modified');
+		$this->setStatusLine(static::CODE_NOT_MODIFIED);
 		return $this;
 	}
 }
