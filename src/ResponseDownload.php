@@ -111,11 +111,11 @@ trait ResponseDownload
 		$this->byteRanges = $this->parseByteRange($rangeLine);
 		if ($this->byteRanges === false) {
 			// https://tools.ietf.org/html/rfc7233#section-4.2
-			$this->setStatusLine(416);
+			$this->setStatusLine(static::CODE_RANGE_NOT_SATISFIABLE);
 			$this->setHeader('Content-Range', '*/' . $this->filesize);
 			return;
 		}
-		$this->setStatusLine(206);
+		$this->setStatusLine(static::CODE_PARTIAL_CONTENT);
 		if (\count($this->byteRanges) === 1) {
 			$this->setSinglePart(...$this->byteRanges[0]);
 			return;
