@@ -1,0 +1,89 @@
+<?php
+/*
+ * This file is part of The Framework HTTP Library.
+ *
+ * (c) Natan Felles <natanfelles@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace PHPSTORM_META;
+
+registerArgumentsSet(
+	'response_status_codes',
+	\Framework\HTTP\ResponseInterface::CODE_CONTINUE,
+	\Framework\HTTP\ResponseInterface::CODE_SWITCHING_PROTOCOLS,
+	\Framework\HTTP\ResponseInterface::CODE_PROCESSING,
+	\Framework\HTTP\ResponseInterface::CODE_EARLY_HINTS,
+	\Framework\HTTP\ResponseInterface::CODE_OK,
+	\Framework\HTTP\ResponseInterface::CODE_CREATED,
+	\Framework\HTTP\ResponseInterface::CODE_ACCEPTED,
+	\Framework\HTTP\ResponseInterface::CODE_NON_AUTHORITATIVE_INFORMATION,
+	\Framework\HTTP\ResponseInterface::CODE_NO_CONTENT,
+	\Framework\HTTP\ResponseInterface::CODE_RESET_CONTENT,
+	\Framework\HTTP\ResponseInterface::CODE_PARTIAL_CONTENT,
+	\Framework\HTTP\ResponseInterface::CODE_MULTI_STATUS,
+	\Framework\HTTP\ResponseInterface::CODE_ALREADY_REPORTED,
+	\Framework\HTTP\ResponseInterface::CODE_IM_USED,
+	\Framework\HTTP\ResponseInterface::CODE_MULTIPLE_CHOICES,
+	\Framework\HTTP\ResponseInterface::CODE_MOVED_PERMANENTLY,
+	\Framework\HTTP\ResponseInterface::CODE_FOUND,
+	\Framework\HTTP\ResponseInterface::CODE_SEE_OTHER,
+	\Framework\HTTP\ResponseInterface::CODE_NOT_MODIFIED,
+	\Framework\HTTP\ResponseInterface::CODE_USE_PROXY,
+	\Framework\HTTP\ResponseInterface::CODE_SWITCH_PROXY,
+	\Framework\HTTP\ResponseInterface::CODE_TEMPORARY_REDIRECT,
+	\Framework\HTTP\ResponseInterface::CODE_PERMANENT_REDIRECT,
+	\Framework\HTTP\ResponseInterface::CODE_BAD_REQUEST,
+	\Framework\HTTP\ResponseInterface::CODE_UNAUTHORIZED,
+	\Framework\HTTP\ResponseInterface::CODE_PAYMENT_REQUIRED,
+	\Framework\HTTP\ResponseInterface::CODE_FORBIDDEN,
+	\Framework\HTTP\ResponseInterface::CODE_NOT_FOUND,
+	\Framework\HTTP\ResponseInterface::CODE_METHOD_NOT_ALLOWED,
+	\Framework\HTTP\ResponseInterface::CODE_NOT_ACCEPTABLE,
+	\Framework\HTTP\ResponseInterface::CODE_PROXY_AUTHENTICATION_REQUIRED,
+	\Framework\HTTP\ResponseInterface::CODE_REQUEST_TIMEOUT,
+	\Framework\HTTP\ResponseInterface::CODE_CONFLICT,
+	\Framework\HTTP\ResponseInterface::CODE_GONE,
+	\Framework\HTTP\ResponseInterface::CODE_LENGTH_REQUIRED,
+	\Framework\HTTP\ResponseInterface::CODE_PRECONDITION_FAILED,
+	\Framework\HTTP\ResponseInterface::CODE_PAYLOAD_TOO_LARGE,
+	\Framework\HTTP\ResponseInterface::CODE_URI_TOO_LARGE,
+	\Framework\HTTP\ResponseInterface::CODE_UNSUPPORTED_MEDIA_TYPE,
+	\Framework\HTTP\ResponseInterface::CODE_RANGE_NOT_SATISFIABLE,
+	\Framework\HTTP\ResponseInterface::CODE_EXPECTATION_FAILED,
+	\Framework\HTTP\ResponseInterface::CODE_IM_A_TEAPOT,
+	\Framework\HTTP\ResponseInterface::CODE_MISDIRECTED_REQUEST,
+	\Framework\HTTP\ResponseInterface::CODE_UNPROCESSABLE_ENTITY,
+	\Framework\HTTP\ResponseInterface::CODE_LOCKED,
+	\Framework\HTTP\ResponseInterface::CODE_FAILED_DEPENDENCY,
+	\Framework\HTTP\ResponseInterface::CODE_TOO_EARLY,
+	\Framework\HTTP\ResponseInterface::CODE_UPGRADE_REQUIRED,
+	\Framework\HTTP\ResponseInterface::CODE_PRECONDITION_REQUIRED,
+	\Framework\HTTP\ResponseInterface::CODE_TOO_MANY_REQUESTS,
+	\Framework\HTTP\ResponseInterface::CODE_REQUEST_HEADER_FIELDS_TOO_LARGE,
+	\Framework\HTTP\ResponseInterface::CODE_UNAVAILABLE_FOR_LEGAL_REASONS,
+	\Framework\HTTP\ResponseInterface::CODE_CLIENT_CLOSED_REQUEST,
+	\Framework\HTTP\ResponseInterface::CODE_INTERNAL_SERVER_ERROR,
+	\Framework\HTTP\ResponseInterface::CODE_NOT_IMPLEMENTED,
+	\Framework\HTTP\ResponseInterface::CODE_BAD_GATEWAY,
+	\Framework\HTTP\ResponseInterface::CODE_SERVICE_UNAVAILABLE,
+	\Framework\HTTP\ResponseInterface::CODE_GATEWAY_TIMEOUT,
+	\Framework\HTTP\ResponseInterface::CODE_CODE_VERSION_NOT_SUPPORTED,
+	\Framework\HTTP\ResponseInterface::CODE_VARIANT_ALSO_NEGOTIATES,
+	\Framework\HTTP\ResponseInterface::CODE_INSUFFICIENT_STORAGE,
+	\Framework\HTTP\ResponseInterface::CODE_LOOP_DETECTED,
+	\Framework\HTTP\ResponseInterface::CODE_NOT_EXTENDED,
+	\Framework\HTTP\ResponseInterface::CODE_NETWORK_AUTHENTICATION_REQUIRED,
+	\Framework\HTTP\ResponseInterface::CODE_NETWORK_CONNECT_TIMEOUT_ERROR,
+);
+expectedArguments(
+	\Framework\HTTP\Response::setStatusCode(),
+	0,
+	argumentsSet('response_status_codes')
+);
+expectedArguments(
+	\Framework\HTTP\Response::setStatusLine(),
+	0,
+	argumentsSet('response_status_codes')
+);
