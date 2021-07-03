@@ -27,7 +27,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/100
 	 */
-	public const HTTP_CONTINUE = 100;
+	public const CODE_CONTINUE = 100;
 	/**
 	 * 101 Switching Protocols.
 	 *
@@ -36,7 +36,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/101
 	 */
-	public const HTTP_SWITCHING_PROTOCOLS = 101;
+	public const CODE_SWITCHING_PROTOCOLS = 101;
 	/**
 	 * 102 Processing (WebDAV).
 	 *
@@ -45,7 +45,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/102
 	 */
-	public const HTTP_PROCESSING = 102;
+	public const CODE_PROCESSING = 102;
 	/**
 	 * 103 Early Hints.
 	 *
@@ -55,7 +55,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103
 	 */
-	public const HTTP_EARLY_HINTS = 103;
+	public const CODE_EARLY_HINTS = 103;
 	/**
 	 * 200 OK.
 	 *
@@ -76,7 +76,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200
 	 */
-	public const HTTP_OK = 200;
+	public const CODE_OK = 200;
 	/**
 	 * 201 Created.
 	 *
@@ -86,7 +86,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201
 	 */
-	public const HTTP_CREATED = 201;
+	public const CODE_CREATED = 201;
 	/**
 	 * 202 Accepted.
 	 *
@@ -97,7 +97,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/202
 	 */
-	public const HTTP_ACCEPTED = 202;
+	public const CODE_ACCEPTED = 202;
 	/**
 	 * 203 Non-Authoritative Information.
 	 *
@@ -109,7 +109,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/203
 	 */
-	public const HTTP_NON_AUTHORITATIVE_INFORMATION = 203;
+	public const CODE_NON_AUTHORITATIVE_INFORMATION = 203;
 	/**
 	 * 204 No Content.
 	 *
@@ -119,7 +119,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204
 	 */
-	public const HTTP_NO_CONTENT = 204;
+	public const CODE_NO_CONTENT = 204;
 	/**
 	 * 205 Reset Content.
 	 *
@@ -127,7 +127,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/205
 	 */
-	public const HTTP_RESET_CONTENT = 205;
+	public const CODE_RESET_CONTENT = 205;
 	/**
 	 * 206 Partial Content.
 	 *
@@ -136,7 +136,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/206
 	 */
-	public const HTTP_PARTIAL_CONTENT = 206;
+	public const CODE_PARTIAL_CONTENT = 206;
 	/**
 	 * 207 Multi-Status (WebDAV).
 	 *
@@ -145,7 +145,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/207
 	 */
-	public const HTTP_MULTI_STATUS = 207;
+	public const CODE_MULTI_STATUS = 207;
 	/**
 	 * 208 Already Reported (WebDAV).
 	 *
@@ -155,7 +155,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/208
 	 */
-	public const HTTP_ALREADY_REPORTED = 208;
+	public const CODE_ALREADY_REPORTED = 208;
 	/**
 	 * 226 IM Used (HTTP Delta encoding).
 	 *
@@ -165,7 +165,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/226
 	 */
-	public const HTTP_IM_USED = 226;
+	public const CODE_IM_USED = 226;
 	/**
 	 * 300 Multiple Choices.
 	 *
@@ -176,7 +176,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/300
 	 */
-	public const HTTP_MULTIPLE_CHOICES = 300;
+	public const CODE_MULTIPLE_CHOICES = 300;
 	/**
 	 * 301 Moved Permanently.
 	 *
@@ -185,7 +185,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/301
 	 */
-	public const HTTP_MOVED_PERMANENTLY = 301;
+	public const CODE_MOVED_PERMANENTLY = 301;
 	/**
 	 * 302 Found.
 	 *
@@ -196,7 +196,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/302
 	 */
-	public const HTTP_FOUND = 302;
+	public const CODE_FOUND = 302;
 	/**
 	 * 303 See Other.
 	 *
@@ -205,7 +205,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/303
 	 */
-	public const HTTP_SEE_OTHER = 303;
+	public const CODE_SEE_OTHER = 303;
 	/**
 	 * 304 Not Modified.
 	 *
@@ -215,7 +215,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/304
 	 */
-	public const HTTP_NOT_MODIFIED = 304;
+	public const CODE_NOT_MODIFIED = 304;
 	/**
 	 * 305 Use Proxy.
 	 *
@@ -225,7 +225,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/305
 	 */
-	public const HTTP_USE_PROXY = 305;
+	public const CODE_USE_PROXY = 305;
 	/**
 	 * 306 unused.
 	 *
@@ -234,7 +234,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/306
 	 */
-	public const HTTP_SWITCH_PROXY = 306;
+	public const CODE_SWITCH_PROXY = 306;
 	/**
 	 * 307 Temporary Redirect.
 	 *
@@ -247,7 +247,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/307
 	 */
-	public const HTTP_TEMPORARY_REDIRECT = 307;
+	public const CODE_TEMPORARY_REDIRECT = 307;
 	/**
 	 * 308 Permanent Redirect.
 	 *
@@ -260,7 +260,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/308
 	 */
-	public const HTTP_PERMANENT_REDIRECT = 308;
+	public const CODE_PERMANENT_REDIRECT = 308;
 	/**
 	 * 400 Bad Request.
 	 *
@@ -268,7 +268,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
 	 */
-	public const HTTP_BAD_REQUEST = 400;
+	public const CODE_BAD_REQUEST = 400;
 	/**
 	 * 401 Unauthorized.
 	 *
@@ -278,7 +278,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
 	 */
-	public const HTTP_UNAUTHORIZED = 401;
+	public const CODE_UNAUTHORIZED = 401;
 	/**
 	 * 402 Payment Required.
 	 *
@@ -288,7 +288,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402
 	 */
-	public const HTTP_PAYMENT_REQUIRED = 402;
+	public const CODE_PAYMENT_REQUIRED = 402;
 	/**
 	 * 403 Forbidden.
 	 *
@@ -298,7 +298,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
 	 */
-	public const HTTP_FORBIDDEN = 403;
+	public const CODE_FORBIDDEN = 403;
 	/**
 	 * 404 Not Found.
 	 *
@@ -311,7 +311,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
 	 */
-	public const HTTP_NOT_FOUND = 404;
+	public const CODE_NOT_FOUND = 404;
 	/**
 	 * 405 Method Not Allowed.
 	 *
@@ -320,7 +320,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405
 	 */
-	public const HTTP_METHOD_NOT_ALLOWED = 405;
+	public const CODE_METHOD_NOT_ALLOWED = 405;
 	/**
 	 * 406 Not Acceptable.
 	 *
@@ -330,7 +330,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406
 	 */
-	public const HTTP_NOT_ACCEPTABLE = 406;
+	public const CODE_NOT_ACCEPTABLE = 406;
 	/**
 	 * 407 Proxy Authentication Required.
 	 *
@@ -339,7 +339,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/407
 	 */
-	public const HTTP_PROXY_AUTHENTICATION_REQUIRED = 407;
+	public const CODE_PROXY_AUTHENTICATION_REQUIRED = 407;
 	/**
 	 * 408 Request Timeout.
 	 *
@@ -352,7 +352,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/408
 	 */
-	public const HTTP_REQUEST_TIMEOUT = 408;
+	public const CODE_REQUEST_TIMEOUT = 408;
 	/**
 	 * 409 Conflict.
 	 *
@@ -361,7 +361,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/409
 	 */
-	public const HTTP_CONFLICT = 409;
+	public const CODE_CONFLICT = 409;
 	/**
 	 * 410 Gone.
 	 *
@@ -374,7 +374,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/410
 	 */
-	public const HTTP_GONE = 410;
+	public const CODE_GONE = 410;
 	/**
 	 * 411 Length Required.
 	 *
@@ -383,7 +383,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/411
 	 */
-	public const HTTP_LENGTH_REQUIRED = 411;
+	public const CODE_LENGTH_REQUIRED = 411;
 	/**
 	 * 412 Precondition Failed.
 	 *
@@ -392,7 +392,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/412
 	 */
-	public const HTTP_PRECONDITION_FAILED = 412;
+	public const CODE_PRECONDITION_FAILED = 412;
 	/**
 	 * 413 Payload Too Large.
 	 *
@@ -401,7 +401,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/413
 	 */
-	public const HTTP_PAYLOAD_TOO_LARGE = 413;
+	public const CODE_PAYLOAD_TOO_LARGE = 413;
 	/**
 	 * 414 URI Too Long.
 	 *
@@ -410,7 +410,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/414
 	 */
-	public const HTTP_URI_TOO_LARGE = 414;
+	public const CODE_URI_TOO_LARGE = 414;
 	/**
 	 * 415 Unsupported Media Type.
 	 *
@@ -419,7 +419,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/415
 	 */
-	public const HTTP_UNSUPPORTED_MEDIA_TYPE = 415;
+	public const CODE_UNSUPPORTED_MEDIA_TYPE = 415;
 	/**
 	 * 416 Range Not Satisfiable.
 	 *
@@ -429,7 +429,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/416
 	 */
-	public const HTTP_RANGE_NOT_SATISFIABLE = 416;
+	public const CODE_RANGE_NOT_SATISFIABLE = 416;
 	/**
 	 * 417 Expectation Failed.
 	 *
@@ -438,7 +438,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/417
 	 */
-	public const HTTP_EXPECTATION_FAILED = 417;
+	public const CODE_EXPECTATION_FAILED = 417;
 	/**
 	 * 418 I'm a teapot.
 	 *
@@ -446,7 +446,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418
 	 */
-	public const HTTP_IM_A_TEAPOT = 418;
+	public const CODE_IM_A_TEAPOT = 418;
 	/**
 	 * 421 Misdirected Request.
 	 *
@@ -457,7 +457,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/421
 	 */
-	public const HTTP_MISDIRECTED_REQUEST = 421;
+	public const CODE_MISDIRECTED_REQUEST = 421;
 	/**
 	 * 422 Unprocessable Entity (WebDAV).
 	 *
@@ -466,7 +466,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422
 	 */
-	public const HTTP_UNPROCESSABLE_ENTITY = 422;
+	public const CODE_UNPROCESSABLE_ENTITY = 422;
 	/**
 	 * 423 Locked (WebDAV).
 	 *
@@ -474,7 +474,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/423
 	 */
-	public const HTTP_LOCKED = 423;
+	public const CODE_LOCKED = 423;
 	/**
 	 * 424 Failed Dependency (WebDAV).
 	 *
@@ -482,7 +482,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/424
 	 */
-	public const HTTP_FAILED_DEPENDENCY = 424;
+	public const CODE_FAILED_DEPENDENCY = 424;
 	/**
 	 * 425 Too Early.
 	 *
@@ -491,7 +491,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/425
 	 */
-	public const HTTP_TOO_EARLY = 425;
+	public const CODE_TOO_EARLY = 425;
 	/**
 	 * 426 Upgrade Required.
 	 *
@@ -502,7 +502,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/426
 	 */
-	public const HTTP_UPGRADE_REQUIRED = 426;
+	public const CODE_UPGRADE_REQUIRED = 426;
 	/**
 	 * 428 Precondition Required.
 	 *
@@ -514,7 +514,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/428
 	 */
-	public const HTTP_PRECONDITION_REQUIRED = 428;
+	public const CODE_PRECONDITION_REQUIRED = 428;
 	/**
 	 * 429 Too Many Requests.
 	 *
@@ -523,7 +523,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
 	 */
-	public const HTTP_TOO_MANY_REQUESTS = 429;
+	public const CODE_TOO_MANY_REQUESTS = 429;
 	/**
 	 * 431 Request Header Fields Too Large.
 	 *
@@ -533,7 +533,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/431
 	 */
-	public const HTTP_REQUEST_HEADER_FIELDS_TOO_LARGE = 431;
+	public const CODE_REQUEST_HEADER_FIELDS_TOO_LARGE = 431;
 	/**
 	 * 451 Unavailable For Legal Reasons.
 	 *
@@ -542,7 +542,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/451
 	 */
-	public const HTTP_UNAVAILABLE_FOR_LEGAL_REASONS = 451;
+	public const CODE_UNAVAILABLE_FOR_LEGAL_REASONS = 451;
 	/**
 	 * 499 Client Closed Request (nginx).
 	 *
@@ -551,7 +551,7 @@ interface ResponseInterface
 	 *
 	 * @see https://httpstatuses.com/499
 	 */
-	public const HTTP_CLIENT_CLOSED_REQUEST = 499;
+	public const CODE_CLIENT_CLOSED_REQUEST = 499;
 	/**
 	 * 500 Internal Server Error.
 	 *
@@ -559,7 +559,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500
 	 */
-	public const HTTP_INTERNAL_SERVER_ERROR = 500;
+	public const CODE_INTERNAL_SERVER_ERROR = 500;
 	/**
 	 * 501 Not Implemented.
 	 *
@@ -569,7 +569,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/501
 	 */
-	public const HTTP_NOT_IMPLEMENTED = 501;
+	public const CODE_NOT_IMPLEMENTED = 501;
 	/**
 	 * 502 Bad Gateway.
 	 *
@@ -578,7 +578,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502
 	 */
-	public const HTTP_BAD_GATEWAY = 502;
+	public const CODE_BAD_GATEWAY = 502;
 	/**
 	 * 503 Service Unavailable.
 	 *
@@ -594,7 +594,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503
 	 */
-	public const HTTP_SERVICE_UNAVAILABLE = 503;
+	public const CODE_SERVICE_UNAVAILABLE = 503;
 	/**
 	 * 504 Gateway Timeout.
 	 *
@@ -603,7 +603,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/504
 	 */
-	public const HTTP_GATEWAY_TIMEOUT = 504;
+	public const CODE_GATEWAY_TIMEOUT = 504;
 	/**
 	 * 505 HTTP Version Not Supported.
 	 *
@@ -611,7 +611,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/505
 	 */
-	public const HTTP_HTTP_VERSION_NOT_SUPPORTED = 505;
+	public const CODE_CODE_VERSION_NOT_SUPPORTED = 505;
 	/**
 	 * 506 Variant Also Negotiates.
 	 *
@@ -622,7 +622,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/506
 	 */
-	public const HTTP_VARIANT_ALSO_NEGOTIATES = 506;
+	public const CODE_VARIANT_ALSO_NEGOTIATES = 506;
 	/**
 	 * 507 Insufficient Storage (WebDAV).
 	 *
@@ -632,7 +632,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/507
 	 */
-	public const HTTP_INSUFFICIENT_STORAGE = 507;
+	public const CODE_INSUFFICIENT_STORAGE = 507;
 	/**
 	 * 508 Loop Detected (WebDAV).
 	 *
@@ -640,7 +640,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/508
 	 */
-	public const HTTP_LOOP_DETECTED = 508;
+	public const CODE_LOOP_DETECTED = 508;
 	/**
 	 * 510 Not Extended.
 	 *
@@ -649,7 +649,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/510
 	 */
-	public const HTTP_NOT_EXTENDED = 510;
+	public const CODE_NOT_EXTENDED = 510;
 	/**
 	 * 511 Network Authentication Required.
 	 *
@@ -658,7 +658,7 @@ interface ResponseInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/511
 	 */
-	public const HTTP_NETWORK_AUTHENTICATION_REQUIRED = 511;
+	public const CODE_NETWORK_AUTHENTICATION_REQUIRED = 511;
 	/**
 	 * 599 Network Connect Timeout Error.
 	 *
@@ -668,7 +668,7 @@ interface ResponseInterface
 	 *
 	 * @see https://httpstatuses.com/599
 	 */
-	public const HTTP_NETWORK_CONNECT_TIMEOUT_ERROR = 599;
+	public const CODE_NETWORK_CONNECT_TIMEOUT_ERROR = 599;
 
 	public function getProtocol() : string;
 
