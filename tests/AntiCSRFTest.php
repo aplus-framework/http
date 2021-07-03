@@ -9,17 +9,17 @@
  */
 namespace Tests\HTTP;
 
-use Framework\HTTP\CSRF;
+use Framework\HTTP\AntiCSRF;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class CSRFTest.
+ * Class AntiCSRFTest.
  *
  * @runTestsInSeparateProcesses
  */
-final class CSRFTest extends TestCase
+final class AntiCSRFTest extends TestCase
 {
-	protected CSRF $csrf;
+	protected AntiCSRF $anti;
 	protected RequestMock $request;
 
 	protected function prepare() : void
@@ -27,30 +27,30 @@ final class CSRFTest extends TestCase
 		\session_start();
 		$this->request = new RequestMock();
 		$this->request->setMethod('POST');
-		$this->csrf = new CSRF($this->request);
+		$this->anti = new AntiCSRF($this->request);
 	}
 
 	public function testSessionDisabled() : void
 	{
 		$this->expectException(\LogicException::class);
 		$this->expectExceptionMessage('Session must be active to use CSRF class');
-		(new CSRF(new RequestMock()));
+		(new AntiCSRF(new RequestMock()));
 	}
 
 	public function testMakeToken() : void
 	{
 		$this->prepare();
-		self::assertSame(12, \strlen($this->csrf->getToken()));
+		self::assertSame(12, \strlen($this->anti->getToken()));
 	}
 
 	public function testTokenName() : void
 	{
 		$this->prepare();
-		self::assertSame('csrf_token', $this->csrf->getTokenName());
-		self::assertInstanceOf(CSRF::class, $this->csrf->setTokenName('custom'));
-		self::assertSame('custom', $this->csrf->getTokenName());
-		self::assertInstanceOf(CSRF::class, $this->csrf->setTokenName("cus'tom"));
-		self::assertSame('cus&apos;tom', $this->csrf->getTokenName());
+		self::assertSame('csrf_token', $this->anti->getTokenName());
+		self::assertInstanceOf(AntiCSRF::class, $this->anti->setTokenName('custom'));
+		self::assertSame('custom', $this->anti->getTokenName());
+		self::assertInstanceOf(AntiCSRF::class, $this->anti->setTokenName("cus'tom"));
+		self::assertSame('cus&apos;tom', $this->anti->getTokenName());
 	}
 
 	public function testInput() : void
@@ -58,7 +58,7 @@ final class CSRFTest extends TestCase
 		$this->prepare();
 		self::assertStringStartsWith(
 			'<input type="hidden" name="csrf_token" value="',
-			$this->csrf->input()
+			$this->anti->input()
 		);
 	}
 
@@ -66,43 +66,43 @@ final class CSRFTest extends TestCase
 	{
 		$this->prepare();
 		$this->request->setMethod('get');
-		self::assertTrue($this->csrf->verify());
+		self::assertTrue($this->anti->verify());
 	}
 
 	public function testUserTokenEmpty() : void
 	{
 		$this->prepare();
 		$_POST = [];
-		self::assertFalse($this->csrf->verify());
+		self::assertFalse($this->anti->verify());
 	}
 
 	public function testVerifySuccess() : void
 	{
 		$this->prepare();
 		$_SESSION['$']['csrf_token'] = 'foo';
-		self::assertTrue($this->csrf->verify());
+		self::assertTrue($this->anti->verify());
 	}
 
 	public function testVerifyFail() : void
 	{
 		$this->prepare();
 		$_SESSION['$']['csrf_token'] = 'bar';
-		self::assertFalse($this->csrf->verify());
+		self::assertFalse($this->anti->verify());
 	}
 
 	public function testEnableAndDisable() : void
 	{
 		$this->prepare();
-		$this->csrf->enable();
+		$this->anti->enable();
 		self::assertStringStartsWith(
 			'<input type="hidden" name="csrf_token" value="',
-			$this->csrf->input()
+			$this->anti->input()
 		);
 		$_SESSION['$']['csrf_token'] = 'foo';
-		self::assertTrue($this->csrf->verify());
-		$this->csrf->disable();
-		self::assertSame('', $this->csrf->input());
+		self::assertTrue($this->anti->verify());
+		$this->anti->disable();
+		self::assertSame('', $this->anti->input());
 		$_SESSION['$']['csrf_token'] = 'bar';
-		self::assertTrue($this->csrf->verify());
+		self::assertTrue($this->anti->verify());
 	}
 }
