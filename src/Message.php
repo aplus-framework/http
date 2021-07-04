@@ -56,7 +56,7 @@ abstract class Message implements MessageInterface
 	 * @var array<string,string>
 	 */
 	protected static array $standardHeaders = [
-		// General
+		// General headers (Request and Response)
 		'cache-control' => 'Cache-Control',
 		'connection' => 'Connection',
 		'content-disposition' => 'Content-Disposition',
@@ -64,14 +64,17 @@ abstract class Message implements MessageInterface
 		'keep-alive' => 'Keep-Alive',
 		'via' => 'Via',
 		'warning' => 'Warning',
-		// Entity
-		'allow' => 'Allow',
+		// Representation headers (Request and Response)
 		'content-encoding' => 'Content-Encoding',
 		'content-language' => 'Content-Language',
-		'content-length' => 'Content-Length',
 		'content-location' => 'Content-Location',
 		'content-type' => 'Content-Type',
-		// Request
+		// Payload headers (Request and Response)
+		'content-length' => 'Content-Length',
+		'content-range' => 'Content-Range',
+		'trailer' => 'Trailer',
+		'transfer-encoding' => 'Transfer-Encoding',
+		// Request headers
 		'accept' => 'Accept',
 		'accept-charset' => 'Accept-Charset',
 		'accept-encoding' => 'Accept-Encoding',
@@ -101,7 +104,7 @@ abstract class Message implements MessageInterface
 		'x-forwarded-host' => 'X-Forwarded-Host',
 		'x-forwarded-proto' => 'X-Forwarded-Proto',
 		'x-requested-with' => 'X-Requested-With',
-		// Response
+		// Response headers
 		'accept-ranges' => 'Accept-Ranges',
 		'access-control-allow-credentials' => 'Access-Control-Allow-Credentials',
 		'access-control-allow-headers' => 'Access-Control-Allow-Headers',
@@ -110,8 +113,8 @@ abstract class Message implements MessageInterface
 		'access-control-expose-headers' => 'Access-Control-Expose-Headers',
 		'access-control-max-age' => 'Access-Control-Max-Age',
 		'age' => 'Age',
+		'allow' => 'Allow',
 		'clear-site-data' => 'Clear-Site-Data',
-		'content-range' => 'Content-Range',
 		'content-security-policy' => 'Content-Security-Policy',
 		'content-security-policy-report-only' => 'Content-Security-Policy-Report-Only',
 		'etag' => 'ETag',
@@ -131,22 +134,20 @@ abstract class Message implements MessageInterface
 		'strict-transport-security' => 'Strict-Transport-Security',
 		'timing-allow-origin' => 'Timing-Allow-Origin',
 		'tk' => 'Tk',
-		'trailer' => 'Trailer',
-		'transfer-encoding' => 'Transfer-Encoding',
 		'vary' => 'Vary',
 		'www-authenticate' => 'WWW-Authenticate',
 		'x-content-type-options' => 'X-Content-Type-Options',
 		'x-dns-prefetch-control' => 'X-DNS-Prefetch-Control',
 		'x-frame-options' => 'X-Frame-Options',
 		'x-xss-protection' => 'X-XSS-Protection',
+		// Custom (Response)
+		'x-request-id' => 'X-Request-ID',
+		'x-powered-by' => 'X-Powered-By',
 		// WebSocket
 		'sec-websocket-extensions' => 'Sec-WebSocket-Extensions',
 		'sec-websocket-key' => 'Sec-WebSocket-Key',
 		'sec-websocket-protocol' => 'Sec-WebSocket-Protocol',
 		'sec-websocket-version' => 'Sec-WebSocket-Version',
-		// Custom
-		'x-request-id' => 'X-Request-ID',
-		'x-powered-by' => 'X-Powered-By',
 	];
 	/**
 	 * Standard Response Status Codes and Reasons.
