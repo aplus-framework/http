@@ -134,18 +134,7 @@ interface RequestInterface extends MessageInterface
 	 */
 	public const HEADER_X_REQUESTED_WITH = 'X-Requested-With';
 
-	public function getProtocol() : string;
-
 	public function getMethod() : string;
 
 	public function getURL() : URL;
-
-	public function getHeader(string $name) : ?string;
-
-	/**
-	 * @return array<string,string>
-	 */
-	public function getHeaders() : array;
-
-	public function getBody() : string;
 }

@@ -819,20 +819,9 @@ interface ResponseInterface extends MessageInterface
 	public const HEADER_X_REQUEST_ID = 'X-Request-ID';
 	public const HEADER_X_POWERED_BY = 'X-Powered-By';
 
-	public function getProtocol() : string;
-
 	public function getStatusCode() : int;
 
 	public function getStatusReason() : string;
 
 	public function getStatusLine() : string;
-
-	public function getHeader(string $name) : ?string;
-
-	/**
-	 * @return array<string,string>
-	 */
-	public function getHeaders() : array;
-
-	public function getBody() : string;
 }

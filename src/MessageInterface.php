@@ -77,4 +77,15 @@ interface MessageInterface
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding
 	 */
 	public const HEADER_TRANSFER_ENCODING = 'Transfer-Encoding';
+
+	public function getProtocol() : string;
+
+	public function getHeader(string $name) : ?string;
+
+	/**
+	 * @return array<string,string>
+	 */
+	public function getHeaders() : array;
+
+	public function getBody() : string;
 }
