@@ -82,11 +82,11 @@ trait ResponseDownload
 				"Could not get the file modification time of '{$this->filepath}'"
 			);
 		}
-		$this->setHeader('Last-Modified', \gmdate(\DATE_RFC7231, $filemtime));
+		$this->setHeader(static::HEADER_LAST_MODIFIED, \gmdate(\DATE_RFC7231, $filemtime));
 		$filename = \basename($filepath);
 		$filename = \htmlspecialchars($filename, \ENT_QUOTES | \ENT_HTML5);
 		$this->setHeader(
-			'Content-Disposition',
+			static::HEADER_CONTENT_DISPOSITION,
 			$inline ? 'inline' : \sprintf('attachment; filename="%s"', $filename)
 		);
 		$this->setAcceptRanges($acceptRanges);
@@ -97,9 +97,9 @@ trait ResponseDownload
 				return $this;
 			}
 		}
-		$this->setHeader('Content-Length', (string) $this->filesize);
+		$this->setHeader(static::HEADER_CONTENT_LENGTH, (string) $this->filesize);
 		$this->setHeader(
-			'Content-Type',
+			static::HEADER_CONTENT_TYPE,
 			\mime_content_type($this->filepath) ?: 'application/octet-stream'
 		);
 		$this->sendType = 'normal';
@@ -112,7 +112,7 @@ trait ResponseDownload
 		if ($this->byteRanges === false) {
 			// https://tools.ietf.org/html/rfc7233#section-4.2
 			$this->setStatusLine(static::CODE_RANGE_NOT_SATISFIABLE);
-			$this->setHeader('Content-Range', '*/' . $this->filesize);
+			$this->setHeader(static::HEADER_CONTENT_RANGE, '*/' . $this->filesize);
 			return;
 		}
 		$this->setStatusLine(static::CODE_PARTIAL_CONTENT);
@@ -127,7 +127,7 @@ trait ResponseDownload
 	{
 		$this->acceptRanges = $acceptRanges;
 		$this->setHeader(
-			'Accept-Ranges',
+			static::HEADER_ACCEPT_RANGES,
 			$acceptRanges ? 'bytes' : 'none'
 		);
 	}
@@ -205,13 +205,16 @@ trait ResponseDownload
 	private function setSinglePart(int $firstByte, int $lastByte) : void
 	{
 		$this->sendType = 'single';
-		$this->setHeader('Content-Length', (string) ($lastByte - $firstByte + 1));
 		$this->setHeader(
-			'Content-Type',
+			static::HEADER_CONTENT_LENGTH,
+			(string) ($lastByte - $firstByte + 1)
+		);
+		$this->setHeader(
+			static::HEADER_CONTENT_TYPE,
 			\mime_content_type($this->filepath) ?: 'application/octet-stream'
 		);
 		$this->setHeader(
-			'Content-Range',
+			static::HEADER_CONTENT_RANGE,
 			\sprintf('bytes %d-%d/%d', $firstByte, $lastByte, $this->filesize)
 		);
 	}
@@ -238,8 +241,11 @@ trait ResponseDownload
 			$length += $range[1] - $range[0] + 1;
 		}
 		$length += \strlen($this->getBoundaryLine());
-		$this->setHeader('Content-Length', (string) $length);
-		$this->setHeader('Content-Type', "multipart/x-byteranges; boundary={$this->boundary}");
+		$this->setHeader(static::HEADER_CONTENT_LENGTH, (string) $length);
+		$this->setHeader(
+			static::HEADER_CONTENT_TYPE,
+			"multipart/x-byteranges; boundary={$this->boundary}"
+		);
 	}
 
 	private function sendMultiPart() : void

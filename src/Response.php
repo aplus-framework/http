@@ -276,7 +276,7 @@ class Response extends Message implements ResponseInterface
 			throw new InvalidArgumentException("Invalid Redirection code: {$code}");
 		}
 		$this->setStatusLine($code);
-		$this->setHeader('Location', $location);
+		$this->setHeader(static::HEADER_LOCATION, $location);
 		if ($data) {
 			if (\session_status() !== \PHP_SESSION_ACTIVE) {
 				throw new LogicException('Session must be active to set redirect data');
@@ -327,10 +327,10 @@ class Response extends Message implements ResponseInterface
 		}
 		// Per spec, MUST be sent with each request, if possible.
 		// http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html
-		if ($this->getHeader('Date') === null) {
+		if ($this->getHeader(static::HEADER_DATE) === null) {
 			$this->setDate(DateTime::createFromFormat('U', (string) \time())); // @phpstan-ignore-line
 		}
-		if ($this->getHeader('Content-Type') === null) {
+		if ($this->getHeader(static::HEADER_CONTENT_TYPE) === null) {
 			$this->setContentType('text/html');
 		}
 		\header($this->getProtocol() . ' ' . $this->getStatusLine());
@@ -392,7 +392,7 @@ class Response extends Message implements ResponseInterface
 		$date->modify('+' . $seconds . ' seconds');
 		$this->setExpires($date);
 		$this->setHeader(
-			'Cache-Control',
+			static::HEADER_CACHE_CONTROL,
 			($public ? 'public' : 'private') . ', max-age=' . $seconds
 		);
 		$this->cacheSeconds = $seconds;
@@ -406,7 +406,7 @@ class Response extends Message implements ResponseInterface
 	 */
 	public function setNoCache() : static
 	{
-		$this->setHeader('Cache-Control', 'no-cache, no-store, max-age=0');
+		$this->setHeader(static::HEADER_CACHE_CONTROL, 'no-cache, no-store, max-age=0');
 		$this->cacheSeconds = 0;
 		return $this;
 	}
@@ -434,7 +434,10 @@ class Response extends Message implements ResponseInterface
 	 */
 	public function setContentType(string $mime, string $charset = 'UTF-8') : static
 	{
-		$this->setHeader('Content-Type', $mime . ($charset ? '; charset=' . $charset : ''));
+		$this->setHeader(
+			static::HEADER_CONTENT_TYPE,
+			$mime . ($charset ? '; charset=' . $charset : '')
+		);
 		return $this;
 	}
 
@@ -449,7 +452,7 @@ class Response extends Message implements ResponseInterface
 	 */
 	public function setContentLanguage(string $language) : static
 	{
-		$this->setHeader('Content-Language', $language);
+		$this->setHeader(static::HEADER_CONTENT_LANGUAGE, $language);
 		return $this;
 	}
 
@@ -464,7 +467,7 @@ class Response extends Message implements ResponseInterface
 	 */
 	public function setContentEncoding(string $encoding) : static
 	{
-		$this->setHeader('Content-Encoding', $encoding);
+		$this->setHeader(static::HEADER_CONTENT_ENCODING, $encoding);
 		return $this;
 	}
 
@@ -481,7 +484,7 @@ class Response extends Message implements ResponseInterface
 	{
 		$date = clone $datetime;
 		$date->setTimezone(new DateTimeZone('UTC'));
-		$this->setHeader('Date', $date->format(DateTime::RFC7231));
+		$this->setHeader(static::HEADER_DATE, $date->format(DateTime::RFC7231));
 		return $this;
 	}
 
@@ -496,7 +499,7 @@ class Response extends Message implements ResponseInterface
 	 */
 	public function setETag(string $etag) : static
 	{
-		$this->setHeader('ETag', $etag);
+		$this->setHeader(static::HEADER_ETAG, $etag);
 		return $this;
 	}
 
@@ -513,7 +516,7 @@ class Response extends Message implements ResponseInterface
 	{
 		$date = clone $datetime;
 		$date->setTimezone(new DateTimeZone('UTC'));
-		$this->setHeader('Expires', $date->format(DateTime::RFC7231));
+		$this->setHeader(static::HEADER_EXPIRES, $date->format(DateTime::RFC7231));
 		return $this;
 	}
 
@@ -530,7 +533,7 @@ class Response extends Message implements ResponseInterface
 	{
 		$date = clone $datetime;
 		$date->setTimezone(new DateTimeZone('UTC'));
-		$this->setHeader('Last-Modified', $date->format(DateTime::RFC7231));
+		$this->setHeader(static::HEADER_LAST_MODIFIED, $date->format(DateTime::RFC7231));
 		return $this;
 	}
 

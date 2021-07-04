@@ -227,7 +227,7 @@ class Request extends Message implements RequestInterface
 	public function getAuthType() : ?string
 	{
 		if ($this->authType === null) {
-			$auth = $this->getHeader('Authorization');
+			$auth = $this->getHeader(static::HEADER_AUTHORIZATION);
 			if ($auth) {
 				$this->parseAuth($auth);
 			}
@@ -546,7 +546,7 @@ class Request extends Message implements RequestInterface
 	#[Pure]
 	public function getContentType() : ?string
 	{
-		return $this->getHeader('Content-Type');
+		return $this->getHeader(static::HEADER_CONTENT_TYPE);
 	}
 
 	/**
@@ -565,6 +565,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
+	 * @todo Maybe it should be removed. ETag is a Response header
+	 *
 	 * @return string|null
 	 */
 	#[Pure]
@@ -622,6 +624,8 @@ class Request extends Message implements RequestInterface
 
 	/**
 	 * Get the Request ID.
+	 *
+	 * @todo Maybe it should be removed. X-Request-ID is a Response header
 	 *
 	 * @return string
 	 */
@@ -741,7 +745,7 @@ class Request extends Message implements RequestInterface
 	{
 		if ( ! isset($this->referrer)) {
 			$this->referrer = false;
-			$referer = $this->getHeader('Referer');
+			$referer = $this->getHeader(static::HEADER_REFERER);
 			if ($referer !== null) {
 				try {
 					$this->referrer = new URL($referer);
@@ -792,7 +796,7 @@ class Request extends Message implements RequestInterface
 		if (isset($this->userAgent) && $this->userAgent instanceof UserAgent) {
 			return $this->userAgent;
 		}
-		$userAgent = $this->getHeader('User-Agent');
+		$userAgent = $this->getHeader(static::HEADER_USER_AGENT);
 		$userAgent ? $this->setUserAgent($userAgent) : $this->userAgent = false;
 		return $this->userAgent ?: null;
 	}
@@ -824,7 +828,7 @@ class Request extends Message implements RequestInterface
 		if (isset($this->isAJAX)) {
 			return $this->isAJAX;
 		}
-		$received = $this->getHeader('X-Requested-With');
+		$received = $this->getHeader(static::HEADER_X_REQUESTED_WITH);
 		return $this->isAJAX = ($received
 			&& \strtolower($received) === 'xmlhttprequest');
 	}
