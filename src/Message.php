@@ -18,7 +18,7 @@ use JetBrains\PhpStorm\Pure;
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
  * @see https://tools.ietf.org/html/rfc7231
  */
-abstract class Message
+abstract class Message implements MessageInterface
 {
 	/**
 	 * HTTP Message Protocol.

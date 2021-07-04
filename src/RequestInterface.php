@@ -14,7 +14,7 @@ namespace Framework\HTTP;
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#http_requests
  */
-interface RequestInterface
+interface RequestInterface extends MessageInterface
 {
 	public function getProtocol() : string;
 
