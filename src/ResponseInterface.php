@@ -18,6 +18,7 @@ namespace Framework\HTTP;
  */
 interface ResponseInterface extends MessageInterface
 {
+	// Status codes (Informational responses) ----------------------------------
 	/**
 	 * 100 Continue.
 	 *
@@ -56,6 +57,7 @@ interface ResponseInterface extends MessageInterface
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103
 	 */
 	public const CODE_EARLY_HINTS = 103;
+	// Status codes (Successful responses) -------------------------------------
 	/**
 	 * 200 OK.
 	 *
@@ -166,6 +168,7 @@ interface ResponseInterface extends MessageInterface
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/226
 	 */
 	public const CODE_IM_USED = 226;
+	// Status codes (Redirects) ------------------------------------------------
 	/**
 	 * 300 Multiple Choices.
 	 *
@@ -261,6 +264,7 @@ interface ResponseInterface extends MessageInterface
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/308
 	 */
 	public const CODE_PERMANENT_REDIRECT = 308;
+	// Status codes (Client errors) --------------------------------------------
 	/**
 	 * 400 Bad Request.
 	 *
@@ -552,6 +556,7 @@ interface ResponseInterface extends MessageInterface
 	 * @see https://httpstatuses.com/499
 	 */
 	public const CODE_CLIENT_CLOSED_REQUEST = 499;
+	// Status codes (Server errors) --------------------------------------------
 	/**
 	 * 500 Internal Server Error.
 	 *
@@ -669,6 +674,150 @@ interface ResponseInterface extends MessageInterface
 	 * @see https://httpstatuses.com/599
 	 */
 	public const CODE_NETWORK_CONNECT_TIMEOUT_ERROR = 599;
+	// Response headers --------------------------------------------------------
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Ranges
+	 */
+	public const HEADER_ACCEPT_RANGES = 'Accept-Ranges';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
+	 */
+	public const HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS = 'Access-Control-Allow-Credentials';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
+	 */
+	public const HEADER_ACCESS_CONTROL_ALLOW_HEADERS = 'Access-Control-Allow-Headers';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods
+	 */
+	public const HEADER_ACCESS_CONTROL_ALLOW_METHODS = 'Access-Control-Allow-Methods';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+	 */
+	public const HEADER_ACCESS_CONTROL_ALLOW_ORIGIN = 'Access-Control-Allow-Origin';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
+	 */
+	public const HEADER_ACCESS_CONTROL_EXPOSE_HEADERS = 'Access-Control-Expose-Headers';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age
+	 */
+	public const HEADER_ACCESS_CONTROL_MAX_AGE = 'Access-Control-Max-Age';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Age
+	 */
+	public const HEADER_AGE = 'Age';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Allow
+	 */
+	public const HEADER_ALLOW = 'Allow';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Clear-Site-Data
+	 */
+	public const HEADER_CLEAR_SITE_DATA = 'Clear-Site-Data';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
+	 */
+	public const HEADER_CONTENT_SECURITY_POLICY = 'Content-Security-Policy';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only
+	 */
+	public const HEADER_CONTENT_SECURITY_POLICY_REPORT_ONLY = 'Content-Security-Policy-Report-Only';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag
+	 */
+	public const HEADER_ETAG = 'ETag';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT
+	 */
+	public const HEADER_EXPECT_CT = 'Expect-CT';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expires
+	 */
+	public const HEADER_EXPIRES = 'Expires';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy
+	 */
+	public const HEADER_FEATURE_POLICY = 'Feature-Policy';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Last-Modified
+	 */
+	public const HEADER_LAST_MODIFIED = 'Last-Modified';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Location
+	 */
+	public const HEADER_LOCATION = 'Location';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Proxy-Authenticate
+	 */
+	public const HEADER_PROXY_AUTHENTICATE = 'Proxy-Authenticate';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Public-Key-Pins
+	 */
+	public const HEADER_PUBLIC_KEY_PINS = 'Public-Key-Pins';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Public-Key-Pins-Report-Only
+	 */
+	public const HEADER_PUBLIC_KEY_PINS_REPORT_ONLY = 'Public-Key-Pins-Report-Only';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+	 */
+	public const HEADER_REFERRER_POLICY = 'Referrer-Policy';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
+	 */
+	public const HEADER_RETRY_AFTER = 'Retry-After';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server
+	 */
+	public const HEADER_SERVER = 'Server';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
+	 */
+	public const HEADER_SET_COOKIE = 'Set-Cookie';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/SourceMap
+	 */
+	public const HEADER_SOURCEMAP = 'SourceMap';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
+	 */
+	public const HEADER_STRICT_TRANSPORT_SECURITY = 'Strict-Transport-Security';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Timing-Allow-Origin
+	 */
+	public const HEADER_TIMING_ALLOW_ORIGIN = 'Timing-Allow-Origin';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Tk
+	 */
+	public const HEADER_TK = 'Tk';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary
+	 */
+	public const HEADER_VARY = 'Vary';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/WWW-Authenticate
+	 */
+	public const HEADER_WWW_AUTHENTICATE = 'WWW-Authenticate';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
+	 */
+	public const HEADER_X_CONTENT_TYPE_OPTIONS = 'X-Content-Type-Options';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-DNS-Prefetch-Control
+	 */
+	public const HEADER_X_DNS_PREFETCH_CONTROL = 'X-DNS-Prefetch-Control';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+	 */
+	public const HEADER_X_FRAME_OPTIONS = 'X-Frame-Options';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
+	 */
+	public const HEADER_X_XSS_PROTECTION = 'X-XSS-Protection';
+	// Custom headers ----------------------------------------------------------
+	public const HEADER_X_REQUEST_ID = 'X-Request-ID';
+	public const HEADER_X_POWERED_BY = 'X-Powered-By';
 
 	public function getProtocol() : string;
 
