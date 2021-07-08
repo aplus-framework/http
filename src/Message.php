@@ -561,6 +561,11 @@ abstract class Message implements MessageInterface
 		return static::$standardHeaders[\strtolower($name)] ?? $name;
 	}
 
+	public static function setHeaderName(string $name) : void
+	{
+		static::$standardHeaders[\strtolower($name)] = $name;
+	}
+
 	/**
 	 * Get the Response reason based on status code.
 	 *
