@@ -62,6 +62,7 @@ abstract class Message implements MessageInterface
 		'content-disposition' => 'Content-Disposition',
 		'date' => 'Date',
 		'keep-alive' => 'Keep-Alive',
+		'link' => 'Link',
 		'via' => 'Via',
 		'warning' => 'Warning',
 		// Representation headers (Request and Response)
