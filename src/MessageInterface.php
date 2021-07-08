@@ -70,6 +70,10 @@ interface MessageInterface
 	 */
 	public const HEADER_CONTENT_RANGE = 'Content-Range';
 	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Link
+	 */
+	public const HEADER_LINK = 'Link';
+	/**
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Trailer
 	 */
 	public const HEADER_TRAILER = 'Trailer';
