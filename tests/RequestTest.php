@@ -121,6 +121,9 @@ final class RequestTest extends TestCase
 		// @phpstan-ignore-next-line
 		$this->request->setBody('color=red&height=500px&width=800');
 		self::assertSame('color=red&height=500px&width=800', $this->request->getBody());
+		self::assertSame([], $this->request->getParsedBody());
+		$this->request->parsedBody = null;
+		$this->request->setHeader('Content-Type', 'application/x-www-form-urlencoded');
 		self::assertSame([
 			'color' => 'red',
 			'height' => '500px',
@@ -132,6 +135,8 @@ final class RequestTest extends TestCase
 			'width' => '800',
 		], $this->request->getParsedBody());
 		self::assertSame('red', $this->request->getParsedBody('color', \FILTER_SANITIZE_STRING));
+		self::assertSame(800, $this->request->getParsedBody('width', \FILTER_VALIDATE_INT));
+		self::assertFalse($this->request->getParsedBody('height', \FILTER_VALIDATE_INT));
 		$this->request->setMethod('POST');
 		self::assertSame([
 			'username' => 'phpdev',

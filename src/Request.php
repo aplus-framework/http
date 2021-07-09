@@ -375,7 +375,9 @@ class Request extends Message implements RequestInterface
 			return $this->getPOST($name, $filter, $filterOptions);
 		}
 		if ($this->parsedBody === null) {
-			\parse_str($this->getBody(), $this->parsedBody);
+			$this->isForm()
+				? \parse_str($this->getBody(), $this->parsedBody)
+				: $this->parsedBody = [];
 		}
 		$variable = $name === null
 			? $this->parsedBody
@@ -848,7 +850,8 @@ class Request extends Message implements RequestInterface
 	}
 
 	/**
-	 * Say if the request is done via an HTML form.
+	 * Say if the request is done with application/x-www-form-urlencoded
+	 * Content-Type.
 	 *
 	 * @return bool
 	 */
