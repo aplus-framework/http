@@ -9,8 +9,8 @@
  */
 namespace Framework\HTTP;
 
-use ArraySimple;
 use BadMethodCallException;
+use Framework\Helpers\ArraySimple;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
