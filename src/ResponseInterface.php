@@ -616,7 +616,7 @@ interface ResponseInterface extends MessageInterface
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/505
 	 */
-	public const CODE_CODE_VERSION_NOT_SUPPORTED = 505;
+	public const CODE_HTTP_VERSION_NOT_SUPPORTED = 505;
 	/**
 	 * 506 Variant Also Negotiates.
 	 *
