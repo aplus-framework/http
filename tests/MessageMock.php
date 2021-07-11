@@ -14,58 +14,58 @@ use Framework\HTTP\Message;
 
 class MessageMock extends Message
 {
-	public function setProtocol(string $protocol) : static
-	{
-		return parent::setProtocol($protocol);
-	}
+    public function setProtocol(string $protocol) : static
+    {
+        return parent::setProtocol($protocol);
+    }
 
-	public function setHeader(string $name, string $value) : static
-	{
-		return parent::setHeader($name, $value);
-	}
+    public function setHeader(string $name, string $value) : static
+    {
+        return parent::setHeader($name, $value);
+    }
 
-	public function setHeaders(array $headers) : static
-	{
-		return parent::setHeaders($headers);
-	}
+    public function setHeaders(array $headers) : static
+    {
+        return parent::setHeaders($headers);
+    }
 
-	public function removeHeader(string $name) : static
-	{
-		return parent::removeHeader($name);
-	}
+    public function removeHeader(string $name) : static
+    {
+        return parent::removeHeader($name);
+    }
 
-	public function removeHeaders() : static
-	{
-		return parent::removeHeaders();
-	}
+    public function removeHeaders() : static
+    {
+        return parent::removeHeaders();
+    }
 
-	public function setBody(?string $body) : static
-	{
-		return parent::setBody($body);
-	}
+    public function setBody(?string $body) : static
+    {
+        return parent::setBody($body);
+    }
 
-	public function setCookie(Cookie $cookie) : static
-	{
-		return parent::setCookie($cookie);
-	}
+    public function setCookie(Cookie $cookie) : static
+    {
+        return parent::setCookie($cookie);
+    }
 
-	public function setCookies(array $cookies) : static
-	{
-		return parent::setCookies($cookies);
-	}
+    public function setCookies(array $cookies) : static
+    {
+        return parent::setCookies($cookies);
+    }
 
-	public function removeCookie(string $name) : static
-	{
-		return parent::removeCookie($name);
-	}
+    public function removeCookie(string $name) : static
+    {
+        return parent::removeCookie($name);
+    }
 
-	public function removeCookies(array $names) : static
-	{
-		return parent::removeCookies($names);
-	}
+    public function removeCookies(array $names) : static
+    {
+        return parent::removeCookies($names);
+    }
 
-	public function parseContentType() : ?string
-	{
-		return parent::parseContentType();
-	}
+    public function parseContentType() : ?string
+    {
+        return parent::parseContentType();
+    }
 }

@@ -20,9 +20,9 @@ use JetBrains\PhpStorm\Deprecated;
 #[Deprecated('since HTTP Library version 3.9, use AntiCSRF instead')]
 class CSRF extends AntiCSRF
 {
-	public function __construct(mixed ...$arguments)
-	{
-		\trigger_error('Class ' . __CLASS__ . ' is deprecated', \E_USER_DEPRECATED);
-		parent::__construct(...$arguments);
-	}
+    public function __construct(mixed ...$arguments)
+    {
+        \trigger_error('Class ' . __CLASS__ . ' is deprecated', \E_USER_DEPRECATED);
+        parent::__construct(...$arguments);
+    }
 }
