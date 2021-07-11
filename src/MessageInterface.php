@@ -81,6 +81,10 @@ interface MessageInterface
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding
 	 */
 	public const HEADER_TRANSFER_ENCODING = 'Transfer-Encoding';
+	/**
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade
+	 */
+	public const HEADER_UPGRADE = 'Upgrade';
 
 	public function getProtocol() : string;
 
