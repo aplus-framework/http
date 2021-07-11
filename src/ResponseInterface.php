@@ -35,6 +35,7 @@ interface ResponseInterface extends MessageInterface
 	 * This code is sent in response to an Upgrade request header from the
 	 * client, and indicates the protocol the server is switching to.
 	 *
+	 * @see MessageInterface::HEADER_UPGRADE
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/101
 	 */
 	public const CODE_SWITCHING_PROTOCOLS = 101;
@@ -54,6 +55,7 @@ interface ResponseInterface extends MessageInterface
 	 * letting the user agent start preloading resources while the server
 	 * prepares a response.
 	 *
+	 * @see MessageInterface::HEADER_LINK
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103
 	 */
 	public const CODE_EARLY_HINTS = 103;
@@ -136,6 +138,8 @@ interface ResponseInterface extends MessageInterface
 	 * This response code is used when the Range header is sent from the client
 	 * to request only part of a resource.
 	 *
+	 * @see RequestInterface::HEADER_RANGE
+	 * @see MessageInterface::HEADER_CONTENT_RANGE
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/206
 	 */
 	public const CODE_PARTIAL_CONTENT = 206;
@@ -261,6 +265,8 @@ interface ResponseInterface extends MessageInterface
 	 * `POST` was used in the first request, a `POST` must be used in the second
 	 * request.
 	 *
+	 * @see ResponseInterface::HEADER_LOCATION
+	 * @see ResponseInterface::CODE_MOVED_PERMANENTLY
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/308
 	 */
 	public const CODE_PERMANENT_REDIRECT = 308;
@@ -300,6 +306,7 @@ interface ResponseInterface extends MessageInterface
 	 * unauthorized, so the server is refusing to give the requested resource.
 	 * Unlike 401, the client's identity is known to the server.
 	 *
+	 * @see ResponseInterface::CODE_UNAUTHORIZED
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
 	 */
 	public const CODE_FORBIDDEN = 403;
@@ -322,6 +329,7 @@ interface ResponseInterface extends MessageInterface
 	 * The request method is known by the server but is not supported by the
 	 * target resource. For example, an API may forbid DELETE-ing a resource.
 	 *
+	 * @see ResponseInterface::HEADER_ALLOW
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405
 	 */
 	public const CODE_METHOD_NOT_ALLOWED = 405;
@@ -341,6 +349,7 @@ interface ResponseInterface extends MessageInterface
 	 * This is similar to 401 but authentication is needed to be done by a
 	 * proxy.
 	 *
+	 * @see ResponseInterface::CODE_UNAUTHORIZED
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/407
 	 */
 	public const CODE_PROXY_AUTHENTICATION_REQUIRED = 407;
@@ -385,6 +394,7 @@ interface ResponseInterface extends MessageInterface
 	 * Server rejected the request because the Content-Length header field is
 	 * not defined and the server requires it.
 	 *
+	 * @see MessageInterface::HEADER_CONTENT_LENGTH
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/411
 	 */
 	public const CODE_LENGTH_REQUIRED = 411;
@@ -403,6 +413,7 @@ interface ResponseInterface extends MessageInterface
 	 * Request entity is larger than limits defined by server; the server might
 	 * close the connection or return an `Retry-After` header field.
 	 *
+	 * @see ResponseInterface::HEADER_RETRY_AFTER
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/413
 	 */
 	public const CODE_PAYLOAD_TOO_LARGE = 413;
@@ -431,6 +442,7 @@ interface ResponseInterface extends MessageInterface
 	 * fulfilled; it's possible that the range is outside the size of the target
 	 * URI's data.
 	 *
+	 * @see RequestInterface::HEADER_RANGE
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/416
 	 */
 	public const CODE_RANGE_NOT_SATISFIABLE = 416;
@@ -440,6 +452,7 @@ interface ResponseInterface extends MessageInterface
 	 * This response code means the expectation indicated by the `Expect`
 	 * request header field can't be met by the server.
 	 *
+	 * @see RequestInterface::HEADER_EXPECT
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/417
 	 */
 	public const CODE_EXPECTATION_FAILED = 417;
@@ -504,6 +517,7 @@ interface ResponseInterface extends MessageInterface
 	 * protocol. The server sends an `Upgrade` header in a 426 response to
 	 * indicate the required protocol(s).
 	 *
+	 * @see MessageInterface::HEADER_UPGRADE
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/426
 	 */
 	public const CODE_UPGRADE_REQUIRED = 426;
@@ -597,6 +611,7 @@ interface ResponseInterface extends MessageInterface
 	 * response, as these temporary condition responses should usually not be
 	 * cached.
 	 *
+	 * @see ResponseInterface::HEADER_RETRY_AFTER
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503
 	 */
 	public const CODE_SERVICE_UNAVAILABLE = 503;

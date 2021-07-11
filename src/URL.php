@@ -17,7 +17,7 @@ use RuntimeException;
 /**
  * Class URL.
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Identifying_resources_on_the_Web
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Identifying_resources_on_the_Web#urls
  * @see https://developer.mozilla.org/en-US/docs/Web/API/URL
  * @see https://tools.ietf.org/html/rfc3986#section-3
  */
