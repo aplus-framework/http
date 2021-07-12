@@ -309,11 +309,11 @@ final class ResponseTest extends TestCase
         self::assertSame('200 OK', $this->response->getStatus());
         self::assertSame(Response::CODE_OK, $this->response->getStatusCode());
         self::assertSame('OK', $this->response->getStatusReason());
-        $this->response->setStatusLine(Response::CODE_CREATED);
+        $this->response->setStatus(Response::CODE_CREATED);
         self::assertSame('201 Created', $this->response->getStatus());
         $this->response->setStatusReason('Other');
         self::assertSame('201 Other', $this->response->getStatus());
-        $this->response->setStatusLine(483, 'Custom');
+        $this->response->setStatus(483, 'Custom');
         self::assertSame('483 Custom', $this->response->getStatus());
     }
 
@@ -321,7 +321,7 @@ final class ResponseTest extends TestCase
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Unknown status code must have a reason: 483');
-        $this->response->setStatusLine(483);
+        $this->response->setStatus(483);
     }
 
     public function testSetContents() : void

@@ -157,10 +157,10 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
+     * @return string
+     *
      * @deprecated
      * @codeCoverageIgnore
-     *
-     * @return string
      */
     #[Deprecated(
         'Since v3.13, use getStatus() instead',
@@ -189,7 +189,7 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
-     * Set the status line.
+     * Set the status part in the start-line.
      *
      * @param int $code
      * @param string|null $reason
@@ -199,7 +199,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return static
      */
-    public function setStatusLine(int $code, string $reason = null) : static
+    public function setStatus(int $code, string $reason = null) : static
     {
         $this->setStatusCode($code);
         $reason ?: $reason = static::getResponseReason($code);
@@ -208,6 +208,28 @@ class Response extends Message implements ResponseInterface
         }
         $this->setStatusReason($reason);
         return $this;
+    }
+
+    /**
+     * @param int $code
+     * @param string|null $reason
+     *
+     * @deprecated
+     * @codeCoverageIgnore
+     *
+     * @return $this
+     */
+    #[Deprecated(
+        'Since v3.13, use setStatus() instead',
+        '%class%->setStatus(%parameter0%, %parameter1%)'
+    )]
+    public function setStatusLine(int $code, string $reason = null) : static
+    {
+        \trigger_error(
+            'Method ' . __METHOD__ . ' is deprecated',
+            \E_USER_DEPRECATED
+        );
+        return $this->setStatus($code, $reason);
     }
 
     /**
@@ -299,7 +321,7 @@ class Response extends Message implements ResponseInterface
         } elseif ($code < 300 || $code > 399) {
             throw new InvalidArgumentException("Invalid Redirection code: {$code}");
         }
-        $this->setStatusLine($code);
+        $this->setStatus($code);
         $this->setHeader(static::HEADER_LOCATION, $location);
         if ($data) {
             if (\session_status() !== \PHP_SESSION_ACTIVE) {
@@ -352,7 +374,10 @@ class Response extends Message implements ResponseInterface
         // Per spec, MUST be sent with each request, if possible.
         // http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html
         if ($this->getHeader(static::HEADER_DATE) === null) {
-            $this->setDate(DateTime::createFromFormat('U', (string) \time())); // @phpstan-ignore-line
+            $this->setDate(DateTime::createFromFormat(
+                'U',
+                (string) \time()
+            )); // @phpstan-ignore-line
         }
         if ($this->getHeader(static::HEADER_CONTENT_TYPE) === null) {
             $this->setContentType('text/html');
@@ -568,7 +593,7 @@ class Response extends Message implements ResponseInterface
      */
     public function setNotModified() : static
     {
-        $this->setStatusLine(static::CODE_NOT_MODIFIED);
+        $this->setStatus(static::CODE_NOT_MODIFIED);
         return $this;
     }
 }
