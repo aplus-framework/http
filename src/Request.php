@@ -567,13 +567,17 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @todo Maybe it should be removed. ETag is a Response header
+     * @deprecated ETag is a Response header, use If-None-Match header
+     * @codeCoverageIgnore
      *
      * @return string|null
      */
-    #[Pure]
     public function getETag() : ?string
     {
+        \trigger_error(
+            'Method ' . __METHOD__ . ' is deprecated',
+            \E_USER_DEPRECATED
+        );
         return $this->getHeader('ETag');
     }
 

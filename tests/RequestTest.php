@@ -257,11 +257,6 @@ final class RequestTest extends TestCase
         self::assertSame([], $this->request->getENV());
     }
 
-    public function testEtag() : void
-    {
-        self::assertSame('abc', $this->request->getETag());
-    }
-
     public function testFiles() : void
     {
         $_FILES = [
@@ -364,7 +359,7 @@ final class RequestTest extends TestCase
 
     public function testHeader() : void
     {
-        self::assertSame('abc', $this->request->getHeader('etag'));
+        self::assertSame('domain.tld', $this->request->getHeader('host'));
     }
 
     public function testHeaders() : void
@@ -375,7 +370,6 @@ final class RequestTest extends TestCase
             'accept-language' => 'pt-BR,es;q=0.8,en;q=0.5,en-US;q=0.3',
             'accept-charset' => 'utf-8, iso-8859-1;q=0.5, *;q=0.1',
             'content-type' => 'text/html; charset=UTF-8',
-            'etag' => 'abc',
             'host' => 'domain.tld',
             'referer' => 'http://domain.tld/contact.html',
             'user-agent' => 'Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
