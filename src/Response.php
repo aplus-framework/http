@@ -12,6 +12,7 @@ namespace Framework\HTTP;
 use DateTime;
 use DateTimeZone;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Deprecated;
 use JetBrains\PhpStorm\Pure;
 use JsonException;
 use LogicException;
@@ -156,10 +157,33 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
+     * @deprecated
+     * @codeCoverageIgnore
+     *
+     * @return string
+     */
+    #[Deprecated(
+        'Since v3.13, use getStatus() instead',
+        '%class%->getStatus()'
+    )]
+    public function getStatusLine() : string
+    {
+        \trigger_error(
+            'Method ' . __METHOD__ . ' is deprecated',
+            \E_USER_DEPRECATED
+        );
+        return "{$this->statusCode} {$this->statusReason}";
+    }
+
+    /**
+     * Get the status line without the protocol part.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#status_line
+     *
      * @return string
      */
     #[Pure]
-    public function getStatusLine() : string
+    public function getStatus() : string
     {
         return "{$this->statusCode} {$this->statusReason}";
     }
@@ -333,7 +357,7 @@ class Response extends Message implements ResponseInterface
         if ($this->getHeader(static::HEADER_CONTENT_TYPE) === null) {
             $this->setContentType('text/html');
         }
-        \header($this->getProtocol() . ' ' . $this->getStatusLine());
+        \header($this->getProtocol() . ' ' . $this->getStatus());
         foreach ($this->getHeaderLines() as $line) {
             \header($line);
         }

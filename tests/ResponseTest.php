@@ -256,7 +256,7 @@ final class ResponseTest extends TestCase
         $this->response->setNotModified();
         self::assertSame(
             '304 Not Modified',
-            $this->response->getStatusLine()
+            $this->response->getStatus()
         );
     }
 
@@ -306,15 +306,15 @@ final class ResponseTest extends TestCase
 
     public function testStatus() : void
     {
-        self::assertSame('200 OK', $this->response->getStatusLine());
+        self::assertSame('200 OK', $this->response->getStatus());
         self::assertSame(Response::CODE_OK, $this->response->getStatusCode());
         self::assertSame('OK', $this->response->getStatusReason());
         $this->response->setStatusLine(Response::CODE_CREATED);
-        self::assertSame('201 Created', $this->response->getStatusLine());
+        self::assertSame('201 Created', $this->response->getStatus());
         $this->response->setStatusReason('Other');
-        self::assertSame('201 Other', $this->response->getStatusLine());
+        self::assertSame('201 Other', $this->response->getStatus());
         $this->response->setStatusLine(483, 'Custom');
-        self::assertSame('483 Custom', $this->response->getStatusLine());
+        self::assertSame('483 Custom', $this->response->getStatus());
     }
 
     public function testUnknownStatus() : void
