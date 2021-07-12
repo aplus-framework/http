@@ -106,6 +106,57 @@ class Request extends Message implements RequestInterface
         throw new BadMethodCallException("Method not found: {$method}");
     }
 
+    public function __toString() : string
+    {
+        if ($this->parseContentType() === 'multipart/form-data') {
+            $this->setBody($this->getMultipartBody());
+        }
+        return parent::__toString();
+    }
+
+    protected function getMultipartBody() : string
+    {
+        $bodyParts = [];
+        /**
+         * @var array<string,string> $post
+         */
+        $post = ArraySimple::convert($this->getPOST());
+        foreach ($post as $field => $value) {
+            $field = \htmlspecialchars($field, \ENT_QUOTES | \ENT_HTML5);
+            $bodyParts[] = \implode("\r\n", [
+                "Content-Disposition: form-data; name=\"{$field}\"",
+                '',
+                $value,
+            ]);
+        }
+        /**
+         * @var array<string,UploadedFile> $files
+         */
+        $files = ArraySimple::convert($this->getFiles());
+        foreach ($files as $field => $file) {
+            $field = \htmlspecialchars($field, \ENT_QUOTES | \ENT_HTML5);
+            $filename = \htmlspecialchars($file->getName(), \ENT_QUOTES | \ENT_HTML5);
+            $getContentsOf = $file->isMoved() ? $file->getDestination() : $file->getTmpName();
+            $data = \file_get_contents($getContentsOf);
+            $bodyParts[] = \implode("\r\n", [
+                "Content-Disposition: form-data; name=\"{$field}\"; filename=\"{$filename}\"",
+                'Content-Type: ' . $file->getClientType(),
+                '',
+                $data,
+            ]);
+        }
+        $boundary = \explode(';', $this->getContentType())[1];
+        $boundary = \substr($boundary, \strlen('boundary=') + 1);
+        $boundary = \trim($boundary);
+        foreach ($bodyParts as &$part) {
+            $part = "--{$boundary}\r\n{$part}";
+        }
+        unset($part);
+        $bodyParts[] = "--{$boundary}--";
+        $bodyParts[] = '';
+        return \implode("\r\n", $bodyParts);
+    }
+
     /**
      * Check if Host header is allowed.
      *
