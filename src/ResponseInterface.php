@@ -831,7 +831,6 @@ interface ResponseInterface extends MessageInterface
      */
     public const HEADER_X_XSS_PROTECTION = 'X-XSS-Protection';
     // Custom headers ----------------------------------------------------------
-    public const HEADER_X_REQUEST_ID = 'X-Request-ID';
     public const HEADER_X_POWERED_BY = 'X-Powered-By';
 
     public function getStatusCode() : int;

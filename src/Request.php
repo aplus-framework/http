@@ -625,9 +625,9 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * Get the Request ID.
+     * Get the X-Request-ID.
      *
-     * @todo Maybe it should be removed. X-Request-ID is a Response header
+     * @todo On v4.0 it must return null if X-Request-ID header is not set
      *
      * @return string
      */
@@ -636,7 +636,7 @@ class Request extends Message implements RequestInterface
         if ($this->id !== null) {
             return $this->id;
         }
-        $this->id = $this->getHeader('X-Request-ID');
+        $this->id = $this->getHeader(static::HEADER_X_REQUEST_ID);
         if (empty($this->id)) {
             $this->id = \md5(\uniqid($this->getIP(), true));
         }

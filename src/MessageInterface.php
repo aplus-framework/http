@@ -85,6 +85,11 @@ interface MessageInterface
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade
      */
     public const HEADER_UPGRADE = 'Upgrade';
+    // Custom headers ----------------------------------------------------------
+    /**
+     * @see https://riptutorial.com/http-headers/topic/10581/x-request-id
+     */
+    public const HEADER_X_REQUEST_ID = 'X-Request-ID';
 
     public function getProtocol() : string;
 
