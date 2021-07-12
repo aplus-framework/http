@@ -217,7 +217,7 @@ class Response extends Message implements ResponseInterface
      * @deprecated
      * @codeCoverageIgnore
      *
-     * @return $this
+     * @return static
      */
     #[Deprecated(
         'Since v3.13, use setStatus() instead',
