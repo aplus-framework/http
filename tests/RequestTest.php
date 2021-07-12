@@ -190,6 +190,14 @@ final class RequestTest extends TestCase
         self::assertSame('HTTP/1.1', $this->request->getProtocol());
     }
 
+    public function testStartLine() : void
+    {
+        self::assertSame(
+            'GET /blog/posts?order_by=title&order=asc HTTP/1.1',
+            $this->request->getStartLine()
+        );
+    }
+
     public function testCookie() : void
     {
         self::assertSame('cart-123', $this->request->getCookie('cart')->getValue());

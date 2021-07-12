@@ -93,6 +93,8 @@ interface MessageInterface
 
     public function getProtocol() : string;
 
+    public function getStartLine() : string;
+
     public function getHeader(string $name) : ?string;
 
     /**

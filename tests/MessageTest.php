@@ -10,6 +10,8 @@
 namespace Tests\HTTP;
 
 use Framework\HTTP\Cookie;
+use Framework\HTTP\RequestInterface;
+use Framework\HTTP\ResponseInterface;
 use PHPUnit\Framework\TestCase;
 
 final class MessageTest extends TestCase
@@ -26,6 +28,16 @@ final class MessageTest extends TestCase
         self::assertSame('HTTP/1.1', $this->message->getProtocol());
         $this->message->setProtocol('HTTP/2');
         self::assertSame('HTTP/2', $this->message->getProtocol());
+    }
+
+    public function testStartLine() : void
+    {
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessage(
+            $this->message::class . ' is not an instance of '
+            . RequestInterface::class . ' or ' . ResponseInterface::class
+        );
+        $this->message->getStartLine();
     }
 
     public function testHeader() : void

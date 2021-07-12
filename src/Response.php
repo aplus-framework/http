@@ -340,7 +340,7 @@ class Response extends Message implements ResponseInterface
         if ($this->getHeader(static::HEADER_CONTENT_TYPE) === null) {
             $this->setContentType('text/html');
         }
-        \header($this->getProtocol() . ' ' . $this->getStatus());
+        \header($this->getStartLine());
         foreach ($this->getHeaderLines() as $line) {
             \header($line);
         }

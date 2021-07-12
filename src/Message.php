@@ -9,6 +9,7 @@
  */
 namespace Framework\HTTP;
 
+use BadMethodCallException;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 
@@ -229,6 +230,33 @@ abstract class Message implements MessageInterface
         511 => 'Network Authentication Required',
         599 => 'Network Connect Timeout Error',
     ];
+
+    /**
+     * Get the Message Start-Line.
+     *
+     * @throws BadMethodCallException if $this is not an instance of
+     * RequestInterface or ResponseInterface
+     *
+     * @return string
+     */
+    public function getStartLine() : string
+    {
+        if ($this instanceof RequestInterface) {
+            $query = $this->getURL()->getQuery();
+            $query = $query !== '' ? '?' . $query : '';
+            return $this->getMethod()
+                . ' ' . $this->getURL()->getPath() . $query
+                . ' ' . $this->getProtocol();
+        }
+        if ($this instanceof ResponseInterface) {
+            return $this->getProtocol()
+                . ' ' . $this->getStatus();
+        }
+        throw new BadMethodCallException(
+            static::class . ' is not an instance of ' . RequestInterface::class
+            . ' or ' . ResponseInterface::class
+        );
+    }
 
     #[Pure]
     public function hasHeader(string $name) : bool

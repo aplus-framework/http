@@ -317,6 +317,14 @@ final class ResponseTest extends TestCase
         self::assertSame('483 Custom', $this->response->getStatus());
     }
 
+    public function testStartLine() : void
+    {
+        self::assertSame(
+            'HTTP/1.1 200 OK',
+            $this->response->getStartLine()
+        );
+    }
+
     public function testUnknownStatus() : void
     {
         $this->expectException(\LogicException::class);
