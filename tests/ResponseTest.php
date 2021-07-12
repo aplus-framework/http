@@ -325,6 +325,32 @@ final class ResponseTest extends TestCase
         );
     }
 
+    public function testToString() : void
+    {
+        $startLine = 'HTTP/1.1 200 OK';
+        $headerLines = [
+            'Date: ' . \gmdate(\DATE_RFC7231),
+            'Content-Type: text/html; charset=UTF-8',
+        ];
+        $body = <<<'HTML'
+            <!doctype html>
+            <html lang="en">
+            <head>
+                <title>Message Body</title>
+            <body>
+                <p>Hello, <strong>A+</strong>!</p>
+            </body>
+            </head>
+            </html>
+            HTML;
+        $this->response->setBody($body);
+        $message = $startLine . "\r\n"
+            . \implode("\r\n", $headerLines) . "\r\n"
+            . "\r\n"
+            . $body;
+        self::assertSame($message, (string) $this->response);
+    }
+
     public function testUnknownStatus() : void
     {
         $this->expectException(\LogicException::class);

@@ -49,6 +49,17 @@ class Response extends Message implements ResponseInterface
         $this->setProtocol($this->request->getProtocol());
     }
 
+    public function __toString() : string
+    {
+        if ($this->getHeader(static::HEADER_DATE) === null) {
+            $this->setDate(new DateTime());
+        }
+        if ($this->getHeader(static::HEADER_CONTENT_TYPE) === null) {
+            $this->setContentType('text/html');
+        }
+        return parent::__toString();
+    }
+
     /**
      * @return Request
      */

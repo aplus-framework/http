@@ -231,6 +231,18 @@ abstract class Message implements MessageInterface
         599 => 'Network Connect Timeout Error',
     ];
 
+    public function __toString() : string
+    {
+        $eol = "\r\n";
+        $message = $this->getStartLine() . $eol;
+        foreach ($this->getHeaderLines() as $headerLine) {
+            $message .= $headerLine . $eol;
+        }
+        $message .= $eol;
+        $message .= $this->getBody();
+        return $message;
+    }
+
     /**
      * Get the Message Start-Line.
      *
@@ -243,7 +255,7 @@ abstract class Message implements MessageInterface
     {
         if ($this instanceof RequestInterface) {
             $query = $this->getURL()->getQuery();
-            $query = $query !== '' ? '?' . $query : '';
+            $query = ($query !== null && $query !== '') ? '?' . $query : '';
             return $this->getMethod()
                 . ' ' . $this->getURL()->getPath() . $query
                 . ' ' . $this->getProtocol();

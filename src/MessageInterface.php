@@ -9,10 +9,12 @@
  */
 namespace Framework\HTTP;
 
+use Stringable;
+
 /**
  * Interface MessageInterface.
  */
-interface MessageInterface
+interface MessageInterface extends Stringable
 {
     // General headers ---------------------------------------------------------
     /**

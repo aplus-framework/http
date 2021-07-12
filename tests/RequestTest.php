@@ -198,6 +198,32 @@ final class RequestTest extends TestCase
         );
     }
 
+    /**
+     * @runInSeparateProcess
+     */
+    public function testToString() : void
+    {
+        $startLine = 'GET /blog/posts?order_by=title&order=asc HTTP/1.1';
+        $headerLines = [
+            'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Encoding: gzip, deflate',
+            'Accept-Language: pt-BR,es;q=0.8,en;q=0.5,en-US;q=0.3',
+            'Accept-Charset: utf-8, iso-8859-1;q=0.5, *;q=0.1',
+            'Content-Type: text/html; charset=UTF-8',
+            'Host: domain.tld',
+            'Referer: http://domain.tld/contact.html',
+            'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
+            'X-Request-ID: abc123',
+            'X-Requested-With: XMLHTTPREQUEST',
+        ];
+        $body = '';
+        $message = $startLine . "\r\n"
+            . \implode("\r\n", $headerLines) . "\r\n"
+            . "\r\n"
+            . $body;
+        self::assertSame($message, (string) $this->request);
+    }
+
     public function testCookie() : void
     {
         self::assertSame('cart-123', $this->request->getCookie('cart')->getValue());
