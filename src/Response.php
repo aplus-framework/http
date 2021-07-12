@@ -12,7 +12,6 @@ namespace Framework\HTTP;
 use DateTime;
 use DateTimeZone;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Deprecated;
 use JetBrains\PhpStorm\Pure;
 use JsonException;
 use LogicException;
@@ -157,25 +156,6 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
-     * @return string
-     *
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    #[Deprecated(
-        'Since v3.13, use getStatus() instead',
-        '%class%->getStatus()'
-    )]
-    public function getStatusLine() : string
-    {
-        \trigger_error(
-            'Method ' . __METHOD__ . ' is deprecated',
-            \E_USER_DEPRECATED
-        );
-        return "{$this->statusCode} {$this->statusReason}";
-    }
-
-    /**
      * Get the status line without the protocol part.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#status_line
@@ -208,28 +188,6 @@ class Response extends Message implements ResponseInterface
         }
         $this->setStatusReason($reason);
         return $this;
-    }
-
-    /**
-     * @param int $code
-     * @param string|null $reason
-     *
-     * @deprecated
-     * @codeCoverageIgnore
-     *
-     * @return static
-     */
-    #[Deprecated(
-        'Since v3.13, use setStatus() instead',
-        '%class%->setStatus(%parameter0%, %parameter1%)'
-    )]
-    public function setStatusLine(int $code, string $reason = null) : static
-    {
-        \trigger_error(
-            'Method ' . __METHOD__ . ' is deprecated',
-            \E_USER_DEPRECATED
-        );
-        return $this->setStatus($code, $reason);
     }
 
     /**
