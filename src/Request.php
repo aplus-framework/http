@@ -567,21 +567,6 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @deprecated ETag is a Response header, use If-None-Match header
-     * @codeCoverageIgnore
-     *
-     * @return string|null
-     */
-    public function getETag() : ?string
-    {
-        \trigger_error(
-            'Method ' . __METHOD__ . ' is deprecated',
-            \E_USER_DEPRECATED
-        );
-        return $this->getHeader('ETag');
-    }
-
-    /**
      * @return array<string,array|UploadedFile>
      */
     #[Pure]
