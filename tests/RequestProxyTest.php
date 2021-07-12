@@ -73,4 +73,10 @@ final class RequestProxyTest extends TestCase
         );
         self::assertInstanceOf(\Framework\HTTP\URL::class, $this->proxyRequest->getURL());
     }
+
+    public function testId() : void
+    {
+        self::assertNull($this->proxyRequest->getId());
+        self::assertNull($this->proxyRequest->getId());
+    }
 }

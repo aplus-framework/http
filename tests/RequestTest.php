@@ -373,6 +373,7 @@ final class RequestTest extends TestCase
             'host' => 'domain.tld',
             'referer' => 'http://domain.tld/contact.html',
             'user-agent' => 'Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
+            'x-request-id' => 'abc123',
             'x-requested-with' => 'XMLHTTPREQUEST',
         ], $this->request->getHeaders());
     }
@@ -530,9 +531,8 @@ final class RequestTest extends TestCase
 
     public function testId() : void
     {
-        $id = $this->request->getId();
-        self::assertIsString($id);
-        self::assertSame($id, $this->request->getId());
+        self::assertSame('abc123', $this->request->getId());
+        self::assertSame('abc123', $this->request->getId());
     }
 
     public function testCallMethodNotAllowed() : void

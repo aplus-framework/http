@@ -45,9 +45,9 @@ class Request extends Message implements RequestInterface
     protected string $host;
     protected int $port;
     /**
-     * Request Identifier. 32 bytes.
+     * Request X-Request-ID header.
      */
-    protected ?string $id = null;
+    protected string | false $id;
     /**
      * @var array<string,array|null>
      */
@@ -614,22 +614,17 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * Get the X-Request-ID.
+     * Get the X-Request-ID header.
      *
-     * @todo On v4.0 it must return null if X-Request-ID header is not set
-     *
-     * @return string
+     * @return string|null
      */
-    public function getId() : string
+    public function getId() : string | null
     {
-        if ($this->id !== null) {
-            return $this->id;
+        if (isset($this->id)) {
+            return $this->id === false ? null : $this->id;
         }
-        $this->id = $this->getHeader(static::HEADER_X_REQUEST_ID);
-        if (empty($this->id)) {
-            $this->id = \md5(\uniqid($this->getIP(), true));
-        }
-        return $this->id;
+        $this->id = $this->getHeader(static::HEADER_X_REQUEST_ID) ?? false;
+        return $this->getId();
     }
 
     /**

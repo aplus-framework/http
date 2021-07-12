@@ -31,6 +31,7 @@ class RequestMock extends \Framework\HTTP\Request
             'HTTP_HOST' => 'domain.tld',
             'HTTP_REFERER' => 'http://domain.tld/contact.html',
             'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
+            'HTTP_X_REQUEST_ID' => 'abc123',
             'HTTP_X_REQUESTED_WITH' => 'XMLHTTPREQUEST',
             'REMOTE_ADDR' => '192.168.1.100',
             'REQUEST_METHOD' => 'GET',
