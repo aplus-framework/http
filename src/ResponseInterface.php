@@ -837,10 +837,5 @@ interface ResponseInterface extends MessageInterface
 
     public function getStatusReason() : string;
 
-    /**
-     * @todo Rename it to getStatus on v4.0
-     *
-     * @return string
-     */
-    public function getStatusLine() : string;
+    public function getStatus() : string;
 }
