@@ -37,6 +37,8 @@ class Response extends Message implements ResponseInterface
      */
     protected string $statusReason = 'OK';
     protected ?string $sendedBody = null;
+    protected bool $inToString = false;
+    protected string $toStringBody;
 
     /**
      * Response constructor.
@@ -56,6 +58,12 @@ class Response extends Message implements ResponseInterface
         }
         if ($this->getHeader(static::HEADER_CONTENT_TYPE) === null) {
             $this->setContentType('text/html');
+        }
+        if ($this->hasDownload()) {
+            $this->inToString = true;
+            $this->toStringBody = '';
+            $this->sendDownload();
+            $this->setBody($this->toStringBody);
         }
         return parent::__toString();
     }

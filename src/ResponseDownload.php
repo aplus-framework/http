@@ -223,7 +223,7 @@ trait ResponseDownload
     {
         // @phpstan-ignore-next-line
         $this->readBuffer($this->byteRanges[0][0], $this->byteRanges[0][1]);
-        $this->readFile();
+        //$this->readFile();
     }
 
     /**
@@ -257,6 +257,10 @@ trait ResponseDownload
             $this->readBuffer($range[0], $range[1]); // @phpstan-ignore-line
         }
         echo $this->getBoundaryLine();
+        if ($this->inToString) {
+            $this->toStringBody .= \ob_get_contents();
+            \ob_clean();
+        }
     }
 
     #[Pure]
@@ -300,6 +304,11 @@ trait ResponseDownload
     private function flush(int $length) : void
     {
         echo \fread($this->handle, $length);
+        if ($this->inToString) {
+            $this->toStringBody .= \ob_get_contents();
+            \ob_clean();
+            return;
+        }
         \ob_flush();
         \flush();
         if ($this->delay) {
