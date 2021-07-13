@@ -122,8 +122,15 @@ final class ResponseDownloadTest extends TestCase
         $this->response->send();
         \ob_end_clean();
         self::assertTrue($this->response->isSent());
-        self::assertStringStartsWith('bytes 0-9/', $this->response->getHeader('Content-Range'));
-        self::assertStringEqualsFile(__FILE__, $this->response->getBody());
+        self::assertSame(
+            'bytes 0-9/' . \filesize(__FILE__),
+            $this->response->getHeader('Content-Range')
+        );
+        self::assertSame('10', $this->response->getHeader('Content-Length'));
+        self::assertSame(
+            \substr(\file_get_contents(__FILE__), 0, 10), // @phpstan-ignore-line
+            $this->response->getBody()
+        );
     }
 
     /**
