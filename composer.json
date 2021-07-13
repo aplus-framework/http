@@ -3,7 +3,17 @@
     "type": "library",
     "description": "The Framework HTTP Library",
     "keywords": [
-        "http"
+        "http",
+        "anti-csrf",
+        "csrf",
+        "message",
+        "request",
+        "response",
+        "url",
+        "cookie",
+        "user-agent",
+        "download",
+        "rest"
     ],
     "homepage": "https://the-framework.gitlab.io/libraries/http.html",
     "license": "MIT",
