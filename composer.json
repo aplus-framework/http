@@ -1,7 +1,7 @@
 {
-    "name": "natanfelles/http",
+    "name": "aplus/http",
     "type": "library",
-    "description": "The Framework HTTP Library",
+    "description": "Aplus Framework HTTP Library",
     "keywords": [
         "http",
         "anti-csrf",
@@ -15,7 +15,7 @@
         "download",
         "rest"
     ],
-    "homepage": "https://the-framework.gitlab.io/libraries/http.html",
+    "homepage": "https://aplus-framework.com/docs/http",
     "license": "MIT",
     "authors": [
         {
@@ -58,9 +58,9 @@
     "prefer-stable": true,
     "support": {
         "email": "natanfelles@gmail.com",
-        "issues": "https://gitlab.com/the-framework/libraries/http/issues",
-        "wiki": "https://gitlab.com/the-framework/libraries/http/wikis/home",
-        "source": "https://gitlab.com/the-framework/libraries/http",
-        "docs": "https://the-framework.gitlab.io/libraries/http/docs/"
+        "issues": "https://gitlab.com/aplus-framework/libraries/http/issues",
+        "wiki": "https://gitlab.com/aplus-framework/libraries/http/wikis/home",
+        "source": "https://gitlab.com/aplus-framework/libraries/http",
+        "docs": "https://aplus-framework.gitlab.io/libraries/http/docs/"
     }
 }
