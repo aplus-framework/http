@@ -114,6 +114,11 @@ class Request extends Message implements RequestInterface
         return parent::__toString();
     }
 
+    /**
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#multipartform-data
+     *
+     * @return string
+     */
     protected function getMultipartBody() : string
     {
         $bodyParts = [];
@@ -148,16 +153,32 @@ class Request extends Message implements RequestInterface
                 $data,
             ]);
         }
-        $boundary = \explode(';', $this->getContentType())[1];
-        $boundary = \substr($boundary, \strlen('boundary=') + 1);
-        $boundary = \trim($boundary);
+        $boundary = \explode(';', $this->getContentType(), 2);
+        $boundary = \trim($boundary[1]);
+        $boundary = \substr($boundary, \strlen('boundary='));
         foreach ($bodyParts as &$part) {
             $part = "--{$boundary}\r\n{$part}";
         }
         unset($part);
         $bodyParts[] = "--{$boundary}--";
         $bodyParts[] = '';
-        return \implode("\r\n", $bodyParts);
+        $bodyParts = \implode("\r\n", $bodyParts);
+        /**
+         * Uncomment the code below to make a raw test.
+         *
+         * @see \Tests\HTTP\RequestTest::testToStringMultipart()
+         */
+        /*
+        $serverLength = (string) $_SERVER['CONTENT_LENGTH'];
+        $algoLength = (string) \strlen($bodyParts);
+        if ($serverLength !== $algoLength) {
+            throw new \Exception(
+                '$_SERVER CONTENT_LENGTH is ' . $serverLength
+                . ', but the algorithm calculated ' . $algoLength
+            );
+        }
+        */
+        return $bodyParts;
     }
 
     /**

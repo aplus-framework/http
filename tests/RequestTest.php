@@ -224,6 +224,147 @@ final class RequestTest extends TestCase
         self::assertSame($message, (string) $this->request);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
+    public function testToStringMultipart() : void
+    {
+        RequestMock::$input[\INPUT_SERVER] = [
+            'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=---------------------------8721656041911415653955004498',
+            'HTTP_HOST' => 'domain.tld',
+            'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
+            'REQUEST_METHOD' => 'POST',
+            'REQUEST_SCHEME' => 'http',
+            'REQUEST_URI' => '/blog/posts',
+            'SERVER_PROTOCOL' => 'HTTP/1.1',
+        ];
+        RequestMock::$input[\INPUT_POST] = [
+            'name' => 'Maria',
+            'country' => [
+                'city' => 'Porto Alegre',
+            ],
+        ];
+        $filepath = __DIR__ . '/files/file.txt';
+        $_FILES = [
+            'files' => [
+                'name' => [
+                    1 => [
+                        'aa' => [
+                            0 => 'Test.php',
+                            1 => '',
+                        ],
+                    ],
+                    2 => 'Other File.php',
+                ],
+                'type' => [
+                    1 => [
+                        'aa' => [
+                            0 => 'application/x-httpd-php',
+                            1 => '',
+                        ],
+                    ],
+                    2 => 'text/x-php',
+                ],
+                'tmp_name' => [
+                    1 => [
+                        'aa' => [
+                            0 => $filepath,
+                            1 => '',
+                        ],
+                    ],
+                    2 => $filepath,
+                ],
+                'error' => [
+                    1 => [
+                        'aa' => [
+                            0 => 0,
+                            1 => 4,
+                        ],
+                    ],
+                    2 => 0,
+                ],
+                'size' => [
+                    1 => [
+                        'aa' => [
+                            0 => \filesize($filepath),
+                            1 => 0,
+                        ],
+                    ],
+                    2 => \filesize($filepath),
+                ],
+            ],
+            'foo' => [
+                'name' => '',
+                'type' => '',
+                'tmp_name' => '',
+                'error' => 4,
+                'size' => 0,
+            ],
+        ];
+        $this->request = new RequestMock();
+        $startLine = 'POST /blog/posts HTTP/1.1';
+        $headerLines = [
+            'Content-Type: multipart/form-data; boundary=---------------------------8721656041911415653955004498',
+            'Host: domain.tld',
+            'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
+        ];
+        $fields[0] = [
+            'Content-Disposition: form-data; name="name"',
+            '',
+            'Maria',
+        ];
+        $fields[1] = [
+            'Content-Disposition: form-data; name="country[city]"',
+            '',
+            'Porto Alegre',
+        ];
+        $files[0] = [
+            'Content-Disposition: form-data; name="files[1][aa][0]"; filename="Test.php"',
+            'Content-Type: application/x-httpd-php',
+            '',
+            \file_get_contents($filepath),
+        ];
+        $files[1] = [
+            'Content-Disposition: form-data; name="files[1][aa][1]"; filename=""',
+            'Content-Type: ',
+            '',
+            '',
+        ];
+        $files[2] = [
+            'Content-Disposition: form-data; name="files[2]"; filename="Other File.php"',
+            'Content-Type: text/x-php',
+            '',
+            \file_get_contents($filepath),
+        ];
+        $files[3] = [
+            'Content-Disposition: form-data; name="foo"; filename=""',
+            'Content-Type: ',
+            '',
+            '',
+        ];
+        $boundary = '-----------------------------8721656041911415653955004498';
+        $body = $boundary . "\r\n";
+        $body .= \implode("\r\n", $fields[0]) . "\r\n";
+        $body .= $boundary . "\r\n";
+        $body .= \implode("\r\n", $fields[1]) . "\r\n";
+        $body .= $boundary . "\r\n";
+        $body .= \implode("\r\n", $files[0]) . "\r\n";
+        $body .= $boundary . "\r\n";
+        $body .= \implode("\r\n", $files[1]) . "\r\n";
+        $body .= $boundary . "\r\n";
+        $body .= \implode("\r\n", $files[2]) . "\r\n";
+        $body .= $boundary . "\r\n";
+        $body .= \implode("\r\n", $files[3]) . "\r\n";
+        $body .= $boundary . "--\r\n";
+        $contentLength = \strlen($body);
+        self::assertSame(937, $contentLength);
+        $message = $startLine . "\r\n"
+            . \implode("\r\n", $headerLines) . "\r\n"
+            . "\r\n"
+            . $body;
+        self::assertSame($message, (string) $this->request);
+    }
+
     public function testCookie() : void
     {
         self::assertSame('cart-123', $this->request->getCookie('cart')->getValue());
