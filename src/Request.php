@@ -137,7 +137,10 @@ class Request extends Message implements RequestInterface
             $field = \htmlspecialchars($field, \ENT_QUOTES | \ENT_HTML5);
             $filename = \htmlspecialchars($file->getName(), \ENT_QUOTES | \ENT_HTML5);
             $getContentsOf = $file->isMoved() ? $file->getDestination() : $file->getTmpName();
-            $data = \file_get_contents($getContentsOf);
+            $data = '';
+            if ($getContentsOf !== '') {
+                $data = \file_get_contents($getContentsOf);
+            }
             $bodyParts[] = \implode("\r\n", [
                 "Content-Disposition: form-data; name=\"{$field}\"; filename=\"{$filename}\"",
                 'Content-Type: ' . $file->getClientType(),
