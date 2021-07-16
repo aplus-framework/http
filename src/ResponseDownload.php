@@ -258,8 +258,7 @@ trait ResponseDownload
         }
         echo $this->getBoundaryLine();
         if ($this->inToString) {
-            $this->toStringBody .= \ob_get_contents();
-            \ob_clean();
+            $this->appendBody('');
         }
     }
 
@@ -305,8 +304,7 @@ trait ResponseDownload
     {
         echo \fread($this->handle, $length);
         if ($this->inToString) {
-            $this->toStringBody .= \ob_get_contents();
-            \ob_clean();
+            $this->appendBody('');
             return;
         }
         \ob_flush();
