@@ -435,7 +435,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return static
      */
-    public function setJson($data, int $options = null, int $depth = 512) : static
+    public function setJson(mixed $data, int $options = null, int $depth = 512) : static
     {
         if ($options === null) {
             $options = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
