@@ -10,6 +10,19 @@
 namespace PHPSTORM_META;
 
 registerArgumentsSet(
+    'json_options',
+    \JSON_FORCE_OBJECT,
+    \JSON_HEX_AMP,
+    \JSON_HEX_APOS,
+    \JSON_HEX_QUOT,
+    \JSON_HEX_TAG,
+    \JSON_NUMERIC_CHECK,
+    \JSON_PRETTY_PRINT,
+    \JSON_THROW_ON_ERROR,
+    \JSON_UNESCAPED_SLASHES,
+    \JSON_UNESCAPED_UNICODE,
+);
+registerArgumentsSet(
     'response_status_codes',
     \Framework\HTTP\ResponseInterface::CODE_CONTINUE,
     \Framework\HTTP\ResponseInterface::CODE_SWITCHING_PROTOCOLS,
@@ -178,6 +191,16 @@ registerArgumentsSet(
     \Framework\HTTP\ResponseInterface::HEADER_X_XSS_PROTECTION,
     \Framework\HTTP\ResponseInterface::HEADER_X_REQUEST_ID,
     \Framework\HTTP\ResponseInterface::HEADER_X_POWERED_BY,
+);
+expectedArguments(
+    \Framework\HTTP\Request::getJson(),
+    1,
+    argumentsSet('json_options')
+);
+expectedArguments(
+    \Framework\HTTP\Response::setJson(),
+    1,
+    argumentsSet('json_options')
 );
 expectedArguments(
     \Framework\HTTP\Response::setStatusCode(),
