@@ -191,7 +191,7 @@ class Request extends Message implements RequestInterface
      */
     protected function validateHost(array $allowedHosts) : void
     {
-        $host = $this->getServerVariable('HTTP_HOST');
+        $host = $this->getServer('HTTP_HOST');
         if ( ! \in_array($host, $allowedHosts, true)) {
             throw new UnexpectedValueException('Invalid Host: ' . $host);
         }
@@ -199,19 +199,19 @@ class Request extends Message implements RequestInterface
 
     protected function prepareStatusLine() : void
     {
-        $this->setProtocol($this->getServerVariable('SERVER_PROTOCOL'));
-        $this->setMethod($this->getServerVariable('REQUEST_METHOD'));
+        $this->setProtocol($this->getServer('SERVER_PROTOCOL'));
+        $this->setMethod($this->getServer('REQUEST_METHOD'));
         $url = $this->isSecure() ? 'https' : 'http';
-        $url .= '://' . $this->getServerVariable('HTTP_HOST');
+        $url .= '://' . $this->getServer('HTTP_HOST');
         //$url .= ':' . $this->getPort();
-        $url .= $this->getServerVariable('REQUEST_URI');
+        $url .= $this->getServer('REQUEST_URI');
         $this->setUrl($url);
-        $this->setHost($this->getURL()->getHost());
+        $this->setHost($this->getUrl()->getHost());
     }
 
     protected function prepareHeaders() : void
     {
-        foreach ($this->getServerVariable() as $name => $value) {
+        foreach ($this->getServer() as $name => $value) {
             if ( ! \str_starts_with($name, 'HTTP_')) {
                 continue;
             }
@@ -229,7 +229,7 @@ class Request extends Message implements RequestInterface
 
     protected function prepareUserAgent() : void
     {
-        $userAgent = $this->getServerVariable('HTTP_USER_AGENT');
+        $userAgent = $this->getServer('HTTP_USER_AGENT');
         if ($userAgent) {
             $this->setUserAgent($userAgent);
         }
@@ -494,7 +494,7 @@ class Request extends Message implements RequestInterface
             return $this->negotiation[$type];
         }
         $this->negotiation[$type] = \array_keys(static::parseQualityValues(
-            $this->getServerVariable('HTTP_ACCEPT' . ($type !== 'ACCEPT' ? '_' . $type : ''))
+            $this->getServer('HTTP_ACCEPT' . ($type !== 'ACCEPT' ? '_' . $type : ''))
         ));
         $this->negotiation[$type] = \array_map('strtolower', $this->negotiation[$type]);
         return $this->negotiation[$type];
@@ -709,7 +709,7 @@ class Request extends Message implements RequestInterface
      */
     public function getIp() : string
     {
-        return $this->getServerVariable('REMOTE_ADDR');
+        return $this->getServer('REMOTE_ADDR');
     }
 
     #[Pure]
@@ -753,7 +753,7 @@ class Request extends Message implements RequestInterface
      */
     public function getPort() : int
     {
-        return $this->port ?? $this->getServerVariable('SERVER_PORT');
+        return $this->port ?? $this->getServer('SERVER_PORT');
     }
 
     /**
@@ -827,7 +827,7 @@ class Request extends Message implements RequestInterface
      *
      * @return mixed
      */
-    public function getServerVariable(
+    public function getServer(
         string $name = null,
         int $filter = null,
         array | int $filterOptions = []
@@ -904,8 +904,8 @@ class Request extends Message implements RequestInterface
         if (isset($this->isSecure)) {
             return $this->isSecure;
         }
-        return $this->isSecure = ($this->getServerVariable('REQUEST_SCHEME') === 'https'
-            || $this->getServerVariable('HTTPS') === 'on');
+        return $this->isSecure = ($this->getServer('REQUEST_SCHEME') === 'https'
+            || $this->getServer('HTTPS') === 'on');
     }
 
     /**
