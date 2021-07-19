@@ -52,7 +52,7 @@ class URL implements \JsonSerializable, \Stringable
      */
     public function __construct(string $url)
     {
-        $this->setURL($url);
+        $this->setUrl($url);
     }
 
     /**
@@ -422,7 +422,7 @@ class URL implements \JsonSerializable, \Stringable
      *
      * @return static
      */
-    protected function setURL(string $url) : static
+    protected function setUrl(string $url) : static
     {
         $filtered_url = \filter_var($url, \FILTER_VALIDATE_URL);
         if ( ! $filtered_url) {

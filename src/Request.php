@@ -59,7 +59,7 @@ class Request extends Message implements RequestInterface
     ];
     protected false | URL $referrer;
     protected false | UserAgent $userAgent;
-    protected bool $isAJAX;
+    protected bool $isAjax;
     /**
      * Tell if is a HTTPS connection.
      *
@@ -205,7 +205,7 @@ class Request extends Message implements RequestInterface
         $url .= '://' . $this->getServerVariable('HTTP_HOST');
         //$url .= ':' . $this->getPort();
         $url .= $this->getServerVariable('REQUEST_URI');
-        $this->setURL($url);
+        $this->setUrl($url);
         $this->setHost($this->getURL()->getHost());
     }
 
@@ -286,7 +286,7 @@ class Request extends Message implements RequestInterface
     /**
      * Force an HTTPS connection on same URL.
      */
-    public function forceHTTPS() : void
+    public function forceHttps() : void
     {
         if ( ! $this->isSecure()) {
             \header('Location: ' . $this->getURL()->setScheme('https')->getAsString(), true, 301);
@@ -471,7 +471,7 @@ class Request extends Message implements RequestInterface
      *
      * @return array<string,mixed>|false|object
      */
-    public function getJSON(bool $assoc = false, int $options = null, int $depth = 512)
+    public function getJson(bool $assoc = false, int $options = null, int $depth = 512)
     {
         if ($options === null) {
             $options = \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES;
@@ -633,7 +633,7 @@ class Request extends Message implements RequestInterface
      *
      * @return mixed
      */
-    public function getENV(
+    public function getEnv(
         string $name = null,
         int $filter = null,
         array | int $filterOptions = []
@@ -707,7 +707,7 @@ class Request extends Message implements RequestInterface
      *
      * @return string
      */
-    public function getIP() : string
+    public function getIp() : string
     {
         return $this->getServerVariable('REMOTE_ADDR');
     }
@@ -765,7 +765,7 @@ class Request extends Message implements RequestInterface
      *
      * @return mixed
      */
-    public function getPOST(
+    public function getPost(
         string $name = null,
         int $filter = null,
         array | int $filterOptions = []
@@ -779,7 +779,7 @@ class Request extends Message implements RequestInterface
      * @return string|null
      */
     #[Pure]
-    public function getProxiedIP() : ?string
+    public function getProxiedIp() : ?string
     {
         foreach ([
             'X-Forwarded-For',
@@ -841,9 +841,9 @@ class Request extends Message implements RequestInterface
      * @return URL
      */
     #[Pure]
-    public function getURL() : URL
+    public function getUrl() : URL
     {
-        return parent::getURL();
+        return parent::getUrl();
     }
 
     /**
@@ -884,13 +884,13 @@ class Request extends Message implements RequestInterface
      *
      * @return bool
      */
-    public function isAJAX() : bool
+    public function isAjax() : bool
     {
-        if (isset($this->isAJAX)) {
-            return $this->isAJAX;
+        if (isset($this->isAjax)) {
+            return $this->isAjax;
         }
         $received = $this->getHeader(static::HEADER_X_REQUESTED_WITH);
-        return $this->isAJAX = ($received
+        return $this->isAjax = ($received
             && \strtolower($received) === 'xmlhttprequest');
     }
 
@@ -926,7 +926,7 @@ class Request extends Message implements RequestInterface
      * @return bool
      */
     #[Pure]
-    public function isJSON() : bool
+    public function isJson() : bool
     {
         return $this->parseContentType() === 'application/json';
     }
@@ -937,7 +937,7 @@ class Request extends Message implements RequestInterface
      * @return bool
      */
     #[Pure]
-    public function isPOST() : bool
+    public function isPost() : bool
     {
         return $this->getMethod() === 'POST';
     }

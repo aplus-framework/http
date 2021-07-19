@@ -254,10 +254,10 @@ abstract class Message implements MessageInterface
     public function getStartLine() : string
     {
         if ($this instanceof RequestInterface) {
-            $query = $this->getURL()->getQuery();
+            $query = $this->getUrl()->getQuery();
             $query = ($query !== null && $query !== '') ? '?' . $query : '';
             return $this->getMethod()
-                . ' ' . $this->getURL()->getPath() . $query
+                . ' ' . $this->getUrl()->getPath() . $query
                 . ' ' . $this->getProtocol();
         }
         if ($this instanceof ResponseInterface) {
@@ -556,7 +556,7 @@ abstract class Message implements MessageInterface
      * @return URL
      */
     #[Pure]
-    protected function getURL() : URL
+    protected function getUrl() : URL
     {
         return $this->url;
     }
@@ -568,7 +568,7 @@ abstract class Message implements MessageInterface
      *
      * @return static
      */
-    protected function setURL(string | URL $url) : static
+    protected function setUrl(string | URL $url) : static
     {
         if ( ! $url instanceof URL) {
             $url = new URL($url);

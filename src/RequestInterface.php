@@ -136,5 +136,5 @@ interface RequestInterface extends MessageInterface
 
     public function getMethod() : string;
 
-    public function getURL() : URL;
+    public function getUrl() : URL;
 }

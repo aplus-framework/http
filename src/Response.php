@@ -388,7 +388,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return static
      */
-    public function setJSON($data, int $options = null, int $depth = 512) : static
+    public function setJson($data, int $options = null, int $depth = 512) : static
     {
         if ($options === null) {
             $options = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
@@ -521,7 +521,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return static
      */
-    public function setETag(string $etag) : static
+    public function setEtag(string $etag) : static
     {
         $this->setHeader(static::HEADER_ETAG, $etag);
         return $this;
