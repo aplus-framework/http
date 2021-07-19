@@ -428,6 +428,43 @@ final class ResponseTest extends TestCase
         self::assertSame($message, (string) $this->response);
     }
 
+    public function testToStringWithDownloadMultipart() : void
+    {
+        RequestMock::setInput(\INPUT_SERVER, [
+            'HTTP_RANGE' => 'bytes=0-1,4-',
+        ]);
+        $this->response = new Response(new RequestMock());
+        $filename = __DIR__ . '/files/file.txt';
+        $boundary = \md5($filename);
+        $body = "\r\n--{$boundary}--\r\n"
+        . "Content-Type: application/octet-stream\r\n"
+        . "Content-Range: bytes 0-1/11\r\n"
+        . "\r\n"
+        . 'Hi'
+        . "\r\n--{$boundary}--\r\n"
+        . "Content-Type: application/octet-stream\r\n"
+        . "Content-Range: bytes 4-10/11\r\n"
+        . "\r\n"
+        . "Aplus!\n"
+        . "\r\n--{$boundary}--\r\n";
+        $length = \strlen($body);
+        $startLine = 'HTTP/1.1 206 Partial Content';
+        $headerLines = [
+            'Last-Modified: ' . \gmdate(\DATE_RFC7231, (int) \filemtime($filename)),
+            'Content-Disposition: attachment; filename="file.txt"',
+            'Accept-Ranges: bytes',
+            'Content-Length: ' . $length,
+            'Content-Type: multipart/x-byteranges; boundary=' . $boundary,
+            'Date: ' . \gmdate(\DATE_RFC7231),
+        ];
+        $this->response->setDownload($filename);
+        $message = $startLine . "\r\n"
+            . \implode("\r\n", $headerLines) . "\r\n"
+            . "\r\n"
+            . $body;
+        self::assertSame($message, (string) $this->response);
+    }
+
     public function testUnknownStatus() : void
     {
         $this->expectException(\LogicException::class);

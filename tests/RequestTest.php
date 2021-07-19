@@ -357,7 +357,7 @@ final class RequestTest extends TestCase
         $body .= \implode("\r\n", $files[3]) . "\r\n";
         $body .= $boundary . "--\r\n";
         $contentLength = \strlen($body);
-        self::assertSame(937, $contentLength);
+        self::assertSame(953, $contentLength);
         $message = $startLine . "\r\n"
             . \implode("\r\n", $headerLines) . "\r\n"
             . "\r\n"
