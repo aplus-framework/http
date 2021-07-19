@@ -38,6 +38,7 @@ class Response extends Message implements ResponseInterface
     protected string $statusReason = 'OK';
     protected ?string $sendedBody = null;
     protected bool $inToString = false;
+    protected bool $autoEtag = false;
 
     /**
      * Response constructor.
@@ -357,9 +358,55 @@ class Response extends Message implements ResponseInterface
         if ($this->getHeader(static::HEADER_CONTENT_TYPE) === null) {
             $this->setContentType('text/html');
         }
+        if ( ! $this->hasDownload()) {
+            $this->negotiateEtag();
+        }
         \header($this->getStartLine());
         foreach ($this->getHeaderLines() as $line) {
             \header($line);
+        }
+    }
+
+    /**
+     * If $autoEtag is false, just return void.
+     * Otherwise, set the ETag header, based on the Response body, and start the
+     * negotiation.
+     *
+     * - Empty the body and set a status 304 (Not Modified) if the Request
+     * If-None-Match header has the same value of the generated ETag, on GET and
+     * HEAD requests.
+     *
+     * - Empty the body and set a status 412 (Precondition Failed) if the Request
+     * If-Match header is set and has not the same value of the generated ETag,
+     * on non-GET or non-HEAD requests.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag
+     */
+    protected function negotiateEtag() : void
+    {
+        if ( ! $this->isAutoEtag()) {
+            return;
+        }
+        // Content-Length is required by Firefox,
+        // otherwise it does not send the If-None-Match header
+        $this->setContentLength(\strlen($this->getBody()));
+        $etag = \md5($this->getBody());
+        $this->setEtag($etag);
+        $etag = '"' . $etag . '"';
+        // Cache of unchanged resources:
+        $ifNoneMatch = $this->getRequest()->getHeader(Request::HEADER_IF_NONE_MATCH);
+        if ($ifNoneMatch && $ifNoneMatch === $etag
+            && \in_array($this->getRequest()->getMethod(), ['GET', 'HEAD'])
+        ) {
+            $this->setNotModified();
+            $this->setBody('');
+            return;
+        }
+        // Avoid mid-air collisions:
+        $ifMatch = $this->getRequest()->getHeader(Request::HEADER_IF_MATCH);
+        if ($ifMatch && $ifMatch !== $etag) {
+            $this->setBody('');
+            $this->setStatus(static::CODE_PRECONDITION_FAILED);
         }
     }
 
@@ -444,6 +491,30 @@ class Response extends Message implements ResponseInterface
     public function getCacheSeconds() : int
     {
         return $this->cacheSeconds;
+    }
+
+    /**
+     * Enable or disable the capability of auto-add the ETag header and
+     * negotiate the response with it.
+     *
+     * @param bool $active
+     *
+     * @see Response::negotiateEtag()
+     *
+     * @return static
+     */
+    public function setAutoEtag(bool $active = true) : static
+    {
+        $this->autoEtag = true;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAutoEtag() : bool
+    {
+        return $this->autoEtag;
     }
 
     /**
