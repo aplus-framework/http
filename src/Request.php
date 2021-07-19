@@ -290,7 +290,7 @@ class Request extends Message implements RequestInterface
     public function forceHttps() : void
     {
         if ( ! $this->isSecure()) {
-            \header('Location: ' . $this->getURL()->setScheme('https')->getAsString(), true, 301);
+            \header('Location: ' . $this->getUrl()->setScheme('https')->getAsString(), true, 301);
             exit;
         }
     }
