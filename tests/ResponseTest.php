@@ -174,6 +174,57 @@ final class ResponseTest extends TestCase
         self::assertSame('"foo"', $this->response->getHeader('ETag'));
     }
 
+    public function testAutoEtag() : void
+    {
+        self::assertFalse($this->response->isAutoEtag());
+        $this->response->setAutoEtag();
+        self::assertTrue($this->response->isAutoEtag());
+        $this->response->setAutoEtag(false);
+        self::assertFalse($this->response->isAutoEtag());
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testAutoEtagNegotiationWithGet() : void
+    {
+        $body = '<h1>Hello world!</h1>';
+        $etag = '"' . \md5($body) . '"';
+        RequestMock::setInput(\INPUT_SERVER, [
+            'REQUEST_METHOD' => 'GET',
+            'HTTP_IF_NONE_MATCH' => $etag,
+        ]);
+        $this->response = new Response(new RequestMock(['domain.tld']));
+        $this->response->setAutoEtag();
+        $this->response->setBody($body);
+        $this->response->send();
+        self::assertSame((string) \strlen($body), $this->response->getHeader('Content-Length'));
+        self::assertSame($etag, $this->response->getHeader('ETag'));
+        self::assertSame('304 Not Modified', $this->response->getStatus());
+        self::assertSame('', $this->response->getBody());
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testAutoEtagNegotiationWithPost() : void
+    {
+        $body = '<h1>My names is Aplus!</h1>';
+        $etag = '"' . \md5($body) . '"';
+        RequestMock::setInput(\INPUT_SERVER, [
+            'REQUEST_METHOD' => 'POST',
+            'HTTP_IF_MATCH' => '"etag-that-do-not-match"',
+        ]);
+        $this->response = new Response(new RequestMock(['domain.tld']));
+        $this->response->setAutoEtag();
+        $this->response->setBody($body);
+        $this->response->send();
+        self::assertSame((string) \strlen($body), $this->response->getHeader('Content-Length'));
+        self::assertSame($etag, $this->response->getHeader('ETag'));
+        self::assertSame('412 Precondition Failed', $this->response->getStatus());
+        self::assertSame('', $this->response->getBody());
+    }
+
     public function testHeader() : void
     {
         self::assertSame([], $this->response->getHeaders());
