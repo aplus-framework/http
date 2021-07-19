@@ -501,7 +501,7 @@ class Response extends Message implements ResponseInterface
      */
     public function setAutoEtag(bool $active = true) : static
     {
-        $this->autoEtag = true;
+        $this->autoEtag = $active;
         return $this;
     }
 
