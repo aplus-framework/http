@@ -521,15 +521,15 @@ final class RequestTest extends TestCase
         self::assertEmpty($this->request->getFiles());
     }
 
-    public function testQueries() : void
+    public function testGet() : void
     {
         self::assertSame([
             'order_by' => 'title',
             'order' => 'asc',
-        ], $this->request->getQuery());
-        self::assertSame('asc', $this->request->getQuery('order'));
-        self::assertSame('title', $this->request->getQuery('order_by'));
-        self::assertNull($this->request->getQuery('unknow'));
+        ], $this->request->getGet());
+        self::assertSame('asc', $this->request->getGet('order'));
+        self::assertSame('title', $this->request->getGet('order_by'));
+        self::assertNull($this->request->getGet('unknow'));
     }
 
     public function testHeader() : void

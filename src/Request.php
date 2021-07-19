@@ -671,7 +671,7 @@ class Request extends Message implements RequestInterface
      *
      * @return mixed
      */
-    public function getQuery(
+    public function getGet(
         string $name = null,
         int $filter = null,
         array | int $filterOptions = []
