@@ -350,7 +350,9 @@ final class ResponseTest extends TestCase
         echo 'foo';
         self::assertSame('foo', $this->response->getBody());
         self::assertSame('foo', $this->response->getBody());
+        \ob_start();
         $this->response->send();
+        \ob_end_clean();
         self::assertSame('foo', $this->response->getBody());
         self::assertSame('foo', $this->response->getBody());
     }

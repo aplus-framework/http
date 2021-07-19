@@ -24,6 +24,7 @@ final class ResponseDownloadTest extends TestCase
         ]);
         $this->request->setHeader('Range', 'bytes=0-499');
         $this->response = new class($this->request) extends Response {
+            public string $body = '';
         };
     }
 
@@ -112,15 +113,34 @@ final class ResponseDownloadTest extends TestCase
     }
 
     /**
+     * This method should not be necessary, but it allows call a $function
+     * enclosed by ob_start and ob_end_clean.
+     *
+     * Appending the $buffer to the Response body and returning an empty string
+     * in ob_start do not send the output buffer, sent by ob_flush(), internally
+     * in the ResponseDownload Trait, to the PHPUnit buffer. And the Response
+     * body can be used for asserts.
+     */
+    protected function avoidPHPUnitOutputBuffer(\Closure $function) : void
+    {
+        \ob_start(function (string $buffer) : string {
+            $this->response->body .= $buffer; // @phpstan-ignore-line
+            return '';
+        });
+        $function();
+        \ob_end_clean();
+    }
+
+    /**
      * @runInSeparateProcess
      */
     public function testSendSinglePart() : void
     {
         $this->request->setHeader('Range', 'bytes=0-9');
         $this->response->setDownload(__FILE__);
-        \ob_start();
-        $this->response->send();
-        \ob_end_clean();
+        $this->avoidPHPUnitOutputBuffer(function () : void {
+            $this->response->send();
+        });
         self::assertTrue($this->response->isSent());
         self::assertSame(
             'bytes 0-9/' . \filesize(__FILE__),
@@ -140,9 +160,9 @@ final class ResponseDownloadTest extends TestCase
     {
         $this->request->setHeader('Range', 'bytes=0-9,10-19');
         $this->response->setDownload(__FILE__);
-        \ob_start();
-        $this->response->send();
-        \ob_end_clean();
+        $this->avoidPHPUnitOutputBuffer(function () : void {
+            $this->response->send();
+        });
         self::assertTrue($this->response->isSent());
         self::assertStringStartsWith(
             'multipart/x-byteranges; boundary=',
@@ -156,9 +176,9 @@ final class ResponseDownloadTest extends TestCase
     public function testReadFile() : void
     {
         $this->response->setDownload(__FILE__, false, false);
-        \ob_start();
-        $this->response->send();
-        \ob_end_clean();
+        $this->avoidPHPUnitOutputBuffer(function () : void {
+            $this->response->send();
+        });
         self::assertTrue($this->response->isSent());
     }
 }
