@@ -15,6 +15,7 @@ use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 use LogicException;
+use stdClass;
 use UnexpectedValueException;
 
 /**
@@ -466,13 +467,32 @@ class Request extends Message implements RequestInterface
      * Get the request body as JSON.
      *
      * @param bool $assoc
-     * @param int|null $options
+     * @param int|null $options [optional] <p>
+     * Bitmask consisting of
+     * <b>JSON_HEX_QUOT</b>,
+     * <b>JSON_HEX_TAG</b>,
+     * <b>JSON_HEX_AMP</b>,
+     * <b>JSON_HEX_APOS</b>,
+     * <b>JSON_NUMERIC_CHECK</b>,
+     * <b>JSON_PRETTY_PRINT</b>,
+     * <b>JSON_UNESCAPED_SLASHES</b>,
+     * <b>JSON_FORCE_OBJECT</b>,
+     * <b>JSON_UNESCAPED_UNICODE</b>.
+     * <b>JSON_THROW_ON_ERROR</b>
+     * </p>
+     * <p>Default is <b>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE</b>
+     * when null</p>
      * @param int $depth
      *
-     * @return array<string,mixed>|false|object
+     * @return array<string,mixed>|false|stdClass If option JSON_THROW_ON_ERROR
+     * is not set, return false if json_decode fail. Otherwise return a
+     * stdClass instance, or an array if the $assoc argument is passed as true.
      */
-    public function getJson(bool $assoc = false, int $options = null, int $depth = 512)
-    {
+    public function getJson(
+        bool $assoc = false,
+        int $options = null,
+        int $depth = 512
+    ) : array | stdClass | false {
         if ($options === null) {
             $options = \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES;
         }
