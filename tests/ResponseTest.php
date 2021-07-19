@@ -451,13 +451,13 @@ final class ResponseTest extends TestCase
         $startLine = 'HTTP/1.1 206 Partial Content';
         $headerLines = [
             'Last-Modified: ' . \gmdate(\DATE_RFC7231, (int) \filemtime($filename)),
-            'Content-Disposition: attachment; filename="file.txt"',
+            'Content-Disposition: attachment; filename="fo_o.b&quot;ar"',
             'Accept-Ranges: bytes',
             'Content-Length: ' . $length,
             'Content-Type: multipart/x-byteranges; boundary=' . $boundary,
             'Date: ' . \gmdate(\DATE_RFC7231),
         ];
-        $this->response->setDownload($filename);
+        $this->response->setDownload($filename, filename: 'fo/o.b"ar');
         $message = $startLine . "\r\n"
             . \implode("\r\n", $headerLines) . "\r\n"
             . "\r\n"

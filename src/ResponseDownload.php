@@ -49,6 +49,7 @@ trait ResponseDownload
      * back and download managers to continue/download multi-parts
      * @param int $delay Delay between flushs in microseconds
      * @param int $readLength Bytes read by flush
+     * @param string|null $filename A custom filename
      *
      * @throws InvalidArgumentException If invalid file path
      * @throws RuntimeException If can not get the file size or modification time
@@ -60,7 +61,8 @@ trait ResponseDownload
         bool $inline = false,
         bool $acceptRanges = true,
         int $delay = 0,
-        int $readLength = 1024
+        int $readLength = 1024,
+        ?string $filename = null
     ) : static {
         $realpath = \realpath($filepath);
         if ($realpath === false || ! \is_file($realpath)) {
@@ -83,8 +85,9 @@ trait ResponseDownload
             );
         }
         $this->setHeader(static::HEADER_LAST_MODIFIED, \gmdate(\DATE_RFC7231, $filemtime));
-        $filename = \basename($filepath);
+        $filename ??= \basename($filepath);
         $filename = \htmlspecialchars($filename, \ENT_QUOTES | \ENT_HTML5);
+        $filename = \strtr($filename, ['/' => '_', '\\' => '_']);
         $this->setHeader(
             static::HEADER_CONTENT_DISPOSITION,
             $inline ? 'inline' : \sprintf('attachment; filename="%s"', $filename)
