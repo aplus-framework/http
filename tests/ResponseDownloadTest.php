@@ -173,12 +173,48 @@ final class ResponseDownloadTest extends TestCase
     /**
      * @runInSeparateProcess
      */
+    public function testSendMultiPartWithDelay() : void
+    {
+        $this->request->setHeader('Range', 'bytes=0-9,10-19');
+        $this->response->setDownload(__FILE__, delay: 2000000, readLength: 10);
+        $startTime = \microtime(true);
+        $this->avoidPHPUnitOutputBuffer(function () : void {
+            $this->response->send();
+        });
+        $endTime = \microtime(true);
+        self::assertGreaterThan(4, $endTime - $startTime);
+        self::assertLessThan(5, $endTime - $startTime);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
     public function testReadFile() : void
     {
         $this->response->setDownload(__FILE__, false, false);
         $this->avoidPHPUnitOutputBuffer(function () : void {
             $this->response->send();
         });
+        self::assertTrue($this->response->isSent());
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testReadFileWithDelay() : void
+    {
+        $this->response->setDownload(
+            __FILE__,
+            delay:  3000000,
+            readLength: (int) \filesize(__FILE__) + 1
+        );
+        $startTime = \microtime(true);
+        $this->avoidPHPUnitOutputBuffer(function () : void {
+            $this->response->send();
+        });
+        $endTime = \microtime(true);
+        self::assertGreaterThan(2, $endTime - $startTime);
+        self::assertLessThan(4, $endTime - $startTime);
         self::assertTrue($this->response->isSent());
     }
 }
