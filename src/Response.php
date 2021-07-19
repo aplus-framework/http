@@ -538,7 +538,7 @@ class Response extends Message implements ResponseInterface
      */
     public function setEtag(string $etag) : static
     {
-        $this->setHeader(static::HEADER_ETAG, $etag);
+        $this->setHeader(static::HEADER_ETAG, '"' . $etag . '"');
         return $this;
     }
 
