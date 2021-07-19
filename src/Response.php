@@ -496,6 +496,21 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
+     * Set the Content-Length header.
+     *
+     * @param int $length
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Length
+     *
+     * @return static
+     */
+    public function setContentLength(int $length) : static
+    {
+        $this->setHeader(static::HEADER_CONTENT_LENGTH, (string) $length);
+        return $this;
+    }
+
+    /**
      * Set the Date header.
      *
      * @param DateTime $datetime
