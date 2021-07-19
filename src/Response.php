@@ -358,7 +358,7 @@ class Response extends Message implements ResponseInterface
         if ($this->getHeader(static::HEADER_CONTENT_TYPE) === null) {
             $this->setContentType('text/html');
         }
-        if ( ! $this->hasDownload()) {
+        if ($this->isAutoEtag() && ! $this->hasDownload()) {
             $this->negotiateEtag();
         }
         \header($this->getStartLine());
@@ -368,8 +368,7 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
-     * If $autoEtag is false, just return void.
-     * Otherwise, set the ETag header, based on the Response body, and start the
+     * Set the ETag header, based on the Response body, and start the
      * negotiation.
      *
      * - Empty the body and set a status 304 (Not Modified) if the Request
@@ -384,9 +383,6 @@ class Response extends Message implements ResponseInterface
      */
     protected function negotiateEtag() : void
     {
-        if ( ! $this->isAutoEtag()) {
-            return;
-        }
         // Content-Length is required by Firefox,
         // otherwise it does not send the If-None-Match header
         $this->setContentLength(\strlen($this->getBody()));
