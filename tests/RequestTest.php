@@ -429,7 +429,7 @@ final class RequestTest extends TestCase
 
     public function testEnv() : void
     {
-        self::assertSame([], $this->request->getENV());
+        self::assertSame([], $this->request->getEnv());
     }
 
     public function testFiles() : void
@@ -558,10 +558,10 @@ final class RequestTest extends TestCase
         self::assertSame('192.168.1.100', $this->request->getIP());
     }
 
-    public function testIsAJAX() : void
+    public function testIsAjax() : void
     {
-        self::assertTrue($this->request->isAJAX());
-        self::assertTrue($this->request->isAJAX());
+        self::assertTrue($this->request->isAjax());
+        self::assertTrue($this->request->isAjax());
     }
 
     public function testIsSecure() : void
@@ -570,10 +570,10 @@ final class RequestTest extends TestCase
         self::assertFalse($this->request->isSecure());
     }
 
-    public function testJSON() : void
+    public function testJson() : void
     {
-        self::assertFalse($this->request->isJSON());
-        self::assertFalse($this->request->getJSON());
+        self::assertFalse($this->request->isJson());
+        self::assertFalse($this->request->getJson());
     }
 
     public function testIsForm() : void
@@ -581,9 +581,9 @@ final class RequestTest extends TestCase
         self::assertFalse($this->request->isForm());
     }
 
-    public function testIsPOST() : void
+    public function testIsPost() : void
     {
-        self::assertFalse($this->request->isPOST());
+        self::assertFalse($this->request->isPost());
     }
 
     public function testHasFiles() : void
@@ -642,12 +642,12 @@ final class RequestTest extends TestCase
                 'city' => 'bar',
             ],
             'csrf_token' => 'foo',
-        ], $this->request->getPOST());
-        self::assertSame('Aw3S0me', $this->request->getPOST('password'));
-        self::assertSame('phpdev', $this->request->getPOST('username'));
-        self::assertNull($this->request->getPOST('unknow'));
+        ], $this->request->getPost());
+        self::assertSame('Aw3S0me', $this->request->getPost('password'));
+        self::assertSame('phpdev', $this->request->getPost('username'));
+        self::assertNull($this->request->getPost('unknow'));
         //self::assertSame(['password' => 'Aw3S0me'], $this->request->getPOST(['password']));
-        self::assertSame('foo', $this->request->getPOST('user[name]'));
+        self::assertSame('foo', $this->request->getPost('user[name]'));
         /*self::assertSame(
             ['user[city]' => 'bar', 'username' => 'phpdev'],
             $this->request->getPOST(['user[city]', 'username'])
@@ -695,13 +695,13 @@ final class RequestTest extends TestCase
         $this->request->getRedirectData();
     }
 
-    public function testURL() : void
+    public function testUrl() : void
     {
         self::assertSame(
             'http://domain.tld/blog/posts?order_by=title&order=asc',
-            (string) $this->request->getURL()
+            (string) $this->request->getUrl()
         );
-        self::assertInstanceOf(URL::class, $this->request->getURL());
+        self::assertInstanceOf(URL::class, $this->request->getUrl());
     }
 
     public function testId() : void

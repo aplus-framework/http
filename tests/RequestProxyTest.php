@@ -32,10 +32,10 @@ final class RequestProxyTest extends TestCase
         self::assertSame([], $this->proxyRequest->getAccepts());
     }
 
-    public function testIsAJAX() : void
+    public function testIsAjax() : void
     {
-        self::assertFalse($this->proxyRequest->isAJAX());
-        self::assertFalse($this->proxyRequest->isAJAX());
+        self::assertFalse($this->proxyRequest->isAjax());
+        self::assertFalse($this->proxyRequest->isAjax());
     }
 
     public function testIsSecure() : void
@@ -44,10 +44,10 @@ final class RequestProxyTest extends TestCase
         self::assertTrue($this->proxyRequest->isSecure());
     }
 
-    public function testJSON() : void
+    public function testJson() : void
     {
         $this->proxyRequest->setBody('{"test":123}'); // @phpstan-ignore-line
-        self::assertSame(123, $this->proxyRequest->getJSON()->test); // @phpstan-ignore-line
+        self::assertSame(123, $this->proxyRequest->getJson()->test); // @phpstan-ignore-line
     }
 
     public function testPort() : void
@@ -69,9 +69,9 @@ final class RequestProxyTest extends TestCase
     {
         self::assertSame(
             'https://real-domain.tld:8080/blog/posts?order_by=title&order=asc',
-            (string) $this->proxyRequest->getURL()
+            (string) $this->proxyRequest->getUrl()
         );
-        self::assertInstanceOf(\Framework\HTTP\URL::class, $this->proxyRequest->getURL());
+        self::assertInstanceOf(\Framework\HTTP\URL::class, $this->proxyRequest->getUrl());
     }
 
     public function testId() : void

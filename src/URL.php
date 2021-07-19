@@ -103,7 +103,7 @@ class URL implements \JsonSerializable, \Stringable
     }
 
     #[Pure]
-    public function getBaseURL(string $path = '/') : string
+    public function getBaseUrl(string $path = '/') : string
     {
         if ($path && $path !== '/') {
             $path = '/' . \trim($path, '/');
@@ -154,7 +154,7 @@ class URL implements \JsonSerializable, \Stringable
         'fragment' => 'null|string',
     ])]
     #[Pure]
-    public function getParsedURL() : array
+    public function getParsedUrl() : array
     {
         return [
             'scheme' => $this->getScheme(),

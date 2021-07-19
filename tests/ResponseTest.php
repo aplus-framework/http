@@ -167,10 +167,10 @@ final class ResponseTest extends TestCase
         );
     }
 
-    public function testETag() : void
+    public function testEtag() : void
     {
         self::assertNull($this->response->getHeader('ETag'));
-        $this->response->setETag('foo');
+        $this->response->setEtag('foo');
         self::assertSame('foo', $this->response->getHeader('ETag'));
     }
 
@@ -226,9 +226,9 @@ final class ResponseTest extends TestCase
         $this->response->setStatusCode(900);
     }
 
-    public function testJSON() : void
+    public function testJson() : void
     {
-        $this->response->setJSON(['test' => 123]);
+        $this->response->setJson(['test' => 123]);
         self::assertSame('{"test":123}', $this->response->getBody());
         self::assertSame(
             'application/json; charset=UTF-8',
@@ -237,7 +237,7 @@ final class ResponseTest extends TestCase
         $this->expectException(\JsonException::class);
         $this->expectExceptionMessage('Malformed UTF-8 characters, possibly incorrectly encoded');
         // See: https://php.net/manual/pt_BR/function.json-last-error.php#example-4408
-        $this->response->setJSON("\xB1\x31");
+        $this->response->setJson("\xB1\x31");
     }
 
     public function testLastModified() : void

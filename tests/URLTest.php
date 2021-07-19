@@ -21,16 +21,16 @@ final class URLTest extends TestCase
         $this->url = new URL('http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id');
     }
 
-    public function testBaseURL() : void
+    public function testBaseUrl() : void
     {
-        self::assertSame('http://domain.tld:8080/', $this->url->getBaseURL());
+        self::assertSame('http://domain.tld:8080/', $this->url->getBaseUrl());
         self::assertSame('http://domain.tld:8080', $this->url->getBaseURL(''));
-        self::assertSame('http://domain.tld:8080/foo/bar', $this->url->getBaseURL('foo/bar'));
+        self::assertSame('http://domain.tld:8080/foo/bar', $this->url->getBaseUrl('foo/bar'));
         $this->url->setScheme('https');
         $this->url->setPort(443);
-        self::assertSame('https://domain.tld/', $this->url->getBaseURL());
-        self::assertSame('https://domain.tld', $this->url->getBaseURL(''));
-        self::assertSame('https://domain.tld/foo/bar', $this->url->getBaseURL('foo/bar'));
+        self::assertSame('https://domain.tld/', $this->url->getBaseUrl());
+        self::assertSame('https://domain.tld', $this->url->getBaseUrl(''));
+        self::assertSame('https://domain.tld/foo/bar', $this->url->getBaseUrl('foo/bar'));
     }
 
     public function testHost() : void
@@ -65,7 +65,7 @@ final class URLTest extends TestCase
         self::assertSame('https://domain.tld', $this->url->getOrigin());
     }
 
-    public function testParsedURL() : void
+    public function testParsedUrl() : void
     {
         self::assertSame([
             'scheme' => 'http',
@@ -76,7 +76,7 @@ final class URLTest extends TestCase
             'path' => ['foo', 'bar'],
             'query' => ['a' => '1', 'b' => '2'],
             'fragment' => 'id',
-        ], $this->url->getParsedURL());
+        ], $this->url->getParsedUrl());
     }
 
     public function testPath() : void
