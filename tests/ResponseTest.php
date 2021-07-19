@@ -261,6 +261,8 @@ final class ResponseTest extends TestCase
         ], $this->response->getHeaders());
         self::assertSame('1', $this->response->getHeader('dnt'));
         self::assertSame('bar', $this->response->getHeader('X-Custom-2'));
+        $this->response->removeHeaders();
+        self::assertSame([], $this->response->getHeaders());
     }
 
     public function testHeadersAlreadyIsSent() : void
