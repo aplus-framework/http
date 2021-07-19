@@ -350,10 +350,7 @@ class Response extends Message implements ResponseInterface
         // Per spec, MUST be sent with each request, if possible.
         // http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html
         if ($this->getHeader(static::HEADER_DATE) === null) {
-            $this->setDate(DateTime::createFromFormat( // @phpstan-ignore-line
-                'U',
-                (string) \time()
-            ));
+            $this->setDate(new DateTime());
         }
         if ($this->getHeader(static::HEADER_CONTENT_TYPE) === null) {
             $this->setContentType('text/html');
