@@ -406,6 +406,28 @@ final class ResponseTest extends TestCase
         self::assertSame($message, (string) $this->response);
     }
 
+    public function testToStringWithDownload() : void
+    {
+        $filename = __DIR__ . '/files/file.txt';
+        $body = (string) \file_get_contents($filename);
+        $length = \strlen($body);
+        $startLine = 'HTTP/1.1 200 OK';
+        $headerLines = [
+            'Last-Modified: ' . \gmdate(\DATE_RFC7231, (int) \filemtime($filename)),
+            'Content-Disposition: attachment; filename="file.txt"',
+            'Accept-Ranges: bytes',
+            'Content-Length: ' . $length,
+            'Content-Type: text/plain',
+            'Date: ' . \gmdate(\DATE_RFC7231),
+        ];
+        $this->response->setDownload($filename);
+        $message = $startLine . "\r\n"
+            . \implode("\r\n", $headerLines) . "\r\n"
+            . "\r\n"
+            . $body;
+        self::assertSame($message, (string) $this->response);
+    }
+
     public function testUnknownStatus() : void
     {
         $this->expectException(\LogicException::class);
