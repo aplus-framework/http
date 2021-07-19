@@ -654,9 +654,9 @@ final class RequestTest extends TestCase
         );*/
     }
 
-    public function testProxiedIP() : void
+    public function testProxiedIp() : void
     {
-        self::assertNull($this->request->getProxiedIP());
+        self::assertNull($this->request->getProxiedIp());
     }
 
     public function testReferer() : void

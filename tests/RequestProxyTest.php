@@ -55,9 +55,9 @@ final class RequestProxyTest extends TestCase
         self::assertSame(8080, $this->proxyRequest->getPort());
     }
 
-    public function testProxiedIP() : void
+    public function testProxiedIp() : void
     {
-        self::assertSame('192.168.1.2', $this->proxyRequest->getProxiedIP());
+        self::assertSame('192.168.1.2', $this->proxyRequest->getProxiedIp());
     }
 
     public function testReferer() : void
