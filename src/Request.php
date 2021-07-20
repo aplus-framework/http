@@ -466,37 +466,40 @@ class Request extends Message implements RequestInterface
     /**
      * Get the request body as JSON.
      *
-     * @param bool $assoc
-     * @param int|null $options [optional] <p>
-     * Bitmask consisting of
-     * <b>JSON_HEX_QUOT</b>,
-     * <b>JSON_HEX_TAG</b>,
-     * <b>JSON_HEX_AMP</b>,
-     * <b>JSON_HEX_APOS</b>,
-     * <b>JSON_NUMERIC_CHECK</b>,
-     * <b>JSON_PRETTY_PRINT</b>,
-     * <b>JSON_UNESCAPED_SLASHES</b>,
-     * <b>JSON_FORCE_OBJECT</b>,
-     * <b>JSON_UNESCAPED_UNICODE</b>.
-     * <b>JSON_THROW_ON_ERROR</b>
+     * @param bool|null $associative When true, JSON objects will be returned as
+     * associative arrays; when false, JSON objects will be returned as objects.
+     * When null, JSON objects will be returned as associative arrays or objects
+     * depending on whether JSON_OBJECT_AS_ARRAY is set in the flags.
+     * @param int $flags <p>
+     * Bitmask of JSON decode options:<br/>
+     * {@see JSON_BIGINT_AS_STRING} decodes large integers as their original
+     * string value.<br/>
+     * {@see JSON_INVALID_UTF8_IGNORE} ignores invalid UTF-8 characters,<br/>
+     * {@see JSON_INVALID_UTF8_SUBSTITUTE} converts invalid UTF-8 characters to
+     * \0xfffd,<br/>
+     * {@see JSON_OBJECT_AS_ARRAY} decodes JSON objects as PHP array, since
+     * 7.2.0 used by default if $assoc parameter is null,<br/>
+     * {@see JSON_THROW_ON_ERROR} when passed this flag, the error behaviour of
+     * these functions is changed. The global error state is left untouched, and
+     * if an error occurs that would otherwise set it, these functions instead
+     * throw a JsonException<br/>
      * </p>
-     * <p>Default is <b>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE</b>
-     * when null</p>
-     * @param int $depth
+     * @param int $depth user specified recursion depth
+     *
+     * @see https://www.php.net/manual/en/function.json-decode.php
+     * @see https://www.php.net/manual/en/json.constants.php
      *
      * @return array<string,mixed>|false|stdClass If option JSON_THROW_ON_ERROR
      * is not set, return false if json_decode fail. Otherwise return a
-     * stdClass instance, or an array if the $assoc argument is passed as true.
+     * stdClass instance, or an array if the $associative argument is passed as
+     * true.
      */
     public function getJson(
-        bool $assoc = false,
-        int $options = null,
+        ?bool $associative = null,
+        int $flags = 0,
         int $depth = 512
     ) : array | stdClass | false {
-        if ($options === null) {
-            $options = \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES;
-        }
-        $body = \json_decode($this->getBody(), $assoc, $depth, $options);
+        $body = \json_decode($this->getBody(), $associative, $depth, $flags);
         if (\json_last_error() !== \JSON_ERROR_NONE) {
             return false;
         }
