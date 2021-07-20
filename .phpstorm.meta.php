@@ -10,6 +10,31 @@
 namespace PHPSTORM_META;
 
 registerArgumentsSet(
+    'filters',
+    \FILTER_CALLBACK,
+    \FILTER_SANITIZE_ADD_SLASHES,
+    \FILTER_SANITIZE_EMAIL,
+    \FILTER_SANITIZE_ENCODED,
+    \FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    \FILTER_SANITIZE_NUMBER_FLOAT,
+    \FILTER_SANITIZE_NUMBER_INT,
+    \FILTER_SANITIZE_SPECIAL_CHARS,
+    \FILTER_SANITIZE_STRING,
+    \FILTER_SANITIZE_STRIPPED,
+    \FILTER_SANITIZE_URL,
+    \FILTER_UNSAFE_RAW,
+    \FILTER_VALIDATE_BOOL,
+    \FILTER_VALIDATE_BOOLEAN,
+    \FILTER_VALIDATE_DOMAIN,
+    \FILTER_VALIDATE_EMAIL,
+    \FILTER_VALIDATE_FLOAT,
+    \FILTER_VALIDATE_INT,
+    \FILTER_VALIDATE_IP,
+    \FILTER_VALIDATE_MAC,
+    \FILTER_VALIDATE_REGEXP,
+    \FILTER_VALIDATE_URL,
+);
+registerArgumentsSet(
     'json_decode_flags',
     \JSON_BIGINT_AS_STRING,
     \JSON_INVALID_UTF8_IGNORE,
@@ -204,6 +229,31 @@ registerArgumentsSet(
     \Framework\HTTP\ResponseInterface::HEADER_X_XSS_PROTECTION,
     \Framework\HTTP\ResponseInterface::HEADER_X_REQUEST_ID,
     \Framework\HTTP\ResponseInterface::HEADER_X_POWERED_BY,
+);
+expectedArguments(
+    \Framework\HTTP\Request::filterInput(),
+    2,
+    argumentsSet('filters')
+);
+expectedArguments(
+    \Framework\HTTP\Request::getEnv(),
+    1,
+    argumentsSet('filters')
+);
+expectedArguments(
+    \Framework\HTTP\Request::getGet(),
+    1,
+    argumentsSet('filters')
+);
+expectedArguments(
+    \Framework\HTTP\Request::getPost(),
+    1,
+    argumentsSet('filters')
+);
+expectedArguments(
+    \Framework\HTTP\Request::getServer(),
+    1,
+    argumentsSet('filters')
 );
 expectedArguments(
     \Framework\HTTP\Request::getJson(),
