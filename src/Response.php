@@ -404,36 +404,41 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
-     * Set response body and Content-Type as JSON.
+     * Set Response body and Content-Type as JSON.
      *
-     * @param mixed $data
-     * @param int|null $options [optional] <p>
+     * @param mixed $data The data being encoded. Can be any type except
+     * a resource.
+     * @param int|null $flags <p>
      * Bitmask consisting of
-     * <b>JSON_HEX_QUOT</b>,
-     * <b>JSON_HEX_TAG</b>,
-     * <b>JSON_HEX_AMP</b>,
-     * <b>JSON_HEX_APOS</b>,
-     * <b>JSON_NUMERIC_CHECK</b>,
-     * <b>JSON_PRETTY_PRINT</b>,
-     * <b>JSON_UNESCAPED_SLASHES</b>,
-     * <b>JSON_FORCE_OBJECT</b>,
-     * <b>JSON_UNESCAPED_UNICODE</b>.
-     * <b>JSON_THROW_ON_ERROR</b>
+     * {@see JSON_HEX_QUOT}<br/>
+     * {@see JSON_HEX_TAG}<br/>
+     * {@see JSON_HEX_AMP}<br/>
+     * {@see JSON_HEX_APOS}<br/>
+     * {@see JSON_NUMERIC_CHECK}<br/>
+     * {@see JSON_PRETTY_PRINT}<br/>
+     * {@see JSON_UNESCAPED_SLASHES}<br/>
+     * {@see JSON_FORCE_OBJECT}<br/>
+     * {@see JSON_UNESCAPED_UNICODE}<br/>
+     * {@see JSON_THROW_ON_ERROR}<br/>
+     * The behaviour of these constants is described on the JSON constants page.
      * </p>
      * <p>Default is <b>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE</b>
-     * when null</p>
-     * @param int $depth [optional] Set the maximum depth. Must be greater than zero.
+     * when null. Set 0 to do not use none.</p>
+     * @param int $depth Set the maximum depth. Must be greater than zero.
+     *
+     * @see https://www.php.net/manual/en/function.json-encode.php
+     * @see https://www.php.net/manual/en/json.constants.php
      *
      * @throws JsonException if json_encode() fails
      *
      * @return static
      */
-    public function setJson(mixed $data, int $options = null, int $depth = 512) : static
+    public function setJson(mixed $data, int $flags = null, int $depth = 512) : static
     {
-        if ($options === null) {
-            $options = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
+        if ($flags === null) {
+            $flags = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
         }
-        $data = \json_encode($data, $options | \JSON_THROW_ON_ERROR, $depth);
+        $data = \json_encode($data, $flags | \JSON_THROW_ON_ERROR, $depth);
         $this->setContentType('application/json');
         $this->setBody($data);
         return $this;
