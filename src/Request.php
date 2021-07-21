@@ -477,14 +477,14 @@ class Request extends Message implements RequestInterface
      * depending on whether JSON_OBJECT_AS_ARRAY is set in the flags.
      * @param int $flags <p>
      * Bitmask of JSON decode options:<br/>
-     * {@see JSON_BIGINT_AS_STRING} decodes large integers as their original
+     * {@see \JSON_BIGINT_AS_STRING} decodes large integers as their original
      * string value.<br/>
-     * {@see JSON_INVALID_UTF8_IGNORE} ignores invalid UTF-8 characters,<br/>
-     * {@see JSON_INVALID_UTF8_SUBSTITUTE} converts invalid UTF-8 characters to
+     * {@see \JSON_INVALID_UTF8_IGNORE} ignores invalid UTF-8 characters,<br/>
+     * {@see \JSON_INVALID_UTF8_SUBSTITUTE} converts invalid UTF-8 characters to
      * \0xfffd,<br/>
-     * {@see JSON_OBJECT_AS_ARRAY} decodes JSON objects as PHP array, since
+     * {@see \JSON_OBJECT_AS_ARRAY} decodes JSON objects as PHP array, since
      * 7.2.0 used by default if $assoc parameter is null,<br/>
-     * {@see JSON_THROW_ON_ERROR} when passed this flag, the error behaviour of
+     * {@see \JSON_THROW_ON_ERROR} when passed this flag, the error behaviour of
      * these functions is changed. The global error state is left untouched, and
      * if an error occurs that would otherwise set it, these functions instead
      * throw a JsonException<br/>

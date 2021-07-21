@@ -410,16 +410,16 @@ class Response extends Message implements ResponseInterface
      * a resource.
      * @param int|null $flags <p>
      * Bitmask consisting of
-     * {@see JSON_HEX_QUOT}<br/>
-     * {@see JSON_HEX_TAG}<br/>
-     * {@see JSON_HEX_AMP}<br/>
-     * {@see JSON_HEX_APOS}<br/>
-     * {@see JSON_NUMERIC_CHECK}<br/>
-     * {@see JSON_PRETTY_PRINT}<br/>
-     * {@see JSON_UNESCAPED_SLASHES}<br/>
-     * {@see JSON_FORCE_OBJECT}<br/>
-     * {@see JSON_UNESCAPED_UNICODE}<br/>
-     * {@see JSON_THROW_ON_ERROR}<br/>
+     * {@see \JSON_HEX_QUOT}<br/>
+     * {@see \JSON_HEX_TAG}<br/>
+     * {@see \JSON_HEX_AMP}<br/>
+     * {@see \JSON_HEX_APOS}<br/>
+     * {@see \JSON_NUMERIC_CHECK}<br/>
+     * {@see \JSON_PRETTY_PRINT}<br/>
+     * {@see \JSON_UNESCAPED_SLASHES}<br/>
+     * {@see \JSON_FORCE_OBJECT}<br/>
+     * {@see \JSON_UNESCAPED_UNICODE}<br/>
+     * {@see \JSON_THROW_ON_ERROR}<br/>
      * The behaviour of these constants is described on the JSON constants page.
      * </p>
      * <p>Default is <b>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE</b>
