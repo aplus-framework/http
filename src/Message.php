@@ -607,7 +607,7 @@ abstract class Message implements MessageInterface
     }
 
     /**
-     * Get the Response reason based on status code.
+     * Get a Response reason based on status code.
      *
      * @param int $code
      * @param string|null $default
@@ -615,7 +615,7 @@ abstract class Message implements MessageInterface
      * @return string|null
      */
     #[Pure]
-    public static function getResponseReason(int $code, string $default = null) : ?string
+    protected static function getReasonByCode(int $code, string $default = null) : ?string
     {
         return static::$responseStatus[$code] ?? $default;
     }
