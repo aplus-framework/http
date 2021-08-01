@@ -3,31 +3,23 @@
     <!-- cleancode -->
     <rule ref="rulesets/cleancode.xml">
         <exclude name="BooleanArgumentFlag"/>
+        <exclude name="ErrorControlOperator"/>
         <exclude name="StaticAccess"/>
     </rule>
-    <rule ref="rulesets/cleancode.xml/UndefinedVariable">
-        <properties>
-            <property name="minimum" value="7"/>
-        </properties>
-    </rule>
     <!-- codesize -->
-    <rule ref="rulesets/codesize.xml/ExcessiveParameterList">
+    <rule ref="rulesets/codesize.xml/NPathComplexity">
         <properties>
-            <property name="minimum" value="7"/>
-        </properties>
-    </rule>
-    <rule ref="rulesets/codesize.xml/TooManyPublicMethods">
-        <properties>
-            <property name="maxmethods" value="20"/>
+            <property name="minimum" value="400"/>
         </properties>
     </rule>
     <!-- controversial -->
     <rule ref="rulesets/controversial.xml">
-        <exclude name="CamelCaseVariableName"/>
         <exclude name="Superglobals"/>
     </rule>
     <!-- design -->
-    <rule ref="rulesets/design.xml"/>
+    <rule ref="rulesets/design.xml">
+        <exclude name="ExitExpression"/>
+    </rule>
     <!-- naming -->
     <rule ref="rulesets/naming.xml/ShortVariable">
         <properties>
