@@ -424,13 +424,13 @@ class URL implements \JsonSerializable, \Stringable
      */
     protected function setUrl(string $url) : static
     {
-        $filtered_url = \filter_var($url, \FILTER_VALIDATE_URL);
-        if ( ! $filtered_url) {
+        $filteredUrl = \filter_var($url, \FILTER_VALIDATE_URL);
+        if ( ! $filteredUrl) {
             throw new InvalidArgumentException("Invalid URL: {$url}");
         }
-        $url = \parse_url($filtered_url);
+        $url = \parse_url($filteredUrl);
         if ($url === false) {
-            throw new RuntimeException("URL could not be parsed: {$filtered_url}");
+            throw new RuntimeException("URL could not be parsed: {$filteredUrl}");
         }
         $this->setScheme($url['scheme']); // @phpstan-ignore-line
         if (isset($url['user'])) {

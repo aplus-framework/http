@@ -852,13 +852,13 @@ class UploadedFile
         if ($this->extension !== null) {
             return $this->extension;
         }
-        $mime_extensions = static::$mimeTypes[\strtolower($this->getType())] ?? [];
-        if ($mime_extensions) {
-            $client_extension = \strtolower($this->getClientExtension());
-            if (\in_array($client_extension, $mime_extensions, true)) {
-                return $this->extension = $client_extension;
+        $mimeExtensions = static::$mimeTypes[\strtolower($this->getType())] ?? [];
+        if ($mimeExtensions) {
+            $clientExtension = \strtolower($this->getClientExtension());
+            if (\in_array($clientExtension, $mimeExtensions, true)) {
+                return $this->extension = $clientExtension;
             }
-            return $this->extension = $mime_extensions[0];
+            return $this->extension = $mimeExtensions[0];
         }
         return $this->extension = '';
     }

@@ -277,7 +277,7 @@ class Request extends Message implements RequestInterface
             \INPUT_COOKIE => $_COOKIE,
             \INPUT_ENV => $_ENV,
             \INPUT_SERVER => $_SERVER,
-            default => throw new \InvalidArgumentException('Invalid input type: ' . $type)
+            default => throw new InvalidArgumentException('Invalid input type: ' . $type)
         };
         $variable = $name === null
             ? $input
@@ -988,21 +988,21 @@ class Request extends Message implements RequestInterface
         if (empty($_FILES)) {
             return [];
         }
-        $make_objects = static function (
+        $makeObjects = static function (
             array $array,
-            callable $make_objects
+            callable $makeObjects
         ) : array | UploadedFile {
             $return = [];
             foreach ($array as $k => $v) {
                 if (\is_array($v)) {
-                    $return[$k] = $make_objects($v, $make_objects);
+                    $return[$k] = $makeObjects($v, $makeObjects);
                     continue;
                 }
                 return new UploadedFile($array);
             }
             return $return;
         };
-        return $make_objects(ArraySimple::files(), $make_objects); // @phpstan-ignore-line
+        return $makeObjects(ArraySimple::files(), $makeObjects); // @phpstan-ignore-line
     }
 
     /**
@@ -1014,12 +1014,12 @@ class Request extends Message implements RequestInterface
      */
     protected function setHost(string $host) : static
     {
-        $filtered_host = 'http://' . $host;
-        $filtered_host = \filter_var($filtered_host, \FILTER_VALIDATE_URL);
-        if ( ! $filtered_host) {
+        $filteredHost = 'http://' . $host;
+        $filteredHost = \filter_var($filteredHost, \FILTER_VALIDATE_URL);
+        if ( ! $filteredHost) {
             throw new InvalidArgumentException("Invalid host: {$host}");
         }
-        $host = \parse_url($filtered_host);
+        $host = \parse_url($filteredHost);
         $this->host = $host['host']; // @phpstan-ignore-line
         if (isset($host['port'])) { // @phpstan-ignore-line
             $this->port = $host['port'];
