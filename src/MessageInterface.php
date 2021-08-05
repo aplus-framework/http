@@ -38,6 +38,10 @@ interface MessageInterface extends Stringable
      */
     public const HEADER_KEEP_ALIVE = 'Keep-Alive';
     /**
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
+     */
+    public const HEADER_PRAGMA = 'Pragma';
+    /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Via
      */
     public const HEADER_VIA = 'Via';
