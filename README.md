@@ -1,7 +1,7 @@
 # Aplus Framework HTTP Library
 
 - [Homepage](https://aplus-framework.com/docs/http)
-- [API Documentation](https://aplus-framework.gitlab.io/libraries/http/docs/)
+- [API Documentation](https://aplus-framework.gitlab.io/libraries/http/docs/guide/)
 
 [![Pipeline](https://gitlab.com/aplus-framework/libraries/http/badges/master/pipeline.svg)](https://gitlab.com/aplus-framework/libraries/http/-/pipelines?scope=branches)
 [![Coverage](https://gitlab.com/aplus-framework/libraries/http/badges/master/coverage.svg?job=test:php)](https://aplus-framework.gitlab.io/libraries/http/coverage/)
