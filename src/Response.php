@@ -20,6 +20,8 @@ use LogicException;
  * Class Response.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#HTTP_Responses
+ *
+ * @package http
  */
 class Response extends Message implements ResponseInterface
 {

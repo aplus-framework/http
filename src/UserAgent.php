@@ -13,6 +13,8 @@ use JetBrains\PhpStorm\Pure;
 
 /**
  * Class UserAgent.
+ *
+ * @package http
  */
 class UserAgent implements \JsonSerializable, \Stringable
 {

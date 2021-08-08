@@ -13,6 +13,8 @@ use JetBrains\PhpStorm\Pure;
 
 /**
  * Class UploadedFile.
+ *
+ * @package http
  */
 class UploadedFile
 {

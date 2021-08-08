@@ -19,6 +19,8 @@ use LogicException;
  * @see https://stackoverflow.com/q/6287903/6027968
  * @see https://portswigger.net/web-security/csrf
  * @see https://www.netsparker.com/blog/web-security/protecting-website-using-anti-csrf-token/
+ *
+ * @package http
  */
 class AntiCSRF
 {

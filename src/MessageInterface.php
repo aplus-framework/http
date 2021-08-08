@@ -13,6 +13,8 @@ use Stringable;
 
 /**
  * Interface MessageInterface.
+ *
+ * @package http
  */
 interface MessageInterface extends Stringable
 {

@@ -19,6 +19,8 @@ use RuntimeException;
  * @see https://tools.ietf.org/html/rfc7233
  *
  * @property Request $request
+ *
+ * @package http
  */
 trait ResponseDownload
 {
