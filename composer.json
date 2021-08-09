@@ -15,7 +15,7 @@
         "download",
         "rest"
     ],
-    "homepage": "https://aplus-framework.com/docs/http",
+    "homepage": "https://docs.aplus-framework.com/guides/libraries/http/",
     "license": "MIT",
     "authors": [
         {
@@ -61,6 +61,6 @@
         "issues": "https://gitlab.com/aplus-framework/libraries/http/issues",
         "wiki": "https://gitlab.com/aplus-framework/libraries/http/wikis/home",
         "source": "https://gitlab.com/aplus-framework/libraries/http",
-        "docs": "https://aplus-framework.gitlab.io/libraries/http/docs/"
+        "docs": "https://docs.aplus-framework.com/guides/libraries/http/"
     }
 }
