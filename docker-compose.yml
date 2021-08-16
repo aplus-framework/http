@@ -1,8 +1,8 @@
 version: "3"
 services:
   package:
-    image: natanfelles/package
-    container_name: http-package
+    image: registry.gitlab.com/aplus-framework/images/package
+    container_name: package-http
     working_dir: /package
     volumes:
       - .:/package
