@@ -15,9 +15,16 @@ use Stringable;
  * Interface MessageInterface.
  *
  * @package http
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP
  */
 interface MessageInterface extends Stringable
 {
+    public const PROTOCOL_HTTP_1_0 = 'HTTP/1.0';
+    public const PROTOCOL_HTTP_1_1 = 'HTTP/1.1';
+    public const PROTOCOL_HTTP_2_0 = 'HTTP/2.0';
+    public const PROTOCOL_HTTP_2 = 'HTTP/2';
+    public const PROTOCOL_HTTP_3 = 'HTTP/3';
     // General headers ---------------------------------------------------------
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
