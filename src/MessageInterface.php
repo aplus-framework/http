@@ -20,10 +20,25 @@ use Stringable;
  */
 interface MessageInterface extends Stringable
 {
+    /**
+     * @see https://en.wikipedia.org/wiki/HTTP/1.0
+     */
     public const PROTOCOL_HTTP_1_0 = 'HTTP/1.0';
+    /**
+     * @see https://en.wikipedia.org/wiki/HTTP/1.1
+     */
     public const PROTOCOL_HTTP_1_1 = 'HTTP/1.1';
+    /**
+     * @see https://en.wikipedia.org/wiki/HTTP/2.0
+     */
     public const PROTOCOL_HTTP_2_0 = 'HTTP/2.0';
+    /**
+     * @see https://en.wikipedia.org/wiki/HTTP/2
+     */
     public const PROTOCOL_HTTP_2 = 'HTTP/2';
+    /**
+     * @see https://en.wikipedia.org/wiki/HTTP/3
+     */
     public const PROTOCOL_HTTP_3 = 'HTTP/3';
     // General headers ---------------------------------------------------------
     /**
