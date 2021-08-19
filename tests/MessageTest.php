@@ -26,8 +26,11 @@ final class MessageTest extends TestCase
     public function testProtocol() : void
     {
         self::assertSame('HTTP/1.1', $this->message->getProtocol());
-        $this->message->setProtocol('HTTP/2');
+        $this->message->setProtocol('http/2');
         self::assertSame('HTTP/2', $this->message->getProtocol());
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid HTTP Protocol: FOO/1.3');
+        $this->message->setProtocol('FOO/1.3');
     }
 
     public function testStartLine() : void

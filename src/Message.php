@@ -511,7 +511,17 @@ abstract class Message implements MessageInterface
      */
     protected function setProtocol(string $protocol) : static
     {
-        $this->protocol = $protocol;
+        $valid = \strtoupper($protocol);
+        if ( ! \in_array($valid, [
+            'HTTP/1.0',
+            'HTTP/1.1',
+            'HTTP/2.0',
+            'HTTP/2',
+            'HTTP/3',
+        ], true)) {
+            throw new InvalidArgumentException("Invalid HTTP Protocol: {$protocol}");
+        }
+        $this->protocol = $valid;
         return $this;
     }
 
