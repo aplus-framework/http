@@ -61,6 +61,14 @@ registerArgumentsSet(
     \JSON_UNESCAPED_UNICODE,
 );
 registerArgumentsSet(
+    'protocols',
+    \Framework\HTTP\MessageInterface::PROTOCOL_HTTP_1_0,
+    \Framework\HTTP\MessageInterface::PROTOCOL_HTTP_1_1,
+    \Framework\HTTP\MessageInterface::PROTOCOL_HTTP_2_0,
+    \Framework\HTTP\MessageInterface::PROTOCOL_HTTP_2,
+    \Framework\HTTP\MessageInterface::PROTOCOL_HTTP_3,
+);
+registerArgumentsSet(
     'response_status_codes',
     \Framework\HTTP\ResponseInterface::CODE_CONTINUE,
     \Framework\HTTP\ResponseInterface::CODE_SWITCHING_PROTOCOLS,
@@ -229,6 +237,11 @@ registerArgumentsSet(
     \Framework\HTTP\ResponseInterface::HEADER_X_XSS_PROTECTION,
     \Framework\HTTP\ResponseInterface::HEADER_X_REQUEST_ID,
     \Framework\HTTP\ResponseInterface::HEADER_X_POWERED_BY,
+);
+expectedArguments(
+    \Framework\HTTP\Message::setProtocol(),
+    0,
+    argumentsSet('protocols')
 );
 expectedArguments(
     \Framework\HTTP\Request::filterInput(),
