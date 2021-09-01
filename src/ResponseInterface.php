@@ -29,6 +29,8 @@ interface ResponseInterface extends MessageInterface
      * is already finished.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/100
+     *
+     * @var int
      */
     public const CODE_CONTINUE = 100;
     /**
@@ -39,6 +41,8 @@ interface ResponseInterface extends MessageInterface
      *
      * @see MessageInterface::HEADER_UPGRADE
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/101
+     *
+     * @var int
      */
     public const CODE_SWITCHING_PROTOCOLS = 101;
     /**
@@ -48,6 +52,8 @@ interface ResponseInterface extends MessageInterface
      * request, but no response is available yet.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/102
+     *
+     * @var int
      */
     public const CODE_PROCESSING = 102;
     /**
@@ -59,6 +65,8 @@ interface ResponseInterface extends MessageInterface
      *
      * @see MessageInterface::HEADER_LINK
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103
+     *
+     * @var int
      */
     public const CODE_EARLY_HINTS = 103;
     // Status codes (Successful responses) -------------------------------------
@@ -81,6 +89,8 @@ interface ResponseInterface extends MessageInterface
      * server.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200
+     *
+     * @var int
      */
     public const CODE_OK = 200;
     /**
@@ -91,6 +101,8 @@ interface ResponseInterface extends MessageInterface
      * PUT requests.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201
+     *
+     * @var int
      */
     public const CODE_CREATED = 201;
     /**
@@ -102,6 +114,8 @@ interface ResponseInterface extends MessageInterface
      * another process or server handles the request, or for batch processing.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/202
+     *
+     * @var int
      */
     public const CODE_ACCEPTED = 202;
     /**
@@ -114,6 +128,8 @@ interface ResponseInterface extends MessageInterface
      * is preferred to this status.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/203
+     *
+     * @var int
      */
     public const CODE_NON_AUTHORITATIVE_INFORMATION = 203;
     /**
@@ -124,6 +140,8 @@ interface ResponseInterface extends MessageInterface
      * with the new ones.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204
+     *
+     * @var int
      */
     public const CODE_NO_CONTENT = 204;
     /**
@@ -132,6 +150,8 @@ interface ResponseInterface extends MessageInterface
      * Tells the user-agent to reset the document which sent this request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/205
+     *
+     * @var int
      */
     public const CODE_RESET_CONTENT = 205;
     /**
@@ -143,6 +163,8 @@ interface ResponseInterface extends MessageInterface
      * @see RequestInterface::HEADER_RANGE
      * @see MessageInterface::HEADER_CONTENT_RANGE
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/206
+     *
+     * @var int
      */
     public const CODE_PARTIAL_CONTENT = 206;
     /**
@@ -152,6 +174,8 @@ interface ResponseInterface extends MessageInterface
      * multiple status codes might be appropriate.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/207
+     *
+     * @var int
      */
     public const CODE_MULTI_STATUS = 207;
     /**
@@ -162,6 +186,8 @@ interface ResponseInterface extends MessageInterface
      * collection.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/208
+     *
+     * @var int
      */
     public const CODE_ALREADY_REPORTED = 208;
     /**
@@ -172,6 +198,8 @@ interface ResponseInterface extends MessageInterface
      * applied to the current instance.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/226
+     *
+     * @var int
      */
     public const CODE_IM_USED = 226;
     // Status codes (Redirects) ------------------------------------------------
@@ -184,6 +212,8 @@ interface ResponseInterface extends MessageInterface
      * the user can pick.)
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/300
+     *
+     * @var int
      */
     public const CODE_MULTIPLE_CHOICES = 300;
     /**
@@ -193,6 +223,8 @@ interface ResponseInterface extends MessageInterface
      * URL is given in the response.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/301
+     *
+     * @var int
      */
     public const CODE_MOVED_PERMANENTLY = 301;
     /**
@@ -204,6 +236,8 @@ interface ResponseInterface extends MessageInterface
      * requests.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/302
+     *
+     * @var int
      */
     public const CODE_FOUND = 302;
     /**
@@ -213,6 +247,8 @@ interface ResponseInterface extends MessageInterface
      * resource at another URI with a GET request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/303
+     *
+     * @var int
      */
     public const CODE_SEE_OTHER = 303;
     /**
@@ -223,6 +259,8 @@ interface ResponseInterface extends MessageInterface
      * version of the response.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/304
+     *
+     * @var int
      */
     public const CODE_NOT_MODIFIED = 304;
     /**
@@ -233,6 +271,8 @@ interface ResponseInterface extends MessageInterface
      * due to security concerns regarding in-band configuration of a proxy.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/305
+     *
+     * @var int
      */
     public const CODE_USE_PROXY = 305;
     /**
@@ -242,6 +282,8 @@ interface ResponseInterface extends MessageInterface
      * a previous version of the HTTP/1.1 specification.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/306
+     *
+     * @var int
      */
     public const CODE_SWITCH_PROXY = 306;
     /**
@@ -255,6 +297,8 @@ interface ResponseInterface extends MessageInterface
      * used in the second request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/307
+     *
+     * @var int
      */
     public const CODE_TEMPORARY_REDIRECT = 307;
     /**
@@ -270,6 +314,8 @@ interface ResponseInterface extends MessageInterface
      * @see ResponseInterface::HEADER_LOCATION
      * @see ResponseInterface::CODE_MOVED_PERMANENTLY
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/308
+     *
+     * @var int
      */
     public const CODE_PERMANENT_REDIRECT = 308;
     // Status codes (Client errors) --------------------------------------------
@@ -279,6 +325,8 @@ interface ResponseInterface extends MessageInterface
      * The server could not understand the request due to invalid syntax.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+     *
+     * @var int
      */
     public const CODE_BAD_REQUEST = 400;
     /**
@@ -289,6 +337,8 @@ interface ResponseInterface extends MessageInterface
      * itself to get the requested response.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+     *
+     * @var int
      */
     public const CODE_UNAUTHORIZED = 401;
     /**
@@ -299,6 +349,8 @@ interface ResponseInterface extends MessageInterface
      * status code is used very rarely and no standard convention exists.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402
+     *
+     * @var int
      */
     public const CODE_PAYMENT_REQUIRED = 402;
     /**
@@ -310,6 +362,8 @@ interface ResponseInterface extends MessageInterface
      *
      * @see ResponseInterface::CODE_UNAUTHORIZED
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+     *
+     * @var int
      */
     public const CODE_FORBIDDEN = 403;
     /**
@@ -323,6 +377,8 @@ interface ResponseInterface extends MessageInterface
      * most famous one due to its frequent occurrence on the web.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+     *
+     * @var int
      */
     public const CODE_NOT_FOUND = 404;
     /**
@@ -333,6 +389,8 @@ interface ResponseInterface extends MessageInterface
      *
      * @see ResponseInterface::HEADER_ALLOW
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405
+     *
+     * @var int
      */
     public const CODE_METHOD_NOT_ALLOWED = 405;
     /**
@@ -343,6 +401,8 @@ interface ResponseInterface extends MessageInterface
      * criteria given by the user agent.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406
+     *
+     * @var int
      */
     public const CODE_NOT_ACCEPTABLE = 406;
     /**
@@ -353,6 +413,8 @@ interface ResponseInterface extends MessageInterface
      *
      * @see ResponseInterface::CODE_UNAUTHORIZED
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/407
+     *
+     * @var int
      */
     public const CODE_PROXY_AUTHENTICATION_REQUIRED = 407;
     /**
@@ -366,6 +428,8 @@ interface ResponseInterface extends MessageInterface
      * servers merely shut down the connection without sending this message.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/408
+     *
+     * @var int
      */
     public const CODE_REQUEST_TIMEOUT = 408;
     /**
@@ -375,6 +439,8 @@ interface ResponseInterface extends MessageInterface
      * the server.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/409
+     *
+     * @var int
      */
     public const CODE_CONFLICT = 409;
     /**
@@ -388,6 +454,8 @@ interface ResponseInterface extends MessageInterface
      * been deleted with this status code.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/410
+     *
+     * @var int
      */
     public const CODE_GONE = 410;
     /**
@@ -398,6 +466,8 @@ interface ResponseInterface extends MessageInterface
      *
      * @see MessageInterface::HEADER_CONTENT_LENGTH
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/411
+     *
+     * @var int
      */
     public const CODE_LENGTH_REQUIRED = 411;
     /**
@@ -407,6 +477,8 @@ interface ResponseInterface extends MessageInterface
      * does not meet.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/412
+     *
+     * @var int
      */
     public const CODE_PRECONDITION_FAILED = 412;
     /**
@@ -417,6 +489,8 @@ interface ResponseInterface extends MessageInterface
      *
      * @see ResponseInterface::HEADER_RETRY_AFTER
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/413
+     *
+     * @var int
      */
     public const CODE_PAYLOAD_TOO_LARGE = 413;
     /**
@@ -426,6 +500,8 @@ interface ResponseInterface extends MessageInterface
      * interpret.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/414
+     *
+     * @var int
      */
     public const CODE_URI_TOO_LARGE = 414;
     /**
@@ -435,6 +511,8 @@ interface ResponseInterface extends MessageInterface
      * so the server is rejecting the request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/415
+     *
+     * @var int
      */
     public const CODE_UNSUPPORTED_MEDIA_TYPE = 415;
     /**
@@ -446,6 +524,8 @@ interface ResponseInterface extends MessageInterface
      *
      * @see RequestInterface::HEADER_RANGE
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/416
+     *
+     * @var int
      */
     public const CODE_RANGE_NOT_SATISFIABLE = 416;
     /**
@@ -456,6 +536,8 @@ interface ResponseInterface extends MessageInterface
      *
      * @see RequestInterface::HEADER_EXPECT
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/417
+     *
+     * @var int
      */
     public const CODE_EXPECTATION_FAILED = 417;
     /**
@@ -464,6 +546,8 @@ interface ResponseInterface extends MessageInterface
      * The server refuses the attempt to brew coffee with a teapot.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418
+     *
+     * @var int
      */
     public const CODE_IM_A_TEAPOT = 418;
     /**
@@ -475,6 +559,8 @@ interface ResponseInterface extends MessageInterface
      * in the request URI.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/421
+     *
+     * @var int
      */
     public const CODE_MISDIRECTED_REQUEST = 421;
     /**
@@ -484,6 +570,8 @@ interface ResponseInterface extends MessageInterface
      * errors.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422
+     *
+     * @var int
      */
     public const CODE_UNPROCESSABLE_ENTITY = 422;
     /**
@@ -492,6 +580,8 @@ interface ResponseInterface extends MessageInterface
      * The resource that is being accessed is locked.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/423
+     *
+     * @var int
      */
     public const CODE_LOCKED = 423;
     /**
@@ -500,6 +590,8 @@ interface ResponseInterface extends MessageInterface
      * The request failed due to failure of a previous request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/424
+     *
+     * @var int
      */
     public const CODE_FAILED_DEPENDENCY = 424;
     /**
@@ -509,6 +601,8 @@ interface ResponseInterface extends MessageInterface
      * might be replayed.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/425
+     *
+     * @var int
      */
     public const CODE_TOO_EARLY = 425;
     /**
@@ -521,6 +615,8 @@ interface ResponseInterface extends MessageInterface
      *
      * @see MessageInterface::HEADER_UPGRADE
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/426
+     *
+     * @var int
      */
     public const CODE_UPGRADE_REQUIRED = 426;
     /**
@@ -533,6 +629,8 @@ interface ResponseInterface extends MessageInterface
      * a conflict.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/428
+     *
+     * @var int
      */
     public const CODE_PRECONDITION_REQUIRED = 428;
     /**
@@ -542,6 +640,8 @@ interface ResponseInterface extends MessageInterface
      * limiting").
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+     *
+     * @var int
      */
     public const CODE_TOO_MANY_REQUESTS = 429;
     /**
@@ -552,6 +652,8 @@ interface ResponseInterface extends MessageInterface
      * the request header fields.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/431
+     *
+     * @var int
      */
     public const CODE_REQUEST_HEADER_FIELDS_TOO_LARGE = 431;
     /**
@@ -561,6 +663,8 @@ interface ResponseInterface extends MessageInterface
      * as a web page censored by a government.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/451
+     *
+     * @var int
      */
     public const CODE_UNAVAILABLE_FOR_LEGAL_REASONS = 451;
     /**
@@ -570,6 +674,8 @@ interface ResponseInterface extends MessageInterface
      * closes the connection while nginx is processing the request.
      *
      * @see https://httpstatuses.com/499
+     *
+     * @var int
      */
     public const CODE_CLIENT_CLOSED_REQUEST = 499;
     // Status codes (Server errors) --------------------------------------------
@@ -579,6 +685,8 @@ interface ResponseInterface extends MessageInterface
      * The server has encountered a situation it doesn't know how to handle.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500
+     *
+     * @var int
      */
     public const CODE_INTERNAL_SERVER_ERROR = 500;
     /**
@@ -589,6 +697,8 @@ interface ResponseInterface extends MessageInterface
      * must not return this code) are `GET` and `HEAD`.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/501
+     *
+     * @var int
      */
     public const CODE_NOT_IMPLEMENTED = 501;
     /**
@@ -598,6 +708,8 @@ interface ResponseInterface extends MessageInterface
      * get a response needed to handle the request, got an invalid response.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502
+     *
+     * @var int
      */
     public const CODE_BAD_GATEWAY = 502;
     /**
@@ -615,6 +727,8 @@ interface ResponseInterface extends MessageInterface
      *
      * @see ResponseInterface::HEADER_RETRY_AFTER
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503
+     *
+     * @var int
      */
     public const CODE_SERVICE_UNAVAILABLE = 503;
     /**
@@ -624,6 +738,8 @@ interface ResponseInterface extends MessageInterface
      * cannot get a response in time.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/504
+     *
+     * @var int
      */
     public const CODE_GATEWAY_TIMEOUT = 504;
     /**
@@ -632,6 +748,8 @@ interface ResponseInterface extends MessageInterface
      * The HTTP version used in the request is not supported by the server.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/505
+     *
+     * @var int
      */
     public const CODE_HTTP_VERSION_NOT_SUPPORTED = 505;
     /**
@@ -643,6 +761,8 @@ interface ResponseInterface extends MessageInterface
      * process.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/506
+     *
+     * @var int
      */
     public const CODE_VARIANT_ALSO_NEGOTIATES = 506;
     /**
@@ -653,6 +773,8 @@ interface ResponseInterface extends MessageInterface
      * request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/507
+     *
+     * @var int
      */
     public const CODE_INSUFFICIENT_STORAGE = 507;
     /**
@@ -661,6 +783,8 @@ interface ResponseInterface extends MessageInterface
      * The server detected an infinite loop while processing the request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/508
+     *
+     * @var int
      */
     public const CODE_LOOP_DETECTED = 508;
     /**
@@ -670,6 +794,8 @@ interface ResponseInterface extends MessageInterface
      * it.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/510
+     *
+     * @var int
      */
     public const CODE_NOT_EXTENDED = 510;
     /**
@@ -679,6 +805,8 @@ interface ResponseInterface extends MessageInterface
      * gain network access.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/511
+     *
+     * @var int
      */
     public const CODE_NETWORK_AUTHENTICATION_REQUIRED = 511;
     /**
@@ -689,150 +817,225 @@ interface ResponseInterface extends MessageInterface
      * in front of the proxy.
      *
      * @see https://httpstatuses.com/599
+     *
+     * @var int
      */
     public const CODE_NETWORK_CONNECT_TIMEOUT_ERROR = 599;
     // Response headers --------------------------------------------------------
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Ranges
+     *
+     * @var string
      */
     public const HEADER_ACCEPT_RANGES = 'Accept-Ranges';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
+     *
+     * @var string
      */
     public const HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS = 'Access-Control-Allow-Credentials';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
+     *
+     * @var string
      */
     public const HEADER_ACCESS_CONTROL_ALLOW_HEADERS = 'Access-Control-Allow-Headers';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods
+     *
+     * @var string
      */
     public const HEADER_ACCESS_CONTROL_ALLOW_METHODS = 'Access-Control-Allow-Methods';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+     *
+     * @var string
      */
     public const HEADER_ACCESS_CONTROL_ALLOW_ORIGIN = 'Access-Control-Allow-Origin';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
+     *
+     * @var string
      */
     public const HEADER_ACCESS_CONTROL_EXPOSE_HEADERS = 'Access-Control-Expose-Headers';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age
+     *
+     * @var string
      */
     public const HEADER_ACCESS_CONTROL_MAX_AGE = 'Access-Control-Max-Age';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Age
+     *
+     * @var string
      */
     public const HEADER_AGE = 'Age';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Allow
+     *
+     * @var string
      */
     public const HEADER_ALLOW = 'Allow';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Clear-Site-Data
+     *
+     * @var string
      */
     public const HEADER_CLEAR_SITE_DATA = 'Clear-Site-Data';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
+     *
+     * @var string
      */
     public const HEADER_CONTENT_SECURITY_POLICY = 'Content-Security-Policy';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only
+     *
+     * @var string
      */
     public const HEADER_CONTENT_SECURITY_POLICY_REPORT_ONLY = 'Content-Security-Policy-Report-Only';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag
+     *
+     * @var string
      */
     public const HEADER_ETAG = 'ETag';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT
+     *
+     * @var string
      */
     public const HEADER_EXPECT_CT = 'Expect-CT';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expires
+     *
+     * @var string
      */
     public const HEADER_EXPIRES = 'Expires';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy
+     *
+     * @var string
      */
     public const HEADER_FEATURE_POLICY = 'Feature-Policy';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Last-Modified
+     *
+     * @var string
      */
     public const HEADER_LAST_MODIFIED = 'Last-Modified';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Location
+     *
+     * @var string
      */
     public const HEADER_LOCATION = 'Location';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Proxy-Authenticate
+     *
+     * @var string
      */
     public const HEADER_PROXY_AUTHENTICATE = 'Proxy-Authenticate';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Public-Key-Pins
+     *
+     * @var string
      */
     public const HEADER_PUBLIC_KEY_PINS = 'Public-Key-Pins';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Public-Key-Pins-Report-Only
+     *
+     * @var string
      */
     public const HEADER_PUBLIC_KEY_PINS_REPORT_ONLY = 'Public-Key-Pins-Report-Only';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+     *
+     * @var string
      */
     public const HEADER_REFERRER_POLICY = 'Referrer-Policy';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
+     *
+     * @var string
      */
     public const HEADER_RETRY_AFTER = 'Retry-After';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server
+     *
+     * @var string
      */
     public const HEADER_SERVER = 'Server';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
+     *
+     * @var string
      */
     public const HEADER_SET_COOKIE = 'Set-Cookie';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/SourceMap
+     *
+     * @var string
      */
     public const HEADER_SOURCEMAP = 'SourceMap';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
+     *
+     * @var string
      */
     public const HEADER_STRICT_TRANSPORT_SECURITY = 'Strict-Transport-Security';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Timing-Allow-Origin
+     *
+     * @var string
      */
     public const HEADER_TIMING_ALLOW_ORIGIN = 'Timing-Allow-Origin';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Tk
+     *
+     * @var string
      */
     public const HEADER_TK = 'Tk';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary
+     *
+     * @var string
      */
     public const HEADER_VARY = 'Vary';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/WWW-Authenticate
+     *
+     * @var string
      */
     public const HEADER_WWW_AUTHENTICATE = 'WWW-Authenticate';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
+     *
+     * @var string
      */
     public const HEADER_X_CONTENT_TYPE_OPTIONS = 'X-Content-Type-Options';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-DNS-Prefetch-Control
+     *
+     * @var string
      */
     public const HEADER_X_DNS_PREFETCH_CONTROL = 'X-DNS-Prefetch-Control';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+     *
+     * @var string
      */
     public const HEADER_X_FRAME_OPTIONS = 'X-Frame-Options';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
+     *
+     * @var string
      */
     public const HEADER_X_XSS_PROTECTION = 'X-XSS-Protection';
     // Custom headers ----------------------------------------------------------
+    /**
+     * @var string
+     */
     public const HEADER_X_POWERED_BY = 'X-Powered-By';
 
     public function getStatusCode() : int;

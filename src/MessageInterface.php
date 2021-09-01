@@ -22,102 +22,150 @@ interface MessageInterface extends Stringable
 {
     /**
      * @see https://en.wikipedia.org/wiki/HTTP/1.0
+     *
+     * @var string
      */
     public const PROTOCOL_HTTP_1_0 = 'HTTP/1.0';
     /**
      * @see https://en.wikipedia.org/wiki/HTTP/1.1
+     *
+     * @var string
      */
     public const PROTOCOL_HTTP_1_1 = 'HTTP/1.1';
     /**
      * @see https://en.wikipedia.org/wiki/HTTP/2.0
+     *
+     * @var string
      */
     public const PROTOCOL_HTTP_2_0 = 'HTTP/2.0';
     /**
      * @see https://en.wikipedia.org/wiki/HTTP/2
+     *
+     * @var string
      */
     public const PROTOCOL_HTTP_2 = 'HTTP/2';
     /**
      * @see https://en.wikipedia.org/wiki/HTTP/3
+     *
+     * @var string
      */
     public const PROTOCOL_HTTP_3 = 'HTTP/3';
     // General headers ---------------------------------------------------------
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
+     *
+     * @var string
      */
     public const HEADER_CACHE_CONTROL = 'Cache-Control';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection
+     *
+     * @var string
      */
     public const HEADER_CONNECTION = 'Connection';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
+     *
+     * @var string
      */
     public const HEADER_CONTENT_DISPOSITION = 'Content-Disposition';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Date
+     *
+     * @var string
      */
     public const HEADER_DATE = 'Date';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Keep-Alive
+     *
+     * @var string
      */
     public const HEADER_KEEP_ALIVE = 'Keep-Alive';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
+     *
+     * @var string
      */
     public const HEADER_PRAGMA = 'Pragma';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Via
+     *
+     * @var string
      */
     public const HEADER_VIA = 'Via';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Warning
+     *
+     * @var string
      */
     public const HEADER_WARNING = 'Warning';
     // Representation headers --------------------------------------------------
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
+     *
+     * @var string
      */
     public const HEADER_CONTENT_ENCODING = 'Content-Encoding';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language
+     *
+     * @var string
      */
     public const HEADER_CONTENT_LANGUAGE = 'Content-Language';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Location
+     *
+     * @var string
      */
     public const HEADER_CONTENT_LOCATION = 'Content-Location';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
+     *
+     * @var string
      */
     public const HEADER_CONTENT_TYPE = 'Content-Type';
     // Payload headers ---------------------------------------------------------
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Length
+     *
+     * @var string
      */
     public const HEADER_CONTENT_LENGTH = 'Content-Length';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range
+     *
+     * @var string
      */
     public const HEADER_CONTENT_RANGE = 'Content-Range';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Link
+     *
+     * @var string
      */
     public const HEADER_LINK = 'Link';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Trailer
+     *
+     * @var string
      */
     public const HEADER_TRAILER = 'Trailer';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding
+     *
+     * @var string
      */
     public const HEADER_TRANSFER_ENCODING = 'Transfer-Encoding';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade
+     *
+     * @var string
      */
     public const HEADER_UPGRADE = 'Upgrade';
     // Custom headers ----------------------------------------------------------
     /**
      * @see https://riptutorial.com/http-headers/topic/10581/x-request-id
+     *
+     * @var string
      */
     public const HEADER_X_REQUEST_ID = 'X-Request-ID';
 
