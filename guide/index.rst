@@ -104,8 +104,8 @@ and terminate the script.
 
 **Allowed Hosts**
 
-If for some unknown reason the virtual host is incorrectly configured on the
-server, it is possible to prevent unwanted access whitelisting the allowed hosts.
+If, for some unknown reason, the virtual host is incorrectly configured on the
+server, it is possible to prevent unwanted access by whitelisting the allowed hosts.
 
 See this example using nginx:
 
@@ -125,28 +125,28 @@ To prevent that, whitelist the allowed hosts. Set it on the Request constructor:
     $allowedHosts = ['domain.tld', 'domain.tld:8088', 'api.domain.tld'];
     $request = new Request($allowedHosts);
 
-When a request for the unwanted host is done, an ``UnexpectedValueException``
+When a request for an unwanted host is done, an ``UnexpectedValueException``
 will thrown, with the message "Invalid Host: other.tld".
 
 With the throwable is possible, for example, to *catch* the Exception message
 and log it.
 
-If the $allowedHosts argument is not set, Request will accept any host.
+If the $allowedHosts argument is not set, the Request will accept any host.
 
 Content Negotiation
 ^^^^^^^^^^^^^^^^^^^
 
-Também é na requisição que são adquiridas informações para a
+It is also in the request that information is acquired for
 `Content Negotiation <https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation>`_. 
-Sabendo o que o Cliente HTTP aceita, e dá prioridade, é possível gerar uma
-`Response`_ mais completa e exclusiva para cada cliente.
+Knowing what the HTTP Client accepts, and prioritizes, it is possible to
+generate a more complete and featured `Response`_ for each user.
 
-A class Request possui métodos para negociação de conteúdo.
+The Request class has methods for negotiating content.
 
-Neles é possível passar os valores disponíveis pela aplicação.
+In them it is possible to pass the values available by the application.
 
-Vejamos um exemplo negociando o valor dos cabeçalhos, Content-Type e Content-Language,
-que podem ser usados na Resposta:
+Let's look at an example negotiating the value of the headers, Content-Type and
+Content-Language, which can be used in the Response:
 
 .. code-block:: php
 
@@ -156,12 +156,13 @@ que podem ser usados na Resposta:
     $availableLanguages = ['en', 'es', 'pt-br'];
     $negotiatedLanguage = $request->negotiateLanguage($availableLanguages);
 
-A negociação pega os `Quality Values <https://developer.mozilla.org/en-US/docs/Glossary/Quality_values>`_
-do cabeçalho em ordem de prioridade e retorna o primeiro na lista dos aceitos pela aplicação. 
-Caso nenhum dos Quality Values estiver disponível na aplicação, o valor retornado é o primeiro da
-array de disponíveis.
+The negotiation takes the `Quality Values <https://developer.mozilla.org/en-US/docs/Glossary/Quality_values>`_
+from the header in order of priority and returns the first one in the list of 
+those accepted by the application. 
+If none of the Quality Values are available in the application, the value
+returned is the first of the array of available.
 
-Enfim, já é possível setar os cabeçalhos negociados na Resposta:
+Anyway, it is now possible to set the headers negotiated in the Response:
 
 .. code-block:: php
 
@@ -171,7 +172,8 @@ Enfim, já é possível setar os cabeçalhos negociados na Resposta:
 Request with JSON
 ^^^^^^^^^^^^^^^^^
 
-When working with JSON, has a method to check if the ``Content-Type`` is of JSON type.
+When working with JSON, has a method to check if the ``Content-Type`` is of JSON
+type.
 
 And also, a method to get the JSON data from the Request body:
 
@@ -184,8 +186,8 @@ And also, a method to get the JSON data from the Request body:
 Request with Uploads
 ^^^^^^^^^^^^^^^^^^^^
 
-When the request is done via the POST method and has ``multipart/form-data`` as Content-Type,
-it characterizes the upload of files.
+When the request is done via the POST method and has ``multipart/form-data`` as
+Content-Type, it characterizes the upload of files.
 
 The Request class has methods to work with uploaded files.
 
@@ -215,9 +217,9 @@ Request working with REST
 Response
 --------
 
-HTTP responses send headers and message body in addition to the code and the reason for the status.
+The HTTP response send the message status, headers and body to a client.
 
-To use the response class, just instantiate it as well:
+To use the Response class, just instantiate it:
 
 .. code-block:: php
 
@@ -257,16 +259,16 @@ Response Body
     $response->setBody('Hi!');
     $body = $response->getBody(); // Hi!
     echo ' How are you';
-    $body = $response->getBody(); // Hi! How are you
+    $body = $response->getBody(); // Hi! What is your name
     $response->appendBody('???');
-    $body = $response->getBody(); // Hi! How are you???
+    $body = $response->getBody(); // Hi! What is your name???
     $response->setBody(['name' => 'A Framework']);
     $body = $response->getBody(); // name=A+Framework
 
 Response with JSON
 ^^^^^^^^^^^^^^^^^^
 
-A response containing JSON could be set to:
+A response containing JSON can be set as:
 
 .. code-block:: php
 
@@ -315,13 +317,15 @@ To send a file as a download in the response, you can call:
 
     $response->setDownload('filepath.pdf');
 
-With the second parameter set to true the content disposition is ``inline``, causing the browser to open the file in the window.
+With the second parameter set to true the content disposition is ``inline``,
+causing the browser to open the file in the window.
 
 .. code-block:: php
 
     $response->setDownload('filepath.pdf', inline: true);
 
-The third parameter makes it possible to continue downloads or start downloading a video at a certain time.
+The third parameter makes it possible to continue downloads or start downloading
+a video at a certain time.
 
 .. code-block:: php
 
@@ -330,19 +334,17 @@ The third parameter makes it possible to continue downloads or start downloading
 Sending the Response
 ^^^^^^^^^^^^^^^^^^^^
 
-Agora que você já viu como setar the Response status, headers and body, é hora de ver
-como enviar a resposta para o User-Agent.
+Now that you've seen how to set the Response status, headers and body, it's time
+to see how to send the response to the User-Agent:
 
 .. code-block:: php
 
     $response->send();
 
-.. note::
-
-    O método send deve ser chamado apenas uma vez, caso contrário irá lançar uma exceção. 
-    Chamar o método send é a última estapa da resposta HTTP. 
-    Depois disso, não deveria sair mais nada para o PHP Output Buffer.
-    Mas, seu script pode continuar rodando normalmente, se for necessário.
+The ``send`` method must be called only once, otherwise it will throw an exception. 
+Calling the ``send`` method is the last step of the HTTP response. 
+After that, nothing else should come out to the PHP Output Buffer. 
+But, your script can continue to run normally if necessary.
 
 Response Cache
 ^^^^^^^^^^^^^^
@@ -363,7 +365,7 @@ Response Cache
 URL
 ---
 
-The library has a class for working with URLs.
+The library has a class for working with URLs:
 
 .. code-block:: php
 
@@ -388,7 +390,7 @@ AntiCSRF
 Conclusion
 ----------
 
-Aplus HTTP Library is an, easy to use, tool for PHP, beginners and experienced, developers. 
+Aplus HTTP Library is an easy-to-use tool for, beginners and experienced, PHP developers. 
 It is perfect for building, simple and full-featured, HTTP interactions. 
 The more you use it, the more you will learn.
 
