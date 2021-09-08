@@ -757,7 +757,7 @@ class Request extends Message implements RequestInterface
      *
      * @param string|null $key a key name or null to get all data
      *
-     * @see Response::redirect
+     * @see Response::redirect()
      *
      * @throws LogicException if PHP Session is not active to get redirect data
      *

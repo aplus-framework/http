@@ -252,7 +252,7 @@ interface RequestInterface extends MessageInterface
      * the request is indicated by the Content-Type header.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST
-     * @see RequestInterface::HEADER_CONTENT_TYPE
+     * @see MessageInterface::HEADER_CONTENT_TYPE
      *
      * @var string
      */

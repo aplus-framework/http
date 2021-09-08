@@ -837,7 +837,7 @@ class UploadedFile
      *
      * WARNING! This info is not secure. Use the getExtension method.
      *
-     * @see getExtension
+     * @see UploadedFile::getExtension()
      *
      * @return string
      */
@@ -870,7 +870,7 @@ class UploadedFile
      *
      * WARNING! This info is not secure. Use the getType method.
      *
-     * @see getType
+     * @see UploadedFile::getType()
      *
      * @return string
      */

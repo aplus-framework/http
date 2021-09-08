@@ -288,7 +288,7 @@ class Response extends Message implements ResponseInterface
      * based on the current HTTP method.
      *
      * @see http://en.wikipedia.org/wiki/Post/Redirect/Get
-     * @see Request::getRedirectData
+     * @see Request::getRedirectData()
      *
      * @throws InvalidArgumentException for invalid Redirection code
      * @throws LogicException if PHP Session is not active to set redirect data
