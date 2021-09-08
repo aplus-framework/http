@@ -351,6 +351,49 @@ abstract class Message implements MessageInterface
     }
 
     /**
+     * Append a Message header.
+     *
+     * Used to set repeated header field names.
+     *
+     * @param string $name
+     * @param string $value
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
+     *
+     * @return static
+     */
+    protected function appendHeader(string $name, string $value) : static
+    {
+        $current = $this->getHeader($name);
+        if ($current !== null) {
+            $separator = $this->getHeaderValueSeparator($name);
+            $value = $current . $separator . $value;
+        }
+        $this->setHeader($name, $value);
+        return $this;
+    }
+
+    /**
+     * @param string $headerName
+     *
+     * @see https://stackoverflow.com/a/38406581/6027968
+     *
+     * @return string
+     */
+    private function getHeaderValueSeparator(string $headerName) : string
+    {
+        $headerName = \strtolower($headerName);
+        if (\in_array($headerName, \array_map('strtolower', [
+            ResponseInterface::HEADER_SET_COOKIE,
+            ResponseInterface::HEADER_WWW_AUTHENTICATE,
+            ResponseInterface::HEADER_PROXY_AUTHENTICATE,
+        ]), true)) {
+            return "\n";
+        }
+        return ', ';
+    }
+
+    /**
      * Remove a header by name.
      *
      * @param string $name

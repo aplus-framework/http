@@ -29,6 +29,11 @@ class MessageMock extends Message
         return parent::setHeaders($headers);
     }
 
+    public function appendHeader(string $name, string $value) : static
+    {
+        return parent::appendHeader($name, $value);
+    }
+
     public function removeHeader(string $name) : static
     {
         return parent::removeHeader($name);

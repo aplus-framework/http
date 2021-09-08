@@ -57,6 +57,22 @@ final class MessageTest extends TestCase
         self::assertNull($this->message->getHeader('from'));
     }
 
+    public function testAppendHeader() : void
+    {
+        self::assertNull($this->message->getHeader('Accept-Encoding'));
+        $this->message->appendHeader('Accept-Encoding', 'gzip');
+        self::assertSame('gzip', $this->message->getHeader('Accept-Encoding'));
+        $this->message->appendHeader('Accept-Encoding', 'deflate');
+        self::assertSame('gzip, deflate', $this->message->getHeader('Accept-Encoding'));
+        $this->message->setHeader('Accept-Encoding', 'br');
+        self::assertSame('br', $this->message->getHeader('Accept-Encoding'));
+        self::assertNull($this->message->getHeader('Set-Cookie'));
+        $this->message->setHeader('Set-Cookie', 'foo=bar');
+        self::assertSame('foo=bar', $this->message->getHeader('Set-Cookie'));
+        $this->message->appendHeader('Set-Cookie', 'uid=9');
+        self::assertSame("foo=bar\nuid=9", $this->message->getHeader('Set-Cookie'));
+    }
+
     public function testHeaders() : void
     {
         self::assertSame([], $this->message->getHeaders());
