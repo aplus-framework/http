@@ -505,7 +505,7 @@ abstract class Message implements MessageInterface
     /**
      * Set the HTTP protocol.
      *
-     * @param string $protocol HTTP/1.1 or HTTP/2
+     * @param string $protocol HTTP/1.1, HTTP/2, etc
      *
      * @return static
      */
@@ -513,11 +513,11 @@ abstract class Message implements MessageInterface
     {
         $valid = \strtoupper($protocol);
         if ( ! \in_array($valid, [
-            'HTTP/1.0',
-            'HTTP/1.1',
-            'HTTP/2.0',
-            'HTTP/2',
-            'HTTP/3',
+            static::PROTOCOL_HTTP_1_0,
+            static::PROTOCOL_HTTP_1_1,
+            static::PROTOCOL_HTTP_2_0,
+            static::PROTOCOL_HTTP_2,
+            static::PROTOCOL_HTTP_3,
         ], true)) {
             throw new InvalidArgumentException("Invalid HTTP Protocol: {$protocol}");
         }
