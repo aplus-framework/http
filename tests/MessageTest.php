@@ -126,11 +126,15 @@ final class MessageTest extends TestCase
             'content-type' => 'application/json',
             'ALLOW' => '*',
         ]);
+        $this->message->appendHeader('Set-COOKIE', 'foo=food');
+        $this->message->appendHeader('Set-cookie', 'bar=bare');
         self::assertSame(
             [
                 'From: foo@localhost',
                 'Content-Type: application/json',
                 'Allow: *',
+                'Set-Cookie: foo=food',
+                'Set-Cookie: bar=bare',
             ],
             $this->message->getHeaderLines()
         );

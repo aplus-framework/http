@@ -314,6 +314,12 @@ abstract class Message implements MessageInterface
         $lines = [];
         foreach ($this->getHeaders() as $name => $value) {
             $name = static::getHeaderName($name);
+            if (\str_contains($value, "\n")) {
+                foreach (\explode("\n", $value) as $val) {
+                    $lines[] = $name . ': ' . $val;
+                }
+                continue;
+            }
             $lines[] = $name . ': ' . $value;
         }
         return $lines;
