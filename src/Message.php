@@ -528,7 +528,8 @@ abstract class Message implements MessageInterface
     /**
      * Gets the HTTP Request Method.
      *
-     * @return string normally one of: GET, HEAD, POST, PATCH, PUT, DELETE or OPTIONS
+     * @return string Normally one of: GET, HEAD, POST, PATCH, PUT, DELETE,
+     * OPTIONS or TRACE
      */
     #[Pure]
     protected function getMethod() : string
@@ -539,7 +540,8 @@ abstract class Message implements MessageInterface
     /**
      * Set the request method.
      *
-     * @param string $method One of: 'DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT'
+     * @param string $method One of: GET, HEAD, POST, PATCH, PUT, DELETE,
+     * OPTIONS or TRACE
      *
      * @throws InvalidArgumentException for invalid method
      *
@@ -549,15 +551,16 @@ abstract class Message implements MessageInterface
     {
         $valid = \strtoupper($method);
         if ( ! \in_array($valid, [
-            'DELETE',
-            'GET',
-            'HEAD',
-            'OPTIONS',
-            'PATCH',
-            'POST',
-            'PUT',
+            RequestInterface::METHOD_DELETE,
+            RequestInterface::METHOD_GET,
+            RequestInterface::METHOD_HEAD,
+            RequestInterface::METHOD_OPTIONS,
+            RequestInterface::METHOD_PATCH,
+            RequestInterface::METHOD_POST,
+            RequestInterface::METHOD_PUT,
+            RequestInterface::METHOD_TRACE,
         ], true)) {
-            throw new InvalidArgumentException("Invalid HTTP Request Method: {$method}");
+            throw new InvalidArgumentException('Invalid HTTP Request Method: ' . $method);
         }
         $this->method = $valid;
         return $this;

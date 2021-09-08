@@ -69,6 +69,17 @@ registerArgumentsSet(
     \Framework\HTTP\MessageInterface::PROTOCOL_HTTP_3,
 );
 registerArgumentsSet(
+    'methods',
+    \Framework\HTTP\RequestInterface::METHOD_DELETE,
+    \Framework\HTTP\RequestInterface::METHOD_GET,
+    \Framework\HTTP\RequestInterface::METHOD_HEAD,
+    \Framework\HTTP\RequestInterface::METHOD_OPTIONS,
+    \Framework\HTTP\RequestInterface::METHOD_PATCH,
+    \Framework\HTTP\RequestInterface::METHOD_POST,
+    \Framework\HTTP\RequestInterface::METHOD_PUT,
+    \Framework\HTTP\RequestInterface::METHOD_TRACE,
+);
+registerArgumentsSet(
     'response_status_codes',
     \Framework\HTTP\ResponseInterface::CODE_CONTINUE,
     \Framework\HTTP\ResponseInterface::CODE_SWITCHING_PROTOCOLS,
@@ -242,6 +253,11 @@ expectedArguments(
     \Framework\HTTP\Message::setProtocol(),
     0,
     argumentsSet('protocols')
+);
+expectedArguments(
+    \Framework\HTTP\Message::setMethod(),
+    0,
+    argumentsSet('methods')
 );
 expectedArguments(
     \Framework\HTTP\Request::filterInput(),
