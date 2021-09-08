@@ -260,6 +260,8 @@ final class ResponseTest extends TestCase
             'x-custom-2' => 'bar',
         ], $this->response->getHeaders());
         self::assertSame('1', $this->response->getHeader('dnt'));
+        $this->response->appendHeader('dnt', 'ahaa');
+        self::assertSame('1, ahaa', $this->response->getHeader('dnt'));
         self::assertSame('bar', $this->response->getHeader('X-Custom-2'));
         $this->response->removeHeaders();
         self::assertSame([], $this->response->getHeaders());
@@ -437,16 +439,16 @@ final class ResponseTest extends TestCase
         $filename = __DIR__ . '/files/file.txt';
         $boundary = \md5($filename);
         $body = "\r\n--{$boundary}--\r\n"
-        . "Content-Type: application/octet-stream\r\n"
-        . "Content-Range: bytes 0-1/11\r\n"
-        . "\r\n"
-        . 'Hi'
-        . "\r\n--{$boundary}--\r\n"
-        . "Content-Type: application/octet-stream\r\n"
-        . "Content-Range: bytes 4-10/11\r\n"
-        . "\r\n"
-        . "Aplus!\n"
-        . "\r\n--{$boundary}--\r\n";
+            . "Content-Type: application/octet-stream\r\n"
+            . "Content-Range: bytes 0-1/11\r\n"
+            . "\r\n"
+            . 'Hi'
+            . "\r\n--{$boundary}--\r\n"
+            . "Content-Type: application/octet-stream\r\n"
+            . "Content-Range: bytes 4-10/11\r\n"
+            . "\r\n"
+            . "Aplus!\n"
+            . "\r\n--{$boundary}--\r\n";
         $length = \strlen($body);
         $startLine = 'HTTP/1.1 206 Partial Content';
         $headerLines = [
