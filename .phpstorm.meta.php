@@ -70,6 +70,7 @@ registerArgumentsSet(
 );
 registerArgumentsSet(
     'methods',
+    \Framework\HTTP\RequestInterface::METHOD_CONNECT,
     \Framework\HTTP\RequestInterface::METHOD_DELETE,
     \Framework\HTTP\RequestInterface::METHOD_GET,
     \Framework\HTTP\RequestInterface::METHOD_HEAD,
