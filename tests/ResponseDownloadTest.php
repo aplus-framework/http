@@ -205,7 +205,7 @@ final class ResponseDownloadTest extends TestCase
     {
         $this->response->setDownload(
             __FILE__,
-            delay:  3000000,
+            delay: 3000000,
             readLength: (int) \filesize(__FILE__) + 1
         );
         $startTime = \microtime(true);

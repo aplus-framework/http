@@ -555,7 +555,7 @@ final class RequestTest extends TestCase
 
     public function testIP() : void
     {
-        self::assertSame('192.168.1.100', $this->request->getIP());
+        self::assertSame('192.168.1.100', $this->request->getIp());
     }
 
     public function testIsAjax() : void
