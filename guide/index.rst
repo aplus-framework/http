@@ -1,6 +1,9 @@
 HTTP
 ====
 
+.. image:: image.png
+    :alt: Aplus Framework HTTP Library
+
 Aplus Framework HTTP (HyperText Transfer Protocol) Library.
 
 - `Installation`_
@@ -258,7 +261,7 @@ Response Body
     $body = $response->getBody(); // Oi!
     $response->setBody('Hi!');
     $body = $response->getBody(); // Hi!
-    echo ' How are you';
+    echo ' What is your name';
     $body = $response->getBody(); // Hi! What is your name
     $response->appendBody('???');
     $body = $response->getBody(); // Hi! What is your name???
