@@ -206,7 +206,6 @@ class Request extends Message implements RequestInterface
         $this->setMethod($this->getServer('REQUEST_METHOD'));
         $url = $this->isSecure() ? 'https' : 'http';
         $url .= '://' . $this->getServer('HTTP_HOST');
-        //$url .= ':' . $this->getPort();
         $url .= $this->getServer('REQUEST_URI');
         $this->setUrl($url);
         $this->setHost($this->getUrl()->getHost());
@@ -215,11 +214,10 @@ class Request extends Message implements RequestInterface
     protected function prepareHeaders() : void
     {
         foreach ($this->getServer() as $name => $value) {
-            if ( ! \str_starts_with($name, 'HTTP_')) {
-                continue;
+            if (\str_starts_with($name, 'HTTP_')) {
+                $name = \strtr(\substr($name, 5), ['_' => '-']);
+                $this->setHeader($name, $value);
             }
-            $name = \strtr(\substr($name, 5), ['_' => '-']);
-            $this->setHeader($name, $value);
         }
     }
 
