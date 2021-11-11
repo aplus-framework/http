@@ -250,6 +250,18 @@ registerArgumentsSet(
     \Framework\HTTP\ResponseInterface::HEADER_X_REQUEST_ID,
     \Framework\HTTP\ResponseInterface::HEADER_X_POWERED_BY,
 );
+registerArgumentsSet(
+    'cookie_samesite',
+    'Lax',
+    'None',
+    'Strict',
+    'Unset',
+);
+registerArgumentsSet(
+    'url_schemes',
+    'http',
+    'https',
+);
 expectedArguments(
     \Framework\HTTP\Message::setProtocol(),
     0,
@@ -329,4 +341,14 @@ expectedArguments(
     \Framework\HTTP\Response::getHeaderName(),
     0,
     argumentsSet('response_headers')
+);
+expectedArguments(
+    \Framework\HTTP\Cookie::setSameSite(),
+    0,
+    argumentsSet('cookie_samesite')
+);
+expectedArguments(
+    \Framework\HTTP\URL::setScheme(),
+    0,
+    argumentsSet('url_schemes')
 );
