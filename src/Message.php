@@ -389,7 +389,7 @@ abstract class Message implements MessageInterface
     private function getHeaderValueSeparator(string $headerName) : string
     {
         $headerName = \strtolower($headerName);
-        if (\in_array($headerName, \array_map('strtolower', [
+        if (\in_array($headerName, \array_map('\strtolower', [
             MessageInterface::HEADER_DATE,
             RequestInterface::HEADER_IF_MODIFIED_SINCE,
             RequestInterface::HEADER_IF_RANGE,

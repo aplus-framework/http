@@ -524,7 +524,7 @@ class Request extends Message implements RequestInterface
         $this->negotiation[$type] = \array_keys(static::parseQualityValues(
             $this->getServer('HTTP_ACCEPT' . ($type !== 'ACCEPT' ? '_' . $type : ''))
         ));
-        $this->negotiation[$type] = \array_map('strtolower', $this->negotiation[$type]);
+        $this->negotiation[$type] = \array_map('\strtolower', $this->negotiation[$type]);
         return $this->negotiation[$type];
     }
 
@@ -536,7 +536,7 @@ class Request extends Message implements RequestInterface
      */
     protected function negotiate(string $type, array $negotiable) : string
     {
-        $negotiable = \array_map('strtolower', $negotiable);
+        $negotiable = \array_map('\strtolower', $negotiable);
         foreach ($this->getNegotiableValues($type) as $item) {
             if (\in_array($item, $negotiable, true)) {
                 return $item;

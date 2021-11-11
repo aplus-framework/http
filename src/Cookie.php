@@ -309,7 +309,7 @@ class Cookie implements \Stringable
      */
     public static function parse(string $line) : ?Cookie
     {
-        $parts = \array_map('trim', \explode(';', $line, 20));
+        $parts = \array_map('\trim', \explode(';', $line, 20));
         $cookie = null;
         foreach ($parts as $key => $part) {
             [$arg, $val] = static::makeArgumentValue($part);
@@ -353,7 +353,7 @@ class Cookie implements \Stringable
      */
     public static function create(string $line) : array
     {
-        $items = \array_map('trim', \explode(';', $line, 3000));
+        $items = \array_map('\trim', \explode(';', $line, 3000));
         $cookies = [];
         foreach ($items as $item) {
             [$name, $value] = static::makeArgumentValue($item);
