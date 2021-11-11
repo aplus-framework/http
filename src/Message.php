@@ -17,7 +17,7 @@ use JetBrains\PhpStorm\Pure;
  * Class Message.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
- * @see https://tools.ietf.org/html/rfc7231
+ * @see https://datatracker.ietf.org/doc/html/rfc7231
  *
  * @package http
  */

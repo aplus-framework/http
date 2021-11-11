@@ -16,7 +16,7 @@ use RuntimeException;
 /**
  * Trait ResponseDownload.
  *
- * @see https://tools.ietf.org/html/rfc7233
+ * @see https://datatracker.ietf.org/doc/html/rfc7233
  *
  * @property Request $request
  *
@@ -115,7 +115,7 @@ trait ResponseDownload
     {
         $this->byteRanges = $this->parseByteRange($rangeLine);
         if ($this->byteRanges === false) {
-            // https://tools.ietf.org/html/rfc7233#section-4.2
+            // https://datatracker.ietf.org/doc/html/rfc7233#section-4.2
             $this->setStatus(static::CODE_RANGE_NOT_SATISFIABLE);
             $this->setHeader(static::HEADER_CONTENT_RANGE, '*/' . $this->filesize);
             return;
@@ -144,8 +144,8 @@ trait ResponseDownload
      * If return false, the Byte Ranges are invalid, so the Response must return
      * a 416 (Range Not Satisfiable) status.
      *
-     * @see https://tools.ietf.org/html/rfc7233#section-2.1
-     * @see https://tools.ietf.org/html/rfc7233#section-4.4
+     * @see https://datatracker.ietf.org/doc/html/rfc7233#section-2.1
+     * @see https://datatracker.ietf.org/doc/html/rfc7233#section-4.4
      *
      * @param string $line
      *

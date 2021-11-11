@@ -354,8 +354,6 @@ class Response extends Message implements ResponseInterface
         if (\headers_sent()) {
             throw new LogicException('Headers already is sent');
         }
-        // Per spec, MUST be sent with each request, if possible.
-        // http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html
         if ($this->getHeader(static::HEADER_DATE) === null) {
             $this->setDate(new DateTime());
         }

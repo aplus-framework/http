@@ -20,8 +20,8 @@ use JetBrains\PhpStorm\Pure;
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
- * @see https://tools.ietf.org/html/rfc6265
- * @see https://php.net/manual/en/function.setcookie.php
+ * @see https://datatracker.ietf.org/doc/html/rfc6265
+ * @see https://www.php.net/manual/en/function.setcookie.php
  *
  * @package http
  */

@@ -237,7 +237,7 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @see https://php.net/manual/en/wrappers.php.php#wrappers.php.input
+     * @see https://www.php.net/manual/en/wrappers.php.php#wrappers.php.input
      *
      * @return string
      */
