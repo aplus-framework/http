@@ -162,23 +162,31 @@ final class CookieTest extends TestCase
         self::assertTrue($cookie->isSecure());
         self::assertTrue($cookie->isHttpOnly());
         self::assertSame('Strict', $cookie->getSameSite());
-        self::assertNull(Cookie::parse('foo'));
+        $cookie = Cookie::parse('sid=foo;secure;;HttpOnly;');
+        self::assertSame('sid', $cookie->getName());
+        self::assertSame('foo', $cookie->getValue());
+        self::assertTrue($cookie->isSecure());
+        self::assertTrue($cookie->isHttpOnly());
+        self::assertNull(Cookie::parse('sid'));
+        self::assertNull(Cookie::parse(';sid=foo'));
     }
 
     public function testCreate() : void
     {
-        $cookies = Cookie::create('a=A; b=B;c=C;d;e = E');
-        self::assertCount(4, $cookies);
+        $cookies = Cookie::create('a=A; b=B;c=C;d;e = E ; =x; f  =  0 ');
+        self::assertCount(5, $cookies);
         self::assertSame([
             'A',
             'B',
             'C',
             'E',
+            '0',
         ], [
             $cookies['a']->getValue(),
             $cookies['b']->getValue(),
             $cookies['c']->getValue(),
             $cookies['e']->getValue(),
+            $cookies['f']->getValue(),
         ]);
         self::assertCount(0, Cookie::create('foo'));
     }

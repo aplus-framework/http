@@ -320,6 +320,9 @@ class Cookie implements \Stringable
                 }
                 break;
             }
+            if ($arg === null) {
+                continue;
+            }
             switch (\strtolower($arg)) {
                 case 'expires':
                     $cookie->setExpires($val);
@@ -372,8 +375,21 @@ class Cookie implements \Stringable
     protected static function makeArgumentValue(string $part) : array
     {
         $part = \array_pad(\explode('=', $part, 2), 2, null);
-        ! $part[0] ?: $part[0] = \trim($part[0]);
-        ! $part[1] ?: $part[1] = \trim($part[1]);
+        if ($part[0] !== null) {
+            $part[0] = static::trimmedOrNull($part[0]);
+        }
+        if ($part[1] !== null) {
+            $part[1] = static::trimmedOrNull($part[1]);
+        }
         return $part;
+    }
+
+    protected static function trimmedOrNull(string $value) : ?string
+    {
+        $value = \trim($value);
+        if ($value === '') {
+            $value = null;
+        }
+        return $value;
     }
 }
