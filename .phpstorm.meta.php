@@ -273,6 +273,11 @@ expectedArguments(
     argumentsSet('methods')
 );
 expectedArguments(
+    \Framework\HTTP\Message::hasMethod(),
+    0,
+    argumentsSet('methods')
+);
+expectedArguments(
     \Framework\HTTP\Request::filterInput(),
     2,
     argumentsSet('filters')

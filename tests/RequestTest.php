@@ -620,8 +620,10 @@ final class RequestTest extends TestCase
     public function testMethod() : void
     {
         self::assertSame('GET', $this->request->getMethod());
+        self::assertFalse($this->request->hasMethod('post'));
         $this->request->setMethod('post');
         self::assertSame('POST', $this->request->getMethod());
+        self::assertTrue($this->request->hasMethod('post'));
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid HTTP Request Method: Foo');
         $this->request->setMethod('Foo');

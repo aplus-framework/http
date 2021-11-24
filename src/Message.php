@@ -594,6 +594,18 @@ abstract class Message implements MessageInterface
     }
 
     /**
+     * @param string $method
+     *
+     * @throws InvalidArgumentException for invalid method
+     *
+     * @return bool
+     */
+    protected function hasMethod(string $method) : bool
+    {
+        return $this->getMethod() === $this->makeMethod($method);
+    }
+
+    /**
      * Set the request method.
      *
      * @param string $method One of: CONNECT, DELETE, GET, HEAD, OPTIONS, PATCH,
@@ -604,6 +616,12 @@ abstract class Message implements MessageInterface
      * @return static
      */
     protected function setMethod(string $method) : static
+    {
+        $this->method = $this->makeMethod($method);
+        return $this;
+    }
+
+    protected function makeMethod(string $method) : string
     {
         $valid = \strtoupper($method);
         if ( ! \in_array($valid, [
@@ -619,8 +637,7 @@ abstract class Message implements MessageInterface
         ], true)) {
             throw new InvalidArgumentException('Invalid HTTP Request Method: ' . $method);
         }
-        $this->method = $valid;
-        return $this;
+        return $valid;
     }
 
     /**
