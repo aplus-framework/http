@@ -606,19 +606,24 @@ class Response extends Message implements ResponseInterface
      * Set the ETag header.
      *
      * @param string $etag
+     * @param bool $strong
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag
      *
      * @return static
      */
-    public function setEtag(string $etag) : static
+    public function setEtag(string $etag, bool $strong = true) : static
     {
-        $this->setHeader(static::HEADER_ETAG, '"' . $etag . '"');
+        $etag = '"' . $etag . '"';
+        if ($strong === false) {
+            $etag = 'W/' . $etag;
+        }
+        $this->setHeader(static::HEADER_ETAG, $etag);
         return $this;
     }
 
     /**
-     * Se the Expires header.
+     * Set the Expires header.
      *
      * @param DateTime $datetime
      *

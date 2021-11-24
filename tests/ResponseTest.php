@@ -172,6 +172,8 @@ final class ResponseTest extends TestCase
         self::assertNull($this->response->getHeader('ETag'));
         $this->response->setEtag('foo');
         self::assertSame('"foo"', $this->response->getHeader('ETag'));
+        $this->response->setEtag('bar', false);
+        self::assertSame('W/"bar"', $this->response->getHeader('ETag'));
     }
 
     public function testAutoEtag() : void
