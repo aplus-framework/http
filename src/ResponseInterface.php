@@ -1040,6 +1040,8 @@ interface ResponseInterface extends MessageInterface
 
     public function getStatusCode() : int;
 
+    public function hasStatusCode(int $code) : bool;
+
     public function getStatusReason() : string;
 
     public function getStatus() : string;

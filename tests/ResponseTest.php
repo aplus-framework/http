@@ -366,11 +366,14 @@ final class ResponseTest extends TestCase
         self::assertSame('200 OK', $this->response->getStatus());
         self::assertSame(Response::CODE_OK, $this->response->getStatusCode());
         self::assertSame('OK', $this->response->getStatusReason());
+        self::assertFalse($this->response->hasStatusCode(201));
         $this->response->setStatus(Response::CODE_CREATED);
+        self::assertTrue($this->response->hasStatusCode(201));
         self::assertSame('201 Created', $this->response->getStatus());
         $this->response->setStatusReason('Other');
         self::assertSame('201 Other', $this->response->getStatus());
         $this->response->setStatus(483, 'Custom');
+        self::assertTrue($this->response->hasStatusCode(483));
         self::assertSame('483 Custom', $this->response->getStatus());
     }
 

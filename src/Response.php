@@ -226,10 +226,7 @@ class Response extends Message implements ResponseInterface
      */
     public function setStatusCode(int $code) : static
     {
-        if ($code < 100 || $code > 599) {
-            throw new InvalidArgumentException("Invalid status code: {$code}");
-        }
-        $this->statusCode = $code;
+        $this->statusCode = $this->makeStatusCode($code);
         return $this;
     }
 
@@ -242,6 +239,18 @@ class Response extends Message implements ResponseInterface
     public function getStatusCode() : int
     {
         return $this->statusCode;
+    }
+
+    /**
+     * @param int $code
+     *
+     * @throws InvalidArgumentException if status code is invalid
+     *
+     * @return bool
+     */
+    public function hasStatusCode(int $code) : bool
+    {
+        return $this->getStatusCode() === $this->makeStatusCode($code);
     }
 
     /**

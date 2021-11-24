@@ -318,6 +318,11 @@ expectedArguments(
     argumentsSet('response_status_codes')
 );
 expectedArguments(
+    \Framework\HTTP\Response::hasStatusCode(),
+    0,
+    argumentsSet('response_status_codes')
+);
+expectedArguments(
     \Framework\HTTP\Response::setStatusLine(),
     0,
     argumentsSet('response_status_codes')

@@ -640,6 +640,14 @@ abstract class Message implements MessageInterface
         return $valid;
     }
 
+    protected function makeStatusCode(int $code) : int
+    {
+        if ($code < 100 || $code > 599) {
+            throw new InvalidArgumentException("Invalid status code: {$code}");
+        }
+        return $code;
+    }
+
     /**
      * Gets the requested URL.
      *
