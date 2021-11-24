@@ -273,6 +273,11 @@ expectedArguments(
     argumentsSet('methods')
 );
 expectedArguments(
+    \Framework\HTTP\Message::hasMethod(),
+    0,
+    argumentsSet('methods')
+);
+expectedArguments(
     \Framework\HTTP\Request::filterInput(),
     2,
     argumentsSet('filters')
@@ -313,6 +318,11 @@ expectedArguments(
     argumentsSet('response_status_codes')
 );
 expectedArguments(
+    \Framework\HTTP\Response::hasStatusCode(),
+    0,
+    argumentsSet('response_status_codes')
+);
+expectedArguments(
     \Framework\HTTP\Response::setStatusLine(),
     0,
     argumentsSet('response_status_codes')
@@ -323,12 +333,22 @@ expectedArguments(
     argumentsSet('request_headers')
 );
 expectedArguments(
+    \Framework\HTTP\Request::hasHeader(),
+    0,
+    argumentsSet('request_headers')
+);
+expectedArguments(
     \Framework\HTTP\Request::getHeaderName(),
     0,
     argumentsSet('request_headers')
 );
 expectedArguments(
     \Framework\HTTP\Response::getHeader(),
+    0,
+    argumentsSet('response_headers')
+);
+expectedArguments(
+    \Framework\HTTP\Response::hasHeader(),
     0,
     argumentsSet('response_headers')
 );

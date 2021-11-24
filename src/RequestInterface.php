@@ -278,5 +278,7 @@ interface RequestInterface extends MessageInterface
 
     public function getMethod() : string;
 
+    public function hasMethod(string $method) : bool;
+
     public function getUrl() : URL;
 }

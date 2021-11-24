@@ -751,6 +751,18 @@ class Request extends Message implements RequestInterface
     }
 
     /**
+     * @param string $method
+     *
+     * @throws InvalidArgumentException for invalid method
+     *
+     * @return bool
+     */
+    public function hasMethod(string $method) : bool
+    {
+        return parent::hasMethod($method);
+    }
+
+    /**
      * Gets data from the last request, if it was redirected.
      *
      * @param string|null $key a key name or null to get all data

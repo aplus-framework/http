@@ -14,9 +14,9 @@ use Stringable;
 /**
  * Interface MessageInterface.
  *
- * @package http
- *
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP
+ *
+ * @package http
  */
 interface MessageInterface extends Stringable
 {
@@ -174,6 +174,8 @@ interface MessageInterface extends Stringable
     public function getStartLine() : string;
 
     public function getHeader(string $name) : ?string;
+
+    public function hasHeader(string $name, string $value = null) : bool;
 
     /**
      * @return array<string,string>

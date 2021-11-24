@@ -274,9 +274,11 @@ abstract class Message implements MessageInterface
     }
 
     #[Pure]
-    public function hasHeader(string $name) : bool
+    public function hasHeader(string $name, string $value = null) : bool
     {
-        return isset($this->headers[\strtolower($name)]);
+        return $value === null
+            ? $this->getHeader($name) !== null
+            : $this->getHeader($name) === $value;
     }
 
     #[Pure]
@@ -594,6 +596,18 @@ abstract class Message implements MessageInterface
     }
 
     /**
+     * @param string $method
+     *
+     * @throws InvalidArgumentException for invalid method
+     *
+     * @return bool
+     */
+    protected function hasMethod(string $method) : bool
+    {
+        return $this->getMethod() === $this->makeMethod($method);
+    }
+
+    /**
      * Set the request method.
      *
      * @param string $method One of: CONNECT, DELETE, GET, HEAD, OPTIONS, PATCH,
@@ -604,6 +618,12 @@ abstract class Message implements MessageInterface
      * @return static
      */
     protected function setMethod(string $method) : static
+    {
+        $this->method = $this->makeMethod($method);
+        return $this;
+    }
+
+    protected function makeMethod(string $method) : string
     {
         $valid = \strtoupper($method);
         if ( ! \in_array($valid, [
@@ -619,8 +639,15 @@ abstract class Message implements MessageInterface
         ], true)) {
             throw new InvalidArgumentException('Invalid HTTP Request Method: ' . $method);
         }
-        $this->method = $valid;
-        return $this;
+        return $valid;
+    }
+
+    protected function makeStatusCode(int $code) : int
+    {
+        if ($code < 100 || $code > 599) {
+            throw new InvalidArgumentException("Invalid status code: {$code}");
+        }
+        return $code;
     }
 
     /**
