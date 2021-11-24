@@ -393,7 +393,8 @@ class Response extends Message implements ResponseInterface
         $etag = '"' . $etag . '"';
         // Cache of unchanged resources:
         $ifNoneMatch = $this->getRequest()->getHeader(Request::HEADER_IF_NONE_MATCH);
-        if ($ifNoneMatch && $ifNoneMatch === $etag
+        if ($ifNoneMatch
+            && ($ifNoneMatch === $etag || $ifNoneMatch === 'W/' . $etag)
             && \in_array($this->getRequest()->getMethod(), ['GET', 'HEAD'])
         ) {
             $this->setNotModified();
