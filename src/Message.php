@@ -274,9 +274,11 @@ abstract class Message implements MessageInterface
     }
 
     #[Pure]
-    public function hasHeader(string $name) : bool
+    public function hasHeader(string $name, string $value = null) : bool
     {
-        return isset($this->headers[\strtolower($name)]);
+        return $value === null
+            ? $this->getHeader($name) !== null
+            : $this->getHeader($name) === $value;
     }
 
     #[Pure]

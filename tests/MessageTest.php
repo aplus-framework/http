@@ -49,6 +49,8 @@ final class MessageTest extends TestCase
         self::assertNull($this->message->getHeader('from'));
         $this->message->setHeader('from', 'foo@localhost');
         self::assertTrue($this->message->hasHeader('from'));
+        self::assertTrue($this->message->hasHeader('from', 'foo@localhost'));
+        self::assertFalse($this->message->hasHeader('from', 'bar@localhost'));
         self::assertSame('foo@localhost', $this->message->getHeader('from'));
         self::assertSame(['from' => 'foo@localhost'], $this->message->getHeaders());
         $this->message->setHeader('from', 'bar@localhost');

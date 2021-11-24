@@ -333,12 +333,22 @@ expectedArguments(
     argumentsSet('request_headers')
 );
 expectedArguments(
+    \Framework\HTTP\Request::hasHeader(),
+    0,
+    argumentsSet('request_headers')
+);
+expectedArguments(
     \Framework\HTTP\Request::getHeaderName(),
     0,
     argumentsSet('request_headers')
 );
 expectedArguments(
     \Framework\HTTP\Response::getHeader(),
+    0,
+    argumentsSet('response_headers')
+);
+expectedArguments(
+    \Framework\HTTP\Response::hasHeader(),
     0,
     argumentsSet('response_headers')
 );
