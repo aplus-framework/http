@@ -313,12 +313,12 @@ expectedArguments(
     argumentsSet('json_encode_flags')
 );
 expectedArguments(
-    \Framework\HTTP\Response::setStatusCode(),
+    \Framework\HTTP\Message::setStatusCode(),
     0,
     argumentsSet('response_status_codes')
 );
 expectedArguments(
-    \Framework\HTTP\Response::hasStatusCode(),
+    \Framework\HTTP\Message::hasStatusCode(),
     0,
     argumentsSet('response_status_codes')
 );

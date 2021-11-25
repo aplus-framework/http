@@ -36,6 +36,10 @@ abstract class Message implements MessageInterface
      */
     protected string $method;
     /**
+     * HTTP Response Status Code.
+     */
+    protected int $statusCode;
+    /**
      * HTTP Message Body.
      */
     protected string $body = '';
@@ -640,6 +644,28 @@ abstract class Message implements MessageInterface
             throw new InvalidArgumentException('Invalid HTTP Request Method: ' . $method);
         }
         return $valid;
+    }
+
+    protected function setStatusCode(int $code) : static
+    {
+        $this->statusCode = $this->makeStatusCode($code);
+        return $this;
+    }
+
+    /**
+     * Get the status code.
+     *
+     * @return int
+     */
+    #[Pure]
+    protected function getStatusCode() : int
+    {
+        return $this->statusCode;
+    }
+
+    protected function hasStatusCode(int $code) : bool
+    {
+        return $this->getStatusCode() === $this->makeStatusCode($code);
     }
 
     protected function makeStatusCode(int $code) : int

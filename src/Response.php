@@ -226,8 +226,7 @@ class Response extends Message implements ResponseInterface
      */
     public function setStatusCode(int $code) : static
     {
-        $this->statusCode = $this->makeStatusCode($code);
-        return $this;
+        return parent::setStatusCode($code);
     }
 
     /**
@@ -238,7 +237,7 @@ class Response extends Message implements ResponseInterface
     #[Pure]
     public function getStatusCode() : int
     {
-        return $this->statusCode;
+        return parent::getStatusCode();
     }
 
     /**
@@ -250,7 +249,7 @@ class Response extends Message implements ResponseInterface
      */
     public function hasStatusCode(int $code) : bool
     {
-        return $this->getStatusCode() === $this->makeStatusCode($code);
+        return parent::hasStatusCode($code);
     }
 
     /**
