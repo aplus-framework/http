@@ -262,6 +262,29 @@ registerArgumentsSet(
     'http',
     'https',
 );
+registerArgumentsSet(
+    'fastcgi_params',
+    'CONTENT_LENGTH',
+    'CONTENT_TYPE',
+    'DOCUMENT_ROOT',
+    'DOCUMENT_URI',
+    'GATEWAY_INTERFACE',
+    'HTTPS',
+    'QUERY_STRING',
+    'REMOTE_ADDR',
+    'REMOTE_PORT',
+    'REMOTE_USER',
+    'REQUEST_METHOD',
+    'REQUEST_SCHEME',
+    'REQUEST_URI',
+    'SCRIPT_FILENAME',
+    'SCRIPT_NAME',
+    'SERVER_ADDR',
+    'SERVER_NAME',
+    'SERVER_PORT',
+    'SERVER_PROTOCOL',
+    'SERVER_SOFTWARE',
+);
 expectedArguments(
     \Framework\HTTP\Message::setProtocol(),
     0,
@@ -291,6 +314,11 @@ expectedArguments(
     \Framework\HTTP\Request::getPost(),
     1,
     argumentsSet('filters')
+);
+expectedArguments(
+    \Framework\HTTP\Request::getServer(),
+    0,
+    argumentsSet('fastcgi_params')
 );
 expectedArguments(
     \Framework\HTTP\Request::getServer(),
