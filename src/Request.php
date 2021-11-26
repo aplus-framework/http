@@ -86,7 +86,6 @@ class Request extends Message implements RequestInterface
         $this->prepareStatusLine();
         $this->prepareHeaders();
         $this->prepareCookies();
-        $this->prepareUserAgent();
         $this->prepareFiles();
     }
 
@@ -225,14 +224,6 @@ class Request extends Message implements RequestInterface
     {
         foreach ($this->filterInput(\INPUT_COOKIE) as $name => $value) {
             $this->setCookie(new Cookie($name, $value));
-        }
-    }
-
-    protected function prepareUserAgent() : void
-    {
-        $userAgent = $this->getServer('HTTP_USER_AGENT');
-        if ($userAgent) {
-            $this->setUserAgent($userAgent);
         }
     }
 

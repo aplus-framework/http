@@ -59,8 +59,10 @@ class UserAgent implements \JsonSerializable, \Stringable
             'ppc mac' => 'Power PC Mac',
             'freebsd' => 'FreeBSD',
             'ppc' => 'Macintosh',
-            'linux' => 'Linux',
+            'ubuntu' => 'Ubuntu',
             'debian' => 'Debian',
+            'fedora' => 'Fedora',
+            'linux' => 'Linux',
             'sunos' => 'Sun Solaris',
             'beos' => 'BeOS',
             'apachebench' => 'ApacheBench',
@@ -81,6 +83,8 @@ class UserAgent implements \JsonSerializable, \Stringable
             'OPR' => 'Opera',
             'Flock' => 'Flock',
             'Edge' => 'Spartan',
+            'Edg' => 'Edge',
+            'EdgA' => 'Edge',
             'Chrome' => 'Chrome',
             // Opera 10+ always reports Opera/9.80 and appends
             // Version/<real version> to the user agent string
