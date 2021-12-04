@@ -15,7 +15,7 @@
         "download",
         "rest"
     ],
-    "homepage": "https://docs.aplus-framework.com/guides/libraries/http/",
+    "homepage": "https://aplus-framework.com/packages/http",
     "license": "MIT",
     "authors": [
         {
@@ -59,13 +59,13 @@
     "support": {
         "email": "support@aplus-framework.com",
         "issues": "https://gitlab.com/aplus-framework/libraries/http/issues",
-        "wiki": "https://gitlab.com/aplus-framework/libraries/http/wikis/home",
+        "forum": "https://aplus-framework.com/forum",
         "source": "https://gitlab.com/aplus-framework/libraries/http",
         "docs": "https://docs.aplus-framework.com/guides/libraries/http/"
     },
     "funding": [
         {
-            "type": "other",
+            "type": "Aplus Sponsor",
             "url": "https://aplus-framework.com/sponsor"
         }
     ]
