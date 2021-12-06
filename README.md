@@ -2,6 +2,7 @@
 
 # Aplus Framework HTTP Library
 
+- [Homepage](https://aplus-framework.com/packages/http)
 - [User Guide](https://docs.aplus-framework.com/guides/libraries/http/index.html)
 - [API Documentation](https://docs.aplus-framework.com/packages/http.html)
 
