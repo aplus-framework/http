@@ -834,7 +834,7 @@ class UploadedFile
     }
 
     /**
-     * Gets the file extension based in the filename sent from the client.
+     * Gets the file extension based on the filename sent from the client.
      *
      * WARNING! This info is not secure. Use the getExtension method.
      *
@@ -850,6 +850,11 @@ class UploadedFile
         return $this->clientExtension;
     }
 
+    /**
+     * Gets a file extension based on the MIME content-type.
+     *
+     * @return string
+     */
     public function getExtension() : string
     {
         if (isset($this->extension)) {
@@ -867,7 +872,7 @@ class UploadedFile
     }
 
     /**
-     * Gets the file MIME Content-type sent from the client.
+     * Gets the file MIME content-type sent from the client.
      *
      * WARNING! This info is not secure. Use the getType method.
      *
@@ -882,6 +887,8 @@ class UploadedFile
     }
 
     /**
+     * Gets the error code associated with this file upload.
+     *
      * @return int
      */
     #[Pure]
@@ -891,6 +898,8 @@ class UploadedFile
     }
 
     /**
+     * Gets the error message based on the file upload error code.
+     *
      * WARNING! This message should not be showed to the final user.
      * Use Validation errors instead.
      *
@@ -905,6 +914,8 @@ class UploadedFile
     }
 
     /**
+     * Gets the uploaded file name sent in the request.
+     *
      * @return string
      */
     #[Pure]
@@ -914,6 +925,8 @@ class UploadedFile
     }
 
     /**
+     * Gets the size, in bytes, of the uploaded file.
+     *
      * @return int
      */
     #[Pure]
@@ -923,6 +936,9 @@ class UploadedFile
     }
 
     /**
+     * Gets the temporary filename of the file in which the uploaded file was
+     * stored on the server.
+     *
      * @return string
      */
     #[Pure]
@@ -932,6 +948,11 @@ class UploadedFile
     }
 
     /**
+     * Gets the full path as submitted by the browser.
+     *
+     * WARNING! This value does not always contain a real directory structure,
+     * and cannot be trusted.
+     *
      * @since 4.5
      *
      * @return string
@@ -942,6 +963,11 @@ class UploadedFile
         return $this->fullPath;
     }
 
+    /**
+     * The destination filename to which the uploaded file was moved.
+     *
+     * @return string|null
+     */
     #[Pure]
     public function getDestination() : ?string
     {
@@ -949,6 +975,8 @@ class UploadedFile
     }
 
     /**
+     * Gets the MIME content-type from the uploaded file stored on the server.
+     *
      * @return string
      */
     public function getType() : string
@@ -960,12 +988,22 @@ class UploadedFile
         return $this->type;
     }
 
+    /**
+     * Tells if the uploaded file has been moved to a new destination.
+     *
+     * @return bool
+     */
     #[Pure]
     public function isMoved() : bool
     {
         return $this->isMoved;
     }
 
+    /**
+     * Tells if the file upload has no errors and is stored in the temporary directory.
+     *
+     * @return bool
+     */
     #[Pure]
     public function isValid() : bool
     {
@@ -973,9 +1011,9 @@ class UploadedFile
     }
 
     /**
-     * Moves an uploaded file to a new location.
+     * Moves the uploaded file to a new destination.
      *
-     * @param string $destination The destination of the moved file
+     * @param string $destination The filename to move the file
      * @param bool $overwrite
      *
      * @return bool
