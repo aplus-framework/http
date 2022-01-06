@@ -41,14 +41,14 @@
         "php": ">=8.0",
         "ext-fileinfo": "*",
         "ext-json": "*",
-        "aplus/helpers": "^2.2"
+        "aplus/helpers": "^2.3"
     },
     "require-dev": {
         "ext-xdebug": "*",
-        "aplus/coding-standard": "^1.9",
-        "ergebnis/composer-normalize": "^2.15",
+        "aplus/coding-standard": "^1.12",
+        "ergebnis/composer-normalize": "^2.23",
         "jetbrains/phpstorm-attributes": "^1.0",
-        "phpmd/phpmd": "^2.10",
+        "phpmd/phpmd": "^2.11",
         "phpstan/phpstan": "^0.12",
         "phpunit/phpunit": "^9.5"
     },
@@ -65,6 +65,9 @@
         }
     },
     "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true
+        },
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true
