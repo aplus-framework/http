@@ -29,6 +29,7 @@ final class UploadedFileTest extends TestCase
      */
     protected array $file2 = [
         'name' => 'file.txt',
+        'full_path' => 'foo/bar/file.txt',
         'type' => 'foo/baz',
         'size' => 3,
         'tmp_name' => __DIR__ . '/files/file.txt',
@@ -90,6 +91,12 @@ final class UploadedFileTest extends TestCase
     {
         self::assertSame('logo.jpg', $this->uploadedFile->getName());
         self::assertSame('file.txt', $this->uploadedFile2->getName());
+    }
+
+    public function testGetFullPath() : void
+    {
+        self::assertSame('logo.jpg', $this->uploadedFile->getFullPath());
+        self::assertSame('foo/bar/file.txt', $this->uploadedFile2->getFullPath());
     }
 
     public function testGetSize() : void

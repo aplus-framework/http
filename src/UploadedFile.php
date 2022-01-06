@@ -23,6 +23,7 @@ class UploadedFile
     protected string $tmpName;
     protected int $error;
     protected int $size;
+    protected string $fullPath;
     protected string $clientType;
     protected string $clientExtension;
     protected string $extension;
@@ -829,6 +830,7 @@ class UploadedFile
         $this->tmpName = $file['tmp_name'];
         $this->error = $file['error'];
         $this->size = $file['size'];
+        $this->fullPath = $file['full_path'] ?? $file['name'];
     }
 
     /**
@@ -927,6 +929,17 @@ class UploadedFile
     public function getTmpName() : string
     {
         return $this->tmpName;
+    }
+
+    /**
+     * @since 4.5
+     *
+     * @return string
+     */
+    #[Pure]
+    public function getFullPath() : string
+    {
+        return $this->fullPath;
     }
 
     #[Pure]
