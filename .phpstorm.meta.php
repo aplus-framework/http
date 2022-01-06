@@ -149,6 +149,18 @@ registerArgumentsSet(
     \Framework\HTTP\ResponseInterface::CODE_NETWORK_CONNECT_TIMEOUT_ERROR,
 );
 registerArgumentsSet(
+    'response_redirect_codes',
+    \Framework\HTTP\ResponseInterface::CODE_MULTIPLE_CHOICES,
+    \Framework\HTTP\ResponseInterface::CODE_MOVED_PERMANENTLY,
+    \Framework\HTTP\ResponseInterface::CODE_FOUND,
+    \Framework\HTTP\ResponseInterface::CODE_SEE_OTHER,
+    \Framework\HTTP\ResponseInterface::CODE_NOT_MODIFIED,
+    \Framework\HTTP\ResponseInterface::CODE_USE_PROXY,
+    \Framework\HTTP\ResponseInterface::CODE_SWITCH_PROXY,
+    \Framework\HTTP\ResponseInterface::CODE_TEMPORARY_REDIRECT,
+    \Framework\HTTP\ResponseInterface::CODE_PERMANENT_REDIRECT,
+);
+registerArgumentsSet(
     'request_headers',
     \Framework\HTTP\MessageInterface::HEADER_CACHE_CONTROL,
     \Framework\HTTP\MessageInterface::HEADER_CONNECTION,
@@ -285,6 +297,81 @@ registerArgumentsSet(
     'SERVER_PROTOCOL',
     'SERVER_SOFTWARE',
 );
+registerArgumentsSet(
+    'hash_algos',
+    'adler32',
+    'crc32',
+    'crc32b',
+    'crc32c',
+    'fnv132',
+    'fnv164',
+    'fnv1a32',
+    'fnv1a64',
+    'gost',
+    'gost-crypto',
+    'haval128,3',
+    'haval128,4',
+    'haval128,5',
+    'haval160,3',
+    'haval160,4',
+    'haval160,5',
+    'haval192,3',
+    'haval192,4',
+    'haval192,5',
+    'haval224,3',
+    'haval224,4',
+    'haval224,5',
+    'haval256,3',
+    'haval256,4',
+    'haval256,5',
+    'joaat',
+    'md2',
+    'md4',
+    'md5',
+    'murmur3a',
+    'murmur3c',
+    'murmur3f',
+    'ripemd128',
+    'ripemd160',
+    'ripemd256',
+    'ripemd320',
+    'sha1',
+    'sha224',
+    'sha256',
+    'sha3-224',
+    'sha3-256',
+    'sha3-384',
+    'sha3-512',
+    'sha384',
+    'sha512',
+    'sha512/224',
+    'sha512/256',
+    'snefru',
+    'snefru256',
+    'tiger128,3',
+    'tiger128,4',
+    'tiger160,3',
+    'tiger160,4',
+    'tiger192,3',
+    'tiger192,4',
+    'whirlpool',
+    'xxh128',
+    'xxh3',
+    'xxh32',
+    'xxh64',
+);
+expectedReturnValues(
+    \Framework\HTTP\MessageInterface::getProtocol(),
+    argumentsSet('protocols')
+);
+expectedReturnValues(
+    \Framework\HTTP\RequestInterface::getMethod(),
+    argumentsSet('methods')
+);
+expectedReturnValues(
+    \Framework\HTTP\ResponseInterface::getStatusCode(),
+    argumentsSet('response_status_codes')
+);
 expectedArguments(
     \Framework\HTTP\Message::setProtocol(),
     0,
@@ -356,39 +443,49 @@ expectedArguments(
     argumentsSet('response_status_codes')
 );
 expectedArguments(
-    \Framework\HTTP\Request::getHeader(),
+    \Framework\HTTP\RequestInterface::getHeader(),
     0,
     argumentsSet('request_headers')
 );
 expectedArguments(
-    \Framework\HTTP\Request::hasHeader(),
+    \Framework\HTTP\RequestInterface::hasHeader(),
     0,
     argumentsSet('request_headers')
 );
 expectedArguments(
-    \Framework\HTTP\Request::getHeaderName(),
+    \Framework\HTTP\RequestInterface::getHeaderName(),
     0,
     argumentsSet('request_headers')
 );
 expectedArguments(
-    \Framework\HTTP\Response::getHeader(),
+    \Framework\HTTP\ResponseInterface::getHeader(),
     0,
     argumentsSet('response_headers')
 );
 expectedArguments(
-    \Framework\HTTP\Response::hasHeader(),
+    \Framework\HTTP\ResponseInterface::hasHeader(),
     0,
     argumentsSet('response_headers')
 );
 expectedArguments(
-    \Framework\HTTP\Response::setHeader(),
+    \Framework\HTTP\ResponseInterface::setHeader(),
     0,
     argumentsSet('response_headers')
 );
 expectedArguments(
-    \Framework\HTTP\Response::getHeaderName(),
+    \Framework\HTTP\ResponseInterface::getHeaderName(),
     0,
     argumentsSet('response_headers')
+);
+expectedArguments(
+    \Framework\HTTP\Response::redirect(),
+    2,
+    argumentsSet('response_redirect_codes')
+);
+expectedArguments(
+    \Framework\HTTP\Response::setAutoEtag(),
+    1,
+    argumentsSet('hash_algos')
 );
 expectedArguments(
     \Framework\HTTP\Cookie::setSameSite(),
@@ -399,4 +496,15 @@ expectedArguments(
     \Framework\HTTP\URL::setScheme(),
     0,
     argumentsSet('url_schemes')
+);
+expectedReturnValues(
+    \Framework\HTTP\UploadedFile::getError(),
+    \UPLOAD_ERR_OK,
+    \UPLOAD_ERR_INI_SIZE,
+    \UPLOAD_ERR_FORM_SIZE,
+    \UPLOAD_ERR_PARTIAL,
+    \UPLOAD_ERR_NO_FILE,
+    \UPLOAD_ERR_NO_TMP_DIR,
+    \UPLOAD_ERR_CANT_WRITE,
+    \UPLOAD_ERR_EXTENSION,
 );
