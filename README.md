@@ -2,10 +2,11 @@
 
 # Aplus Framework HTTP Library
 
-- [Homepage](https://aplus-framework.com/packages/http)
+- [Home](https://aplus-framework.com/packages/http)
 - [User Guide](https://docs.aplus-framework.com/guides/libraries/http/index.html)
 - [API Documentation](https://docs.aplus-framework.com/packages/http.html)
 
+[![tests](https://github.com/aplus-framework/http/actions/workflows/tests.yml/badge.svg)](https://github.com/aplus-framework/http/actions/workflows/tests.yml)
 [![pipeline](https://gitlab.com/aplus-framework/libraries/http/badges/master/pipeline.svg)](https://gitlab.com/aplus-framework/libraries/http/-/pipelines?scope=branches)
 [![coverage](https://gitlab.com/aplus-framework/libraries/http/badges/master/coverage.svg?job=test:php)](https://aplus-framework.gitlab.io/libraries/http/coverage/)
 [![packagist](https://img.shields.io/packagist/v/aplus/http)](https://packagist.org/packages/aplus/http)
