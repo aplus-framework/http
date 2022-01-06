@@ -227,6 +227,20 @@ final class ResponseTest extends TestCase
         self::assertSame('', $this->response->getBody());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
+    public function testAutoEtagHashAlgo() : void
+    {
+        $body = '<h1>I have many names!</h1>';
+        $etag = '"' . \hash('crc32', $body) . '"';
+        $this->response = new Response(new RequestMock(['domain.tld']));
+        $this->response->setBody($body);
+        $this->response->setAutoEtag(hashAlgo: 'crc32');
+        $this->response->send();
+        self::assertSame($etag, $this->response->getHeader('ETag'));
+    }
+
     public function testHeader() : void
     {
         self::assertSame([], $this->response->getHeaders());

@@ -41,6 +41,7 @@ class Response extends Message implements ResponseInterface
     protected ?string $sendedBody = null;
     protected bool $inToString = false;
     protected bool $autoEtag = false;
+    protected string $autoEtagHashAlgo = 'md5';
 
     /**
      * Response constructor.
@@ -396,7 +397,7 @@ class Response extends Message implements ResponseInterface
         // Content-Length is required by Firefox,
         // otherwise it does not send the If-None-Match header
         $this->setContentLength(\strlen($this->getBody()));
-        $etag = \md5($this->getBody());
+        $etag = \hash($this->autoEtagHashAlgo, $this->getBody());
         $this->setEtag($etag);
         $etag = '"' . $etag . '"';
         // Cache of unchanged resources:
@@ -510,14 +511,18 @@ class Response extends Message implements ResponseInterface
      * negotiate the response with it.
      *
      * @param bool $active
+     * @param string|null $hashAlgo
      *
      * @see Response::negotiateEtag()
      *
      * @return static
      */
-    public function setAutoEtag(bool $active = true) : static
+    public function setAutoEtag(bool $active = true, string $hashAlgo = null) : static
     {
         $this->autoEtag = $active;
+        if ($hashAlgo !== null) {
+            $this->autoEtagHashAlgo = $hashAlgo;
+        }
         return $this;
     }
 
