@@ -90,6 +90,20 @@ final class AntiCSRFTest extends TestCase
         self::assertFalse($this->anti->verify());
     }
 
+    public function testIsSafeMethod() : void
+    {
+        $this->prepare();
+        self::assertFalse($this->anti->isSafeMethod());
+        $this->request->setMethod('GET');
+        self::assertTrue($this->anti->isSafeMethod());
+        $this->request->setMethod('HEAD');
+        self::assertTrue($this->anti->isSafeMethod());
+        $this->request->setMethod('OPTIONS');
+        self::assertTrue($this->anti->isSafeMethod());
+        $this->request->setMethod('PUT');
+        self::assertFalse($this->anti->isSafeMethod());
+    }
+
     public function testEnableAndDisable() : void
     {
         $this->prepare();

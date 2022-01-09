@@ -81,15 +81,24 @@ class AntiCSRF
     }
 
     /**
+     * Sets the anti-csrf token into the session.
+     *
+     * @param string|null $token A custom anti-csrf token or null to generate one
+     *
      * @return static
      */
-    protected function setToken() : static
+    public function setToken(string $token = null) : static
     {
-        $_SESSION['$']['csrf_token'] = \base64_encode(\random_bytes(8));
+        $_SESSION['$']['csrf_token'] = $token ?? \base64_encode(\random_bytes(8));
         return $this;
     }
 
-    protected function getUserToken() : ?string
+    /**
+     * Gets the user token from the request input form.
+     *
+     * @return string|null
+     */
+    public function getUserToken() : ?string
     {
         return $this->request->getParsedBody($this->getTokenName());
     }
@@ -107,11 +116,7 @@ class AntiCSRF
         if ($this->isEnabled() === false) {
             return true;
         }
-        if (\in_array($this->request->getMethod(), [
-            'GET',
-            'HEAD',
-            'OPTIONS',
-        ], true)) {
+        if ($this->isSafeMethod()) {
             return true;
         }
         if ($this->getUserToken() === null) {
@@ -125,6 +130,21 @@ class AntiCSRF
             $this->setVerified();
         }
         return true;
+    }
+
+    /**
+     * Safe HTTP Request methods are: GET, HEAD and OPTIONS.
+     *
+     * @return bool
+     */
+    #[Pure]
+    public function isSafeMethod() : bool
+    {
+        return \in_array($this->request->getMethod(), [
+            RequestInterface::METHOD_GET,
+            RequestInterface::METHOD_HEAD,
+            RequestInterface::METHOD_OPTIONS,
+        ], true);
     }
 
     /**
