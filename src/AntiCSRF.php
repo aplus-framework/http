@@ -15,7 +15,7 @@ use LogicException;
 /**
  * Class AntiCSRF.
  *
- * @see https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html
+ * @see https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern
  * @see https://stackoverflow.com/q/6287903/6027968
  * @see https://portswigger.net/web-security/csrf
  * @see https://www.netsparker.com/blog/web-security/protecting-website-using-anti-csrf-token/
@@ -30,7 +30,7 @@ class AntiCSRF
     protected bool $enabled = true;
 
     /**
-     * CSRF constructor.
+     * AntiCSRF constructor.
      *
      * @param Request $request
      */
@@ -46,6 +46,8 @@ class AntiCSRF
     }
 
     /**
+     * Gets the anti-csrf token name.
+     *
      * @return string
      */
     #[Pure]
@@ -55,6 +57,8 @@ class AntiCSRF
     }
 
     /**
+     * Sets the anti-csrf token name.
+     *
      * @param string $tokenName
      *
      * @return static
@@ -66,6 +70,8 @@ class AntiCSRF
     }
 
     /**
+     * Gets the anti-csrf token from the session.
+     *
      * @return string|null
      */
     #[Pure]
@@ -89,6 +95,11 @@ class AntiCSRF
     }
 
     /**
+     * Verifies the request input token, if the verification is enabled.
+     * The verification always succeed on HTTP GET, HEAD and OPTIONS methods.
+     * If verification is successful with other HTTP methods, a new token is
+     * generated.
+     *
      * @return bool
      */
     public function verify() : bool
@@ -116,6 +127,16 @@ class AntiCSRF
         return true;
     }
 
+    /**
+     * Validates if a user token is equals the session token.
+     *
+     * This method can be used to validate tokens not received through forms.
+     * For example: Through a request header, JSON, etc.
+     *
+     * @param string $userToken
+     *
+     * @return bool
+     */
     public function validate(string $userToken) : bool
     {
         return \hash_equals($_SESSION['$']['csrf_token'], $userToken);
@@ -139,6 +160,8 @@ class AntiCSRF
     }
 
     /**
+     * Gets the HTML form hidden input if the verification is enabled.
+     *
      * @return string
      */
     #[Pure]
@@ -153,6 +176,10 @@ class AntiCSRF
     }
 
     /**
+     * Tells if the verification is enabled.
+     *
+     * @see AntiCSRF::verify()
+     *
      * @return bool
      */
     #[Pure]
@@ -162,6 +189,10 @@ class AntiCSRF
     }
 
     /**
+     * Enables the Anti CSRF verification.
+     *
+     * @see AntiCSRF::verify()
+     *
      * @return static
      */
     public function enable() : static
@@ -171,6 +202,10 @@ class AntiCSRF
     }
 
     /**
+     * Disables the Anti CSRF verification.
+     *
+     * @see AntiCSRF::verify()
+     *
      * @return static
      */
     public function disable() : static
