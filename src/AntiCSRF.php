@@ -106,7 +106,7 @@ class AntiCSRF
         if ($this->getUserToken() === null) {
             return false;
         }
-        if ( ! \hash_equals($_SESSION['$']['csrf_token'], $this->getUserToken())) {
+        if ( ! $this->validate($this->getUserToken())) {
             return false;
         }
         if ( ! $this->isVerified()) {
@@ -114,6 +114,11 @@ class AntiCSRF
             $this->setVerified();
         }
         return true;
+    }
+
+    public function validate(string $userToken) : bool
+    {
+        return \hash_equals($_SESSION['$']['csrf_token'], $userToken);
     }
 
     #[Pure]
