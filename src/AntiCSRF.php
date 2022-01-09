@@ -37,7 +37,7 @@ class AntiCSRF
     public function __construct(Request $request)
     {
         if (\session_status() !== \PHP_SESSION_ACTIVE) {
-            throw new LogicException('Session must be active to use CSRF class');
+            throw new LogicException('Session must be active to use AntiCSRF class');
         }
         $this->request = $request;
         if ($this->getToken() === null) {

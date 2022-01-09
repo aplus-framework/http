@@ -33,7 +33,7 @@ final class AntiCSRFTest extends TestCase
     public function testSessionDisabled() : void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Session must be active to use CSRF class');
+        $this->expectExceptionMessage('Session must be active to use AntiCSRF class');
         (new AntiCSRF(new RequestMock()));
     }
 
