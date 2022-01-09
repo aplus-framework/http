@@ -79,13 +79,7 @@ class AntiCSRF
      */
     protected function setToken() : static
     {
-        $token = '';
-        $alnum = 'abcdefghijklmnopqrstuvxywzABCDEFGHIJKLMNOPQRSTUVXYWZ0123456789';
-        $max = \strlen($alnum) - 1;
-        for ($i = 0; $i < 6; $i++) {
-            $token .= $alnum[\rand(0, $max)];
-        }
-        $_SESSION['$']['csrf_token'] = \bin2hex($token);
+        $_SESSION['$']['csrf_token'] = \base64_encode(\random_bytes(8));
         return $this;
     }
 
