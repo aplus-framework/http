@@ -63,7 +63,6 @@ class HTTPCollector extends Collector
         <p><strong>URL:</strong> <?= $this->request->getUrl() ?></p>
         <p><strong>Server:</strong> <?= $this->request->getServer('SERVER_SOFTWARE') ?></p>
         <?= $this->renderRequestUserAgent() ?>
-        <h2>Headers</h2>
         <?php
         echo $this->renderHeadersTable($this->request->getHeaderLines());
         echo $this->renderRequestBody();
@@ -213,7 +212,6 @@ class HTTPCollector extends Collector
         <p><strong>Protocol:</strong> <?= \htmlentities($this->response->getProtocol()) ?></p>
         <p><strong>Status:</strong> <?= \htmlentities($this->response->getStatus()) ?></p>
         <p><strong>Sent:</strong> <?= $this->response->isSent() ? 'Yes' : 'No' ?></p>
-        <h2>Headers</h2>
         <?php
         echo $this->renderHeadersTable($this->response->getHeaderLines());
         echo $this->renderResponseCookies();
@@ -262,12 +260,18 @@ class HTTPCollector extends Collector
 
     protected function renderResponseBody() : string
     {
-        $body = $this->response->getBody();
-        if ($body === '') {
-            return '';
-        }
         \ob_start(); ?>
         <h2>Body Contents</h2>
+        <?php
+        if ( ! $this->response->isSent()) {
+            echo '<p>Response has not been sent.</p>';
+            return \ob_get_clean(); // @phpstan-ignore-line
+        }
+        $body = $this->response->getBody();
+        if ($body === '') {
+            echo '<p>Body is empty.</p>';
+            return \ob_get_clean(); // @phpstan-ignore-line
+        } ?>
         <pre><code class="<?= $this->getCodeLanguage(
             $this->response->getHeader('Content-Type')
         ) ?>"><?= \htmlentities($body) ?></code></pre>
@@ -283,6 +287,12 @@ class HTTPCollector extends Collector
     protected function renderHeadersTable(array $headerLines) : string
     {
         \ob_start(); ?>
+        <h2>Headers</h2>
+        <?php
+        if (empty($headerLines)) {
+            echo '<p>No headers.</p>';
+            return \ob_get_clean(); // @phpstan-ignore-line
+        } ?>
         <table>
             <thead>
             <tr>
