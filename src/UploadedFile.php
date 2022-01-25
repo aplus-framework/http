@@ -981,11 +981,15 @@ class UploadedFile
      */
     public function getType() : string
     {
-        if ( ! isset($this->type)) {
-            $this->type = \mime_content_type($this->tmpName)
-                ?: 'application/octet-stream';
+        if (isset($this->type)) {
+            return $this->type;
         }
-        return $this->type;
+        $type = '';
+        $file = $this->isMoved() ? $this->getDestination() : $this->getTmpName();
+        if ($file !== '') {
+            $type = \mime_content_type($file) ?: 'application/octet-stream';
+        }
+        return $this->type = $type;
     }
 
     /**
@@ -1020,10 +1024,10 @@ class UploadedFile
      */
     public function move(string $destination, bool $overwrite = false) : bool
     {
-        $destination = \realpath($destination);
+        /*$destination = \realpath($destination);
         if ($destination === false) {
             return false;
-        }
+        }*/
         if ($overwrite === false && \is_file($destination)) {
             return false;
         }

@@ -66,6 +66,8 @@ final class UploadedFileTest extends TestCase
     public function testGetType() : void
     {
         self::assertSame('image/png', $this->uploadedFile->getType());
+        self::assertSame('image/png', $this->uploadedFile->getType());
+        self::assertSame('text/plain', $this->uploadedFile2->getType());
         self::assertSame('text/plain', $this->uploadedFile2->getType());
     }
 
