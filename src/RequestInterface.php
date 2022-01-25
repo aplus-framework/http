@@ -152,6 +152,30 @@ interface RequestInterface extends MessageInterface
      */
     public const HEADER_REFERER = 'Referer';
     /**
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Sec-Fetch-Dest
+     *
+     * @var string
+     */
+    public const HEADER_SEC_FETCH_DEST = 'Sec-Fetch-Dest';
+    /**
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Sec-Fetch-Mode
+     *
+     * @var string
+     */
+    public const HEADER_SEC_FETCH_MODE = 'Sec-Fetch-Mode';
+    /**
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Sec-Fetch-Site
+     *
+     * @var string
+     */
+    public const HEADER_SEC_FETCH_SITE = 'Sec-Fetch-Site';
+    /**
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Sec-Fetch-User
+     *
+     * @var string
+     */
+    public const HEADER_SEC_FETCH_USER = 'Sec-Fetch-User';
+    /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/TE
      *
      * @var string
