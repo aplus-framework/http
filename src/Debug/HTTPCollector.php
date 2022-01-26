@@ -44,7 +44,6 @@ class HTTPCollector extends Collector
         \ob_start(); ?>
         <h1>Request</h1>
         <?= $this->renderRequest() ?>
-        <hr>
         <h1>Response</h1>
         <?= $this->renderResponse() ?>
         <?php
@@ -88,6 +87,9 @@ class HTTPCollector extends Collector
         } elseif ($userAgent->isRobot()) {
             $type = 'Robot';
             $name = $userAgent->getRobot();
+        }
+        if ($type === '') {
+            return '';
         }
         \ob_start(); ?>
         <h2>User-Agent</h2>
@@ -281,6 +283,10 @@ class HTTPCollector extends Collector
         <?php
         if ( ! $this->response->isSent()) {
             echo '<p>Response has not been sent.</p>';
+            return \ob_get_clean(); // @phpstan-ignore-line
+        }
+        if ($this->response->hasDownload()) {
+            echo '<p>Body has downloadable content.</p>';
             return \ob_get_clean(); // @phpstan-ignore-line
         }
         $body = $this->response->getBody();
