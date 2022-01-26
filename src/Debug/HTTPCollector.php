@@ -213,6 +213,22 @@ class HTTPCollector extends Collector
         <p><strong>Status:</strong> <?= \htmlentities($this->response->getStatus()) ?></p>
         <p><strong>Sent:</strong> <?= $this->response->isSent() ? 'Yes' : 'No' ?></p>
         <?php
+        if ($this->response->isSent()):
+            $info = [];
+        foreach ($this->getData() as $data) {
+            if (isset($data['message'], $data['type'])
+                    && $data['message'] === 'response'
+                    && $data['type'] === 'send'
+                ) {
+                $info = $data;
+                break;
+            }
+        } ?>
+            <p>
+                <strong>Time Sending:</strong> <?= \round($info['end'] - $info['start'], 6) ?> seconds
+            </p>
+        <?php
+        endif;
         echo $this->renderHeadersTable($this->response->getHeaderLines());
         echo $this->renderResponseCookies();
         echo $this->renderResponseBody();

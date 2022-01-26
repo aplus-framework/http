@@ -12,6 +12,7 @@ namespace Framework\HTTP;
 use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
+use Framework\HTTP\Debug\HTTPCollector;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use JsonException;
@@ -43,6 +44,7 @@ class Response extends Message implements ResponseInterface
     protected bool $inToString = false;
     protected bool $autoEtag = false;
     protected string $autoEtagHashAlgo = 'md5';
+    protected HTTPCollector $debugCollector;
 
     /**
      * Response constructor.
@@ -328,6 +330,23 @@ class Response extends Message implements ResponseInterface
      * @throws LogicException if Response already is sent
      */
     public function send() : void
+    {
+        if (isset($this->debugCollector)) {
+            $start = \microtime(true);
+            $this->sendAll();
+            $end = \microtime(true);
+            $this->debugCollector->addData([
+                'start' => $start,
+                'end' => $end,
+                'message' => 'response',
+                'type' => 'send',
+            ]);
+            return;
+        }
+        $this->sendAll();
+    }
+
+    protected function sendAll() : void
     {
         if ($this->isSent) {
             throw new LogicException('Response already is sent');
@@ -687,6 +706,13 @@ class Response extends Message implements ResponseInterface
     public function setNotModified() : static
     {
         $this->setStatus(Status::NOT_MODIFIED);
+        return $this;
+    }
+
+    public function setDebugCollector(HTTPCollector $debugCollector) : static
+    {
+        $this->debugCollector = $debugCollector;
+        $this->debugCollector->setResponse($this);
         return $this;
     }
 
