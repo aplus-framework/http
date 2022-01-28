@@ -39,6 +39,26 @@ class HTTPCollector extends Collector
         return $this;
     }
 
+    public function getActivities() : array
+    {
+        $activities = [];
+        foreach ($this->getData() as $data) {
+            if (isset($data['message'], $data['type'])
+                && $data['message'] === 'response'
+                && $data['type'] === 'send'
+            ) {
+                $activities[] = [
+                    'collector' => $this->getName(),
+                    'class' => static::class,
+                    'description' => 'Send response',
+                    'start' => $data['start'],
+                    'end' => $data['end'],
+                ];
+            }
+        }
+        return $activities;
+    }
+
     public function getContents() : string
     {
         \ob_start(); ?>
