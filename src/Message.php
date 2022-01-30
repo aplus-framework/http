@@ -59,6 +59,7 @@ abstract class Message implements MessageInterface
      * Standard Headers.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
+     * @deprecated
      *
      * @var array<string,string>
      */
@@ -166,6 +167,7 @@ abstract class Message implements MessageInterface
      * Standard Response Status Codes and Reasons.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+     * @deprecated
      *
      * @var array<int,string>
      */
@@ -724,15 +726,29 @@ abstract class Message implements MessageInterface
      * @param string $name header name
      *
      * @return string
+     *
+     * @deprecated
      */
-    #[Pure]
     public static function getHeaderName(string $name) : string
     {
+        \trigger_error(
+            'Method ' . __METHOD__ . ' is deprecated',
+            \E_USER_DEPRECATED
+        );
         return static::$standardHeaders[\strtolower($name)] ?? $name;
     }
 
+    /**
+     * @param string $name
+     *
+     * @deprecated
+     */
     public static function setHeaderName(string $name) : void
     {
+        \trigger_error(
+            'Method ' . __METHOD__ . ' is deprecated',
+            \E_USER_DEPRECATED
+        );
         static::$standardHeaders[\strtolower($name)] = $name;
     }
 

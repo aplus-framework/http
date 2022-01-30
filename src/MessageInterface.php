@@ -53,48 +53,56 @@ interface MessageInterface extends Stringable
     // General headers ---------------------------------------------------------
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_CACHE_CONTROL = 'Cache-Control';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_CONNECTION = 'Connection';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_CONTENT_DISPOSITION = 'Content-Disposition';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Date
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_DATE = 'Date';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Keep-Alive
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_KEEP_ALIVE = 'Keep-Alive';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_PRAGMA = 'Pragma';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Via
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_VIA = 'Via';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Warning
+     * @deprecated
      *
      * @var string
      */
@@ -102,24 +110,28 @@ interface MessageInterface extends Stringable
     // Representation headers --------------------------------------------------
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_CONTENT_ENCODING = 'Content-Encoding';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_CONTENT_LANGUAGE = 'Content-Language';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Location
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_CONTENT_LOCATION = 'Content-Location';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
+     * @deprecated
      *
      * @var string
      */
@@ -127,36 +139,42 @@ interface MessageInterface extends Stringable
     // Payload headers ---------------------------------------------------------
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Length
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_CONTENT_LENGTH = 'Content-Length';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_CONTENT_RANGE = 'Content-Range';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Link
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_LINK = 'Link';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Trailer
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_TRAILER = 'Trailer';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_TRANSFER_ENCODING = 'Transfer-Encoding';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade
+     * @deprecated
      *
      * @var string
      */
@@ -164,6 +182,7 @@ interface MessageInterface extends Stringable
     // Custom headers ----------------------------------------------------------
     /**
      * @see https://riptutorial.com/http-headers/topic/10581/x-request-id
+     * @deprecated
      *
      * @var string
      */

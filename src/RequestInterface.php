@@ -21,198 +21,231 @@ interface RequestInterface extends MessageInterface
     // Request headers ---------------------------------------------------------
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_ACCEPT = 'Accept';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Charset
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_ACCEPT_CHARSET = 'Accept-Charset';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_ACCEPT_ENCODING = 'Accept-Encoding';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_ACCEPT_LANGUAGE = 'Accept-Language';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Request-Headers
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_ACCESS_CONTROL_REQUEST_HEADERS = 'Access-Control-Request-Headers';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Request-Method
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_ACCESS_CONTROL_REQUEST_METHOD = 'Access-Control-Request-Method';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_AUTHORIZATION = 'Authorization';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_COOKIE = 'Cookie';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/DNT
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_DNT = 'DNT';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_EXPECT = 'Expect';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_FORWARDED = 'Forwarded';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/From
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_FROM = 'From';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Host
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_HOST = 'Host';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Match
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_IF_MATCH = 'If-Match';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Modified-Since
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_IF_MODIFIED_SINCE = 'If-Modified-Since';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_IF_NONE_MATCH = 'If-None-Match';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Range
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_IF_RANGE = 'If-Range';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Unmodified-Since
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_IF_UNMODIFIED_SINCE = 'If-Unmodified-Since';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_ORIGIN = 'Origin';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Proxy-Authorization
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_PROXY_AUTHORIZATION = 'Proxy-Authorization';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Range
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_RANGE = 'Range';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_REFERER = 'Referer';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Sec-Fetch-Dest
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_SEC_FETCH_DEST = 'Sec-Fetch-Dest';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Sec-Fetch-Mode
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_SEC_FETCH_MODE = 'Sec-Fetch-Mode';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Sec-Fetch-Site
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_SEC_FETCH_SITE = 'Sec-Fetch-Site';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Sec-Fetch-User
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_SEC_FETCH_USER = 'Sec-Fetch-User';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/TE
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_TE = 'TE';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade-Insecure-Requests
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_UPGRADE_INSECURE_REQUESTS = 'Upgrade-Insecure-Requests';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_USER_AGENT = 'User-Agent';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_X_FORWARDED_FOR = 'X-Forwarded-For';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Host
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_X_FORWARDED_HOST = 'X-Forwarded-Host';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto
+     * @deprecated
      *
      * @var string
      */
     public const HEADER_X_FORWARDED_PROTO = 'X-Forwarded-Proto';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Requested-With
+     * @deprecated
      *
      * @var string
      */
