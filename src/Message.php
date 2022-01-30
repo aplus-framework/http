@@ -621,8 +621,20 @@ abstract class Message implements MessageInterface
         return $this;
     }
 
+    /**
+     * @param string $method
+     *
+     * @return string
+     *
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     protected function makeMethod(string $method) : string
     {
+        \trigger_error(
+            'Method ' . __METHOD__ . ' is deprecated',
+            \E_USER_DEPRECATED
+        );
         $valid = \strtoupper($method);
         if ( ! \in_array($valid, [
             RequestInterface::METHOD_CONNECT,

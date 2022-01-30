@@ -255,6 +255,7 @@ interface RequestInterface extends MessageInterface
      * resource. It can be used to open a tunnel.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/CONNECT
+     * @deprecated
      *
      * @var string
      */
@@ -263,6 +264,7 @@ interface RequestInterface extends MessageInterface
      * The HTTP DELETE request method deletes the specified resource.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/DELETE
+     * @deprecated
      *
      * @var string
      */
@@ -273,6 +275,7 @@ interface RequestInterface extends MessageInterface
      * include data).
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET
+     * @deprecated
      *
      * @var string
      */
@@ -282,6 +285,7 @@ interface RequestInterface extends MessageInterface
      * HEAD request's URL was instead requested with the HTTP GET method.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/HEAD
+     * @deprecated
      *
      * @var string
      */
@@ -292,6 +296,7 @@ interface RequestInterface extends MessageInterface
      * asterisk (*) to refer to the entire server.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS
+     * @deprecated
      *
      * @var string
      */
@@ -300,6 +305,7 @@ interface RequestInterface extends MessageInterface
      * The HTTP PATCH request method applies partial modifications to a resource.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH
+     * @deprecated
      *
      * @var string
      */
@@ -310,6 +316,7 @@ interface RequestInterface extends MessageInterface
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST
      * @see MessageInterface::HEADER_CONTENT_TYPE
+     * @deprecated
      *
      * @var string
      */
@@ -319,6 +326,7 @@ interface RequestInterface extends MessageInterface
      * representation of the target resource with the request payload.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PUT
+     * @deprecated
      *
      * @var string
      */
@@ -328,6 +336,7 @@ interface RequestInterface extends MessageInterface
      * the target resource, providing a useful debugging mechanism.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/TRACE
+     * @deprecated
      *
      * @var string
      */
