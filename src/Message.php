@@ -602,7 +602,7 @@ abstract class Message implements MessageInterface
      */
     protected function hasMethod(string $method) : bool
     {
-        return $this->getMethod() === $this->makeMethod($method);
+        return $this->getMethod() === RequestMethod::validate($method);
     }
 
     /**
@@ -617,7 +617,7 @@ abstract class Message implements MessageInterface
      */
     protected function setMethod(string $method) : static
     {
-        $this->method = $this->makeMethod($method);
+        $this->method = RequestMethod::validate($method);
         return $this;
     }
 
