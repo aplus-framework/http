@@ -311,7 +311,7 @@ abstract class Message implements MessageInterface
         if ($value === null) {
             return null;
         }
-        $name = static::getHeaderName($name);
+        $name = Header::getName($name);
         return $name . ': ' . $value;
     }
 
@@ -323,7 +323,7 @@ abstract class Message implements MessageInterface
     {
         $lines = [];
         foreach ($this->getHeaders() as $name => $value) {
-            $name = static::getHeaderName($name);
+            $name = Header::getName($name);
             if (\str_contains($value, "\n")) {
                 foreach (\explode("\n", $value) as $val) {
                     $lines[] = $name . ': ' . $val;
