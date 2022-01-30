@@ -400,19 +400,7 @@ abstract class Message implements MessageInterface
      */
     private function getHeaderValueSeparator(string $headerName) : string
     {
-        $headerName = \strtolower($headerName);
-        if (\in_array($headerName, \array_map('\strtolower', [
-            MessageInterface::HEADER_DATE,
-            RequestInterface::HEADER_IF_MODIFIED_SINCE,
-            RequestInterface::HEADER_IF_RANGE,
-            RequestInterface::HEADER_IF_UNMODIFIED_SINCE,
-            ResponseInterface::HEADER_EXPIRES,
-            ResponseInterface::HEADER_LAST_MODIFIED,
-            ResponseInterface::HEADER_PROXY_AUTHENTICATE,
-            ResponseInterface::HEADER_RETRY_AFTER,
-            ResponseInterface::HEADER_SET_COOKIE,
-            ResponseInterface::HEADER_WWW_AUTHENTICATE,
-        ]), true)) {
+        if (Header::isMultiline($headerName)) {
             return "\n";
         }
         return ', ';

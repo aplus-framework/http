@@ -275,4 +275,31 @@ class Header
     {
         static::$headers[\strtolower($name)] = $name;
     }
+
+    /**
+     * @return array<string>
+     */
+    public static function getMultilines() : array
+    {
+        return [
+            'date',
+            'expires',
+            'if-modified-since',
+            'if-range',
+            'if-unmodified-since',
+            'last-modified',
+            'proxy-authenticate',
+            'retry-after',
+            'set-cookie',
+            'www-authenticate',
+        ];
+    }
+
+    public static function isMultiline(string $name) : bool
+    {
+        if (\in_array(\strtolower($name), static::getMultilines(), true)) {
+            return true;
+        }
+        return false;
+    }
 }

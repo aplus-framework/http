@@ -24,6 +24,20 @@ final class HeaderTest extends TestCase
         self::assertSame('HOsT', Header::getName('host'));
     }
 
+    public function testGetMultilines() : void
+    {
+        foreach (Header::getMultilines() as $name) {
+            self::assertSame(\strtolower($name), $name);
+        }
+    }
+
+    public function testIsMultiline() : void
+    {
+        self::assertTrue(Header::isMultiline('Date'));
+        self::assertTrue(Header::isMultiline('SET-COOKIE'));
+        self::assertFalse(Header::isMultiline('Etag'));
+    }
+
     public function testConstants() : void
     {
         $reflection = new \ReflectionClass(Header::class);
