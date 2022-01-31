@@ -297,7 +297,7 @@ class Request extends Message implements RequestInterface
     public function getAuthType() : ?string
     {
         if ($this->authType === null) {
-            $auth = $this->getHeader(static::HEADER_AUTHORIZATION);
+            $auth = $this->getHeader(RequestHeader::AUTHORIZATION);
             if ($auth) {
                 $this->parseAuth($auth);
             }
@@ -642,7 +642,7 @@ class Request extends Message implements RequestInterface
     #[Pure]
     public function getContentType() : ?string
     {
-        return $this->getHeader(static::HEADER_CONTENT_TYPE);
+        return $this->getHeader(Header::CONTENT_TYPE);
     }
 
     /**
@@ -721,7 +721,7 @@ class Request extends Message implements RequestInterface
         if (isset($this->id)) {
             return $this->id === false ? null : $this->id;
         }
-        $this->id = $this->getHeader(static::HEADER_X_REQUEST_ID) ?? false;
+        $this->id = $this->getHeader(Header::X_REQUEST_ID) ?? false;
         return $this->getId();
     }
 
@@ -843,7 +843,7 @@ class Request extends Message implements RequestInterface
     {
         if ( ! isset($this->referrer)) {
             $this->referrer = false;
-            $referer = $this->getHeader(static::HEADER_REFERER);
+            $referer = $this->getHeader(RequestHeader::REFERER);
             if ($referer !== null) {
                 try {
                     $this->referrer = new URL($referer);
@@ -896,7 +896,7 @@ class Request extends Message implements RequestInterface
         if (isset($this->userAgent) && $this->userAgent instanceof UserAgent) {
             return $this->userAgent;
         }
-        $userAgent = $this->getHeader(static::HEADER_USER_AGENT);
+        $userAgent = $this->getHeader(RequestHeader::USER_AGENT);
         $userAgent ? $this->setUserAgent($userAgent) : $this->userAgent = false;
         return $this->userAgent ?: null;
     }
@@ -928,7 +928,7 @@ class Request extends Message implements RequestInterface
         if (isset($this->isAjax)) {
             return $this->isAjax;
         }
-        $received = $this->getHeader(static::HEADER_X_REQUESTED_WITH);
+        $received = $this->getHeader(RequestHeader::X_REQUESTED_WITH);
         return $this->isAjax = ($received
             && \strtolower($received) === 'xmlhttprequest');
     }

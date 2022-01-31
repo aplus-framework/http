@@ -141,9 +141,9 @@ class AntiCSRF
     public function isSafeMethod() : bool
     {
         return \in_array($this->request->getMethod(), [
-            RequestInterface::METHOD_GET,
-            RequestInterface::METHOD_HEAD,
-            RequestInterface::METHOD_OPTIONS,
+           RequestMethod::GET,
+           RequestMethod::HEAD,
+           RequestMethod::OPTIONS,
         ], true);
     }
 
