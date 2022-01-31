@@ -10,6 +10,7 @@
 namespace Framework\HTTP\Debug;
 
 use Framework\Debug\Collector;
+use Framework\Debug\Debugger;
 use Framework\Helpers\ArraySimple;
 use Framework\HTTP\Request;
 use Framework\HTTP\Response;
@@ -213,7 +214,7 @@ class HTTPCollector extends Collector
                     <td><?= \htmlentities($file->getType()) ?></td>
                     <td><?= \htmlentities($file->getClientType()) ?></td>
                     <td><?= \htmlentities($file->getExtension()) ?></td>
-                    <td><?= $this->toSize($file->getSize()) ?></td>
+                    <td><?= Debugger::convertSize($file->getSize()) ?></td>
                     <td><?= $file->getDestination() ?></td>
                     <td><?= $file->getError() ?></td>
                     <td><?= \htmlentities($file->getErrorMessage()) ?></td>
@@ -364,22 +365,5 @@ class HTTPCollector extends Collector
             $language = \explode('/', $contentType[0], 2)[1] ?? $language;
         }
         return 'language-' . $language;
-    }
-
-    protected function toSize(int $size) : string
-    {
-        $num = 1024 * 1024 * 1024;
-        if ($size >= $num) {
-            return \round($size / $num, 3) . ' GB';
-        }
-        $num = 1024 * 1024;
-        if ($size >= $num) {
-            return \round($size / $num, 3) . ' MB';
-        }
-        $num = 1024;
-        if ($size >= $num) {
-            return \round($size / $num, 3) . ' KB';
-        }
-        return $size . ' Bytes';
     }
 }
