@@ -29,6 +29,7 @@ interface ResponseInterface extends MessageInterface
      * is already finished.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/100
+     * @deprecated
      *
      * @var int
      */
@@ -43,6 +44,8 @@ interface ResponseInterface extends MessageInterface
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/101
      *
      * @var int
+     *
+     * @deprecated
      */
     public const CODE_SWITCHING_PROTOCOLS = 101;
     /**
@@ -52,6 +55,7 @@ interface ResponseInterface extends MessageInterface
      * request, but no response is available yet.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/102
+     * @deprecated
      *
      * @var int
      */
@@ -67,6 +71,8 @@ interface ResponseInterface extends MessageInterface
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103
      *
      * @var int
+     *
+     * @deprecated
      */
     public const CODE_EARLY_HINTS = 103;
     // Status codes (Successful responses) -------------------------------------
@@ -89,6 +95,7 @@ interface ResponseInterface extends MessageInterface
      * server.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200
+     * @deprecated
      *
      * @var int
      */
@@ -101,6 +108,7 @@ interface ResponseInterface extends MessageInterface
      * PUT requests.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201
+     * @deprecated
      *
      * @var int
      */
@@ -114,6 +122,7 @@ interface ResponseInterface extends MessageInterface
      * another process or server handles the request, or for batch processing.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/202
+     * @deprecated
      *
      * @var int
      */
@@ -128,6 +137,7 @@ interface ResponseInterface extends MessageInterface
      * is preferred to this status.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/203
+     * @deprecated
      *
      * @var int
      */
@@ -140,6 +150,7 @@ interface ResponseInterface extends MessageInterface
      * with the new ones.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204
+     * @deprecated
      *
      * @var int
      */
@@ -150,6 +161,7 @@ interface ResponseInterface extends MessageInterface
      * Tells the user-agent to reset the document which sent this request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/205
+     * @deprecated
      *
      * @var int
      */
@@ -165,6 +177,8 @@ interface ResponseInterface extends MessageInterface
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/206
      *
      * @var int
+     *
+     * @deprecated
      */
     public const CODE_PARTIAL_CONTENT = 206;
     /**
@@ -174,6 +188,7 @@ interface ResponseInterface extends MessageInterface
      * multiple status codes might be appropriate.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/207
+     * @deprecated
      *
      * @var int
      */
@@ -186,6 +201,7 @@ interface ResponseInterface extends MessageInterface
      * collection.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/208
+     * @deprecated
      *
      * @var int
      */
@@ -198,6 +214,7 @@ interface ResponseInterface extends MessageInterface
      * applied to the current instance.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/226
+     * @deprecated
      *
      * @var int
      */
@@ -212,6 +229,7 @@ interface ResponseInterface extends MessageInterface
      * the user can pick.)
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/300
+     * @deprecated
      *
      * @var int
      */
@@ -223,6 +241,7 @@ interface ResponseInterface extends MessageInterface
      * URL is given in the response.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/301
+     * @deprecated
      *
      * @var int
      */
@@ -236,6 +255,7 @@ interface ResponseInterface extends MessageInterface
      * requests.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/302
+     * @deprecated
      *
      * @var int
      */
@@ -247,6 +267,7 @@ interface ResponseInterface extends MessageInterface
      * resource at another URI with a GET request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/303
+     * @deprecated
      *
      * @var int
      */
@@ -259,6 +280,7 @@ interface ResponseInterface extends MessageInterface
      * version of the response.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/304
+     * @deprecated
      *
      * @var int
      */
@@ -271,6 +293,7 @@ interface ResponseInterface extends MessageInterface
      * due to security concerns regarding in-band configuration of a proxy.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/305
+     * @deprecated
      *
      * @var int
      */
@@ -282,6 +305,7 @@ interface ResponseInterface extends MessageInterface
      * a previous version of the HTTP/1.1 specification.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/306
+     * @deprecated
      *
      * @var int
      */
@@ -297,6 +321,7 @@ interface ResponseInterface extends MessageInterface
      * used in the second request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/307
+     * @deprecated
      *
      * @var int
      */
@@ -316,6 +341,8 @@ interface ResponseInterface extends MessageInterface
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/308
      *
      * @var int
+     *
+     * @deprecated
      */
     public const CODE_PERMANENT_REDIRECT = 308;
     // Status codes (Client errors) --------------------------------------------
@@ -325,6 +352,7 @@ interface ResponseInterface extends MessageInterface
      * The server could not understand the request due to invalid syntax.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+     * @deprecated
      *
      * @var int
      */
@@ -337,6 +365,7 @@ interface ResponseInterface extends MessageInterface
      * itself to get the requested response.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+     * @deprecated
      *
      * @var int
      */
@@ -349,6 +378,7 @@ interface ResponseInterface extends MessageInterface
      * status code is used very rarely and no standard convention exists.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402
+     * @deprecated
      *
      * @var int
      */
@@ -364,6 +394,8 @@ interface ResponseInterface extends MessageInterface
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
      *
      * @var int
+     *
+     * @deprecated
      */
     public const CODE_FORBIDDEN = 403;
     /**
@@ -377,6 +409,7 @@ interface ResponseInterface extends MessageInterface
      * most famous one due to its frequent occurrence on the web.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+     * @deprecated
      *
      * @var int
      */
@@ -391,6 +424,8 @@ interface ResponseInterface extends MessageInterface
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405
      *
      * @var int
+     *
+     * @deprecated
      */
     public const CODE_METHOD_NOT_ALLOWED = 405;
     /**
@@ -401,6 +436,7 @@ interface ResponseInterface extends MessageInterface
      * criteria given by the user agent.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406
+     * @deprecated
      *
      * @var int
      */
@@ -415,6 +451,8 @@ interface ResponseInterface extends MessageInterface
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/407
      *
      * @var int
+     *
+     * @deprecated
      */
     public const CODE_PROXY_AUTHENTICATION_REQUIRED = 407;
     /**
@@ -428,6 +466,7 @@ interface ResponseInterface extends MessageInterface
      * servers merely shut down the connection without sending this message.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/408
+     * @deprecated
      *
      * @var int
      */
@@ -439,6 +478,7 @@ interface ResponseInterface extends MessageInterface
      * the server.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/409
+     * @deprecated
      *
      * @var int
      */
@@ -454,6 +494,7 @@ interface ResponseInterface extends MessageInterface
      * been deleted with this status code.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/410
+     * @deprecated
      *
      * @var int
      */
@@ -468,6 +509,8 @@ interface ResponseInterface extends MessageInterface
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/411
      *
      * @var int
+     *
+     * @deprecated
      */
     public const CODE_LENGTH_REQUIRED = 411;
     /**
@@ -477,6 +520,7 @@ interface ResponseInterface extends MessageInterface
      * does not meet.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/412
+     * @deprecated
      *
      * @var int
      */
@@ -491,6 +535,8 @@ interface ResponseInterface extends MessageInterface
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/413
      *
      * @var int
+     *
+     * @deprecated
      */
     public const CODE_PAYLOAD_TOO_LARGE = 413;
     /**
@@ -500,6 +546,7 @@ interface ResponseInterface extends MessageInterface
      * interpret.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/414
+     * @deprecated
      *
      * @var int
      */
@@ -511,6 +558,7 @@ interface ResponseInterface extends MessageInterface
      * so the server is rejecting the request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/415
+     * @deprecated
      *
      * @var int
      */
@@ -526,6 +574,8 @@ interface ResponseInterface extends MessageInterface
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/416
      *
      * @var int
+     *
+     * @deprecated
      */
     public const CODE_RANGE_NOT_SATISFIABLE = 416;
     /**
@@ -538,6 +588,8 @@ interface ResponseInterface extends MessageInterface
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/417
      *
      * @var int
+     *
+     * @deprecated
      */
     public const CODE_EXPECTATION_FAILED = 417;
     /**
@@ -546,6 +598,7 @@ interface ResponseInterface extends MessageInterface
      * The server refuses the attempt to brew coffee with a teapot.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418
+     * @deprecated
      *
      * @var int
      */
@@ -559,6 +612,7 @@ interface ResponseInterface extends MessageInterface
      * in the request URI.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/421
+     * @deprecated
      *
      * @var int
      */
@@ -570,6 +624,7 @@ interface ResponseInterface extends MessageInterface
      * errors.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422
+     * @deprecated
      *
      * @var int
      */
@@ -580,6 +635,7 @@ interface ResponseInterface extends MessageInterface
      * The resource that is being accessed is locked.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/423
+     * @deprecated
      *
      * @var int
      */
@@ -590,6 +646,7 @@ interface ResponseInterface extends MessageInterface
      * The request failed due to failure of a previous request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/424
+     * @deprecated
      *
      * @var int
      */
@@ -601,6 +658,7 @@ interface ResponseInterface extends MessageInterface
      * might be replayed.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/425
+     * @deprecated
      *
      * @var int
      */
@@ -617,6 +675,8 @@ interface ResponseInterface extends MessageInterface
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/426
      *
      * @var int
+     *
+     * @deprecated
      */
     public const CODE_UPGRADE_REQUIRED = 426;
     /**
@@ -629,6 +689,7 @@ interface ResponseInterface extends MessageInterface
      * a conflict.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/428
+     * @deprecated
      *
      * @var int
      */
@@ -640,6 +701,7 @@ interface ResponseInterface extends MessageInterface
      * limiting").
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+     * @deprecated
      *
      * @var int
      */
@@ -652,6 +714,7 @@ interface ResponseInterface extends MessageInterface
      * the request header fields.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/431
+     * @deprecated
      *
      * @var int
      */
@@ -663,6 +726,7 @@ interface ResponseInterface extends MessageInterface
      * as a web page censored by a government.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/451
+     * @deprecated
      *
      * @var int
      */
@@ -674,6 +738,7 @@ interface ResponseInterface extends MessageInterface
      * closes the connection while nginx is processing the request.
      *
      * @see https://httpstatuses.com/499
+     * @deprecated
      *
      * @var int
      */
@@ -685,6 +750,7 @@ interface ResponseInterface extends MessageInterface
      * The server has encountered a situation it doesn't know how to handle.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500
+     * @deprecated
      *
      * @var int
      */
@@ -697,6 +763,7 @@ interface ResponseInterface extends MessageInterface
      * must not return this code) are `GET` and `HEAD`.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/501
+     * @deprecated
      *
      * @var int
      */
@@ -708,6 +775,7 @@ interface ResponseInterface extends MessageInterface
      * get a response needed to handle the request, got an invalid response.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502
+     * @deprecated
      *
      * @var int
      */
@@ -729,6 +797,8 @@ interface ResponseInterface extends MessageInterface
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503
      *
      * @var int
+     *
+     * @deprecated
      */
     public const CODE_SERVICE_UNAVAILABLE = 503;
     /**
@@ -738,6 +808,7 @@ interface ResponseInterface extends MessageInterface
      * cannot get a response in time.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/504
+     * @deprecated
      *
      * @var int
      */
@@ -748,6 +819,7 @@ interface ResponseInterface extends MessageInterface
      * The HTTP version used in the request is not supported by the server.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/505
+     * @deprecated
      *
      * @var int
      */
@@ -761,6 +833,7 @@ interface ResponseInterface extends MessageInterface
      * process.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/506
+     * @deprecated
      *
      * @var int
      */
@@ -773,6 +846,7 @@ interface ResponseInterface extends MessageInterface
      * request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/507
+     * @deprecated
      *
      * @var int
      */
@@ -783,6 +857,7 @@ interface ResponseInterface extends MessageInterface
      * The server detected an infinite loop while processing the request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/508
+     * @deprecated
      *
      * @var int
      */
@@ -794,6 +869,7 @@ interface ResponseInterface extends MessageInterface
      * it.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/510
+     * @deprecated
      *
      * @var int
      */
@@ -805,6 +881,7 @@ interface ResponseInterface extends MessageInterface
      * gain network access.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/511
+     * @deprecated
      *
      * @var int
      */
@@ -817,6 +894,7 @@ interface ResponseInterface extends MessageInterface
      * in front of the proxy.
      *
      * @see https://httpstatuses.com/599
+     * @deprecated
      *
      * @var int
      */

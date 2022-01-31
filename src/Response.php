@@ -677,7 +677,15 @@ class Response extends Message implements ResponseInterface
         return $this;
     }
 
-    #[Pure]
+    /**
+     * @param int $code
+     * @param string|null $default
+     *
+     * @return string|null
+     *
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public static function getReasonByCode(int $code, string $default = null) : ?string
     {
         return parent::getReasonByCode($code, $default);

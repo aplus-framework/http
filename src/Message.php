@@ -674,8 +674,20 @@ abstract class Message implements MessageInterface
         return $this->getStatusCode() === ResponseStatus::validate($code);
     }
 
+    /**
+     * @param int $code
+     *
+     * @return int
+     *
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     protected function makeStatusCode(int $code) : int
     {
+        \trigger_error(
+            'Method ' . __METHOD__ . ' is deprecated',
+            \E_USER_DEPRECATED
+        );
         if ($code < 100 || $code > 599) {
             throw new InvalidArgumentException("Invalid status code: {$code}");
         }
@@ -759,10 +771,16 @@ abstract class Message implements MessageInterface
      * @param string|null $default
      *
      * @return string|null
+     *
+     * @deprecated
+     * @codeCoverageIgnore
      */
-    #[Pure]
     protected static function getReasonByCode(int $code, string $default = null) : ?string
     {
+        \trigger_error(
+            'Method ' . __METHOD__ . ' is deprecated',
+            \E_USER_DEPRECATED
+        );
         return static::$responseStatus[$code] ?? $default;
     }
 
