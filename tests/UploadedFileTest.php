@@ -9,7 +9,6 @@
  */
 namespace Tests\HTTP;
 
-use Framework\HTTP\UploadedFile;
 use PHPUnit\Framework\TestCase;
 
 final class UploadedFileTest extends TestCase
@@ -35,13 +34,13 @@ final class UploadedFileTest extends TestCase
         'tmp_name' => __DIR__ . '/files/file.txt',
         'error' => \UPLOAD_ERR_CANT_WRITE,
     ];
-    protected UploadedFile $uploadedFile;
-    protected UploadedFile $uploadedFile2;
+    protected UploadedFileMock $uploadedFile;
+    protected UploadedFileMock $uploadedFile2;
 
     protected function setUp() : void
     {
-        $this->uploadedFile = new UploadedFile($this->file);
-        $this->uploadedFile2 = new UploadedFile($this->file2);
+        $this->uploadedFile = new UploadedFileMock($this->file);
+        $this->uploadedFile2 = new UploadedFileMock($this->file2);
     }
 
     public function testGetClientExtension() : void
@@ -89,6 +88,55 @@ final class UploadedFileTest extends TestCase
         );
     }
 
+    public function testSetErrorMessage() : void
+    {
+        $this->uploadedFile->setErrorMessage(\UPLOAD_ERR_OK);
+        self::assertStringStartsWith(
+            'There is no error',
+            $this->uploadedFile->getErrorMessage()
+        );
+        $this->uploadedFile->setErrorMessage(\UPLOAD_ERR_INI_SIZE);
+        self::assertStringStartsWith(
+            'The uploaded file exceeds the upload_max_filesize',
+            $this->uploadedFile->getErrorMessage()
+        );
+        $this->uploadedFile->setErrorMessage(\UPLOAD_ERR_FORM_SIZE);
+        self::assertStringStartsWith(
+            'The uploaded file exceeds the MAX_FILE_SIZE',
+            $this->uploadedFile->getErrorMessage()
+        );
+        $this->uploadedFile->setErrorMessage(\UPLOAD_ERR_PARTIAL);
+        self::assertStringStartsWith(
+            'The uploaded file was only partially',
+            $this->uploadedFile->getErrorMessage()
+        );
+        $this->uploadedFile->setErrorMessage(\UPLOAD_ERR_NO_FILE);
+        self::assertStringStartsWith(
+            'No file was uploaded',
+            $this->uploadedFile->getErrorMessage()
+        );
+        $this->uploadedFile->setErrorMessage(\UPLOAD_ERR_NO_TMP_DIR);
+        self::assertStringStartsWith(
+            'Missing a temporary',
+            $this->uploadedFile->getErrorMessage()
+        );
+        $this->uploadedFile->setErrorMessage(\UPLOAD_ERR_CANT_WRITE);
+        self::assertStringStartsWith(
+            'Failed to write file',
+            $this->uploadedFile->getErrorMessage()
+        );
+        $this->uploadedFile->setErrorMessage(\UPLOAD_ERR_EXTENSION);
+        self::assertStringStartsWith(
+            'A PHP extension stopped',
+            $this->uploadedFile->getErrorMessage()
+        );
+        $this->uploadedFile->setErrorMessage(42);
+        self::assertStringStartsWith(
+            'Unknown error',
+            $this->uploadedFile->getErrorMessage()
+        );
+    }
+
     public function testGetName() : void
     {
         self::assertSame('logo.jpg', $this->uploadedFile->getName());
@@ -127,7 +175,26 @@ final class UploadedFileTest extends TestCase
 
     public function testMove() : void
     {
-        self::assertFalse($this->uploadedFile->move('/tmp/foo'));
-        self::assertFalse($this->uploadedFile2->move('/tmp/foo2'));
+        $files = [
+            \sys_get_temp_dir() . '/test-1',
+            \sys_get_temp_dir() . '/test-2',
+            \sys_get_temp_dir() . '/test-3',
+        ];
+        foreach ($files as $file) {
+            if (\is_file($file)) {
+                \unlink($file);
+            }
+        }
+        self::assertFalse($this->uploadedFile->move($files[0]));
+        \touch($files[0]);
+        $this->uploadedFile->isMoved = true;
+        $this->uploadedFile->destination = $files[0];
+        self::assertTrue($this->uploadedFile->move($files[1]));
+        self::assertSame($files[1], $this->uploadedFile->getDestination());
+        \touch($files[2]);
+        self::assertFalse($this->uploadedFile->move($files[2]));
+        self::assertSame($files[1], $this->uploadedFile->getDestination());
+        self::assertTrue($this->uploadedFile->move($files[2], true));
+        self::assertSame($files[2], $this->uploadedFile->getDestination());
     }
 }

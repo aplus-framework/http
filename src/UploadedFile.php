@@ -1024,10 +1024,6 @@ class UploadedFile
      */
     public function move(string $destination, bool $overwrite = false) : bool
     {
-        /*$destination = \realpath($destination);
-        if ($destination === false) {
-            return false;
-        }*/
         if ($overwrite === false && \is_file($destination)) {
             return false;
         }
