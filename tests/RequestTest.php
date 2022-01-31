@@ -143,6 +143,7 @@ final class RequestTest extends TestCase
             'password' => 'Aw3S0me',
             'user' => [
                 'name' => 'foo',
+                'email' => 'foo@bar.com',
                 'city' => 'bar',
             ],
             'csrf_token' => 'foo',
@@ -641,6 +642,7 @@ final class RequestTest extends TestCase
             'password' => 'Aw3S0me',
             'user' => [
                 'name' => 'foo',
+                'email' => 'foo@bar.com',
                 'city' => 'bar',
             ],
             'csrf_token' => 'foo',
@@ -648,12 +650,20 @@ final class RequestTest extends TestCase
         self::assertSame('Aw3S0me', $this->request->getPost('password'));
         self::assertSame('phpdev', $this->request->getPost('username'));
         self::assertNull($this->request->getPost('unknow'));
-        //self::assertSame(['password' => 'Aw3S0me'], $this->request->getPOST(['password']));
+        self::assertFalse($this->request->getPost('unknow', \FILTER_VALIDATE_EMAIL));
+        self::assertSame([
+            'name' => 'foo',
+            'email' => 'foo@bar.com',
+            'city' => 'bar',
+        ], $this->request->getPost('user'));
         self::assertSame('foo', $this->request->getPost('user[name]'));
-        /*self::assertSame(
-            ['user[city]' => 'bar', 'username' => 'phpdev'],
-            $this->request->getPOST(['user[city]', 'username'])
-        );*/
+        self::assertSame('bar', $this->request->getPost('user[city]'));
+        self::assertSame('foo@bar.com', $this->request->getPost('user[email]'));
+        self::assertSame(
+            'foo@bar.com',
+            $this->request->getPost('user[email]', \FILTER_VALIDATE_EMAIL)
+        );
+        self::assertFalse($this->request->getPost('csrf_token', \FILTER_VALIDATE_EMAIL));
     }
 
     public function testProxiedIp() : void

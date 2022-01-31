@@ -46,6 +46,7 @@ class RequestMock extends \Framework\HTTP\Request
             'password' => 'Aw3S0me',
             'user' => [
                 'name' => 'foo',
+                'email' => 'foo@bar.com',
                 'city' => 'bar',
             ],
             'csrf_token' => 'foo',

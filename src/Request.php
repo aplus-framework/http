@@ -270,12 +270,15 @@ class Request extends Message implements RequestInterface
             \INPUT_SERVER => $_SERVER,
             default => throw new InvalidArgumentException('Invalid input type: ' . $type)
         };
-        $variable = $name === null
-            ? $input
-            : ArraySimple::value($name, $input);
-        return $filter !== null
-            ? \filter_var($variable, $filter, $options)
-            : $variable;
+        if ($name !== null) {
+            $input = \in_array($type, [\INPUT_POST, \INPUT_GET], true)
+                ? ArraySimple::value($name, $input)
+                : $input[$name] ?? null;
+        }
+        if ($filter !== null) {
+            $input = \filter_var($input, $filter, $options);
+        }
+        return $input;
     }
 
     /**
