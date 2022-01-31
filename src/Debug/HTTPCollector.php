@@ -102,9 +102,6 @@ class HTTPCollector extends Collector
         if ($userAgent->isBrowser()) {
             $type = 'Browser';
             $name = $userAgent->getBrowser();
-        } elseif ($userAgent->isMobile()) {
-            $type = 'Mobile';
-            $name = $userAgent->getMobile();
         } elseif ($userAgent->isRobot()) {
             $type = 'Robot';
             $name = $userAgent->getRobot();
@@ -121,6 +118,7 @@ class HTTPCollector extends Collector
                 <th>Name</th>
                 <th>Version</th>
                 <th>Platform</th>
+                <th>Is Mobile</th>
             </tr>
             </thead>
             <tbody>
@@ -131,6 +129,7 @@ class HTTPCollector extends Collector
                         ? \htmlentities((string) $userAgent->getBrowserVersion())
                         : '' ?></td>
                 <td><?= \htmlentities((string) $userAgent->getPlatform()) ?></td>
+                <td><?= $userAgent->isMobile() ? 'Yes' : 'No' ?></td>
             </tr>
             </tbody>
         </table>
