@@ -12,6 +12,7 @@ namespace Tests\HTTP;
 use Framework\HTTP\Cookie;
 use Framework\HTTP\Request;
 use Framework\HTTP\Response;
+use Framework\HTTP\Status;
 use PHPUnit\Framework\TestCase;
 
 final class ResponseTest extends TestCase
@@ -43,7 +44,7 @@ final class ResponseTest extends TestCase
         \session_start();
         $this->response->redirect('/new', ['foo']);
         self::assertSame('/new', $this->response->getHeader('Location'));
-        self::assertSame(Response::CODE_SEE_OTHER, $this->response->getStatusCode());
+        self::assertSame(Status::SEE_OTHER, $this->response->getStatusCode());
         self::assertSame(['foo'], $request->getRedirectData());
     }
 
@@ -58,18 +59,18 @@ final class ResponseTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid Redirection code: 404');
-        $this->response->redirect('/new', [], Response::CODE_NOT_FOUND);
+        $this->response->redirect('/new', [], Status::NOT_FOUND);
     }
 
     public function testRedirect() : void
     {
         $this->response->redirect('/new');
         self::assertSame('/new', $this->response->getHeader('Location'));
-        self::assertSame(Response::CODE_TEMPORARY_REDIRECT, $this->response->getStatusCode());
+        self::assertSame(Status::TEMPORARY_REDIRECT, $this->response->getStatusCode());
         self::assertSame('Temporary Redirect', $this->response->getStatusReason());
-        $this->response->redirect('/other', [], Response::CODE_MOVED_PERMANENTLY);
+        $this->response->redirect('/other', [], Status::MOVED_PERMANENTLY);
         self::assertSame('/other', $this->response->getHeader('Location'));
-        self::assertSame(Response::CODE_MOVED_PERMANENTLY, $this->response->getStatusCode());
+        self::assertSame(Status::MOVED_PERMANENTLY, $this->response->getStatusCode());
         self::assertSame('Moved Permanently', $this->response->getStatusReason());
     }
 
@@ -380,10 +381,10 @@ final class ResponseTest extends TestCase
     public function testStatus() : void
     {
         self::assertSame('200 OK', $this->response->getStatus());
-        self::assertSame(Response::CODE_OK, $this->response->getStatusCode());
+        self::assertSame(Status::OK, $this->response->getStatusCode());
         self::assertSame('OK', $this->response->getStatusReason());
         self::assertFalse($this->response->hasStatusCode(201));
-        $this->response->setStatus(Response::CODE_CREATED);
+        $this->response->setStatus(Status::CREATED);
         self::assertTrue($this->response->hasStatusCode(201));
         self::assertSame('201 Created', $this->response->getStatus());
         $this->response->setStatusReason('Other');
