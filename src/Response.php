@@ -208,10 +208,7 @@ class Response extends Message implements ResponseInterface
     public function setStatus(int $code, string $reason = null) : static
     {
         $this->setStatusCode($code);
-        $reason ?: $reason = static::getReasonByCode($code);
-        if (empty($reason)) {
-            throw new LogicException("Unknown status code must have a reason: {$code}");
-        }
+        $reason ?: $reason = ResponseStatus::getReason($code);
         $this->setStatusReason($reason);
         return $this;
     }

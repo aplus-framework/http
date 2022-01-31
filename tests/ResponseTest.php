@@ -293,7 +293,7 @@ final class ResponseTest extends TestCase
     public function testInvalidStatusCode() : void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid status code: 900');
+        $this->expectExceptionMessage('Invalid response status code: 900');
         $this->response->setStatusCode(900);
     }
 
@@ -489,7 +489,7 @@ final class ResponseTest extends TestCase
     public function testUnknownStatus() : void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Unknown status code must have a reason: 483');
+        $this->expectExceptionMessage('Unknown status code must have a default reason: 483');
         $this->response->setStatus(483);
     }
 

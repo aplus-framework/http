@@ -654,7 +654,7 @@ abstract class Message implements MessageInterface
 
     protected function setStatusCode(int $code) : static
     {
-        $this->statusCode = $this->makeStatusCode($code);
+        $this->statusCode = ResponseStatus::validate($code);
         return $this;
     }
 
@@ -671,7 +671,7 @@ abstract class Message implements MessageInterface
 
     protected function hasStatusCode(int $code) : bool
     {
-        return $this->getStatusCode() === $this->makeStatusCode($code);
+        return $this->getStatusCode() === ResponseStatus::validate($code);
     }
 
     protected function makeStatusCode(int $code) : int
