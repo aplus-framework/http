@@ -10,6 +10,7 @@
 namespace Framework\HTTP;
 
 use DateTime;
+use DateTimeInterface;
 use DateTimeZone;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
@@ -611,7 +612,10 @@ class Response extends Message implements ResponseInterface
     {
         $date = clone $datetime;
         $date->setTimezone(new DateTimeZone('UTC'));
-        $this->setHeader(Header::DATE, $date->format(DateTime::RFC7231));
+        $this->setHeader(
+            Header::DATE,
+            $date->format(DateTimeInterface::RFC7231)
+        );
         return $this;
     }
 
@@ -648,7 +652,10 @@ class Response extends Message implements ResponseInterface
     {
         $date = clone $datetime;
         $date->setTimezone(new DateTimeZone('UTC'));
-        $this->setHeader(ResponseHeader::EXPIRES, $date->format(DateTime::RFC7231));
+        $this->setHeader(
+            ResponseHeader::EXPIRES,
+            $date->format(DateTimeInterface::RFC7231)
+        );
         return $this;
     }
 
@@ -665,7 +672,10 @@ class Response extends Message implements ResponseInterface
     {
         $date = clone $datetime;
         $date->setTimezone(new DateTimeZone('UTC'));
-        $this->setHeader(ResponseHeader::LAST_MODIFIED, $date->format(DateTime::RFC7231));
+        $this->setHeader(
+            ResponseHeader::LAST_MODIFIED,
+            $date->format(DateTimeInterface::RFC7231)
+        );
         return $this;
     }
 
