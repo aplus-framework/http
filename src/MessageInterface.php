@@ -22,30 +22,35 @@ interface MessageInterface extends Stringable
 {
     /**
      * @see https://en.wikipedia.org/wiki/HTTP/1.0
+     * @deprecated
      *
      * @var string
      */
     public const PROTOCOL_HTTP_1_0 = 'HTTP/1.0';
     /**
      * @see https://en.wikipedia.org/wiki/HTTP/1.1
+     * @deprecated
      *
      * @var string
      */
     public const PROTOCOL_HTTP_1_1 = 'HTTP/1.1';
     /**
      * @see https://en.wikipedia.org/wiki/HTTP/2.0
+     * @deprecated
      *
      * @var string
      */
     public const PROTOCOL_HTTP_2_0 = 'HTTP/2.0';
     /**
      * @see https://en.wikipedia.org/wiki/HTTP/2
+     * @deprecated
      *
      * @var string
      */
     public const PROTOCOL_HTTP_2 = 'HTTP/2';
     /**
      * @see https://en.wikipedia.org/wiki/HTTP/3
+     * @deprecated
      *
      * @var string
      */
