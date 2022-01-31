@@ -442,7 +442,7 @@ expectedArguments(
     argumentsSet('response_status_codes')
 );
 expectedArguments(
-    \Framework\HTTP\Response::setStatusLine(),
+    \Framework\HTTP\Response::setStatus(),
     0,
     argumentsSet('response_status_codes')
 );
@@ -452,12 +452,17 @@ expectedArguments(
     argumentsSet('request_headers')
 );
 expectedArguments(
+    \Framework\HTTP\Request::getHeader(),
+    0,
+    argumentsSet('request_headers')
+);
+expectedArguments(
     \Framework\HTTP\RequestInterface::hasHeader(),
     0,
     argumentsSet('request_headers')
 );
 expectedArguments(
-    \Framework\HTTP\RequestInterface::getHeaderName(),
+    \Framework\HTTP\Request::hasHeader(),
     0,
     argumentsSet('request_headers')
 );
@@ -467,7 +472,17 @@ expectedArguments(
     argumentsSet('response_headers')
 );
 expectedArguments(
+    \Framework\HTTP\Response::getHeader(),
+    0,
+    argumentsSet('response_headers')
+);
+expectedArguments(
     \Framework\HTTP\ResponseInterface::hasHeader(),
+    0,
+    argumentsSet('response_headers')
+);
+expectedArguments(
+    \Framework\HTTP\Response::hasHeader(),
     0,
     argumentsSet('response_headers')
 );
@@ -477,7 +492,7 @@ expectedArguments(
     argumentsSet('response_headers')
 );
 expectedArguments(
-    \Framework\HTTP\ResponseInterface::getHeaderName(),
+    \Framework\HTTP\Response::setHeader(),
     0,
     argumentsSet('response_headers')
 );
