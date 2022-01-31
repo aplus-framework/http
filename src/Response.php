@@ -209,7 +209,7 @@ class Response extends Message implements ResponseInterface
     public function setStatus(int $code, string $reason = null) : static
     {
         $this->setStatusCode($code);
-        $reason ?: $reason = ResponseStatus::getReason($code);
+        $reason ?: $reason = Status::getReason($code);
         $this->setStatusReason($reason);
         return $this;
     }
@@ -306,8 +306,8 @@ class Response extends Message implements ResponseInterface
     {
         if ($code === null) {
             $code = $this->request->getMethod() === 'GET'
-                ? ResponseStatus::TEMPORARY_REDIRECT
-                : ResponseStatus::SEE_OTHER;
+                ? Status::TEMPORARY_REDIRECT
+                : Status::SEE_OTHER;
         } elseif ($code < 300 || $code > 399) {
             throw new InvalidArgumentException("Invalid Redirection code: {$code}");
         }
@@ -412,7 +412,7 @@ class Response extends Message implements ResponseInterface
         $ifMatch = $this->getRequest()->getHeader(RequestHeader::IF_MATCH);
         if ($ifMatch && $ifMatch !== $etag) {
             $this->setBody('');
-            $this->setStatus(ResponseStatus::PRECONDITION_FAILED);
+            $this->setStatus(Status::PRECONDITION_FAILED);
         }
     }
 
@@ -686,7 +686,7 @@ class Response extends Message implements ResponseInterface
      */
     public function setNotModified() : static
     {
-        $this->setStatus(ResponseStatus::NOT_MODIFIED);
+        $this->setStatus(Status::NOT_MODIFIED);
         return $this;
     }
 

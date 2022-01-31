@@ -12,13 +12,13 @@ namespace Framework\HTTP;
 use InvalidArgumentException;
 
 /**
- * Class RequestMethod.
+ * Class Method.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
  *
  * @package http
  */
-class RequestMethod
+class Method
 {
     /**
      * The HTTP CONNECT method starts two-way communications with the requested

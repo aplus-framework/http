@@ -13,13 +13,13 @@ use InvalidArgumentException;
 use LogicException;
 
 /**
- * Class ResponseStatus.
+ * Class Status.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
  *
  * @package http
  */
-class ResponseStatus
+class Status
 {
     // -------------------------------------------------------------------------
     // Informational responses
@@ -319,7 +319,7 @@ class ResponseStatus
      * request.
      *
      * @see ResponseHeader::LOCATION
-     * @see ResponseStatus::MOVED_PERMANENTLY
+     * @see Status::MOVED_PERMANENTLY
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/308
      *
      * @var int
@@ -369,7 +369,7 @@ class ResponseStatus
      * unauthorized, so the server is refusing to give the requested resource.
      * Unlike 401, the client's identity is known to the server.
      *
-     * @see ResponseStatus::UNAUTHORIZED
+     * @see Status::UNAUTHORIZED
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
      *
      * @var int
@@ -420,7 +420,7 @@ class ResponseStatus
      * This is similar to 401 but authentication is needed to be done by a
      * proxy.
      *
-     * @see ResponseStatus::UNAUTHORIZED
+     * @see Status::UNAUTHORIZED
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/407
      *
      * @var int

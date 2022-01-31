@@ -9,19 +9,19 @@
  */
 namespace Tests\HTTP;
 
-use Framework\HTTP\ResponseStatus;
+use Framework\HTTP\Status;
 use PHPUnit\Framework\TestCase;
 
-final class ResponseStatusTest extends TestCase
+final class StatusTest extends TestCase
 {
     public function testGetReason() : void
     {
-        self::assertSame('OK', ResponseStatus::getReason(200));
-        self::assertSame('Not Found', ResponseStatus::getReason(404));
-        self::assertSame('Foo Bar', ResponseStatus::getReason(567, 'Foo Bar'));
+        self::assertSame('OK', Status::getReason(200));
+        self::assertSame('Not Found', Status::getReason(404));
+        self::assertSame('Foo Bar', Status::getReason(567, 'Foo Bar'));
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Unknown status code must have a default reason: 567');
-        ResponseStatus::getReason(567);
+        Status::getReason(567);
     }
 
     /**
@@ -29,27 +29,27 @@ final class ResponseStatusTest extends TestCase
      */
     public function testSetStatus() : void
     {
-        self::assertSame('OK', ResponseStatus::getReason(200));
-        ResponseStatus::setStatus(200, 'Foo');
-        self::assertSame('Foo', ResponseStatus::getReason(200));
+        self::assertSame('OK', Status::getReason(200));
+        Status::setStatus(200, 'Foo');
+        self::assertSame('Foo', Status::getReason(200));
     }
 
     public function testValidate() : void
     {
-        self::assertSame(100, ResponseStatus::validate(100));
-        self::assertSame(599, ResponseStatus::validate(599));
+        self::assertSame(100, Status::validate(100));
+        self::assertSame(599, Status::validate(599));
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid response status code: 600');
-        ResponseStatus::validate(600);
+        Status::validate(600);
     }
 
     public function testConstants() : void
     {
-        $reflection = new \ReflectionClass(ResponseStatus::class);
+        $reflection = new \ReflectionClass(Status::class);
         foreach ($reflection->getConstants() as $name => $value) {
             self::assertIsInt($value);
             self::assertSame(\strtoupper($name), $name);
-            $reason = ResponseStatus::getReason($value);
+            $reason = Status::getReason($value);
             $reason = \strtolower($reason);
             $name = \strtr(\strtolower($name), ['_' => ' ']);
             if ($name === 'im a teapot') {

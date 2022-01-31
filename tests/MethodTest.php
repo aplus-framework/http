@@ -9,27 +9,27 @@
  */
 namespace Tests\HTTP;
 
-use Framework\HTTP\RequestMethod;
+use Framework\HTTP\Method;
 use PHPUnit\Framework\TestCase;
 
-final class RequestMethodTest extends TestCase
+final class MethodTest extends TestCase
 {
     public function testValidate() : void
     {
-        self::assertSame('GET', RequestMethod::validate('Get'));
-        self::assertSame('PATCH', RequestMethod::validate('PatCH'));
+        self::assertSame('GET', Method::validate('Get'));
+        self::assertSame('PATCH', Method::validate('PatCH'));
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid request method: Foo');
-        RequestMethod::validate('Foo');
+        Method::validate('Foo');
     }
 
     public function testConstants() : void
     {
-        $reflection = new \ReflectionClass(RequestMethod::class);
+        $reflection = new \ReflectionClass(Method::class);
         foreach ($reflection->getConstants() as $name => $value) {
             self::assertSame(\strtoupper($name), $name);
             self::assertSame($name, $value);
-            self::assertSame($name, RequestMethod::validate($value));
+            self::assertSame($name, Method::validate($value));
         }
     }
 }

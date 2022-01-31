@@ -592,7 +592,7 @@ abstract class Message implements MessageInterface
      */
     protected function hasMethod(string $method) : bool
     {
-        return $this->getMethod() === RequestMethod::validate($method);
+        return $this->getMethod() === Method::validate($method);
     }
 
     /**
@@ -607,7 +607,7 @@ abstract class Message implements MessageInterface
      */
     protected function setMethod(string $method) : static
     {
-        $this->method = RequestMethod::validate($method);
+        $this->method = Method::validate($method);
         return $this;
     }
 
@@ -644,7 +644,7 @@ abstract class Message implements MessageInterface
 
     protected function setStatusCode(int $code) : static
     {
-        $this->statusCode = ResponseStatus::validate($code);
+        $this->statusCode = Status::validate($code);
         return $this;
     }
 
@@ -661,7 +661,7 @@ abstract class Message implements MessageInterface
 
     protected function hasStatusCode(int $code) : bool
     {
-        return $this->getStatusCode() === ResponseStatus::validate($code);
+        return $this->getStatusCode() === Status::validate($code);
     }
 
     /**
