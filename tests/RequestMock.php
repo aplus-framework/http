@@ -19,7 +19,7 @@ class RequestMock extends \Framework\HTTP\Request
     public ?array $parsedBody = null;
     public UserAgent | false $userAgent;
     /**
-     * @var array<int,array>
+     * @var array<int,array<string,mixed>>
      */
     public static array $input = [
         \INPUT_SERVER => [

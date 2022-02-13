@@ -456,7 +456,7 @@ class Response extends Message implements ResponseInterface
      * </p>
      * <p>Default is <b>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE</b>
      * when null. Set 0 to do not use none.</p>
-     * @param int $depth Set the maximum depth. Must be greater than zero.
+     * @param int<1,max> $depth Set the maximum depth. Must be greater than zero.
      *
      * @see https://www.php.net/manual/en/function.json-encode.php
      * @see https://www.php.net/manual/en/json.constants.php

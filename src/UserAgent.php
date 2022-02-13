@@ -28,7 +28,7 @@ class UserAgent implements \JsonSerializable, \Stringable
     protected bool $isMobile = false;
     protected bool $isRobot = false;
     /**
-     * @var array<string,array>
+     * @var array<string,array<string,string>>
      */
     protected static array $config = [
         'platforms' => [

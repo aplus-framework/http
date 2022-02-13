@@ -33,7 +33,7 @@ class UploadedFile
     /**
      * @see http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
      *
-     * @var array<string,array>
+     * @var array<string,array<int,string>>
      */
     protected static array $mimeTypes = [
         'application/andrew-inset' => ['ez'],

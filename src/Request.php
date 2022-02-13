@@ -28,7 +28,7 @@ use UnexpectedValueException;
 class Request extends Message implements RequestInterface
 {
     /**
-     * @var array<string,array|UploadedFile>
+     * @var array<string,array<mixed>|UploadedFile>
      */
     protected array $files = [];
     /**
@@ -52,7 +52,7 @@ class Request extends Message implements RequestInterface
      */
     protected string | false $id;
     /**
-     * @var array<string,array|null>
+     * @var array<string,array<mixed>|null>
      */
     protected array $negotiation = [
         'ACCEPT' => null,
@@ -483,7 +483,7 @@ class Request extends Message implements RequestInterface
      * if an error occurs that would otherwise set it, these functions instead
      * throw a JsonException<br/>
      * </p>
-     * @param int $depth user specified recursion depth
+     * @param int<1,max> $depth user specified recursion depth
      *
      * @see https://www.php.net/manual/en/function.json-decode.php
      * @see https://www.php.net/manual/en/json.constants.php
@@ -666,7 +666,7 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @return array<string,array|UploadedFile>
+     * @return array<string,array<mixed>|UploadedFile>
      */
     #[Pure]
     public function getFiles() : array
@@ -987,7 +987,7 @@ class Request extends Message implements RequestInterface
     /**
      * @see https://www.sitepoint.com/community/t/-files-array-structure/2728/5
      *
-     * @return array<string,array|UploadedFile>
+     * @return array<string,array<mixed>|UploadedFile>
      */
     protected function getInputFiles() : array
     {

@@ -28,7 +28,7 @@ trait ResponseDownload
     private int $filesize;
     private bool $acceptRanges = true;
     /**
-     * @var array<int,array>|false
+     * @var array<int,array<int,int>>|false
      */
     private array | false $byteRanges = [];
     private string $sendType = 'normal';
@@ -149,7 +149,7 @@ trait ResponseDownload
      *
      * @param string $line
      *
-     * @return array<int,array>|false
+     * @return array<int,array<int,int>>|false
      * @phpstan-ignore-next-line
      */
     #[Pure]
@@ -307,7 +307,7 @@ trait ResponseDownload
 
     private function flush(int $length) : void
     {
-        echo \fread($this->handle, $length);
+        echo \fread($this->handle, $length); // @phpstan-ignore-line
         if ($this->inToString) {
             $this->appendBody('');
             return;
