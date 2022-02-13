@@ -10,7 +10,7 @@
 namespace Tests\HTTP;
 
 use Framework\HTTP\Protocol;
-use PHPStan\Testing\TestCase;
+use PHPUnit\Framework\TestCase;
 
 final class ProtocolTest extends TestCase
 {

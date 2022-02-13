@@ -10,7 +10,7 @@
 namespace Tests\HTTP;
 
 use Framework\HTTP\ResponseHeader;
-use PHPStan\Testing\TestCase;
+use PHPUnit\Framework\TestCase;
 
 final class ResponseHeaderTest extends TestCase
 {
