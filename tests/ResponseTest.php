@@ -192,7 +192,7 @@ final class ResponseTest extends TestCase
     public function testAutoEtagNegotiationWithGet() : void
     {
         $body = '<h1>Hello world!</h1>';
-        $etag = '"' . \md5($body) . '"';
+        $etag = '"' . \hash('xxh3', $body) . '"';
         RequestMock::setInput(\INPUT_SERVER, [
             'REQUEST_METHOD' => 'GET',
             'HTTP_IF_NONE_MATCH' => $etag,
@@ -213,7 +213,7 @@ final class ResponseTest extends TestCase
     public function testAutoEtagNegotiationWithPost() : void
     {
         $body = '<h1>My names is Aplus!</h1>';
-        $etag = '"' . \md5($body) . '"';
+        $etag = '"' . \hash('xxh3', $body) . '"';
         RequestMock::setInput(\INPUT_SERVER, [
             'REQUEST_METHOD' => 'POST',
             'HTTP_IF_MATCH' => '"etag-that-do-not-match"',

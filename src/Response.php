@@ -43,7 +43,7 @@ class Response extends Message implements ResponseInterface
     protected ?string $sendedBody = null;
     protected bool $inToString = false;
     protected bool $autoEtag = false;
-    protected string $autoEtagHashAlgo = 'md5';
+    protected string $autoEtagHashAlgo = 'xxh3';
     protected HTTPCollector $debugCollector;
 
     /**
