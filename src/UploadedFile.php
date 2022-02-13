@@ -830,7 +830,7 @@ class UploadedFile
         $this->tmpName = $file['tmp_name'];
         $this->error = $file['error'];
         $this->size = $file['size'];
-        $this->fullPath = $file['full_path'] ?? $file['name'];
+        $this->fullPath = $file['full_path'];
     }
 
     /**

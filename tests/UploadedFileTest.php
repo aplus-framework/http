@@ -18,6 +18,7 @@ final class UploadedFileTest extends TestCase
      */
     protected array $file = [
         'name' => 'logo.jpg',
+        'full_path' => 'logo.jpg',
         'type' => 'foo/bar',
         'size' => 19878,
         'tmp_name' => __DIR__ . '/files/logo.png',
