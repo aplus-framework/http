@@ -200,7 +200,9 @@ final class ResponseTest extends TestCase
         $this->response = new Response(new RequestMock(['domain.tld']));
         $this->response->setAutoEtag();
         $this->response->setBody($body);
+        \ob_start();
         $this->response->send();
+        \ob_end_clean();
         self::assertSame((string) \strlen($body), $this->response->getHeader('Content-Length'));
         self::assertSame($etag, $this->response->getHeader('ETag'));
         self::assertSame('304 Not Modified', $this->response->getStatus());
@@ -221,7 +223,9 @@ final class ResponseTest extends TestCase
         $this->response = new Response(new RequestMock(['domain.tld']));
         $this->response->setAutoEtag();
         $this->response->setBody($body);
+        \ob_start();
         $this->response->send();
+        \ob_end_clean();
         self::assertSame((string) \strlen($body), $this->response->getHeader('Content-Length'));
         self::assertSame($etag, $this->response->getHeader('ETag'));
         self::assertSame('412 Precondition Failed', $this->response->getStatus());
@@ -238,7 +242,9 @@ final class ResponseTest extends TestCase
         $this->response = new Response(new RequestMock(['domain.tld']));
         $this->response->setBody($body);
         $this->response->setAutoEtag(hashAlgo: 'crc32');
+        \ob_start();
         $this->response->send();
+        \ob_end_clean();
         self::assertSame($etag, $this->response->getHeader('ETag'));
     }
 
