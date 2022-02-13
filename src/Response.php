@@ -715,18 +715,4 @@ class Response extends Message implements ResponseInterface
         $this->debugCollector->setResponse($this);
         return $this;
     }
-
-    /**
-     * @param int $code
-     * @param string|null $default
-     *
-     * @return string|null
-     *
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public static function getReasonByCode(int $code, string $default = null) : ?string
-    {
-        return parent::getReasonByCode($code, $default);
-    }
 }

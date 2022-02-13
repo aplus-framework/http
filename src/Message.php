@@ -723,58 +723,6 @@ abstract class Message implements MessageInterface
     }
 
     /**
-     * Gets a header name according with the standards.
-     *
-     * @param string $name header name
-     *
-     * @return string
-     *
-     * @deprecated
-     */
-    public static function getHeaderName(string $name) : string
-    {
-        \trigger_error(
-            'Method ' . __METHOD__ . ' is deprecated',
-            \E_USER_DEPRECATED
-        );
-        return static::$standardHeaders[\strtolower($name)] ?? $name;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @deprecated
-     */
-    public static function setHeaderName(string $name) : void
-    {
-        \trigger_error(
-            'Method ' . __METHOD__ . ' is deprecated',
-            \E_USER_DEPRECATED
-        );
-        static::$standardHeaders[\strtolower($name)] = $name;
-    }
-
-    /**
-     * Get a Response reason based on status code.
-     *
-     * @param int $code
-     * @param string|null $default
-     *
-     * @return string|null
-     *
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    protected static function getReasonByCode(int $code, string $default = null) : ?string
-    {
-        \trigger_error(
-            'Method ' . __METHOD__ . ' is deprecated',
-            \E_USER_DEPRECATED
-        );
-        return static::$responseStatus[$code] ?? $default;
-    }
-
-    /**
      * @see https://developer.mozilla.org/en-US/docs/Glossary/Quality_values
      * @see https://stackoverflow.com/a/33748742/6027968
      *

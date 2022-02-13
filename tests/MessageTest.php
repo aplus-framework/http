@@ -99,13 +99,6 @@ final class MessageTest extends TestCase
         self::assertSame([], $this->message->getHeaders());
     }
 
-    public function testHeaderNames() : void
-    {
-        self::assertSame('Host', $this->message::getHeaderName('host'));
-        $this->message::setHeaderName('HOsT');
-        self::assertSame('HOsT', $this->message::getHeaderName('host'));
-    }
-
     public function testHeaderLine() : void
     {
         self::assertNull($this->message->getHeaderLine('content-type'));
