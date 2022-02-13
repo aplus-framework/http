@@ -297,9 +297,6 @@ class Header
 
     public static function isMultiline(string $name) : bool
     {
-        if (\in_array(\strtolower($name), static::getMultilines(), true)) {
-            return true;
-        }
-        return false;
+        return \in_array(\strtolower($name), static::getMultilines(), true);
     }
 }
