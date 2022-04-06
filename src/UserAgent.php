@@ -80,6 +80,8 @@ class UserAgent implements \JsonSerializable, \Stringable
         // The order of this array should NOT be changed. Many browsers return
         // multiple browser types so we want to identify the sub-type first.
         'browsers' => [
+            'curl' => 'Curl',
+            'PostmanRuntime' => 'Postman',
             'OPR' => 'Opera',
             'Flock' => 'Flock',
             'Edge' => 'Spartan',
