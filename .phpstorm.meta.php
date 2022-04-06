@@ -527,3 +527,9 @@ expectedReturnValues(
     \UPLOAD_ERR_CANT_WRITE,
     \UPLOAD_ERR_EXTENSION,
 );
+expectedReturnValues(
+    \Framework\HTTP\UserAgent::getType(),
+    'Browser',
+    'Robot',
+    'Unknown',
+);
