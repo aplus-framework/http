@@ -439,6 +439,30 @@ class UserAgent implements \JsonSerializable, \Stringable
     }
 
     #[Pure]
+    public function getType() : string
+    {
+        if ($this->isBrowser()) {
+            return 'Browser';
+        }
+        if ($this->isRobot()) {
+            return 'Robot';
+        }
+        return 'Unknown';
+    }
+
+    #[Pure]
+    public function getName() : string
+    {
+        if ($this->isBrowser()) {
+            return $this->getBrowser();
+        }
+        if ($this->isRobot()) {
+            return $this->getRobot();
+        }
+        return 'Unknown';
+    }
+
+    #[Pure]
     public function jsonSerialize() : string
     {
         return $this->getAsString();
