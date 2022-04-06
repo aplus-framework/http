@@ -91,7 +91,8 @@ final class HTTPCollectorTest extends TestCase
             'HTTP_USER_AGENT' => 'foo/1.2',
         ]);
         $contents = $this->collector->getContents();
-        self::assertStringNotContainsString('<h2>User-Agent</h2>', $contents);
+        self::assertStringContainsString('<h2>User-Agent</h2>', $contents);
+        self::assertStringContainsString('<td>Unknown</td>', $contents);
     }
 
     public function testRequestForm() : void

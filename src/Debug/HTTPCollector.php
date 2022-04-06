@@ -94,19 +94,7 @@ class HTTPCollector extends Collector
     protected function renderRequestUserAgent() : string
     {
         $userAgent = $this->request->getUserAgent();
-        if ( ! $userAgent) {
-            return '';
-        }
-        $type = '';
-        $name = '';
-        if ($userAgent->isBrowser()) {
-            $type = 'Browser';
-            $name = $userAgent->getBrowser();
-        } elseif ($userAgent->isRobot()) {
-            $type = 'Robot';
-            $name = $userAgent->getRobot();
-        }
-        if ($type === '') {
+        if ($userAgent === null) {
             return '';
         }
         \ob_start(); ?>
@@ -123,8 +111,8 @@ class HTTPCollector extends Collector
             </thead>
             <tbody>
             <tr>
-                <td><?= \htmlentities($type) ?></td>
-                <td><?= \htmlentities($name) ?></td>
+                <td><?= \htmlentities($userAgent->getType()) ?></td>
+                <td><?= \htmlentities($userAgent->getName()) ?></td>
                 <td><?= $userAgent->isBrowser()
                         ? \htmlentities((string) $userAgent->getBrowserVersion())
                         : '' ?></td>
