@@ -42,7 +42,7 @@
         "ext-fileinfo": "*",
         "ext-json": "*",
         "aplus/debug": "^3.0",
-        "aplus/helpers": "^2.3"
+        "aplus/helpers": "^3.0"
     },
     "require-dev": {
         "ext-xdebug": "*",
