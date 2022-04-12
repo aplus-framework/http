@@ -402,7 +402,7 @@ abstract class Message implements MessageInterface
      *
      * @return bool
      */
-    protected function hasMethod(string $method) : bool
+    protected function isMethod(string $method) : bool
     {
         return $this->getMethod() === Method::validate($method);
     }
@@ -440,7 +440,7 @@ abstract class Message implements MessageInterface
         return $this->statusCode;
     }
 
-    protected function hasStatusCode(int $code) : bool
+    protected function isStatusCode(int $code) : bool
     {
         return $this->getStatusCode() === Status::validate($code);
     }

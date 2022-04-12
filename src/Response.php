@@ -248,9 +248,9 @@ class Response extends Message implements ResponseInterface
      *
      * @return bool
      */
-    public function hasStatusCode(int $code) : bool
+    public function isStatusCode(int $code) : bool
     {
-        return parent::hasStatusCode($code);
+        return parent::isStatusCode($code);
     }
 
     /**

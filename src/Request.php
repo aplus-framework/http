@@ -751,9 +751,9 @@ class Request extends Message implements RequestInterface
      *
      * @return bool
      */
-    public function hasMethod(string $method) : bool
+    public function isMethod(string $method) : bool
     {
-        return parent::hasMethod($method);
+        return parent::isMethod($method);
     }
 
     /**

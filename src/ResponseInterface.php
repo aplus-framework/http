@@ -22,7 +22,7 @@ interface ResponseInterface extends MessageInterface
 {
     public function getStatusCode() : int;
 
-    public function hasStatusCode(int $code) : bool;
+    public function isStatusCode(int $code) : bool;
 
     public function getStatusReason() : string;
 
