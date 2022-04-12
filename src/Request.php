@@ -127,7 +127,7 @@ class Request extends Message implements RequestInterface
         /**
          * @var array<string,string> $post
          */
-        $post = ArraySimple::convert($this->getPOST());
+        $post = ArraySimple::convert($this->getPost());
         foreach ($post as $field => $value) {
             $field = \htmlspecialchars($field, \ENT_QUOTES | \ENT_HTML5);
             $bodyParts[] = \implode("\r\n", [
@@ -447,7 +447,7 @@ class Request extends Message implements RequestInterface
         array | int $filterOptions = 0
     ) {
         if ($this->getMethod() === 'POST') {
-            return $this->getPOST($name, $filter, $filterOptions);
+            return $this->getPost($name, $filter, $filterOptions);
         }
         if ($this->parsedBody === null) {
             $this->isForm()
