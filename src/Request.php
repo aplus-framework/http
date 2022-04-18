@@ -446,7 +446,7 @@ class Request extends Message implements RequestInterface
         int $filter = null,
         array | int $filterOptions = 0
     ) {
-        if ($this->getMethod() === 'POST') {
+        if ($this->getMethod() === Method::POST) {
             return $this->getPost($name, $filter, $filterOptions);
         }
         if ($this->parsedBody === null) {
@@ -981,7 +981,7 @@ class Request extends Message implements RequestInterface
     #[Pure]
     public function isPost() : bool
     {
-        return $this->getMethod() === 'POST';
+        return $this->getMethod() === Method::POST;
     }
 
     /**

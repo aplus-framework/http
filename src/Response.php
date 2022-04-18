@@ -307,7 +307,7 @@ class Response extends Message implements ResponseInterface
     public function redirect(string $location, array $data = [], int $code = null) : static
     {
         if ($code === null) {
-            $code = $this->request->getMethod() === 'GET'
+            $code = $this->request->getMethod() === Method::GET
                 ? Status::TEMPORARY_REDIRECT
                 : Status::SEE_OTHER;
         } elseif ($code < 300 || $code > 399) {
@@ -421,7 +421,11 @@ class Response extends Message implements ResponseInterface
         $ifNoneMatch = $this->getRequest()->getHeader(RequestHeader::IF_NONE_MATCH);
         if ($ifNoneMatch !== null
             && ($ifNoneMatch === $etag || $ifNoneMatch === 'W/' . $etag)
-            && \in_array($this->getRequest()->getMethod(), ['GET', 'HEAD'])
+            && \in_array(
+                $this->getRequest()->getMethod(),
+                [Method::GET, Method::HEAD],
+                true
+            )
         ) {
             $this->setNotModified();
             $this->setBody('');
