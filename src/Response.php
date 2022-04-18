@@ -419,7 +419,7 @@ class Response extends Message implements ResponseInterface
         $etag = '"' . $etag . '"';
         // Cache of unchanged resources:
         $ifNoneMatch = $this->getRequest()->getHeader(RequestHeader::IF_NONE_MATCH);
-        if ($ifNoneMatch
+        if ($ifNoneMatch !== null
             && ($ifNoneMatch === $etag || $ifNoneMatch === 'W/' . $etag)
             && \in_array($this->getRequest()->getMethod(), ['GET', 'HEAD'])
         ) {
@@ -429,7 +429,7 @@ class Response extends Message implements ResponseInterface
         }
         // Avoid mid-air collisions:
         $ifMatch = $this->getRequest()->getHeader(RequestHeader::IF_MATCH);
-        if ($ifMatch && $ifMatch !== $etag) {
+        if ($ifMatch !== null && $ifMatch !== $etag) {
             $this->setBody('');
             $this->setStatus(Status::PRECONDITION_FAILED);
         }
