@@ -26,7 +26,7 @@ abstract class Message implements MessageInterface
     /**
      * HTTP Message Protocol.
      */
-    protected string $protocol = 'HTTP/1.1';
+    protected string $protocol = Protocol::HTTP_1_1;
     /**
      * HTTP Request URL.
      */

@@ -35,7 +35,7 @@ class Response extends Message implements ResponseInterface
     /**
      * HTTP Response Status Code.
      */
-    protected int $statusCode = 200;
+    protected int $statusCode = Status::OK;
     /**
      * HTTP Response Status Reason.
      */
