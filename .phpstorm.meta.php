@@ -387,7 +387,7 @@ expectedArguments(
     argumentsSet('methods')
 );
 expectedArguments(
-    \Framework\HTTP\Message::hasMethod(),
+    \Framework\HTTP\Message::isMethod(),
     0,
     argumentsSet('methods')
 );
@@ -437,7 +437,7 @@ expectedArguments(
     argumentsSet('response_status_codes')
 );
 expectedArguments(
-    \Framework\HTTP\Message::hasStatusCode(),
+    \Framework\HTTP\Message::isStatusCode(),
     0,
     argumentsSet('response_status_codes')
 );
