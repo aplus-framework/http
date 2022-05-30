@@ -90,9 +90,14 @@ The Curl response body will be like this:
     }
 
 Secure Request
-^^^^^^^^^^^^^^
+##############
 
-**Force HTTPS**
+To make sure that the application will only respond to secure requests, you can
+force the request to be over HTTPS and also that it is responding only on
+allowed hosts.
+
+Force HTTPS
+^^^^^^^^^^^
 
 If the request is not secure, we can force a redirect using HTTPS:
 
@@ -105,7 +110,8 @@ This method checks if the request scheme is HTTPS.
 And only if is not, it set headers and status to redirect to the HTTPS version of the URL
 and terminate the script.
 
-**Allowed Hosts**
+Allowed Hosts
+^^^^^^^^^^^^^
 
 If, for some unknown reason, the virtual host is incorrectly configured on the
 server, it is possible to prevent unwanted access by whitelisting the allowed hosts.
@@ -137,7 +143,7 @@ and log it.
 If the $allowedHosts argument is not set, the Request will accept any host.
 
 Content Negotiation
-^^^^^^^^^^^^^^^^^^^
+###################
 
 It is also in the request that information is acquired for
 `Content Negotiation <https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation>`_. 
@@ -173,7 +179,7 @@ Anyway, it is now possible to set the headers negotiated in the Response:
     $response->setHeader('Content-Language', $negotiatedLanguage);
 
 Request with JSON
-^^^^^^^^^^^^^^^^^
+#################
 
 When working with JSON, has a method to check if the ``Content-Type`` is of JSON
 type.
@@ -187,7 +193,7 @@ And also, a method to get the JSON data from the Request body:
     }
 
 Request with Uploads
-^^^^^^^^^^^^^^^^^^^^
+####################
 
 When the request is done via the POST method and has ``multipart/form-data`` as
 Content-Type, it characterizes the upload of files.
@@ -205,17 +211,100 @@ The ``getFile`` method returns an ``UploadedFile`` instance or ``null``.
         $moved = $file->move($filepath); // bool
     }
 
+Request with Authorization
+##########################
+
+To identify the type of authorization received, you can use the ``getAuthType``
+method. Which will return ``null`` if there is none, ``Basic`` or ``Digest``:
+
+.. code-block:: php
+
+    $request->getAuthType();
+
+Using the ``getBasicAuth`` method, we obtain an array containing two keys,
+``username`` and ``password`` or null:
+
+.. code-block:: php
+
+    $request->getBasicAuth();
+
+Using the ``getDigestAuth`` method, an array with 9 keys is obtained:
+``username``, ``realm``, ``nonce``, ``uri``, ``response``, ``opaque``,
+``qop``, ``nc`` and ``cnonce``.
+
+.. code-block:: php
+
+    $request->getDigestAuth();
+
 Request working with REST
-^^^^^^^^^^^^^^^^^^^^^^^^^
+#########################
+
+The Request class has methods that work very well with REST APIs.
+
+With the ``getMethod`` method, we get the HTTP method used:
 
 .. code-block:: php
 
     $request->getMethod();
+
+With the ``getGet`` method, query parts from the current URL:
+
+.. code-block:: php
+
     $request->getGet();
+
+The ``getPost`` method get data from POST requests.
+
+.. code-block:: php
+
     $request->getPost();
-    $request->getJson();    
+
+With the ``getJson`` method, the request body data is parsed in JSON, being an
+object, array or false if there are syntax errors.
+
+.. code-block:: php
+
+    $request->getJson();   
+
+With the ``getBody`` method, the body string of the request is obtained.
+
+.. code-block:: php
+
     $request->getBody();
+
+And with the ``getParsedBody`` method you get parsed body parts, used when the
+HTTP method is neither GET nor POST.
+
+.. code-block:: php
+
     $request->getParsedBody();
+
+Request working with Arrays
+###########################
+
+The ``getGet``, ``getPost``, ``getFile``, ``getParsedBody``, ``getEnv`` and
+``getServer`` methods can get data from arrays via strings with square brackets.
+
+For example, let's say ``$_POST`` equals the array below:
+
+.. code-block:: php
+
+    $_POST = [
+        'user' => [
+            'name' => 'John Doe',
+            'address' => [
+                'country' => 'Brazil',
+                'city' => 'Sapiranga',
+            ],
+        ],
+    ];
+
+User data can be obtained as follows:
+
+.. code-block:: php
+
+    $name = $request->getPost('user[name]'); // John Doe
+    $city = $request->getPost('user[address][city]'); // Sapiranga
 
 Response
 --------
@@ -236,24 +325,44 @@ To use the Response class, just instantiate it:
     $response = new Response($request);
 
 Response Status
-^^^^^^^^^^^^^^^
+###############
+
+Response status can be set with the ``setStatusCode``, ``setStatusReason`` or
+``setStatus`` methods using the status number or the value of a constant of
+the **Status** class:
 
 .. code-block:: php
+
+    use Framework\HTTP\Status;
 
     $response->setStatus(401);
-    $response->setStatus(Response::CODE_UNAUTHORIZED);
+    $response->setStatus(Status::UNAUTHORIZED);
 
 Response Headers
-^^^^^^^^^^^^^^^^
+################
+
+Headers can be set using the ``setHeader`` method, using a string in the first
+parameter with the name of the header and in the second the value.
+
+Also, you can use constants from the **Header** and **ResponseHeader** classes:
 
 .. code-block:: php
 
+    use Framework\HTTP\Header;
+
     $response->setHeader('Content-Type', 'text/xml');
-    $response->setHeader(Response::HEADER_CONTENT_TYPE, 'text/xml');
+    $response->setHeader(Header::CONTENT_TYPE, 'text/xml');
     $response->setContentType('text/xml');
 
 Response Body
-^^^^^^^^^^^^^
+#############
+
+Each time you call the ``getBody`` method the buffer will be appended to the
+body. This is so that, for example, ``echo`` can be used.
+
+Also, you can use the ``setBody`` method.
+
+Let's see an example manipulating the body of the Response:
 
 .. code-block:: php
 
@@ -269,7 +378,7 @@ Response Body
     $body = $response->getBody(); // name=A+Framework
 
 Response with JSON
-^^^^^^^^^^^^^^^^^^
+##################
 
 A response containing JSON can be set as:
 
@@ -296,7 +405,7 @@ or simply:
     $response->setJson($users);
 
 Response with HTML
-^^^^^^^^^^^^^^^^^^
+##################
 
 HTML, and any other Content-Type, can be set with the
 ``Response::{set,append,prepend}Body()`` methods.
@@ -312,7 +421,7 @@ If the Content-Type header is not set, it is automatically set to
 ``text/html; charset=UTF-8`` when the Response is sent.
 
 Response with Download
-^^^^^^^^^^^^^^^^^^^^^^
+######################
 
 To send a file as a download in the response, you can call:
 
@@ -335,7 +444,7 @@ a video at a certain time.
     $response->setDownload('filepath.pdf', true, acceptRanges: true);
 
 Sending the Response
-^^^^^^^^^^^^^^^^^^^^
+####################
 
 Now that you've seen how to set the Response status, headers and body, it's time
 to see how to send the response to the User-Agent:
@@ -344,22 +453,46 @@ to see how to send the response to the User-Agent:
 
     $response->send();
 
-The ``send`` method must be called only once, otherwise it will throw an exception. 
-Calling the ``send`` method is the last step of the HTTP response. 
-After that, nothing else should come out to the PHP Output Buffer. 
-But, your script can continue to run normally if necessary.
+The ``send`` method must be called only once, otherwise it will throw an exception.
+Calling the ``send`` method is the last step of the HTTP response. After that,
+nothing else should come out to the PHP Output Buffer. But, your script can
+continue to run normally if necessary.
 
 Response Cache
-^^^^^^^^^^^^^^
+##############
 
-**Cache-Control**
+Response has methods to simplify the caching process in the browser.
+
+You can use the **Cache-Control** header to enable the cache for a certain time
+or negotiate the response through the **ETag** header:
+
+Cache-Control
+^^^^^^^^^^^^^
+
+To set the ``Cache-Control`` header, you can use the ``setCache`` method passing
+the number of seconds in the first parameter and in the second pass true for it
+to be public or false to be private, which is the default .
 
 .. code-block:: php
 
-    $response->setCache();
+    $response->setCache(60);
+
+To not save anything in the cache, use the ``setNoCache`` method:
+
+.. code-block:: php
+
     $response->setNoCache();
 
-**ETag**
+ETag
+^^^^
+
+Through the ETag header it is possible to make the User-Agent cache the contents
+of the response body by an identifier. This will cause the response to contain a
+304 Not Modified status and the message body to be empty, saving data to be
+transferred.
+
+Likewise, it will avoid mid-air collisions on requests other than the GET or
+HEAD method:
 
 .. code-block:: php
 
@@ -368,7 +501,7 @@ Response Cache
 URL
 ---
 
-The library has a class for working with URLs:
+The library has a class for working with URLs. See how it works:
 
 .. code-block:: php
 
@@ -389,6 +522,67 @@ The library has a class for working with URLs:
 
 AntiCSRF
 --------
+
+The HTTP library has a class to prevent
+`Cross-Site Request Forgery (CSRF) <https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern>`_
+using the Synchronizer Token Pattern.
+
+We will see below how AntiCSRF works.
+
+We have a file called **header.php** that will be required by other files
+because it loads the autoload file, starts the session and instantiates the
+Request and AntiCSRF objects:
+
+.. code-block:: php
+
+    <?php
+    require __DIR__ . '/vendor/autoload.php';
+
+    use Framework\HTTP\AntiCSRF;
+    use Framework\HTTP\Request;
+
+    session_start();
+    $request = new Request();
+    $antiCsrf = new AntiCSRF($request);
+
+In this example, we have a form in the **form.php** file. In which there is a
+call to the ``$antiCsrf`` variable that returns the field with the token saved
+in the session.
+
+The form action takes you to the **save.php** file using the POST method:
+
+.. code-block:: php
+
+    <?php
+    require __DIR__ . '/header.php';
+    ?>
+    <form action="save.php" method="post">
+        <?= $antiCsrf->input() ?>
+        <label>Name</label>
+        <input name="name"/>
+        <label>Message</label>
+        <textarea name="message"></textarea>
+        <button>Send</button>
+    </form>
+
+Finally, we have the **save.php** file, where the verification of the token
+received in the form is performed. If it is invalid, the script will terminate
+showing that the request is invalid. If valid, it will show that the form
+message can be saved.
+
+.. code-block:: php
+
+    <?php
+    require __DIR__ . '/header.php';
+
+    if ( ! $request->isPost() || ! $antiCsrf->verify()) {
+        exit ('Request is invalid.');
+    }
+    echo 'OK. Anti-CSRF is valid. You can save the message!';
+
+Note that in this example we validated only the field with the anti-CSRF token
+and did not validate the other fields. Which can be validated using the
+`Validation Library <https://gitlab.com/aplus-framework/libraries/validation>`_.
 
 Conclusion
 ----------
