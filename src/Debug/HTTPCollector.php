@@ -44,9 +44,9 @@ class HTTPCollector extends Collector
     {
         $activities = [];
         foreach ($this->getData() as $data) {
-            if (isset($data['message'], $data['type'])
-                && $data['message'] === 'response'
-                && $data['type'] === 'send'
+            if (isset($data['message'], $data['type']) &&
+                $data['message'] === 'response' &&
+                $data['type'] === 'send'
             ) {
                 $activities[] = [
                     'collector' => $this->getName(),
@@ -225,15 +225,16 @@ class HTTPCollector extends Collector
         <?php
         if ($this->response->isSent()):
             $info = [];
-        foreach ($this->getData() as $data) {
-            if (isset($data['message'], $data['type'])
+            foreach ($this->getData() as $data) {
+                if (
+                    isset($data['message'], $data['type'])
                     && $data['message'] === 'response'
                     && $data['type'] === 'send'
                 ) {
-                $info = $data;
-                break;
-            }
-        } ?>
+                    $info = $data;
+                    break;
+                }
+            } ?>
             <p>
                 <strong>Time Sending:</strong> <?= \round($info['end'] - $info['start'], 6) ?> seconds
             </p>
