@@ -67,6 +67,11 @@ registerArgumentsSet(
     \Framework\HTTP\Protocol::HTTP_2_0,
     \Framework\HTTP\Protocol::HTTP_2,
     \Framework\HTTP\Protocol::HTTP_3,
+    'HTTP/1.0',
+    'HTTP/1.1',
+    'HTTP/2.0',
+    'HTTP/2',
+    'HTTP/3',
 );
 registerArgumentsSet(
     'methods',
