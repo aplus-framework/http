@@ -512,4 +512,32 @@ final class ResponseTest extends TestCase
         $this->response->setContentEncoding('gzip');
         self::assertSame('gzip', $this->response->getHeader('content-encoding'));
     }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testContentTypeNotSetIfBodyIsEmpty() : void
+    {
+        \ob_start();
+        $this->response->send();
+        \ob_end_clean();
+        self::assertNull($this->response->getHeader('content-type'));
+        self::assertSame('', $this->response->getBody());
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testContentTypeAutoSetIfBodyIsNotEmpty() : void
+    {
+        $this->response->setBody('Foo');
+        \ob_start();
+        $this->response->send();
+        \ob_end_clean();
+        self::assertSame(
+            'text/html; charset=UTF-8',
+            $this->response->getHeader('content-type')
+        );
+        self::assertSame('Foo', $this->response->getBody());
+    }
 }
