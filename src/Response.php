@@ -327,7 +327,7 @@ class Response extends Message implements ResponseInterface
     /**
      * Send the Response headers, cookies and body to the output.
      *
-     * @throws LogicException if Response already is sent
+     * @throws LogicException if Response is already sent
      */
     public function send() : void
     {
@@ -349,7 +349,7 @@ class Response extends Message implements ResponseInterface
     protected function sendAll() : void
     {
         if ($this->isSent) {
-            throw new LogicException('Response already is sent');
+            throw new LogicException('Response is already sent');
         }
         $this->sendHeaders();
         $this->sendCookies();
@@ -373,12 +373,12 @@ class Response extends Message implements ResponseInterface
     /**
      * Send the HTTP headers to the output.
      *
-     * @throws LogicException if headers already is sent
+     * @throws LogicException if headers are already sent
      */
     protected function sendHeaders() : void
     {
         if (\headers_sent()) {
-            throw new LogicException('Headers already is sent');
+            throw new LogicException('Headers are already sent');
         }
         if ($this->getHeader(Header::DATE) === null) {
             $this->setDate(new DateTime());

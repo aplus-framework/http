@@ -290,10 +290,10 @@ final class ResponseTest extends TestCase
         self::assertSame([], $this->response->getHeaders());
     }
 
-    public function testHeadersAlreadyIsSent() : void
+    public function testHeadersAreAlreadySent() : void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Headers already is sent');
+        $this->expectExceptionMessage('Headers are already sent');
         $this->response->send();
     }
 
@@ -364,7 +364,7 @@ final class ResponseTest extends TestCase
         self::assertSame('Hello!', $contents);
         self::assertTrue($this->response->isSent());
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Response already is sent');
+        $this->expectExceptionMessage('Response is already sent');
         $this->response->send();
     }
 
