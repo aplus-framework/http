@@ -383,10 +383,8 @@ class Response extends Message implements ResponseInterface
         if ($this->getHeader(Header::DATE) === null) {
             $this->setDate(new DateTime());
         }
-        if ($this->getHeader(Header::CONTENT_TYPE) === null
-            && $this->getBody() !== ''
-        ) {
-            $this->setContentType('text/html');
+        if ($this->getHeader(Header::CONTENT_TYPE) === null) {
+            $this->negotiateContentType();
         }
         if ($this->isAutoEtag() && ! $this->hasDownload()) {
             $this->negotiateEtag();
@@ -394,6 +392,47 @@ class Response extends Message implements ResponseInterface
         \header($this->getStartLine());
         foreach ($this->getHeaderLines() as $line) {
             \header($line);
+        }
+    }
+
+    /**
+     * Negotiates the Content-Type header, setting the MIME type "text/html" if
+     * the response body is not empty.
+     *
+     * If the response body is empty, it checks servers to set the header to an
+     * empty value, which causes the server to remove the Content-Type header,
+     * and it will not appear to the client from the request.
+     *
+     * The header will also not be set on the PHP Development Server when the
+     * body is empty.
+     *
+     * This prevents the Content-Type from appearing without it being needed in,
+     * for example, REST API responses.
+     *
+     * @see https://stackoverflow.com/a/21029402/6027968
+     */
+    protected function negotiateContentType() : void
+    {
+        if ($this->getBody() !== '') {
+            $this->setContentType('text/html');
+            return;
+        }
+        $software = (string) $this->getRequest()->getServer('SERVER_SOFTWARE');
+        $software = \strtolower($software);
+        // These servers remove headers if they are set to an empty value:
+        $servers = [
+            'apache',
+            'nginx',
+        ];
+        foreach ($servers as $server) {
+            if (\str_contains($software, $server)) {
+                $this->setHeader(Header::CONTENT_TYPE, '');
+                return;
+            }
+        }
+        // Prevent PHP Development Server from setting the default Content-Type:
+        if (\str_contains($software, 'php')) {
+            \ini_set('default_mimetype', '');
         }
     }
 

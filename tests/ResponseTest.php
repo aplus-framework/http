@@ -540,4 +540,54 @@ final class ResponseTest extends TestCase
         );
         self::assertSame('Foo', $this->response->getBody());
     }
+
+    /**
+     * @dataProvider
+     *
+     * @return array<array<string>>
+     */
+    public function serverSoftwareProvider() : array
+    {
+        return [
+            ['Apache/2.4.52'],
+            ['nginx/1.18.0'],
+        ];
+    }
+
+    /**
+     * @dataProvider serverSoftwareProvider
+     * @runInSeparateProcess
+     */
+    public function testContentTypeEmptyOnServer(string $software) : void
+    {
+        $_SERVER['SERVER_SOFTWARE'] = $software;
+        $this->response->setBody('');
+        \ob_start();
+        $this->response->send();
+        \ob_end_clean();
+        self::assertSame(
+            '',
+            $this->response->getHeader('content-type')
+        );
+        self::assertSame('Content-Type:', xdebug_get_headers()[1]);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testRemoveContentTypeOnDevelopmentServer() : void
+    {
+        self::assertSame('text/html', \ini_get('default_mimetype'));
+        $_SERVER['SERVER_SOFTWARE'] = 'PHP 8.1.9 Development Server';
+        $this->response->setBody('');
+        \ob_start();
+        $this->response->send();
+        \ob_end_clean();
+        self::assertNull($this->response->getHeader('content-type'));
+        self::assertSame('', \ini_get('default_mimetype'));
+        foreach (xdebug_get_headers() as $header) {
+            $header = \strtolower($header);
+            self::assertStringNotContainsString('content-type', $header);
+        }
+    }
 }
