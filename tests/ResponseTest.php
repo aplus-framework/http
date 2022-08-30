@@ -550,6 +550,7 @@ final class ResponseTest extends TestCase
     {
         return [
             ['Apache/2.4.52'],
+            ['lighttpd/1.4.63'],
             ['nginx/1.18.0'],
         ];
     }

@@ -422,6 +422,7 @@ class Response extends Message implements ResponseInterface
         // These servers remove headers if they are set to an empty value:
         $servers = [
             'apache',
+            'lighttpd',
             'nginx',
         ];
         foreach ($servers as $server) {
