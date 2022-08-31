@@ -287,8 +287,16 @@ class Request extends Message implements RequestInterface
     public function forceHttps() : void
     {
         if ( ! $this->isSecure()) {
-            \header('Location: ' . $this->getUrl()->setScheme('https')->getAsString(), true, 301);
-            exit;
+            \header(
+                'Location: ' . $this->getUrl()->setScheme('https'),
+                true,
+                Status::MOVED_PERMANENTLY
+            );
+            if ( ! \defined('TESTING')) {
+                // @codeCoverageIgnoreStart
+                exit;
+                // @codeCoverageIgnoreEnd
+            }
         }
     }
 

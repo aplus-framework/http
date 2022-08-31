@@ -43,6 +43,36 @@ final class RequestTest extends TestCase
         );
     }
 
+    /**
+     * @runInSeparateProcess
+     */
+    public function testForceHttpsWithHttp() : void
+    {
+        RequestMock::setInput(\INPUT_SERVER, [
+            'REQUEST_SCHEME' => 'http',
+        ]);
+        $request = new RequestMock();
+        $request->forceHttps();
+        self::assertFalse($request->isSecure());
+        $url = $request->getUrl()->setScheme('https');
+        self::assertContains('Location: ' . $url, xdebug_get_headers());
+        self::assertSame(301, \http_response_code());
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testForceHttpsWithHttps() : void
+    {
+        RequestMock::setInput(\INPUT_SERVER, [
+            'HTTPS' => 'on',
+            'REQUEST_SCHEME' => 'https',
+        ]);
+        $request = new RequestMock();
+        $request->forceHttps();
+        self::assertTrue($request->isSecure());
+    }
+
     public function testUserAgent() : void
     {
         self::assertInstanceOf(
