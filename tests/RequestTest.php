@@ -101,20 +101,6 @@ final class RequestTest extends TestCase
         ]));
     }
 
-    public function testBasicAuth() : void
-    {
-        $this->request->setHeader(
-            'Authorization',
-            'Basic ' . \base64_encode('user:pass')
-        );
-        $expected = [
-            'username' => 'user',
-            'password' => 'pass',
-        ];
-        self::assertSame($expected, $this->request->getBasicAuth());
-        self::assertSame($expected, $this->request->getBasicAuth());
-    }
-
     public function testBody() : void
     {
         self::assertSame('', $this->request->getBody());
@@ -388,6 +374,33 @@ final class RequestTest extends TestCase
         self::assertIsArray($this->request->getCookies());
     }
 
+    public function testBasicAuth() : void
+    {
+        $this->request->setHeader(
+            'Authorization',
+            'Basic ' . \base64_encode('user:pass')
+        );
+        $expected = [
+            'username' => 'user',
+            'password' => 'pass',
+        ];
+        self::assertSame($expected, $this->request->getBasicAuth());
+        self::assertSame($expected, $this->request->getBasicAuth());
+    }
+
+    public function testBearerAuth() : void
+    {
+        $this->request->setHeader(
+            'Authorization',
+            'Bearer foobar'
+        );
+        $expected = [
+            'token' => 'foobar',
+        ];
+        self::assertSame($expected, $this->request->getBearerAuth());
+        self::assertSame($expected, $this->request->getBearerAuth());
+    }
+
     public function testDigestAuth() : void
     {
         $this->request->setHeader(
@@ -411,6 +424,7 @@ final class RequestTest extends TestCase
     public function testEmptyAuth() : void
     {
         self::assertNull($this->request->getBasicAuth());
+        self::assertNull($this->request->getBearerAuth());
         self::assertNull($this->request->getDigestAuth());
     }
 

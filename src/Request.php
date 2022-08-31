@@ -295,7 +295,7 @@ class Request extends Message implements RequestInterface
     /**
      * Get the Authorization type.
      *
-     * @return string|null Basic, Digest or null for none
+     * @return string|null Basic, Bearer, Digest or null for none
      */
     public function getAuthType() : ?string
     {
@@ -317,6 +317,19 @@ class Request extends Message implements RequestInterface
     public function getBasicAuth() : ?array
     {
         return $this->getAuthType() === 'Basic'
+            ? $this->auth
+            : null;
+    }
+
+    /**
+     * Get Bearer authorization.
+     *
+     * @return array<string>|null One key: token
+     */
+    #[ArrayShape(['token' => 'string|null'])]
+    public function getBearerAuth() : ?array
+    {
+        return $this->getAuthType() === 'Bearer'
             ? $this->auth
             : null;
     }
@@ -357,6 +370,9 @@ class Request extends Message implements RequestInterface
         if ($type === 'Basic') {
             $this->authType = $type;
             $this->auth = $this->parseBasicAuth($attributes);
+        } elseif ($type === 'Bearer') {
+            $this->authType = $type;
+            $this->auth = $this->parseBearerAuth($attributes);
         } elseif ($type === 'Digest') {
             $this->authType = $type;
             $this->auth = $this->parseDigestAuth($attributes);
@@ -383,6 +399,24 @@ class Request extends Message implements RequestInterface
                 $data['username'],
                 $data['password'],
             ] = \array_pad(\explode(':', $attributes, 2), 2, null);
+        }
+        return $data;
+    }
+
+    /**
+     * @param string $attributes
+     *
+     * @return array<string,string|null>
+     */
+    #[ArrayShape(['token' => 'string|null'])]
+    #[Pure]
+    protected function parseBearerAuth(string $attributes) : array
+    {
+        $data = [
+            'token' => null,
+        ];
+        if ($attributes) {
+            $data['token'] = $attributes;
         }
         return $data;
     }
