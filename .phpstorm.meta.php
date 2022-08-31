@@ -645,6 +645,13 @@ expectedArguments(
     argumentsSet('url_schemes')
 );
 expectedReturnValues(
+    \Framework\HTTP\Request::getAuthType(),
+    'Basic',
+    'Bearer',
+    'Digest',
+    null,
+);
+expectedReturnValues(
     \Framework\HTTP\UploadedFile::getError(),
     \UPLOAD_ERR_OK,
     \UPLOAD_ERR_INI_SIZE,
