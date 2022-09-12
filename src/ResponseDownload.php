@@ -65,8 +65,7 @@ trait ResponseDownload
         int $delay = 0,
         int $readLength = 1024,
         ?string $filename = null
-    ) : static
-    {
+    ) : static {
         $realpath = \realpath($filepath);
         if ($realpath === false || ! \is_file($realpath)) {
             throw new InvalidArgumentException('Invalid file path: ' . $filepath);
@@ -151,6 +150,7 @@ trait ResponseDownload
      * @param string $line
      *
      * @return array<int,array<int,int>>|false
+     *
      * @phpstan-ignore-next-line
      */
     #[Pure]
