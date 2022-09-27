@@ -64,7 +64,7 @@ class RequestMock extends \Framework\HTTP\Request
         \INPUT_ENV => [],
     ];
 
-    public function __construct(array $allowedHosts = null)
+    public function __construct(array $allowedHosts = [])
     {
         $this->prepareInput();
         parent::__construct($allowedHosts);

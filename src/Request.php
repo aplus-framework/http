@@ -73,14 +73,14 @@ class Request extends Message implements RequestInterface
     /**
      * Request constructor.
      *
-     * @param array<int,string>|null $allowedHosts set allowed hosts if your
-     * server dont serve by Host header, as Nginx do
+     * @param array<string> $allowedHosts set allowed hosts if your
+     * server don't serve by Host header, as Nginx do
      *
      * @throws UnexpectedValueException if invalid Host
      */
-    public function __construct(array $allowedHosts = null)
+    public function __construct(array $allowedHosts = [])
     {
-        if ($allowedHosts !== null) {
+        if ($allowedHosts) {
             $this->validateHost($allowedHosts);
         }
         $this->prepareStatusLine();
@@ -189,7 +189,7 @@ class Request extends Message implements RequestInterface
      * @see https://expressionengine.com/blog/http-host-and-server-name-security-issues
      * @see http://nginx.org/en/docs/http/request_processing.html
      *
-     * @param array<int,string> $allowedHosts
+     * @param array<string> $allowedHosts
      */
     protected function validateHost(array $allowedHosts) : void
     {
