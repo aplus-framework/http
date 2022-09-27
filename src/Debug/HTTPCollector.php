@@ -77,11 +77,12 @@ class HTTPCollector extends Collector
             return '<p>A Request instance has not been set on this collector.</p>';
         }
         \ob_start(); ?>
-        <p><strong>IP:</strong> <?= $this->request->getIp() ?></p>
+        <p><strong>Client IP:</strong> <?= $this->request->getIp() ?></p>
         <p><strong>Protocol:</strong> <?= $this->request->getProtocol() ?></p>
         <p><strong>Method:</strong> <?= $this->request->getMethod() ?></p>
         <p><strong>URL:</strong> <?= $this->request->getUrl() ?></p>
         <p><strong>Server:</strong> <?= $this->request->getServer('SERVER_SOFTWARE') ?></p>
+        <p><strong>Hostname:</strong> <?= \gethostname() ?></p>
         <?= $this->renderRequestUserAgent() ?>
         <?php
         echo $this->renderHeadersTable($this->request->getHeaderLines());
