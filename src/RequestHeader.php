@@ -211,6 +211,12 @@ class RequestHeader extends Header
      */
     public const X_FORWARDED_PROTO = 'X-Forwarded-Proto';
     /**
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Real-IP
+     *
+     * @var string
+     */
+    public const X_REAL_IP = 'X-Real-IP';
+    /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Requested-With
      *
      * @var string

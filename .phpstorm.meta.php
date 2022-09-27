@@ -227,6 +227,7 @@ registerArgumentsSet(
     \Framework\HTTP\RequestHeader::X_FORWARDED_FOR,
     \Framework\HTTP\RequestHeader::X_FORWARDED_HOST,
     \Framework\HTTP\RequestHeader::X_FORWARDED_PROTO,
+    \Framework\HTTP\RequestHeader::X_REAL_IP,
     \Framework\HTTP\RequestHeader::X_REQUESTED_WITH,
     'Accept',
     'Accept-Charset',
@@ -279,6 +280,7 @@ registerArgumentsSet(
     'X-Forwarded-Host',
     'X-Forwarded-Proto',
     'X-Request-ID',
+    'X-Real-IP',
     'X-Requested-With',
 );
 registerArgumentsSet(

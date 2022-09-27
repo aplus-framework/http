@@ -213,6 +213,7 @@ class Header
         'x-forwarded-for' => 'X-Forwarded-For',
         'x-forwarded-host' => 'X-Forwarded-Host',
         'x-forwarded-proto' => 'X-Forwarded-Proto',
+        'x-real-ip' => 'X-Real-IP',
         'x-requested-with' => 'X-Requested-With',
         // ---------------------------------------------------------------------
         // Response headers
