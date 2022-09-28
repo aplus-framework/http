@@ -864,6 +864,7 @@ class Request extends Message implements RequestInterface
     public function getProxiedIp() : ?string
     {
         foreach ([
+            'X-Real-IP',
             'X-Forwarded-For',
             'Client-IP',
             'X-Client-IP',
@@ -871,7 +872,8 @@ class Request extends Message implements RequestInterface
         ] as $header) {
             $header = $this->getHeader($header);
             if ($header) {
-                return $header;
+                $ip = \explode(',', $header, 2)[0];
+                return \trim($ip);
             }
         }
         return null;
