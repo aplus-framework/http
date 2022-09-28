@@ -77,7 +77,7 @@ class HTTPCollector extends Collector
             return '<p>A Request instance has not been set on this collector.</p>';
         }
         \ob_start(); ?>
-        <p><strong>Client IP:</strong> <?= $this->request->getIp() ?></p>
+        <p title="REMOTE_ADDR"><strong>IP:</strong> <?= $this->request->getIp() ?></p>
         <p><strong>Protocol:</strong> <?= $this->request->getProtocol() ?></p>
         <p><strong>Method:</strong> <?= $this->request->getMethod() ?></p>
         <p><strong>URL:</strong> <?= $this->request->getUrl() ?></p>
