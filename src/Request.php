@@ -1071,7 +1071,7 @@ class Request extends Message implements RequestInterface
         }
         $host = \parse_url($filteredHost);
         $this->host = $host['host']; // @phpstan-ignore-line
-        if (isset($host['port'])) { // @phpstan-ignore-line
+        if (isset($host['port'])) {
             $this->port = $host['port'];
         }
         return $this;
