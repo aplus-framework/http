@@ -469,7 +469,7 @@ class Request extends Message implements RequestInterface
                 $data[$match[1]] = $match[3] ?: $match[4] ?? '';
             }
         }
-        return $data; // @phpstan-ignore-line
+        return $data;
     }
 
     /**
