@@ -13,6 +13,7 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Deprecated;
 use JetBrains\PhpStorm\Pure;
 
 /**
@@ -50,10 +51,35 @@ class Cookie implements \Stringable
 
     public function __toString() : string
     {
-        return $this->getAsString();
+        return $this->toString();
     }
 
+    /**
+     * @return string
+     *
+     * @deprecated Use {@see Cookie::toString()}
+     *
+     * @codeCoverageIgnore
+     */
+    #[Deprecated(
+        reason: 'since HTTP Library version 5.3, use toString() instead',
+        replacement: '%class%->toString()'
+    )]
     public function getAsString() : string
+    {
+        \trigger_error(
+            'Method ' . __METHOD__ . ' is deprecated',
+            \E_USER_DEPRECATED
+        );
+        return $this->toString();
+    }
+
+    /**
+     * @since 5.3
+     *
+     * @return string
+     */
+    public function toString() : string
     {
         $string = $this->getName() . '=' . $this->getValue();
         $part = $this->getExpires();

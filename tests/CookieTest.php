@@ -121,7 +121,7 @@ final class CookieTest extends TestCase
             ->setExpires('+30 seconds')
             ->send();
         self::assertContains(
-            'Set-Cookie: ' . $this->cookie->getAsString(),
+            'Set-Cookie: ' . $this->cookie->toString(),
             xdebug_get_headers()
         );
     }
@@ -139,7 +139,7 @@ final class CookieTest extends TestCase
             ->setSameSite('strict')
             ->setValue('baz')
             ->setExpires($time);
-        self::assertSame($expected, $this->cookie->getAsString());
+        self::assertSame($expected, $this->cookie->toString());
         self::assertSame($expected, (string) $this->cookie);
         self::assertInstanceOf(Cookie::class, $this->cookie);
     }
