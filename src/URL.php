@@ -11,6 +11,7 @@ namespace Framework\HTTP;
 
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\Deprecated;
 use JetBrains\PhpStorm\Pure;
 use RuntimeException;
 
@@ -63,7 +64,7 @@ class URL implements \JsonSerializable, \Stringable
     #[Pure]
     public function __toString() : string
     {
-        return $this->getAsString();
+        return $this->toString();
     }
 
     /**
@@ -257,8 +258,33 @@ class URL implements \JsonSerializable, \Stringable
         return $this->scheme;
     }
 
-    #[Pure]
+    /**
+     * @return string
+     *
+     * @deprecated Use {@see URL::toString()}
+     *
+     * @codeCoverageIgnore
+     */
+    #[Deprecated(
+        reason: 'since HTTP Library version 5.3, use toString() instead',
+        replacement: '%class%->toString()'
+    )]
     public function getAsString() : string
+    {
+        \trigger_error(
+            'Method ' . __METHOD__ . ' is deprecated',
+            \E_USER_DEPRECATED
+        );
+        return $this->toString();
+    }
+
+    /**
+     * @since 5.3
+     *
+     * @return string
+     */
+    #[Pure]
+    public function toString() : string
     {
         $url = $this->getScheme() . '://';
         $part = $this->getUser();
@@ -471,6 +497,6 @@ class URL implements \JsonSerializable, \Stringable
     #[Pure]
     public function jsonSerialize() : string
     {
-        return $this->getAsString();
+        return $this->toString();
     }
 }

@@ -168,11 +168,11 @@ final class URLTest extends TestCase
         self::assertSame('https', $this->url->getScheme());
     }
 
-    public function testGetAsString() : void
+    public function testToString() : void
     {
         self::assertSame(
             'http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id',
-            $this->url->getAsString()
+            $this->url->toString()
         );
         self::assertSame(
             'http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id',
