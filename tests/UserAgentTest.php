@@ -20,7 +20,7 @@ final class UserAgentTest extends TestCase
     public function testAgentString() : void
     {
         $agent = new UserAgent($this->userAgent);
-        self::assertSame($this->userAgent, $agent->getAsString());
+        self::assertSame($this->userAgent, $agent->toString());
         self::assertSame($this->userAgent, $agent->__toString());
     }
 
@@ -71,7 +71,7 @@ final class UserAgentTest extends TestCase
         self::assertSame('13.0', $agent->getBrowserVersion());
         self::assertNull($agent->getRobot());
         self::assertSame('Android', $agent->getMobile());
-        self::assertSame($new_agent, $agent->getAsString());
+        self::assertSame($new_agent, $agent->toString());
         self::assertTrue($agent->isBrowser());
         self::assertFalse($agent->isRobot());
         self::assertTrue($agent->isMobile());

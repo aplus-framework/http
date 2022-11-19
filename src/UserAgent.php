@@ -9,6 +9,7 @@
  */
 namespace Framework\HTTP;
 
+use JetBrains\PhpStorm\Deprecated;
 use JetBrains\PhpStorm\Pure;
 
 /**
@@ -234,7 +235,7 @@ class UserAgent implements \JsonSerializable, \Stringable
     #[Pure]
     public function __toString() : string
     {
-        return $this->getAsString();
+        return $this->toString();
     }
 
     /**
@@ -321,12 +322,34 @@ class UserAgent implements \JsonSerializable, \Stringable
     }
 
     /**
+     * @return string
+     *
+     * @deprecated Use {@see UserAgent::toString()}
+     *
+     * @codeCoverageIgnore
+     */
+    #[Deprecated(
+        reason: 'since HTTP Library version 5.3, use toString() instead',
+        replacement: '%class%->toString()'
+    )]
+    public function getAsString() : string
+    {
+        \trigger_error(
+            'Method ' . __METHOD__ . ' is deprecated',
+            \E_USER_DEPRECATED
+        );
+        return $this->toString();
+    }
+
+    /**
      * Get the User-Agent as string.
+     *
+     * @since 5.3
      *
      * @return string
      */
     #[Pure]
-    public function getAsString() : string
+    public function toString() : string
     {
         return $this->agent;
     }
@@ -467,6 +490,6 @@ class UserAgent implements \JsonSerializable, \Stringable
     #[Pure]
     public function jsonSerialize() : string
     {
-        return $this->getAsString();
+        return $this->toString();
     }
 }
