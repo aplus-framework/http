@@ -97,7 +97,7 @@ class Response extends Message implements ResponseInterface
             $buffer = \ob_get_contents();
             \ob_clean();
         }
-        return $this->body .= $buffer;
+        return $this->body = parent::getBody() . $buffer;
     }
 
     /**
