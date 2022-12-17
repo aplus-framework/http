@@ -42,7 +42,7 @@ abstract class Message implements MessageInterface
     /**
      * HTTP Message Body.
      */
-    protected string $body = '';
+    protected string $body;
     /**
      * HTTP Message Cookies.
      *
@@ -343,7 +343,7 @@ abstract class Message implements MessageInterface
     #[Pure]
     public function getBody() : string
     {
-        return $this->body;
+        return $this->body ?? '';
     }
 
     /**
