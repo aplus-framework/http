@@ -170,6 +170,9 @@ final class RequestTest extends TestCase
         $this->request->parsedBody = [];
         self::assertSame('', $this->request->getBody());
         self::assertSame([], $this->request->getParsedBody());
+        // @phpstan-ignore-next-line
+        $this->request->setBody('0');
+        self::assertSame('0', $this->request->getBody());
     }
 
     public function testCharset() : void
