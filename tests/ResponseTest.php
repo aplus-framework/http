@@ -31,6 +31,7 @@ final class ResponseTest extends TestCase
 
     /**
      * @see http://en.wikipedia.org/wiki/Post/Redirect/Get
+     *
      * @runInSeparateProcess
      */
     public function testPostRedirectGet() : void
@@ -557,6 +558,7 @@ final class ResponseTest extends TestCase
 
     /**
      * @dataProvider serverSoftwareProvider
+     *
      * @runInSeparateProcess
      */
     public function testContentTypeEmptyOnServer(string $software) : void
