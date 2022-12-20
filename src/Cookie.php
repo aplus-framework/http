@@ -10,6 +10,7 @@
 namespace Framework\HTTP;
 
 use DateTime;
+use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use InvalidArgumentException;
@@ -84,7 +85,7 @@ class Cookie implements \Stringable
         $string = $this->getName() . '=' . $this->getValue();
         $part = $this->getExpires();
         if ($part !== null) {
-            $string .= '; expires=' . $this->expires->format('D, d-M-Y H:i:s') . ' GMT';
+            $string .= '; expires=' . $this->expires->format(DateTimeInterface::RFC7231);
             $string .= '; Max-Age=' . $this->expires->diff(new DateTime('-1 second'))->s;
         }
         $part = $this->getPath();
