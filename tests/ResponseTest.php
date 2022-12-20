@@ -355,12 +355,15 @@ final class ResponseTest extends TestCase
         \ob_start();
         $this->response->send();
         $contents = \ob_get_clean();
+        $xdebugCookieDateFormat = \PHP_VERSION_ID < 80200
+            ? 'D, d-M-Y H:i:s'
+            : 'D, d M Y H:i:s';
         self::assertSame([
             'foo: bar',
             'Date: ' . \gmdate('D, d M Y H:i:s') . ' GMT',
             'Content-Type: text/html; charset=UTF-8',
-            'Set-Cookie: session_id=abc123; expires=' . \gmdate('D, d-M-Y H:i:s', \time() + 3600)
-            . ' GMT; Max-Age=3600',
+            'Set-Cookie: session_id=abc123; expires='
+            . \gmdate($xdebugCookieDateFormat, \time() + 3600) . ' GMT; Max-Age=3600',
         ], xdebug_get_headers());
         self::assertSame('Hello!', $contents);
         self::assertTrue($this->response->isSent());
