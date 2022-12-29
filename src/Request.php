@@ -190,7 +190,7 @@ class Request extends Message implements RequestInterface
      */
     protected function validateHost(array $allowedHosts) : void
     {
-        $host = $this->getServer('HTTP_HOST');
+        $host = $_SERVER['HTTP_HOST'] ?? null;
         if ( ! \in_array($host, $allowedHosts, true)) {
             throw new UnexpectedValueException('Invalid Host: ' . $host);
         }
@@ -198,11 +198,11 @@ class Request extends Message implements RequestInterface
 
     protected function prepareStatusLine() : void
     {
-        $this->setProtocol($this->getServer('SERVER_PROTOCOL'));
-        $this->setMethod($this->getServer('REQUEST_METHOD'));
+        $this->setProtocol($_SERVER['SERVER_PROTOCOL']);
+        $this->setMethod($_SERVER['REQUEST_METHOD']);
         $url = $this->isSecure() ? 'https' : 'http';
-        $url .= '://' . $this->getServer('HTTP_HOST');
-        $url .= $this->getServer('REQUEST_URI');
+        $url .= '://' . $_SERVER['HTTP_HOST'];
+        $url .= $_SERVER['REQUEST_URI'];
         $this->setUrl($url);
         $this->setHost($this->getUrl()->getHost());
     }
@@ -817,7 +817,7 @@ class Request extends Message implements RequestInterface
      */
     public function getIp() : string
     {
-        return $this->getServer('REMOTE_ADDR');
+        return $_SERVER['REMOTE_ADDR'];
     }
 
     #[Pure]
@@ -873,7 +873,7 @@ class Request extends Message implements RequestInterface
      */
     public function getPort() : int
     {
-        return $this->port ?? $this->getServer('SERVER_PORT');
+        return $this->port ?? $_SERVER['SERVER_PORT'];
     }
 
     /**
@@ -1030,8 +1030,9 @@ class Request extends Message implements RequestInterface
         if (isset($this->isSecure)) {
             return $this->isSecure;
         }
-        return $this->isSecure = ($this->getServer('REQUEST_SCHEME') === 'https'
-            || $this->getServer('HTTPS') === 'on');
+        $scheme = $_SERVER['REQUEST_SCHEME'] ?? null;
+        $https = $_SERVER['HTTPS'] ?? null;
+        return $this->isSecure = ($scheme === 'https' || $https === 'on');
     }
 
     /**
