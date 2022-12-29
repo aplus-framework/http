@@ -84,7 +84,6 @@ class Request extends Message implements RequestInterface
             $this->validateHost($allowedHosts);
         }
         $this->prepareStatusLine();
-        $this->prepareFiles();
     }
 
     /**
@@ -278,6 +277,9 @@ class Request extends Message implements RequestInterface
 
     protected function prepareFiles() : void
     {
+        if ( ! empty($this->files)) {
+            return;
+        }
         $this->files = $this->getInputFiles();
     }
 
@@ -747,13 +749,12 @@ class Request extends Message implements RequestInterface
     /**
      * @return array<string,array<mixed>|UploadedFile>
      */
-    #[Pure]
     public function getFiles() : array
     {
+        $this->prepareFiles();
         return $this->files;
     }
 
-    #[Pure]
     public function hasFiles() : bool
     {
         $this->prepareFiles();
@@ -762,6 +763,7 @@ class Request extends Message implements RequestInterface
 
     public function getFile(string $name) : ?UploadedFile
     {
+        $this->prepareFiles();
         $file = ArraySimple::value($name, $this->files);
         return \is_array($file) ? null : $file;
     }
