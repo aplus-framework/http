@@ -84,7 +84,7 @@ final class RequestTest extends TestCase
             $this->request->getUserAgent()
         );
         $this->request->userAgent = false;
-        $this->request->removeHeader('User-Agent');
+        unset($_SERVER['HTTP_USER_AGENT']);
         self::assertNull($this->request->getUserAgent());
     }
 
@@ -409,10 +409,7 @@ final class RequestTest extends TestCase
 
     public function testBasicAuth() : void
     {
-        $this->request->setHeader(
-            'Authorization',
-            'Basic ' . \base64_encode('user:pass')
-        );
+        $_SERVER['HTTP_AUTHORIZATION'] = 'Basic ' . \base64_encode('user:pass');
         $expected = [
             'username' => 'user',
             'password' => 'pass',
@@ -423,10 +420,7 @@ final class RequestTest extends TestCase
 
     public function testBearerAuth() : void
     {
-        $this->request->setHeader(
-            'Authorization',
-            'Bearer foobar'
-        );
+        $_SERVER['HTTP_AUTHORIZATION'] = 'Bearer foobar';
         $expected = [
             'token' => 'foobar',
         ];
@@ -436,10 +430,9 @@ final class RequestTest extends TestCase
 
     public function testDigestAuth() : void
     {
-        $this->request->setHeader(
-            'Authorization',
-            'Digest realm="testrealm@host.com", qop="auth,auth-int", nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093", opaque="5ccc069c403ebaf9f0171e9517f40e41"'
-        );
+        $_SERVER['HTTP_AUTHORIZATION'] = 'Digest realm="testrealm@host.com",'
+        . ' qop="auth,auth-int", nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093",'
+        . ' opaque="5ccc069c403ebaf9f0171e9517f40e41"';
         $expected = [
             'username' => null,
             'realm' => 'testrealm@host.com',

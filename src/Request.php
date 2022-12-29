@@ -84,7 +84,6 @@ class Request extends Message implements RequestInterface
             $this->validateHost($allowedHosts);
         }
         $this->prepareStatusLine();
-        $this->prepareHeaders();
         $this->prepareCookies();
         $this->prepareFiles();
     }
@@ -210,9 +209,27 @@ class Request extends Message implements RequestInterface
         $this->setHost($this->getUrl()->getHost());
     }
 
+    public function getHeader(string $name) : ?string
+    {
+        $this->prepareHeaders();
+        return $this->headers[\strtolower($name)] ?? null;
+    }
+
+    /**
+     * @return array<string,string>
+     */
+    public function getHeaders() : array
+    {
+        $this->prepareHeaders();
+        return $this->headers;
+    }
+
     protected function prepareHeaders() : void
     {
-        foreach ($this->getServer() as $name => $value) {
+        if ( ! empty($this->headers)) {
+            return;
+        }
+        foreach ($_SERVER as $name => $value) {
             if (\str_starts_with($name, 'HTTP_')) {
                 $name = \strtr(\substr($name, 5), ['_' => '-']);
                 $this->setHeader($name, $value);
@@ -308,7 +325,7 @@ class Request extends Message implements RequestInterface
     public function getAuthType() : ?string
     {
         if ($this->authType === null) {
-            $auth = $this->getHeader(RequestHeader::AUTHORIZATION);
+            $auth = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
             if ($auth) {
                 $this->parseAuth($auth);
             }
@@ -557,8 +574,9 @@ class Request extends Message implements RequestInterface
         if ($this->negotiation[$type]) {
             return $this->negotiation[$type];
         }
+        $header = $_SERVER['HTTP_ACCEPT' . ($type !== 'ACCEPT' ? '_' . $type : '')] ?? null;
         $this->negotiation[$type] = \array_keys(static::parseQualityValues(
-            $this->getServer('HTTP_ACCEPT' . ($type !== 'ACCEPT' ? '_' . $type : ''))
+            $header
         ));
         $this->negotiation[$type] = \array_map('\strtolower', $this->negotiation[$type]);
         return $this->negotiation[$type];
@@ -687,7 +705,7 @@ class Request extends Message implements RequestInterface
     #[Pure]
     public function getContentType() : ?string
     {
-        return $this->getHeader(Header::CONTENT_TYPE);
+        return $_SERVER['HTTP_CONTENT_TYPE'] ?? null;
     }
 
     /**
@@ -766,7 +784,7 @@ class Request extends Message implements RequestInterface
         if (isset($this->id)) {
             return $this->id === false ? null : $this->id;
         }
-        $this->id = $this->getHeader(Header::X_REQUEST_ID) ?? false;
+        $this->id = $_SERVER['HTTP_X_REQUEST_ID'] ?? false;
         return $this->getId();
     }
 
@@ -890,7 +908,7 @@ class Request extends Message implements RequestInterface
     {
         if ( ! isset($this->referrer)) {
             $this->referrer = false;
-            $referer = $this->getHeader(RequestHeader::REFERER);
+            $referer = $_SERVER['HTTP_REFERER'] ?? null;
             if ($referer !== null) {
                 try {
                     $this->referrer = new URL($referer);
@@ -943,7 +961,7 @@ class Request extends Message implements RequestInterface
         if (isset($this->userAgent) && $this->userAgent instanceof UserAgent) {
             return $this->userAgent;
         }
-        $userAgent = $this->getHeader(RequestHeader::USER_AGENT);
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
         $userAgent ? $this->setUserAgent($userAgent) : $this->userAgent = false;
         return $this->userAgent ?: null;
     }
@@ -975,7 +993,7 @@ class Request extends Message implements RequestInterface
         if (isset($this->isAjax)) {
             return $this->isAjax;
         }
-        $received = $this->getHeader(RequestHeader::X_REQUESTED_WITH);
+        $received = $_SERVER['HTTP_X_REQUESTED_WITH'] ?? null;
         return $this->isAjax = ($received
             && \strtolower($received) === 'xmlhttprequest');
     }
