@@ -84,7 +84,6 @@ class Request extends Message implements RequestInterface
             $this->validateHost($allowedHosts);
         }
         $this->prepareStatusLine();
-        $this->prepareCookies();
         $this->prepareFiles();
     }
 
@@ -237,9 +236,29 @@ class Request extends Message implements RequestInterface
         }
     }
 
+    public function getCookie(string $name) : ?Cookie
+    {
+        $this->prepareCookies();
+        return $this->cookies[$name] ?? null;
+    }
+
+    /**
+     * Get all Cookies.
+     *
+     * @return array<string,Cookie>
+     */
+    public function getCookies() : array
+    {
+        $this->prepareCookies();
+        return $this->cookies;
+    }
+
     protected function prepareCookies() : void
     {
-        foreach ($this->filterInput(\INPUT_COOKIE) as $name => $value) {
+        if ( ! empty($this->cookies)) {
+            return;
+        }
+        foreach ($_COOKIE as $name => $value) {
             $this->setCookie(new Cookie($name, $value));
         }
     }
@@ -737,6 +756,7 @@ class Request extends Message implements RequestInterface
     #[Pure]
     public function hasFiles() : bool
     {
+        $this->prepareFiles();
         return ! empty($this->files);
     }
 
