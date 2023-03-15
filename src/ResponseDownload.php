@@ -188,7 +188,8 @@ trait ResponseDownload
                 return false;
             }
         }
-        return $ranges; // @phpstan-ignore-line
+        // @phpstan-ignore-next-line
+        return $ranges;
     }
 
     /**
