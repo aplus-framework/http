@@ -151,6 +151,7 @@ trait ResponseDownload
      * @param string $line
      *
      * @return array<int,array<int,int>>|false
+     *
      * @phpstan-ignore-next-line
      */
     #[Pure]
@@ -188,7 +189,8 @@ trait ResponseDownload
                 return false;
             }
         }
-        return $ranges; // @phpstan-ignore-line
+        // @phpstan-ignore-next-line
+        return $ranges;
     }
 
     /**
