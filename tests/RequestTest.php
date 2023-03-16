@@ -726,18 +726,6 @@ final class RequestTest extends TestCase
         self::assertFalse($this->request->getPost('csrf_token', \FILTER_VALIDATE_EMAIL));
     }
 
-    public function testProxiedIp() : void
-    {
-        self::assertNull($this->request->getProxiedIp());
-        $this->request->setHeader(
-            'X-Forwarded-For',
-            '192.168.0.10, 2001:db8:85a3:8d3:1319:8a2e:370:7348,192.168.0.22'
-        );
-        self::assertSame('192.168.0.10', $this->request->getProxiedIp());
-        $this->request->setHeader('X-Real-IP', '192.168.0.33');
-        self::assertSame('192.168.0.33', $this->request->getProxiedIp());
-    }
-
     public function testReferer() : void
     {
         self::assertSame('http://domain.tld/contact.html', (string) $this->request->getReferer());

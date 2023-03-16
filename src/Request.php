@@ -13,6 +13,7 @@ use BadMethodCallException;
 use Framework\Helpers\ArraySimple;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\Deprecated;
 use JetBrains\PhpStorm\Pure;
 use LogicException;
 use stdClass;
@@ -899,10 +900,21 @@ class Request extends Message implements RequestInterface
      * Get the connection IP via a proxy header.
      *
      * @return string|null
+     *
+     * @deprecated Use {@see Request::getHeader()}
+     *
+     * @codeCoverageIgnore
      */
-    #[Pure]
+    #[Deprecated(
+        reason: 'since HTTP Library version 5.5, use getHeader() instead',
+        replacement: '%class%->getHeader()'
+    )]
     public function getProxiedIp() : ?string
     {
+        \trigger_error(
+            'Method ' . __METHOD__ . ' is deprecated',
+            \E_USER_DEPRECATED
+        );
         foreach ([
             'X-Real-IP',
             'X-Forwarded-For',
