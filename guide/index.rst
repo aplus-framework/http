@@ -103,7 +103,7 @@ If the request is not secure, we can force a redirect using HTTPS:
 
 .. code-block:: php
 
-    $request->forceHttps();
+    $request->forceHttps(); // void
 
 This method checks if the request scheme is HTTPS.
 
@@ -163,7 +163,7 @@ Content-Language, which can be used in the Response:
     $negotiatedType = $request->negotiateAccept($availableTypes);
 
     $availableLanguages = ['en', 'es', 'pt-br'];
-    $negotiatedLanguage = $request->negotiateLanguage($availableLanguages);
+    $negotiatedLanguage = $request->negotiateLanguage($availableLanguages); // string
 
 The negotiation takes the `Quality Values <https://developer.mozilla.org/en-US/docs/Glossary/Quality_values>`_
 from the header in order of priority and returns the first one in the list of 
@@ -175,8 +175,8 @@ Anyway, it is now possible to set the headers negotiated in the Response:
 
 .. code-block:: php
 
-    $response->setHeader('Content-Type', $negotiatedType);
-    $response->setHeader('Content-Language', $negotiatedLanguage);
+    $response->setHeader('Content-Type', $negotiatedType); // static
+    $response->setHeader('Content-Language', $negotiatedLanguage); // static
 
 Request with JSON
 #################
@@ -189,7 +189,7 @@ And also, a method to get the JSON data from the Request body:
 .. code-block:: php
 
     if ($request->isJson()) {
-        $data = $request->getJson();
+        $data = $request->getJson(); // object or false
     }
 
 Request with Uploads
@@ -204,7 +204,7 @@ The ``getFile`` method returns an ``UploadedFile`` instance or ``null``.
 
 .. code-block:: php
 
-    $file = $request->getFile('fieldName');
+    $file = $request->getFile('fieldName'); // UploadedFile or null
     if ($file && $file->isValid()) {
         $filename = 'rand0m' . $file->getExtension();
         $filepath = '/var/www/app/uploads/' . $filename;
@@ -215,18 +215,26 @@ Request with Authorization
 ##########################
 
 To identify the type of authorization received, you can use the ``getAuthType``
-method. Which will return ``null`` if there is none, ``Basic`` or ``Digest``:
+method. Which will return ``null`` if there is none, ``Basic``, ``Bearer`` or
+``Digest``:
 
 .. code-block:: php
 
-    $request->getAuthType();
+    $request->getAuthType(); // string or null
 
 Using the ``getBasicAuth`` method, we obtain an array containing two keys,
 ``username`` and ``password`` or null:
 
 .. code-block:: php
 
-    $request->getBasicAuth();
+    $request->getBasicAuth(); // array or null
+
+Using the ``getBearerAuth`` method, we obtain an array containing one key,
+``token`` or null:
+
+.. code-block:: php
+
+    $request->getBearerAuth(); // array or null
 
 Using the ``getDigestAuth`` method, an array with 9 keys is obtained:
 ``username``, ``realm``, ``nonce``, ``uri``, ``response``, ``opaque``,
@@ -234,7 +242,7 @@ Using the ``getDigestAuth`` method, an array with 9 keys is obtained:
 
 .. code-block:: php
 
-    $request->getDigestAuth();
+    $request->getDigestAuth(); // array or null
 
 Request working with REST
 #########################
@@ -245,39 +253,39 @@ With the ``getMethod`` method, we get the HTTP method used:
 
 .. code-block:: php
 
-    $request->getMethod();
+    $request->getMethod(); // string
 
 With the ``getGet`` method, query parts from the current URL:
 
 .. code-block:: php
 
-    $request->getGet();
+    $request->getGet(); // array
 
 The ``getPost`` method get data from POST requests.
 
 .. code-block:: php
 
-    $request->getPost();
+    $request->getPost(); // array
 
 With the ``getJson`` method, the request body data is parsed in JSON, being an
 object, array or false if there are syntax errors.
 
 .. code-block:: php
 
-    $request->getJson();   
+    $request->getJson(); // object, array or false
 
 With the ``getBody`` method, the body string of the request is obtained.
 
 .. code-block:: php
 
-    $request->getBody();
+    $request->getBody(); // string
 
 And with the ``getParsedBody`` method you get parsed body parts, used when the
 HTTP method is neither GET nor POST.
 
 .. code-block:: php
 
-    $request->getParsedBody();
+    $request->getParsedBody(); // array
 
 Request working with Arrays
 ###########################
@@ -335,8 +343,8 @@ the **Status** class:
 
     use Framework\HTTP\Status;
 
-    $response->setStatus(401);
-    $response->setStatus(Status::UNAUTHORIZED);
+    $response->setStatus(401); // static
+    $response->setStatus(Status::UNAUTHORIZED); // static
 
 Response Headers
 ################
@@ -350,9 +358,9 @@ Also, you can use constants from the **Header** and **ResponseHeader** classes:
 
     use Framework\HTTP\Header;
 
-    $response->setHeader('Content-Type', 'text/xml');
-    $response->setHeader(Header::CONTENT_TYPE, 'text/xml');
-    $response->setContentType('text/xml');
+    $response->setHeader('Content-Type', 'text/xml'); // static
+    $response->setHeader(Header::CONTENT_TYPE, 'text/xml'); // static
+    $response->setContentType('text/xml'); // static
 
 Response Body
 #############
@@ -395,14 +403,14 @@ A response containing JSON can be set as:
         ],
     ];
 
-    $response->setHeader('Content-Type', 'application/json');
-    $response->setBody(json_encode($users));
+    $response->setHeader('Content-Type', 'application/json'); // static
+    $response->setBody(json_encode($users)); // static
 
 or simply:
 
 .. code-block:: php
 
-    $response->setJson($users);
+    $response->setJson($users); // static
 
 Response with HTML
 ##################
@@ -427,21 +435,21 @@ To send a file as a download in the response, you can call:
 
 .. code-block:: php
 
-    $response->setDownload('filepath.pdf');
+    $response->setDownload('filepath.pdf'); // static
 
 With the second parameter set to true the content disposition is ``inline``,
 causing the browser to open the file in the window.
 
 .. code-block:: php
 
-    $response->setDownload('filepath.pdf', inline: true);
+    $response->setDownload('filepath.pdf', inline: true); // static
 
 The third parameter makes it possible to continue downloads or start downloading
 a video at a certain time.
 
 .. code-block:: php
 
-    $response->setDownload('filepath.pdf', true, acceptRanges: true);
+    $response->setDownload('filepath.pdf', true, acceptRanges: true); // static
 
 Sending the Response
 ####################
@@ -451,7 +459,7 @@ to see how to send the response to the User-Agent:
 
 .. code-block:: php
 
-    $response->send();
+    $response->send(); // void
 
 The ``send`` method must be called only once, otherwise it will throw an exception.
 Calling the ``send`` method is the last step of the HTTP response. After that,
@@ -475,13 +483,13 @@ to be public or false to be private, which is the default .
 
 .. code-block:: php
 
-    $response->setCache(60);
+    $response->setCache(60); // static
 
 To not save anything in the cache, use the ``setNoCache`` method:
 
 .. code-block:: php
 
-    $response->setNoCache();
+    $response->setNoCache(); // static
 
 ETag
 ^^^^
@@ -496,7 +504,7 @@ HEAD method:
 
 .. code-block:: php
 
-    $response->setAutoEtag();
+    $response->setAutoEtag(); // static
 
 URL
 ---
