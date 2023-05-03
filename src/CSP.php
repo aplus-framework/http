@@ -191,6 +191,22 @@ class CSP implements \Stringable
      */
     public const scriptSrc = 'script-src';
     /**
+     * Specifies valid sources for JavaScript inline event handlers.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src-attr
+     *
+     * @var string
+     */
+    public const scriptSrcAttr = 'script-src-attr';
+    /**
+     * Specifies valid sources for JavaScript `<script>` elements.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src-elem
+     *
+     * @var string
+     */
+    public const scriptSrcElem = 'script-src-elem';
+    /**
      * Specifies valid sources for stylesheets.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src
@@ -198,6 +214,35 @@ class CSP implements \Stringable
      * @var string
      */
     public const styleSrc = 'style-src';
+    /**
+     * Specifies valid sources for inline styles applied to individual DOM
+     * elements.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src-attr
+     *
+     * @var string
+     */
+    public const styleSrcAttr = 'style-src-attr';
+    /**
+     * Specifies valid sources for stylesheets `<style>` elements and `<link>`
+     * elements with `rel="stylesheet"`.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src-elem
+     *
+     * @var string
+     */
+    public const styleSrcElem = 'style-src-elem';
+    /**
+     * Instructs user agents to treat all of a site's insecure URLs (those
+     * served over HTTP) as though they have been replaced with secure URLs
+     * (those served over HTTPS). This directive is intended for websites with
+     * large numbers of insecure legacy URLs that need to be rewritten.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/upgrade-insecure-requests
+     *
+     * @var string
+     */
+    public const upgradeInsecureRequests = 'upgrade-insecure-requests';
     /**
      * Specifies valid sources for Worker, SharedWorker, or ServiceWorker
      * scripts.
