@@ -494,6 +494,67 @@ registerArgumentsSet(
     'xxh32',
     'xxh64',
 );
+registerArgumentsSet(
+    'csp_directives',
+    \Framework\HTTP\CSP::baseUri,
+    \Framework\HTTP\CSP::childSrc,
+    \Framework\HTTP\CSP::connectSrc,
+    \Framework\HTTP\CSP::defaultSrc,
+    \Framework\HTTP\CSP::fontSrc,
+    \Framework\HTTP\CSP::formAction,
+    \Framework\HTTP\CSP::frameAncestors,
+    \Framework\HTTP\CSP::frameSrc,
+    \Framework\HTTP\CSP::imgSrc,
+    \Framework\HTTP\CSP::manifestSrc,
+    \Framework\HTTP\CSP::mediaSrc,
+    \Framework\HTTP\CSP::navigateTo,
+    \Framework\HTTP\CSP::objectSrc,
+    \Framework\HTTP\CSP::pluginTypes,
+    \Framework\HTTP\CSP::prefetchSrc,
+    \Framework\HTTP\CSP::reportTo,
+    \Framework\HTTP\CSP::reportUri,
+    \Framework\HTTP\CSP::sandbox,
+    \Framework\HTTP\CSP::scriptSrc,
+    \Framework\HTTP\CSP::scriptSrcAttr,
+    \Framework\HTTP\CSP::scriptSrcElem,
+    \Framework\HTTP\CSP::styleSrc,
+    \Framework\HTTP\CSP::styleSrcAttr,
+    \Framework\HTTP\CSP::styleSrcElem,
+    \Framework\HTTP\CSP::upgradeInsecureRequests,
+    \Framework\HTTP\CSP::workerSrc,
+    'base-uri',
+    'child-src',
+    'connect-src',
+    'default-src',
+    'font-src',
+    'form-action',
+    'frame-ancestors',
+    'frame-src',
+    'img-src',
+    'manifest-src',
+    'media-src',
+    'navigate-to',
+    'object-src',
+    'plugin-types',
+    'prefetch-src',
+    'report-to',
+    'report-uri',
+    'sandbox',
+    'script-src',
+    'script-src-attr',
+    'script-src-elem',
+    'style-src',
+    'style-src-attr',
+    'style-src-elem',
+    'upgrade-insecure-requests',
+    'worker-src',
+);
+registerArgumentsSet(
+    'csp_algos',
+    'sha256',
+    'sha384',
+    'sha512',
+);
 expectedReturnValues(
     \Framework\HTTP\MessageInterface::getProtocol(),
     argumentsSet('protocols')
@@ -645,6 +706,36 @@ expectedArguments(
     \Framework\HTTP\URL::setScheme(),
     0,
     argumentsSet('url_schemes')
+);
+expectedArguments(
+    \Framework\HTTP\CSP::addOptions(),
+    0,
+    argumentsSet('csp_directives')
+);
+expectedArguments(
+    \Framework\HTTP\CSP::setDirective(),
+    0,
+    argumentsSet('csp_directives')
+);
+expectedArguments(
+    \Framework\HTTP\CSP::getDirective(),
+    0,
+    argumentsSet('csp_directives')
+);
+expectedArguments(
+    \Framework\HTTP\CSP::removeDirective(),
+    0,
+    argumentsSet('csp_directives')
+);
+expectedArguments(
+    \Framework\HTTP\CSP::makeHash(),
+    0,
+    argumentsSet('csp_algos')
+);
+expectedArguments(
+    \Framework\HTTP\CSP::makeHashes(),
+    1,
+    argumentsSet('csp_algos')
 );
 expectedReturnValues(
     \Framework\HTTP\Request::getAuthType(),
