@@ -479,9 +479,34 @@ class Response extends Message implements ResponseInterface
         if ($this->isAutoEtag() && ! $this->hasDownload()) {
             $this->negotiateEtag();
         }
+        $this->negotiateCsp();
         \header($this->getStartLine());
         foreach ($this->getHeaderLines() as $line) {
             \header($line);
+        }
+    }
+
+    /**
+     * Set the Content-Security-Policy and Content-Security-Policy-Report-Only
+     * headers if the CSP classes are set and the response has not downloads.
+     *
+     * @return void
+     */
+    protected function negotiateCsp() : void
+    {
+        $csp = $this->getCsp();
+        if ($csp && ! $this->hasDownload()) {
+            $this->setHeader(
+                ResponseHeader::CONTENT_SECURITY_POLICY,
+                $csp->render()
+            );
+        }
+        $csp = $this->getCspReportOnly();
+        if ($csp && ! $this->hasDownload()) {
+            $this->setHeader(
+                ResponseHeader::CONTENT_SECURITY_POLICY_REPORT_ONLY,
+                $csp->render()
+            );
         }
     }
 
