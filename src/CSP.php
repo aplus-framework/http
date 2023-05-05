@@ -252,7 +252,6 @@ class CSP implements \Stringable
      * @var string
      */
     public const workerSrc = 'worker-src';
-    protected bool $enabled = true;
     /**
      * @var array<string,array<string>>
      */
@@ -279,9 +278,6 @@ class CSP implements \Stringable
 
     public function render() : string
     {
-        if ( ! $this->isEnabled()) {
-            return '';
-        }
         if (empty($this->directives)) {
             throw new LogicException('No CSP directive has been set');
         }
@@ -290,23 +286,6 @@ class CSP implements \Stringable
             $directives[] = $name . ' ' . \implode(' ', $values);
         }
         return \implode('; ', $directives) . ';';
-    }
-
-    public function enable() : static
-    {
-        $this->enabled = true;
-        return $this;
-    }
-
-    public function disable() : static
-    {
-        $this->enabled = false;
-        return $this;
-    }
-
-    public function isEnabled() : bool
-    {
-        return $this->enabled;
     }
 
     /**
@@ -426,9 +405,6 @@ class CSP implements \Stringable
 
     protected function getNonceAttr(string $type) : string
     {
-        if ( ! $this->isEnabled()) {
-            return '';
-        }
         $nonce = match ($type) {
             static::scriptSrc => $this->addScriptSrcNonce(),
             static::styleSrc => $this->addStyleSrcNonce(),
