@@ -256,10 +256,6 @@ class CSP implements \Stringable
      * @var array<string,array<string>>
      */
     protected array $directives = [];
-    /**
-     * @var array<string>
-     */
-    protected array $nonces = [];
 
     /**
      * @param array<string,array<string>> $directives
@@ -388,7 +384,6 @@ class CSP implements \Stringable
     protected function addNonce(string $type) : string
     {
         $nonce = \bin2hex(\random_bytes(8));
-        $this->nonces[] = $nonce;
         $this->addOptions($type, "'nonce-{$nonce}'");
         return $nonce;
     }
@@ -423,23 +418,6 @@ class CSP implements \Stringable
     public function getStyleNonceAttr() : string
     {
         return $this->getNonceAttr(static::styleSrc);
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getNonces() : array
-    {
-        return $this->nonces;
-    }
-
-    public function removeNonceAttributes(string $contents) : string
-    {
-        $attributes = [];
-        foreach ($this->getNonces() as $nonce) {
-            $attributes[' nonce="' . $nonce . '"'] = '';
-        }
-        return \strtr($contents, $attributes);
     }
 
     /**
