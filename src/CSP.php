@@ -279,7 +279,9 @@ class CSP implements \Stringable
         }
         $directives = [];
         foreach ($this->directives as $name => $values) {
-            $directives[] = $name . ' ' . \implode(' ', $values);
+            $values = \implode(' ', $values);
+            $directive = $name . ' ' . $values;
+            $directives[] = \trim($directive);
         }
         return \implode('; ', $directives) . ';';
     }
@@ -317,7 +319,7 @@ class CSP implements \Stringable
         ) {
             return "'{$value}'";
         }
-        return $value;
+        return \trim($value);
     }
 
     /**
