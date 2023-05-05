@@ -45,6 +45,8 @@ class Response extends Message implements ResponseInterface
     protected bool $autoEtag = false;
     protected string $autoEtagHashAlgo = 'xxh3';
     protected HTTPCollector $debugCollector;
+    protected CSP $csp;
+    protected CSP $cspReportOnly;
 
     /**
      * Response constructor.
@@ -182,6 +184,94 @@ class Response extends Message implements ResponseInterface
     public function removeHeaders() : static
     {
         return parent::removeHeaders();
+    }
+
+    /**
+     * Set the Content-Security-Policy instance.
+     *
+     * @param CSP $csp
+     *
+     * @return static
+     */
+    public function setCsp(CSP $csp) : static
+    {
+        $this->csp = $csp;
+        return $this;
+    }
+
+    /**
+     * Set the Content-Security-Policy-Report-Only instance.
+     *
+     * @param CSP $csp
+     *
+     * @return static
+     */
+    public function setCspReportOnly(CSP $csp) : static
+    {
+        $this->cspReportOnly = $csp;
+        return $this;
+    }
+
+    /**
+     * Get the Content-Security-Policy instance or null.
+     *
+     * @return CSP|null
+     */
+    public function getCsp() : CSP | null
+    {
+        return $this->csp ?? null;
+    }
+
+    /**
+     * Get the Content-Security-Policy-Report-Only instance or null.
+     *
+     * @return CSP|null
+     */
+    public function getCspReportOnly() : CSP | null
+    {
+        return $this->cspReportOnly ?? null;
+    }
+
+    /**
+     * Tells if the Content-Security-Policy instance has been set.
+     *
+     * @return bool
+     */
+    public function hasCsp() : bool
+    {
+        return isset($this->csp);
+    }
+
+    /**
+     * Tells if the Content-Security-Policy-Report-Only instance has been set.
+     *
+     * @return bool
+     */
+    public function hasCspReportOnly() : bool
+    {
+        return isset($this->cspReportOnly);
+    }
+
+    /**
+     * Remove the Content-Security-Policy instance.
+     *
+     * @return static
+     */
+    public function removeCsp() : static
+    {
+        unset($this->csp);
+        return $this;
+    }
+
+    /**
+     * Remove the Content-Security-Policy-Report-Only instance.
+     *
+     * @return static
+     */
+    public function removeCspReportOnly() : static
+    {
+        unset($this->cspReportOnly);
+        return $this;
     }
 
     /**
