@@ -296,6 +296,7 @@ class CSP implements \Stringable
     {
         $directive = \strtolower($directive);
         $values = (array) $values;
+        $this->directives[$directive] ??= [];
         foreach ($values as $value) {
             $this->directives[$directive][] = $this->getValue($value);
         }
