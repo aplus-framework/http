@@ -356,11 +356,11 @@ class CSP implements \Stringable
     /**
      * @param string $name
      *
-     * @return array<string>
+     * @return array<string>|null
      */
-    public function getDirective(string $name) : array
+    public function getDirective(string $name) : array | null
     {
-        return $this->directives[\strtolower($name)] ?? [];
+        return $this->directives[\strtolower($name)] ?? null;
     }
 
     /**
@@ -391,21 +391,11 @@ class CSP implements \Stringable
         return $nonce;
     }
 
-    public function addScriptSrcNonce() : string
-    {
-        return $this->addNonce(static::scriptSrc);
-    }
-
-    public function addStyleSrcNonce() : string
-    {
-        return $this->addNonce(static::styleSrc);
-    }
-
     protected function getNonceAttr(string $type) : string
     {
         $nonce = match ($type) {
-            static::scriptSrc => $this->addScriptSrcNonce(),
-            static::styleSrc => $this->addStyleSrcNonce(),
+            static::scriptSrc => $this->addNonce(static::scriptSrc),
+            static::styleSrc => $this->addNonce(static::styleSrc),
             default => throw new InvalidArgumentException(
                 'Invalid CSP directive: ' . $type
             ),
@@ -413,62 +403,76 @@ class CSP implements \Stringable
         return ' nonce="' . $nonce . '"';
     }
 
+    /**
+     * Creates a nonce, adds it to the script-src directive, and returns the
+     * attribute to be inserted into the script tag.
+     *
+     * @return string the nonce attribute
+     */
     public function getScriptNonceAttr() : string
     {
         return $this->getNonceAttr(static::scriptSrc);
     }
 
+    /**
+     * Creates a nonce, adds it to the style-src directive, and returns the
+     * attribute to be inserted into the style tag.
+     *
+     * @return string the nonce attribute
+     */
     public function getStyleNonceAttr() : string
     {
         return $this->getNonceAttr(static::styleSrc);
     }
 
     /**
-     * @param string $contents
+     * @param string $html
      *
      * @return array<string>
      */
-    public static function getHashesOfStyles(string $contents) : array
+    public static function getStyleHashes(string $html) : array
     {
-        return static::makeHashes(static::getContentsOfStyles($contents));
+        return static::makeHashes(static::getStyleContents($html));
     }
 
     /**
      * @see https://stackoverflow.com/a/72636724
      * @see https://stackoverflow.com/a/50124875
      *
-     * @param string $contents
+     * @param string $html
      *
      * @return array<string>
      */
-    public static function getContentsOfStyles(string $contents) : array
+    public static function getStyleContents(string $html) : array
     {
         \preg_match_all(
             '#<style[\w="\'\s-]*>([^<]+)</style>#i',
-            $contents,
+            $html,
             $matches
         );
         return $matches[1];
     }
 
     /**
-     * @return array<string>
-     */
-    public static function getHashesOfScripts(string $contents) : array
-    {
-        return static::makeHashes(static::getContentsOfScripts($contents));
-    }
-
-    /**
-     * @param string $contents
+     * @param string $html
      *
      * @return array<string>
      */
-    public static function getContentsOfScripts(string $contents) : array
+    public static function getScriptHashes(string $html) : array
+    {
+        return static::makeHashes(static::getScriptContents($html));
+    }
+
+    /**
+     * @param string $html
+     *
+     * @return array<string>
+     */
+    public static function getScriptContents(string $html) : array
     {
         \preg_match_all(
             '#<script[\w="\'\s-]*>([^<]+)</script>#i',
-            $contents,
+            $html,
             $matches
         );
         return $matches[1];
@@ -496,14 +500,14 @@ class CSP implements \Stringable
      * @see https://security.stackexchange.com/q/58789
      *
      * @param string $algo
-     * @param string $contents
+     * @param string $content
      *
      * @return string
      */
-    public static function makeHash(string $algo, string $contents) : string
+    public static function makeHash(string $algo, string $content) : string
     {
-        $contents = \hash($algo, $contents, true);
-        $contents = \base64_encode($contents);
-        return $algo . '-' . $contents;
+        $content = \hash($algo, $content, true);
+        $content = \base64_encode($content);
+        return $algo . '-' . $content;
     }
 }
