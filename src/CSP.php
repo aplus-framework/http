@@ -292,7 +292,7 @@ class CSP implements \Stringable
      *
      * @return static
      */
-    public function addOptions(string $directive, array | string $values) : static
+    public function addValues(string $directive, array | string $values) : static
     {
         $directive = \strtolower($directive);
         $values = (array) $values;
@@ -387,7 +387,7 @@ class CSP implements \Stringable
     protected function addNonce(string $type) : string
     {
         $nonce = \bin2hex(\random_bytes(8));
-        $this->addOptions($type, "'nonce-{$nonce}'");
+        $this->addValues($type, "'nonce-{$nonce}'");
         return $nonce;
     }
 
