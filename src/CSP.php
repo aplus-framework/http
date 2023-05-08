@@ -298,12 +298,12 @@ class CSP implements \Stringable
         $values = (array) $values;
         $this->directives[$directive] ??= [];
         foreach ($values as $value) {
-            $this->directives[$directive][] = $this->getValue($value);
+            $this->directives[$directive][] = $this->sanitizeValue($value);
         }
         return $this;
     }
 
-    protected function getValue(string $value) : string
+    protected function sanitizeValue(string $value) : string
     {
         if (\in_array($value, [
                 'none',
@@ -333,7 +333,7 @@ class CSP implements \Stringable
     {
         $values = (array) $values;
         foreach ($values as &$value) {
-            $value = $this->getValue($value);
+            $value = $this->sanitizeValue($value);
         }
         unset($value);
         $this->directives[\strtolower($name)] = $values;
