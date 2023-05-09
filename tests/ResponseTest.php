@@ -10,6 +10,7 @@
 namespace Tests\HTTP;
 
 use Framework\HTTP\Cookie;
+use Framework\HTTP\CSP;
 use Framework\HTTP\Request;
 use Framework\HTTP\Response;
 use Framework\HTTP\Status;
@@ -515,6 +516,60 @@ final class ResponseTest extends TestCase
         self::assertNull($this->response->getHeader('content-encoding'));
         $this->response->setContentEncoding('gzip');
         self::assertSame('gzip', $this->response->getHeader('content-encoding'));
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testCsp() : void
+    {
+        self::assertNull($this->response->getCsp());
+        self::assertFalse($this->response->hasCsp());
+        $csp = new CSP([
+            CSP::defaultSrc => [
+                'self',
+            ],
+        ]);
+        $this->response->setCsp($csp);
+        self::assertSame($csp, $this->response->getCsp());
+        self::assertTrue($this->response->hasCsp());
+        \ob_start();
+        $this->response->send();
+        \ob_get_clean();
+        self::assertContains(
+            "Content-Security-Policy: default-src 'self';",
+            xdebug_get_headers()
+        );
+        $this->response->removeCsp();
+        self::assertNull($this->response->getCsp());
+        self::assertFalse($this->response->hasCsp());
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testCspReportOnly() : void
+    {
+        self::assertNull($this->response->getCspReportOnly());
+        self::assertFalse($this->response->hasCspReportOnly());
+        $csp = new CSP([
+            CSP::defaultSrc => [
+                'self',
+            ],
+        ]);
+        $this->response->setCspReportOnly($csp);
+        self::assertSame($csp, $this->response->getCspReportOnly());
+        self::assertTrue($this->response->hasCspReportOnly());
+        \ob_start();
+        $this->response->send();
+        \ob_get_clean();
+        self::assertContains(
+            "Content-Security-Policy-Report-Only: default-src 'self';",
+            xdebug_get_headers()
+        );
+        $this->response->removeCspReportOnly();
+        self::assertNull($this->response->getCspReportOnly());
+        self::assertFalse($this->response->hasCspReportOnly());
     }
 
     /**
