@@ -11,6 +11,7 @@ Aplus Framework HTTP (HyperText Transfer Protocol) Library.
 - `Response`_
 - `URL`_
 - `AntiCSRF`_
+- `Content Security Policy`_
 
 Installation
 ------------
@@ -591,6 +592,215 @@ message can be saved.
 Note that in this example we validated only the field with the anti-CSRF token
 and did not validate the other fields. Which can be validated using the
 `Validation Library <https://gitlab.com/aplus-framework/libraries/validation>`_.
+
+Content Security Policy
+-----------------------
+
+The Content-Security-Policy HTTP response header helps you reduce XSS risks on
+modern browsers by declaring which dynamic resources are allowed to load.
+
+You can get more information on these pages:
+
+- `Content Security Policy Reference <https://content-security-policy.com/>`_
+- `Content Security Policy (CSP) <https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP>`_
+
+CSP classes can be instantiated as in the following example.
+
+Several directives can be passed in object construction or through the
+``setDirectives`` method:
+
+.. code-block:: php
+
+    use Framework\HTTP\CSP;
+
+    $directives = [
+        'default-src' => [
+            'self',
+        ],
+        'style-src' => [
+            'self',
+            'cdn.foo.tld',
+        ],
+    ];
+    $csp = new CSP($directives);
+    $csp->setDirectives($directives);
+
+Values for a single directive can be passed with the ``setDirective`` method:
+
+.. code-block:: php
+
+    $csp->setDirective(CSP::defaultSrc, [
+        'self',
+    ]);
+
+Methods that start with ``set`` override directive values. To just add new values,
+use the ``addValue`` method:
+
+.. code-block:: php
+
+    $csp->addValue(CSP::styleSrc, [
+        'self',
+        'cdn.foo.tld',
+    ]);
+
+CSP Nonces
+##########
+
+By default, when the value is ``self``, the contents of the ``style`` and
+``script`` tags do not execute.
+
+To make them run, it is possible to add the ``nonce`` attribute to the tags, which
+have a unique value generated at each page load.
+
+Let's see the following examples:
+
+The dynamic code below written with PHP:
+
+.. code-block:: php
+
+    <script<?= $csp->getScriptNonceAttr() ?>>
+        // ...
+    </script>
+
+Will render HTML similar to the following example:
+
+.. code-block:: html
+
+    <script nonce="2aca99c7ee6e0884">
+        // ...
+    </script>
+
+So, it is also possible to add the ``nonce`` attribute in the ``style`` tag:
+
+.. code-block:: php
+
+    <style<?= $csp->getStyleNonceAttr() ?>>
+        // ...
+    </style>
+
+Which renders similar to the example below:
+
+.. code-block:: html
+
+    <style nonce="ccd8147d8a8e275c">
+        // ...
+    </style>
+
+Using the nonce attribute is a very practical way, however, as the nonce values
+are unique per request, it is impossible to cache the page in browsers.
+
+CSP Hashes
+##########
+
+To cache the page in browsers, such as by `ETag`_, we can use hashes of the
+contents of the ``script`` and ``style`` tags.
+
+Let's look at the following HTML page:
+
+.. code-block:: html
+
+    <!doctype html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>CSP Test</title>
+        <style>
+            body {
+                background: cyan;
+            }
+        </style>
+    </head>
+    <body>
+    <script>
+        console.log('Hello!');
+    </script>
+    <script>
+        console.log('Bye.');
+        // it is a comment
+    </script>
+    </body>
+    </html>
+
+In order to get all the hashes of the ``style`` tags we can pass the content of
+the HTML page in the ``getStyleHashes`` method and it will return an array with
+all the hashes.
+
+And then we can add them in the ``style-src`` directive via the ``addValues``
+method:
+
+.. code-block:: php
+
+    $styleHashes = CSP::getStyleHashes($html);
+    $csp->addValue(CSP::styleSrc, $styleHashes);
+
+The CSP header will look like the following:
+
+.. code-block:: http
+
+    Content-Security-Policy: style-src 'sha256-CvbCUHrSwRhSRk6O3h7eTuSY9r3oKFudXNGTM/oLBI8=';
+
+Similarly, we can get the hashes of the ``script`` tags and add them via the
+``addValues`` method:
+
+.. code-block:: php
+
+    $scriptHashes = CSP::getScriptHashes($html);
+    $csp->addValue(CSP::scriptSrc, $scriptHashes);
+
+The CSP header will look similar to the following example:
+
+.. code-block:: http
+
+    Content-Security-Policy: style-src 'sha256-CvbCUHrSwRhSRk6O3h7eTuSY9r3oKFudXNGTM/oLBI8='; script-src 'sha256-IfEVrz7Me6SW7O7OHy04/VaUhErMLxjWHdJd8MYN5b0=' 'sha256-0TppQmjw9at2nEl3givShY5l6nABmQ84qrh1dRgvMJ0=';
+
+CSP in Response
+###############
+
+An object of the CSP class can be set to an object of the Framework\HTTP\Response
+class and then it will be sent with the response via the ``send`` method:
+
+.. code-block:: php
+
+    $csp = new CSP([
+        CSP::defaultSrc => [
+            'self',
+        ],
+        CSP::styleSrc => [
+            'self',
+            'cdn.foo.tld',
+        ],
+        CSP::scriptSrc => [
+            'self',
+            'cdn.foo.tld',
+        ],
+    ]);
+
+    $response = new Framework\HTTP\Response;
+    $response->setCsp($csp);
+
+Only if you're sure the page doesn't have any malicious scripts, get the hashes
+from the response body and add them to the CSP object:
+
+.. code-block:: php
+
+    $scriptHashes = CSP::getScriptHashes($response->getBody());
+    $csp->addValue(CSP::scriptSrc, $scriptHashes);
+
+Then the response can be sent:
+
+.. code-block:: php
+
+    $response->send();
+
+CSP in a Meta Tag
+#################
+
+Another way to define the Content-Security-Policy is through an HTML meta tag.
+See the example below:
+
+.. code-block:: php
+
+    <meta http-equiv="Content-Security-Policy" content="<?= $csp ?>">
 
 Conclusion
 ----------
