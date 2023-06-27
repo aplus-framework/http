@@ -109,7 +109,7 @@ class URL implements \JsonSerializable, \Stringable
     public function getBaseUrl(string $path = '/') : string
     {
         if ($path && $path !== '/') {
-            $path = '/' . \trim($path, '/');
+            $path = '/' . \ltrim($path, '/');
         }
         return $this->getOrigin() . $path;
     }
@@ -183,7 +183,12 @@ class URL implements \JsonSerializable, \Stringable
     #[Pure]
     public function getPath() : string
     {
-        return '/' . \implode('/', $this->pathSegments);
+        $count = \count($this->pathSegments);
+        $path = \implode('/', $this->pathSegments);
+        if ($count === 1 && $path === '') {
+            return '/';
+        }
+        return $path === '' ? '' : '/' . $path;
     }
 
     /**
@@ -375,7 +380,7 @@ class URL implements \JsonSerializable, \Stringable
      */
     public function setPath(string $segments) : static
     {
-        return $this->setPathSegments(\explode('/', \trim($segments, '/')));
+        return $this->setPathSegments(\explode('/', \ltrim($segments, '/')));
     }
 
     /**
