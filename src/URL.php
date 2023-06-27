@@ -108,7 +108,7 @@ class URL implements \JsonSerializable, \Stringable
     public function getBaseUrl(string $path = '/') : string
     {
         if ($path && $path !== '/') {
-            $path = '/' . \trim($path, '/');
+            $path = '/' . \ltrim($path, '/');
         }
         return $this->getOrigin() . $path;
     }

@@ -46,11 +46,13 @@ final class URLTest extends TestCase
         self::assertSame('http://domain.tld:8080/', $this->url->getBaseUrl());
         self::assertSame('http://domain.tld:8080', $this->url->getBaseURL(''));
         self::assertSame('http://domain.tld:8080/foo/bar', $this->url->getBaseUrl('foo/bar'));
+        self::assertSame('http://domain.tld:8080/foo/bar/', $this->url->getBaseUrl('foo/bar/'));
         $this->url->setScheme('https');
         $this->url->setPort(443);
         self::assertSame('https://domain.tld/', $this->url->getBaseUrl());
         self::assertSame('https://domain.tld', $this->url->getBaseUrl(''));
         self::assertSame('https://domain.tld/foo/bar', $this->url->getBaseUrl('foo/bar'));
+        self::assertSame('https://domain.tld/foo/bar/', $this->url->getBaseUrl('/foo/bar/'));
     }
 
     public function testHost() : void
