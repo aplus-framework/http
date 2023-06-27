@@ -21,6 +21,26 @@ final class URLTest extends TestCase
         $this->url = new URL('http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id');
     }
 
+    public function testSameUrl() : void
+    {
+        $url = 'http://domain.tld';
+        self::assertSame($url, (new URL($url))->__toString());
+        $url = 'http://domain.tld/';
+        self::assertSame($url, (new URL($url))->__toString());
+        $url = 'http://domain.tld/foo';
+        self::assertSame($url, (new URL($url))->__toString());
+        $url = 'http://domain.tld/foo/';
+        self::assertSame($url, (new URL($url))->__toString());
+        $url = 'http://domain.tld/foo/bar';
+        self::assertSame($url, (new URL($url))->__toString());
+        $url = 'http://domain.tld/foo/bar/';
+        self::assertSame($url, (new URL($url))->__toString());
+        $url = 'http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id';
+        self::assertSame($url, (new URL($url))->__toString());
+        $url = 'http://user:pass@domain.tld:8080/foo/bar/?a=1&b=2#id';
+        self::assertSame($url, (new URL($url))->__toString());
+    }
+
     public function testBaseUrl() : void
     {
         self::assertSame('http://domain.tld:8080/', $this->url->getBaseUrl());
@@ -87,11 +107,13 @@ final class URLTest extends TestCase
         $this->url->setPath('/a/b/c');
         self::assertSame('/a/b/c', $this->url->getPath());
         $this->url->setPath('a/b/c/');
-        self::assertSame('/a/b/c', $this->url->getPath());
+        self::assertSame('/a/b/c/', $this->url->getPath());
         $this->url->setPath('/a/b/c/');
-        self::assertSame('/a/b/c', $this->url->getPath());
+        self::assertSame('/a/b/c/', $this->url->getPath());
         $this->url->setPathSegments(['hello', 'bye']);
         self::assertSame('/hello/bye', $this->url->getPath());
+        $this->url->setPathSegments(['hello', 'bye', '']);
+        self::assertSame('/hello/bye/', $this->url->getPath());
     }
 
     public function testPathSegments() : void
@@ -102,13 +124,17 @@ final class URLTest extends TestCase
         $this->url->setPath('/a/b/c');
         self::assertSame(['a', 'b', 'c'], $this->url->getPathSegments());
         $this->url->setPath('a/b/c/');
-        self::assertSame(['a', 'b', 'c'], $this->url->getPathSegments());
+        self::assertSame(['a', 'b', 'c', ''], $this->url->getPathSegments());
         $this->url->setPath('/a/b/c/');
-        self::assertSame(['a', 'b', 'c'], $this->url->getPathSegments());
+        self::assertSame(['a', 'b', 'c', ''], $this->url->getPathSegments());
         $this->url->setPathSegments(['hello', 'bye']);
         self::assertSame(['hello', 'bye'], $this->url->getPathSegments());
+        $this->url->setPathSegments(['hello', 'bye', '']);
+        self::assertSame(['hello', 'bye', ''], $this->url->getPathSegments());
+        self::assertSame('hello', $this->url->getPathSegment(0));
         self::assertSame('bye', $this->url->getPathSegment(1));
-        self::assertNull($this->url->getPathSegment(2));
+        self::assertSame('', $this->url->getPathSegment(2));
+        self::assertNull($this->url->getPathSegment(3));
     }
 
     public function testPort() : void
