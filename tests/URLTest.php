@@ -24,7 +24,7 @@ final class URLTest extends TestCase
     public function testSameUrl() : void
     {
         $url = 'http://domain.tld';
-        self::assertSame($url, (new URL($url))->__toString());
+        self::assertNotSame($url, (new URL($url))->__toString());
         $url = 'http://domain.tld/';
         self::assertSame($url, (new URL($url))->__toString());
         $url = 'http://domain.tld/foo';
@@ -39,6 +39,15 @@ final class URLTest extends TestCase
         self::assertSame($url, (new URL($url))->__toString());
         $url = 'http://user:pass@domain.tld:8080/foo/bar/?a=1&b=2#id';
         self::assertSame($url, (new URL($url))->__toString());
+    }
+
+    public function testPathEndsWithBar() : void
+    {
+        $url = 'http://domain.tld';
+        self::assertSame(
+            $url . '/',
+            (new URL($url))->__toString()
+        );
     }
 
     public function testBaseUrl() : void
@@ -112,6 +121,8 @@ final class URLTest extends TestCase
         self::assertSame('/a/b/c/', $this->url->getPath());
         $this->url->setPath('/a/b/c/');
         self::assertSame('/a/b/c/', $this->url->getPath());
+        $this->url->setPathSegments([]);
+        self::assertSame('/', $this->url->getPath());
         $this->url->setPathSegments(['hello', 'bye']);
         self::assertSame('/hello/bye', $this->url->getPath());
         $this->url->setPathSegments(['hello', 'bye', '']);
