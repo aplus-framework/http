@@ -382,7 +382,7 @@ class URL implements \JsonSerializable, \Stringable
 
     /**
      * @param string $data
-     * @param array<int,string> $only
+     * @param array<string> $only
      *
      * @return static
      */
@@ -393,8 +393,8 @@ class URL implements \JsonSerializable, \Stringable
     }
 
     /**
-     * @param array<string,mixed> $data
-     * @param array<int,string> $only
+     * @param array<mixed> $data
+     * @param array<string> $only
      *
      * @return static
      */

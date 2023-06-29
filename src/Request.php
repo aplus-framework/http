@@ -469,7 +469,7 @@ class Request extends Message implements RequestInterface
                 $data[$match[1]] = $match[3] ?: $match[4] ?? '';
             }
         }
-        return $data; // @phpstan-ignore-line
+        return $data;
     }
 
     /**
@@ -1069,7 +1069,7 @@ class Request extends Message implements RequestInterface
         }
         $host = \parse_url($filteredHost);
         $this->host = $host['host']; // @phpstan-ignore-line
-        if (isset($host['port'])) { // @phpstan-ignore-line
+        if (isset($host['port'])) {
             $this->port = $host['port'];
         }
         return $this;
