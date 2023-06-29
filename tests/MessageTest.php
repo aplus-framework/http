@@ -153,7 +153,7 @@ final class MessageTest extends TestCase
         self::assertTrue($this->message->hasCookie('session'));
         $this->message->setCookie(new Cookie('custom', 'foo'));
         // @phpstan-ignore-next-line
-        self::assertSame('abc123', $this->message->getCookie('session')->getValue());
+        self::assertSame('abc123', $this->message->getCookie('session')?->getValue());
         self::assertSame(['session', 'custom'], \array_keys($this->message->getCookies()));
         $this->message->removeCookies([
             'session',
