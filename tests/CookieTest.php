@@ -113,7 +113,7 @@ final class CookieTest extends TestCase
             'Set-Cookie: foo=bar',
             'Set-Cookie: foo=abc123; secure; HttpOnly',
             'Set-Cookie: foo=abc123; expires='
-            . \date('D, d-M-Y H:i:s', \time() + 5) . ' GMT; Max-Age=5',
+            . \gmdate($xdebugCookieDateFormat, \time() + 5) . ' GMT; Max-Age=5',
         ], xdebug_get_headers());
         $this->cookie->setDomain('domain.tld')
             ->setPath('/blog')
