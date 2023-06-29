@@ -140,7 +140,7 @@ final class CookieTest extends TestCase
     {
         $time = \time() + 30;
         $expected = 'foo=baz; expires='
-            . \date('D, d-M-Y H:i:s', $time)
+            . \date('D, d M Y H:i:s', $time)
             . ' GMT; Max-Age=30; path=/blog; domain=domain.tld; secure; HttpOnly; SameSite=Strict';
         $this->cookie->setDomain('domain.tld')
             ->setPath('/blog')
