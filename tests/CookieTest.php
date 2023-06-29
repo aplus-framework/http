@@ -131,7 +131,7 @@ final class CookieTest extends TestCase
             ]);
         }
         self::assertContains(
-            'Set-Cookie: ' . $this->cookie->getAsString(),
+            'Set-Cookie: ' . $value,
             xdebug_get_headers()
         );
     }
