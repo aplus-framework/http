@@ -182,8 +182,7 @@ class URL implements \JsonSerializable, \Stringable
     #[Pure]
     public function getPath() : string
     {
-        $path = \implode('/', $this->pathSegments);
-        return $path === '' ? '/' : '/' . $path;
+        return '/' . \implode('/', $this->pathSegments);
     }
 
     /**
