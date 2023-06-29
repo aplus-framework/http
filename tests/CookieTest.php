@@ -113,7 +113,7 @@ final class CookieTest extends TestCase
             'Set-Cookie: foo=bar',
             'Set-Cookie: foo=abc123; secure; HttpOnly',
             'Set-Cookie: foo=abc123; expires='
-            . \gmdate($xdebugCookieDateFormat, \time() + 5) . ' GMT; Max-Age=5',
+            . \date('D, d-M-Y H:i:s', \time() + 5) . ' GMT; Max-Age=5',
         ], xdebug_get_headers());
         $this->cookie->setDomain('domain.tld')
             ->setPath('/blog')
@@ -131,7 +131,7 @@ final class CookieTest extends TestCase
             ]);
         }
         self::assertContains(
-            'Set-Cookie: ' . $value,
+            'Set-Cookie: ' . $this->cookie->getAsString(),
             xdebug_get_headers()
         );
     }
