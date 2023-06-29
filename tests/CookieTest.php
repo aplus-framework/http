@@ -106,11 +106,14 @@ final class CookieTest extends TestCase
         self::assertSame(['Set-Cookie: foo=bar'], xdebug_get_headers());
         (new Cookie('foo', 'abc123'))->setSecure()->setHttpOnly()->send();
         (new Cookie('foo', 'abc123'))->setExpires('+5 seconds')->send();
+        $xdebugCookieDateFormat = \PHP_VERSION_ID < 80200
+            ? 'D, d-M-Y H:i:s'
+            : 'D, d M Y H:i:s';
         self::assertSame([
             'Set-Cookie: foo=bar',
             'Set-Cookie: foo=abc123; secure; HttpOnly',
             'Set-Cookie: foo=abc123; expires='
-            . \date('D, d-M-Y H:i:s', \time() + 5) . ' GMT; Max-Age=5',
+            . \gmdate($xdebugCookieDateFormat, \time() + 5) . ' GMT; Max-Age=5',
         ], xdebug_get_headers());
         $this->cookie->setDomain('domain.tld')
             ->setPath('/blog')
@@ -120,8 +123,15 @@ final class CookieTest extends TestCase
             ->setValue('baz')
             ->setExpires('+30 seconds')
             ->send();
+        $value = $this->cookie->getAsString();
+        if (\PHP_VERSION_ID < 80200) {
+            $time = \time() + 30;
+            $value = \strtr($value, [
+                \gmdate('D, d M Y H:i:s', $time) => \gmdate('D, d-M-Y H:i:s', $time),
+            ]);
+        }
         self::assertContains(
-            'Set-Cookie: ' . $this->cookie->getAsString(),
+            'Set-Cookie: ' . $value,
             xdebug_get_headers()
         );
     }
