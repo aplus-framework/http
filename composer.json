@@ -26,9 +26,9 @@
     "homepage": "https://aplus-framework.com/packages/http",
     "support": {
         "email": "support@aplus-framework.com",
-        "issues": "https://gitlab.com/aplus-framework/libraries/http/issues",
+        "issues": "https://github.com/aplus-framework/http/issues",
         "forum": "https://aplus-framework.com/forum",
-        "source": "https://gitlab.com/aplus-framework/libraries/http",
+        "source": "https://github.com/aplus-framework/http",
         "docs": "https://docs.aplus-framework.com/guides/libraries/http/"
     },
     "funding": [
