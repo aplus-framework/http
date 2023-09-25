@@ -229,7 +229,7 @@ class Cookie implements \Stringable
     {
         if ($sameSite !== null) {
             $sameSite = \ucfirst(\strtolower($sameSite));
-            if ( ! \in_array($sameSite, ['Strict', 'Lax', 'Unset', 'None'])) {
+            if (!\in_array($sameSite, ['Strict', 'Lax', 'Unset', 'None'])) {
                 throw new InvalidArgumentException('SameSite must be Strict, Lax, Unset or None');
             }
         }

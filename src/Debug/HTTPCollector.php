@@ -73,7 +73,7 @@ class HTTPCollector extends Collector
 
     protected function renderRequest() : string
     {
-        if ( ! isset($this->request)) {
+        if (!isset($this->request)) {
             return '<p>A Request instance has not been set on this collector.</p>';
         }
         \ob_start(); ?>
@@ -145,7 +145,7 @@ class HTTPCollector extends Collector
 
     protected function renderRequestForm() : string
     {
-        if ( ! $this->request->isPost() && ! $this->request->isForm()) {
+        if (!$this->request->isPost() && !$this->request->isForm()) {
             return '';
         }
         \ob_start(); ?>
@@ -174,7 +174,7 @@ class HTTPCollector extends Collector
 
     protected function renderRequestFiles() : string
     {
-        if ( ! $this->request->hasFiles()) {
+        if (!$this->request->hasFiles()) {
             return '';
         }
         \ob_start(); ?>
@@ -216,7 +216,7 @@ class HTTPCollector extends Collector
 
     protected function renderResponse() : string
     {
-        if ( ! isset($this->response)) {
+        if (!isset($this->response)) {
             return '<p>A Response instance has not been set on this collector.</p>';
         }
         \ob_start(); ?>
@@ -249,7 +249,7 @@ class HTTPCollector extends Collector
 
     protected function renderResponseCookies() : string
     {
-        if ( ! $this->response->getCookies()) {
+        if (!$this->response->getCookies()) {
             return '';
         }
         \ob_start(); ?>
@@ -291,7 +291,7 @@ class HTTPCollector extends Collector
         \ob_start(); ?>
         <h2>Body Contents</h2>
         <?php
-        if ( ! $this->response->isSent()) {
+        if (!$this->response->isSent()) {
             echo '<p>Response has not been sent.</p>';
             return \ob_get_clean(); // @phpstan-ignore-line
         }

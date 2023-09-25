@@ -476,7 +476,7 @@ class Response extends Message implements ResponseInterface
         if ($this->getHeader(Header::CONTENT_TYPE) === null) {
             $this->negotiateContentType();
         }
-        if ($this->isAutoEtag() && ! $this->hasDownload()) {
+        if ($this->isAutoEtag() && !$this->hasDownload()) {
             $this->negotiateEtag();
         }
         $this->negotiateCsp();

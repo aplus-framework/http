@@ -214,7 +214,7 @@ class URL implements \JsonSerializable, \Stringable
     protected function getPortPart() : string
     {
         $part = $this->getPort();
-        if ( ! \in_array($part, [
+        if (!\in_array($part, [
             null,
             80,
             443,
@@ -350,7 +350,7 @@ class URL implements \JsonSerializable, \Stringable
     public function setHostname(string $hostname) : static
     {
         $filtered = \filter_var($hostname, \FILTER_VALIDATE_DOMAIN, \FILTER_FLAG_HOSTNAME);
-        if ( ! $filtered) {
+        if (!$filtered) {
             throw new InvalidArgumentException("Invalid URL Hostname: {$hostname}");
         }
         $this->hostname = $filtered;
@@ -453,7 +453,7 @@ class URL implements \JsonSerializable, \Stringable
     protected function setUrl(string $url) : static
     {
         $filteredUrl = \filter_var($url, \FILTER_VALIDATE_URL);
-        if ( ! $filteredUrl) {
+        if (!$filteredUrl) {
             throw new InvalidArgumentException("Invalid URL: {$url}");
         }
         $url = \parse_url($filteredUrl);
