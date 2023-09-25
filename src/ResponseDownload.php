@@ -67,7 +67,7 @@ trait ResponseDownload
         ?string $filename = null
     ) : static {
         $realpath = \realpath($filepath);
-        if ($realpath === false || ! \is_file($realpath)) {
+        if ($realpath === false || !\is_file($realpath)) {
             throw new InvalidArgumentException('Invalid file path: ' . $filepath);
         }
         $this->filepath = $realpath;
@@ -156,7 +156,7 @@ trait ResponseDownload
     #[Pure]
     private function parseByteRange(string $line) : array | false
     {
-        if ( ! \str_starts_with($line, 'bytes=')) {
+        if (!\str_starts_with($line, 'bytes=')) {
             return false;
         }
         $line = \substr($line, 6);
@@ -200,7 +200,7 @@ trait ResponseDownload
     #[Pure]
     private function validBytePos(string $pos) : false | int
     {
-        if ( ! \is_numeric($pos) || $pos < \PHP_INT_MIN || $pos > \PHP_INT_MAX) {
+        if (!\is_numeric($pos) || $pos < \PHP_INT_MIN || $pos > \PHP_INT_MAX) {
             return false;
         }
         if ($pos < 0 || $pos >= $this->filesize) {
@@ -297,7 +297,7 @@ trait ResponseDownload
     {
         \fseek($this->handle, $firstByte);
         $bytesLeft = $lastByte - $firstByte + 1;
-        while ($bytesLeft > 0 && ! \feof($this->handle)) {
+        while ($bytesLeft > 0 && !\feof($this->handle)) {
             $bytesRead = $bytesLeft > $this->readLength ? $this->readLength : $bytesLeft;
             $bytesLeft -= $bytesRead;
             $this->flush($bytesRead);
@@ -323,7 +323,7 @@ trait ResponseDownload
 
     private function readFile() : void
     {
-        while ( ! \feof($this->handle)) {
+        while (!\feof($this->handle)) {
             $this->flush($this->readLength);
             if (\connection_status() !== \CONNECTION_NORMAL) {
                 break;

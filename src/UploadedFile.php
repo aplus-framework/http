@@ -844,7 +844,7 @@ class UploadedFile
      */
     public function getClientExtension() : string
     {
-        if ( ! isset($this->clientExtension)) {
+        if (!isset($this->clientExtension)) {
             $this->clientExtension = (string) \pathinfo($this->getName(), \PATHINFO_EXTENSION);
         }
         return $this->clientExtension;
@@ -907,7 +907,7 @@ class UploadedFile
      */
     public function getErrorMessage() : string
     {
-        if ( ! isset($this->errorMessage)) {
+        if (!isset($this->errorMessage)) {
             $this->setErrorMessage($this->error);
         }
         return $this->errorMessage;

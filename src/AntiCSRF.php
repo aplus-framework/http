@@ -122,10 +122,10 @@ class AntiCSRF
         if ($this->getUserToken() === null) {
             return false;
         }
-        if ( ! $this->validate($this->getUserToken())) {
+        if (!$this->validate($this->getUserToken())) {
             return false;
         }
-        if ( ! $this->isVerified()) {
+        if (!$this->isVerified()) {
             $this->setToken();
             $this->setVerified();
         }
