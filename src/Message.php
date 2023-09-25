@@ -465,7 +465,7 @@ abstract class Message implements MessageInterface
      */
     protected function setUrl(string | URL $url) : static
     {
-        if ( ! $url instanceof URL) {
+        if (!$url instanceof URL) {
             $url = new URL($url);
         }
         $this->url = $url;

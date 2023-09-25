@@ -194,7 +194,7 @@ class Request extends Message implements RequestInterface
     protected function validateHost(array $allowedHosts) : void
     {
         $host = $this->getServer('HTTP_HOST');
-        if ( ! \in_array($host, $allowedHosts, true)) {
+        if (!\in_array($host, $allowedHosts, true)) {
             throw new UnexpectedValueException('Invalid Host: ' . $host);
         }
     }
@@ -286,13 +286,13 @@ class Request extends Message implements RequestInterface
      */
     public function forceHttps() : void
     {
-        if ( ! $this->isSecure()) {
+        if (!$this->isSecure()) {
             \header(
                 'Location: ' . $this->getUrl()->setScheme('https'),
                 true,
                 Status::MOVED_PERMANENTLY
             );
-            if ( ! \defined('TESTING')) {
+            if (!\defined('TESTING')) {
                 // @codeCoverageIgnoreStart
                 exit;
                 // @codeCoverageIgnoreEnd
@@ -719,7 +719,7 @@ class Request extends Message implements RequestInterface
     #[Pure]
     public function hasFiles() : bool
     {
-        return ! empty($this->files);
+        return !empty($this->files);
     }
 
     public function getFile(string $name) : ?UploadedFile
@@ -886,7 +886,7 @@ class Request extends Message implements RequestInterface
      */
     public function getReferer() : ?URL
     {
-        if ( ! isset($this->referrer)) {
+        if (!isset($this->referrer)) {
             $this->referrer = false;
             $referer = $this->getHeader(RequestHeader::REFERER);
             if ($referer !== null) {
@@ -953,7 +953,7 @@ class Request extends Message implements RequestInterface
      */
     protected function setUserAgent(string | UserAgent $userAgent) : static
     {
-        if ( ! $userAgent instanceof UserAgent) {
+        if (!$userAgent instanceof UserAgent) {
             $userAgent = new UserAgent($userAgent);
         }
         $this->userAgent = $userAgent;
@@ -1064,7 +1064,7 @@ class Request extends Message implements RequestInterface
     {
         $filteredHost = 'http://' . $host;
         $filteredHost = \filter_var($filteredHost, \FILTER_VALIDATE_URL);
-        if ( ! $filteredHost) {
+        if (!$filteredHost) {
             throw new InvalidArgumentException("Invalid host: {$host}");
         }
         $host = \parse_url($filteredHost);
