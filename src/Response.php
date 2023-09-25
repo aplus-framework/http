@@ -495,14 +495,14 @@ class Response extends Message implements ResponseInterface
     protected function negotiateCsp() : void
     {
         $csp = $this->getCsp();
-        if ($csp && ! $this->hasDownload()) {
+        if ($csp && !$this->hasDownload()) {
             $this->setHeader(
                 ResponseHeader::CONTENT_SECURITY_POLICY,
                 $csp->render()
             );
         }
         $csp = $this->getCspReportOnly();
-        if ($csp && ! $this->hasDownload()) {
+        if ($csp && !$this->hasDownload()) {
             $this->setHeader(
                 ResponseHeader::CONTENT_SECURITY_POLICY_REPORT_ONLY,
                 $csp->render()
