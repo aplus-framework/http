@@ -591,7 +591,7 @@ message can be saved.
 
 Note that in this example we validated only the field with the anti-CSRF token
 and did not validate the other fields. Which can be validated using the
-`Validation Library <https://gitlab.com/aplus-framework/libraries/validation>`_.
+`Validation Library <https://github.com/aplus-framework/validation>`_.
 
 Content Security Policy
 -----------------------
@@ -812,5 +812,5 @@ The more you use it, the more you will learn.
 .. note::
     Did you find something wrong? 
     Be sure to let us know about it with an
-    `issue <https://gitlab.com/aplus-framework/libraries/http/issues>`_. 
+    `issue <https://github.com/aplus-framework/http/issues>`_. 
     Thank you!
