@@ -320,6 +320,19 @@ final class ResponseTest extends TestCase
         $this->response->setJson("\xB1\x31");
     }
 
+    public function testJsonFlags() : void
+    {
+        self::assertSame(
+            \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE,
+            $this->response->getJsonFlags()
+        );
+        $this->response->setJsonFlags(\JSON_FORCE_OBJECT);
+        self::assertSame(
+            \JSON_FORCE_OBJECT,
+            $this->response->getJsonFlags()
+        );
+    }
+
     public function testLastModified() : void
     {
         self::assertNull($this->response->getHeader('Last-Modified'));

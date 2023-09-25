@@ -47,6 +47,7 @@ class Response extends Message implements ResponseInterface
     protected HTTPCollector $debugCollector;
     protected CSP $csp;
     protected CSP $cspReportOnly;
+    protected int $jsonFlags = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
 
     /**
      * Response constructor.
@@ -629,12 +630,35 @@ class Response extends Message implements ResponseInterface
     public function setJson(mixed $data, int $flags = null, int $depth = 512) : static
     {
         if ($flags === null) {
-            $flags = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
+            $flags = $this->getJsonFlags();
         }
         $data = \json_encode($data, $flags | \JSON_THROW_ON_ERROR, $depth);
         $this->setContentType('application/json');
         $this->setBody($data);
         return $this;
+    }
+
+    /**
+     * Set JSON flags used in the {@see Response::setJson()} method.
+     *
+     * @param int $flags
+     *
+     * @return static
+     */
+    public function setJsonFlags(int $flags) : static
+    {
+        $this->jsonFlags = $flags;
+        return $this;
+    }
+
+    /**
+     * Get JSON flags.
+     *
+     * @return int
+     */
+    public function getJsonFlags() : int
+    {
+        return $this->jsonFlags;
     }
 
     /**
