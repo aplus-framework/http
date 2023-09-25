@@ -234,7 +234,7 @@ class Request extends Message implements RequestInterface
      */
     public function getBody() : string
     {
-        if ( ! isset($this->body)) {
+        if (!isset($this->body)) {
             $this->body = (string) \file_get_contents('php://input');
         }
         return $this->body;
