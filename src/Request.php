@@ -70,6 +70,7 @@ class Request extends Message implements RequestInterface
      * @var bool
      */
     protected bool $isSecure;
+    protected int $jsonFlags = 0;
 
     /**
      * Request constructor.
@@ -576,9 +577,12 @@ class Request extends Message implements RequestInterface
      */
     public function getJson(
         ?bool $associative = null,
-        int $flags = 0,
+        int $flags = null,
         int $depth = 512
     ) : array | stdClass | false {
+        if ($flags === null) {
+            $flags = $this->getJsonFlags();
+        }
         $body = \json_decode($this->getBody(), $associative, $depth, $flags);
         if (\json_last_error() !== \JSON_ERROR_NONE) {
             return false;

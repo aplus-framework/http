@@ -637,6 +637,19 @@ final class RequestTest extends TestCase
         self::assertFalse($this->request->getJson());
     }
 
+    public function testJsonFlags() : void
+    {
+        self::assertSame(
+            0,
+            $this->request->getJsonFlags()
+        );
+        $this->request->setJsonFlags(\JSON_FORCE_OBJECT);
+        self::assertSame(
+            \JSON_FORCE_OBJECT,
+            $this->request->getJsonFlags()
+        );
+    }
+
     public function testIsForm() : void
     {
         self::assertFalse($this->request->isForm());
