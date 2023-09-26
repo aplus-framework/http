@@ -170,4 +170,17 @@ final class MessageTest extends TestCase
         $this->message->setHeader('Content-Type', 'text/html; charset=UTF-8');
         self::assertSame('text/html', $this->message->parseContentType());
     }
+
+    public function testJsonFlags() : void
+    {
+        self::assertSame(
+            \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE,
+            $this->message->getJsonFlags()
+        );
+        $this->message->setJsonFlags(\JSON_FORCE_OBJECT);
+        self::assertSame(
+            \JSON_FORCE_OBJECT,
+            $this->message->getJsonFlags()
+        );
+    }
 }

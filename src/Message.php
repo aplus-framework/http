@@ -55,6 +55,7 @@ abstract class Message implements MessageInterface
      * @var array<string,string>
      */
     protected array $headers = [];
+    protected int $jsonFlags = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
 
     public function __toString() : string
     {
@@ -481,6 +482,33 @@ abstract class Message implements MessageInterface
         }
         $contentType = \explode(';', $contentType, 2)[0];
         return \trim($contentType);
+    }
+
+    /**
+     * Set JSON flags.
+     *
+     * @since 5.6
+     *
+     * @param int $flags
+     *
+     * @return static
+     */
+    public function setJsonFlags(int $flags) : static
+    {
+        $this->jsonFlags = $flags;
+        return $this;
+    }
+
+    /**
+     * Get JSON flags.
+     *
+     * @since 5.6
+     *
+     * @return int
+     */
+    public function getJsonFlags() : int
+    {
+        return $this->jsonFlags;
     }
 
     /**
