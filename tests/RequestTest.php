@@ -643,9 +643,9 @@ final class RequestTest extends TestCase
             0,
             $this->request->getJsonFlags()
         );
-        $this->request->setJsonFlags(\JSON_FORCE_OBJECT);
+        $this->request->setJsonFlags(\JSON_BIGINT_AS_STRING);
         self::assertSame(
-            \JSON_FORCE_OBJECT,
+            \JSON_BIGINT_AS_STRING,
             $this->request->getJsonFlags()
         );
     }
