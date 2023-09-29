@@ -618,8 +618,18 @@ expectedArguments(
     argumentsSet('json_decode_flags')
 );
 expectedArguments(
+    \Framework\HTTP\Request::setJsonFlags(),
+    0,
+    argumentsSet('json_decode_flags')
+);
+expectedArguments(
     \Framework\HTTP\Response::setJson(),
     1,
+    argumentsSet('json_encode_flags')
+);
+expectedArguments(
+    \Framework\HTTP\Response::setJsonFlags(),
+    0,
     argumentsSet('json_encode_flags')
 );
 expectedArguments(
