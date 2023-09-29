@@ -601,22 +601,26 @@ class Response extends Message implements ResponseInterface
      *
      * @param mixed $data The data being encoded. Can be any type except
      * a resource.
-     * @param int|null $flags <p>
-     * Bitmask consisting of
-     * {@see \JSON_HEX_QUOT}<br/>
-     * {@see \JSON_HEX_TAG}<br/>
-     * {@see \JSON_HEX_AMP}<br/>
-     * {@see \JSON_HEX_APOS}<br/>
-     * {@see \JSON_NUMERIC_CHECK}<br/>
-     * {@see \JSON_PRETTY_PRINT}<br/>
-     * {@see \JSON_UNESCAPED_SLASHES}<br/>
-     * {@see \JSON_FORCE_OBJECT}<br/>
-     * {@see \JSON_UNESCAPED_UNICODE}<br/>
-     * {@see \JSON_THROW_ON_ERROR}<br/>
-     * The behaviour of these constants is described on the JSON constants page.
-     * </p>
-     * <p>Default is <b>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE</b>
-     * when null. Set 0 to do not use none.</p>
+     * @param int|null $flags [optional] <p>
+     *  Bitmask consisting of <b>JSON_FORCE_OBJECT</b>,
+     *  <b>JSON_HEX_AMP</b>,
+     *  <b>JSON_HEX_APOS</b>,
+     *  <b>JSON_HEX_QUOT</b>,
+     *  <b>JSON_HEX_TAG</b>,
+     *  <b>JSON_INVALID_UTF8_IGNORE</b>,
+     *  <b>JSON_INVALID_UTF8_SUBSTITUTE</b>,
+     *  <b>JSON_INVALID_UTF8_SUBSTITUTE</b>,
+     *  <b>JSON_NUMERIC_CHECK</b>,
+     *  <b>JSON_PARTIAL_OUTPUT_ON_ERROR</b>,
+     *  <b>JSON_PRESERVE_ZERO_FRACTION</b>,
+     *  <b>JSON_PRETTY_PRINT</b>,
+     *  <b>JSON_THROW_ON_ERROR</b>.
+     *  <b>JSON_UNESCAPED_LINE_TERMINATORS</b>,
+     *  <b>JSON_UNESCAPED_SLASHES</b>,
+     *  <b>JSON_UNESCAPED_UNICODE</b>,
+     *  </p>
+     *  <p>Default is <b>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE</b>
+     *  when null. <b>JSON_THROW_ON_ERROR</b> is enforced by default.</p>
      * @param int<1,max> $depth Set the maximum depth. Must be greater than zero.
      *
      * @see https://www.php.net/manual/en/function.json-encode.php

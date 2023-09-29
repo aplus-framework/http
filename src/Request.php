@@ -551,27 +551,21 @@ class Request extends Message implements RequestInterface
      * associative arrays; when false, JSON objects will be returned as objects.
      * When null, JSON objects will be returned as associative arrays or objects
      * depending on whether JSON_OBJECT_AS_ARRAY is set in the flags.
-     * @param int $flags <p>
-     * Bitmask of JSON decode options:<br/>
-     * {@see \JSON_BIGINT_AS_STRING} decodes large integers as their original
-     * string value.<br/>
-     * {@see \JSON_INVALID_UTF8_IGNORE} ignores invalid UTF-8 characters,<br/>
-     * {@see \JSON_INVALID_UTF8_SUBSTITUTE} converts invalid UTF-8 characters to
-     * \0xfffd,<br/>
-     * {@see \JSON_OBJECT_AS_ARRAY} decodes JSON objects as PHP array, since
-     * 7.2.0 used by default if $assoc parameter is null,<br/>
-     * {@see \JSON_THROW_ON_ERROR} when passed this flag, the error behaviour of
-     * these functions is changed. The global error state is left untouched, and
-     * if an error occurs that would otherwise set it, these functions instead
-     * throw a JsonException<br/>
-     * </p>
+     * @param int|null $flags [optional] <p>
+     *  Bitmask consisting of <b>JSON_BIGINT_AS_STRING</b>,
+     *  <b>JSON_INVALID_UTF8_IGNORE</b>,
+     *  <b>JSON_INVALID_UTF8_SUBSTITUTE</b>,
+     *  <b>JSON_OBJECT_AS_ARRAY</b>,
+     *  <b>JSON_THROW_ON_ERROR</b>.
+     *  </p>
+     *  <p>Default is none when null.</p>
      * @param int<1,max> $depth user specified recursion depth
      *
      * @see https://www.php.net/manual/en/function.json-decode.php
      * @see https://www.php.net/manual/en/json.constants.php
      *
      * @return array<string,mixed>|false|stdClass If option JSON_THROW_ON_ERROR
-     * is not set, return false if json_decode fail. Otherwise return a
+     * is not set, return false if json_decode fail. Otherwise, return a
      * stdClass instance, or an array if the $associative argument is passed as
      * true.
      */
