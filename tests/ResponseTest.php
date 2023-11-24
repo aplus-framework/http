@@ -595,6 +595,7 @@ final class ResponseTest extends TestCase
         \ob_end_clean();
         self::assertNull($this->response->getHeader('content-type'));
         self::assertSame('', $this->response->getBody());
+        self::assertSame('', \ini_get('default_mimetype'));
     }
 
     /**
@@ -611,6 +612,7 @@ final class ResponseTest extends TestCase
             $this->response->getHeader('content-type')
         );
         self::assertSame('Foo', $this->response->getBody());
+        self::assertNotSame('', \ini_get('default_mimetype'));
     }
 
     /**
@@ -639,11 +641,8 @@ final class ResponseTest extends TestCase
         \ob_start();
         $this->response->send();
         \ob_end_clean();
-        self::assertSame(
-            '',
-            $this->response->getHeader('content-type')
-        );
-        self::assertSame('Content-Type:', xdebug_get_headers()[1]);
+        self::assertNull($this->response->getHeader('content-type'));
+        self::assertSame('', \ini_get('default_mimetype'));
     }
 
     /**
