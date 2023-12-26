@@ -293,9 +293,16 @@ final class ResponseTest extends TestCase
 
     public function testHeadersAreAlreadySent() : void
     {
+        $response = new class(new RequestMock(['domain.tld'])) extends Response {
+            public function sendHeaders() : void
+            {
+                parent::sendHeaders();
+            }
+        };
+        $response->sendHeaders();
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Headers are already sent');
-        $this->response->send();
+        $response->sendHeaders();
     }
 
     public function testInvalidStatusCode() : void
