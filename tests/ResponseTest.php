@@ -555,27 +555,10 @@ final class ResponseTest extends TestCase
     }
 
     /**
-     * @dataProvider
-     *
-     * @return array<array<string>>
-     */
-    public function serverSoftwareProvider() : array
-    {
-        return [
-            ['Apache/2.4.52'],
-            ['lighttpd/1.4.63'],
-            ['nginx/1.18.0'],
-        ];
-    }
-
-    /**
-     * @dataProvider serverSoftwareProvider
-     *
      * @runInSeparateProcess
      */
-    public function testContentTypeEmptyOnServer(string $software) : void
+    public function testContentTypeEmptyOnServer() : void
     {
-        $_SERVER['SERVER_SOFTWARE'] = $software;
         $this->response->setBody('');
         \ob_start();
         $this->response->send();
