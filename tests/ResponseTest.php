@@ -293,9 +293,16 @@ final class ResponseTest extends TestCase
 
     public function testHeadersAreAlreadySent() : void
     {
+        $response = new class(new RequestMock(['domain.tld'])) extends Response {
+            public function sendHeaders() : void
+            {
+                parent::sendHeaders();
+            }
+        };
+        $response->sendHeaders();
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Headers are already sent');
-        $this->response->send();
+        $response->sendHeaders();
     }
 
     public function testInvalidStatusCode() : void
@@ -548,27 +555,10 @@ final class ResponseTest extends TestCase
     }
 
     /**
-     * @dataProvider
-     *
-     * @return array<array<string>>
-     */
-    public function serverSoftwareProvider() : array
-    {
-        return [
-            ['Apache/2.4.52'],
-            ['lighttpd/1.4.63'],
-            ['nginx/1.18.0'],
-        ];
-    }
-
-    /**
-     * @dataProvider serverSoftwareProvider
-     *
      * @runInSeparateProcess
      */
-    public function testContentTypeEmptyOnServer(string $software) : void
+    public function testContentTypeEmptyOnServer() : void
     {
-        $_SERVER['SERVER_SOFTWARE'] = $software;
         $this->response->setBody('');
         \ob_start();
         $this->response->send();

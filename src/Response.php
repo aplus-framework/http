@@ -31,6 +31,7 @@ class Response extends Message implements ResponseInterface
 
     protected int $cacheSeconds = 0;
     protected bool $isSent = false;
+    protected bool $headersSent = false;
     protected Request $request;
     /**
      * HTTP Response Status Code.
@@ -377,7 +378,7 @@ class Response extends Message implements ResponseInterface
      */
     protected function sendHeaders() : void
     {
-        if (\headers_sent()) {
+        if ($this->headersSent || \headers_sent()) {
             throw new LogicException('Headers are already sent');
         }
         if ($this->getHeader(Header::DATE) === null) {
@@ -393,6 +394,7 @@ class Response extends Message implements ResponseInterface
         foreach ($this->getHeaderLines() as $line) {
             \header($line);
         }
+        $this->headersSent = true;
     }
 
     /**
