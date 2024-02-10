@@ -23,50 +23,34 @@ class Header
     // -------------------------------------------------------------------------
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
-     *
-     * @var string
      */
     public const string CACHE_CONTROL = 'Cache-Control';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection
-     *
-     * @var string
      */
     public const string CONNECTION = 'Connection';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
-     *
-     * @var string
      */
     public const string CONTENT_DISPOSITION = 'Content-Disposition';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Date
-     *
-     * @var string
      */
     public const string DATE = 'Date';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Keep-Alive
-     *
-     * @var string
      */
     public const string KEEP_ALIVE = 'Keep-Alive';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
-     *
-     * @var string
      */
     public const string PRAGMA = 'Pragma';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Via
-     *
-     * @var string
      */
     public const string VIA = 'Via';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Warning
-     *
-     * @var string
      */
     public const string WARNING = 'Warning';
     // -------------------------------------------------------------------------
@@ -74,26 +58,18 @@ class Header
     // -------------------------------------------------------------------------
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
-     *
-     * @var string
      */
     public const string CONTENT_ENCODING = 'Content-Encoding';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language
-     *
-     * @var string
      */
     public const string CONTENT_LANGUAGE = 'Content-Language';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Location
-     *
-     * @var string
      */
     public const string CONTENT_LOCATION = 'Content-Location';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
-     *
-     * @var string
      */
     public const string CONTENT_TYPE = 'Content-Type';
     // -------------------------------------------------------------------------
@@ -101,38 +77,26 @@ class Header
     // -------------------------------------------------------------------------
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Length
-     *
-     * @var string
      */
     public const string CONTENT_LENGTH = 'Content-Length';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range
-     *
-     * @var string
      */
     public const string CONTENT_RANGE = 'Content-Range';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Link
-     *
-     * @var string
      */
     public const string LINK = 'Link';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Trailer
-     *
-     * @var string
      */
     public const string TRAILER = 'Trailer';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding
-     *
-     * @var string
      */
     public const string TRANSFER_ENCODING = 'Transfer-Encoding';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade
-     *
-     * @var string
      */
     public const string UPGRADE = 'Upgrade';
     // -------------------------------------------------------------------------
@@ -140,8 +104,6 @@ class Header
     // -------------------------------------------------------------------------
     /**
      * @see https://riptutorial.com/http-headers/topic/10581/x-request-id
-     *
-     * @var string
      */
     public const string X_REQUEST_ID = 'X-Request-ID';
     /**
