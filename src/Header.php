@@ -26,49 +26,49 @@ class Header
      *
      * @var string
      */
-    public const CACHE_CONTROL = 'Cache-Control';
+    public const string CACHE_CONTROL = 'Cache-Control';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection
      *
      * @var string
      */
-    public const CONNECTION = 'Connection';
+    public const string CONNECTION = 'Connection';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
      *
      * @var string
      */
-    public const CONTENT_DISPOSITION = 'Content-Disposition';
+    public const string CONTENT_DISPOSITION = 'Content-Disposition';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Date
      *
      * @var string
      */
-    public const DATE = 'Date';
+    public const string DATE = 'Date';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Keep-Alive
      *
      * @var string
      */
-    public const KEEP_ALIVE = 'Keep-Alive';
+    public const string KEEP_ALIVE = 'Keep-Alive';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
      *
      * @var string
      */
-    public const PRAGMA = 'Pragma';
+    public const string PRAGMA = 'Pragma';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Via
      *
      * @var string
      */
-    public const VIA = 'Via';
+    public const string VIA = 'Via';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Warning
      *
      * @var string
      */
-    public const WARNING = 'Warning';
+    public const string WARNING = 'Warning';
     // -------------------------------------------------------------------------
     // Representation headers (Request and Response)
     // -------------------------------------------------------------------------
@@ -77,25 +77,25 @@ class Header
      *
      * @var string
      */
-    public const CONTENT_ENCODING = 'Content-Encoding';
+    public const string CONTENT_ENCODING = 'Content-Encoding';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Language
      *
      * @var string
      */
-    public const CONTENT_LANGUAGE = 'Content-Language';
+    public const string CONTENT_LANGUAGE = 'Content-Language';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Location
      *
      * @var string
      */
-    public const CONTENT_LOCATION = 'Content-Location';
+    public const string CONTENT_LOCATION = 'Content-Location';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
      *
      * @var string
      */
-    public const CONTENT_TYPE = 'Content-Type';
+    public const string CONTENT_TYPE = 'Content-Type';
     // -------------------------------------------------------------------------
     // Payload headers (Request and Response)
     // -------------------------------------------------------------------------
@@ -104,37 +104,37 @@ class Header
      *
      * @var string
      */
-    public const CONTENT_LENGTH = 'Content-Length';
+    public const string CONTENT_LENGTH = 'Content-Length';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range
      *
      * @var string
      */
-    public const CONTENT_RANGE = 'Content-Range';
+    public const string CONTENT_RANGE = 'Content-Range';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Link
      *
      * @var string
      */
-    public const LINK = 'Link';
+    public const string LINK = 'Link';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Trailer
      *
      * @var string
      */
-    public const TRAILER = 'Trailer';
+    public const string TRAILER = 'Trailer';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Transfer-Encoding
      *
      * @var string
      */
-    public const TRANSFER_ENCODING = 'Transfer-Encoding';
+    public const string TRANSFER_ENCODING = 'Transfer-Encoding';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade
      *
      * @var string
      */
-    public const UPGRADE = 'Upgrade';
+    public const string UPGRADE = 'Upgrade';
     // -------------------------------------------------------------------------
     // Custom
     // -------------------------------------------------------------------------
@@ -143,7 +143,7 @@ class Header
      *
      * @var string
      */
-    public const X_REQUEST_ID = 'X-Request-ID';
+    public const string X_REQUEST_ID = 'X-Request-ID';
     /**
      * Header names.
      *
