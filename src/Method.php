@@ -25,16 +25,12 @@ class Method
      * resource. It can be used to open a tunnel.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/CONNECT
-     *
-     * @var string
      */
     public const string CONNECT = 'CONNECT';
     /**
      * The HTTP DELETE request method deletes the specified resource.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/DELETE
-     *
-     * @var string
      */
     public const string DELETE = 'DELETE';
     /**
@@ -43,8 +39,6 @@ class Method
      * include data).
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET
-     *
-     * @var string
      */
     public const string GET = 'GET';
     /**
@@ -52,8 +46,6 @@ class Method
      * HEAD request's URL was instead requested with the HTTP GET method.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/HEAD
-     *
-     * @var string
      */
     public const string HEAD = 'HEAD';
     /**
@@ -62,16 +54,12 @@ class Method
      * asterisk (*) to refer to the entire server.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS
-     *
-     * @var string
      */
     public const string OPTIONS = 'OPTIONS';
     /**
      * The HTTP PATCH request method applies partial modifications to a resource.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH
-     *
-     * @var string
      */
     public const string PATCH = 'PATCH';
     /**
@@ -80,8 +68,6 @@ class Method
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST
      * @see Header::CONTENT_TYPE
-     *
-     * @var string
      */
     public const string POST = 'POST';
     /**
@@ -89,8 +75,6 @@ class Method
      * representation of the target resource with the request payload.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PUT
-     *
-     * @var string
      */
     public const string PUT = 'PUT';
     /**
@@ -98,8 +82,6 @@ class Method
      * the target resource, providing a useful debugging mechanism.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/TRACE
-     *
-     * @var string
      */
     public const string TRACE = 'TRACE';
     /**
