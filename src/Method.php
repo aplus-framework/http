@@ -28,7 +28,7 @@ class Method
      *
      * @var string
      */
-    public const CONNECT = 'CONNECT';
+    public const string CONNECT = 'CONNECT';
     /**
      * The HTTP DELETE request method deletes the specified resource.
      *
@@ -36,7 +36,7 @@ class Method
      *
      * @var string
      */
-    public const DELETE = 'DELETE';
+    public const string DELETE = 'DELETE';
     /**
      * The HTTP GET method requests a representation of the specified resource.
      * Requests using GET should only be used to request data (they shouldn't
@@ -46,7 +46,7 @@ class Method
      *
      * @var string
      */
-    public const GET = 'GET';
+    public const string GET = 'GET';
     /**
      * The HTTP HEAD method requests the headers that would be returned if the
      * HEAD request's URL was instead requested with the HTTP GET method.
@@ -55,7 +55,7 @@ class Method
      *
      * @var string
      */
-    public const HEAD = 'HEAD';
+    public const string HEAD = 'HEAD';
     /**
      * The HTTP OPTIONS method requests permitted communication options for a
      * given URL or server. A client can specify a URL with this method, or an
@@ -65,7 +65,7 @@ class Method
      *
      * @var string
      */
-    public const OPTIONS = 'OPTIONS';
+    public const string OPTIONS = 'OPTIONS';
     /**
      * The HTTP PATCH request method applies partial modifications to a resource.
      *
@@ -73,7 +73,7 @@ class Method
      *
      * @var string
      */
-    public const PATCH = 'PATCH';
+    public const string PATCH = 'PATCH';
     /**
      * The HTTP POST method sends data to the server. The type of the body of
      * the request is indicated by the Content-Type header.
@@ -83,7 +83,7 @@ class Method
      *
      * @var string
      */
-    public const POST = 'POST';
+    public const string POST = 'POST';
     /**
      * The HTTP PUT request method creates a new resource or replaces a
      * representation of the target resource with the request payload.
@@ -92,7 +92,7 @@ class Method
      *
      * @var string
      */
-    public const PUT = 'PUT';
+    public const string PUT = 'PUT';
     /**
      * The HTTP TRACE method performs a message loop-back test along the path to
      * the target resource, providing a useful debugging mechanism.
@@ -101,7 +101,7 @@ class Method
      *
      * @var string
      */
-    public const TRACE = 'TRACE';
+    public const string TRACE = 'TRACE';
     /**
      * @var array<string>
      */
