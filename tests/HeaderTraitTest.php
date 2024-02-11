@@ -9,41 +9,40 @@
  */
 namespace Tests\HTTP;
 
-use Framework\HTTP\Header;
 use PHPUnit\Framework\TestCase;
 
-final class HeaderTest extends TestCase
+final class HeaderTraitTest extends TestCase
 {
     /**
      * @runInSeparateProcess
      */
     public function testNames() : void
     {
-        self::assertSame('Host', Header::getName('host'));
-        Header::setName('HOsT');
-        self::assertSame('HOsT', Header::getName('host'));
+        self::assertSame('Host', HeaderTraitMock::getName('host'));
+        HeaderTraitMock::setName('HOsT');
+        self::assertSame('HOsT', HeaderTraitMock::getName('host'));
     }
 
     public function testGetMultilines() : void
     {
-        foreach (Header::getMultilines() as $name) {
+        foreach (HeaderTraitMock::getMultilines() as $name) {
             self::assertSame(\strtolower($name), $name);
         }
     }
 
     public function testIsMultiline() : void
     {
-        self::assertTrue(Header::isMultiline('Date'));
-        self::assertTrue(Header::isMultiline('SET-COOKIE'));
-        self::assertFalse(Header::isMultiline('Etag'));
+        self::assertTrue(HeaderTraitMock::isMultiline('Date'));
+        self::assertTrue(HeaderTraitMock::isMultiline('SET-COOKIE'));
+        self::assertFalse(HeaderTraitMock::isMultiline('Etag'));
     }
 
     public function testConstants() : void
     {
-        $reflection = new \ReflectionClass(Header::class);
+        $reflection = new \ReflectionClass(HeaderTraitMock::class);
         foreach ($reflection->getConstants() as $name => $value) {
             self::assertSame(\strtoupper($name), $name);
-            self::assertSame(Header::getName($value), $value);
+            self::assertSame(HeaderTraitMock::getName($value), $value);
             $name = \strtr(\strtolower($name), ['_' => '-']);
             $value = \strtolower($value);
             self::assertSame($name, $value);

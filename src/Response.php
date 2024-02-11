@@ -62,10 +62,10 @@ class Response extends Message implements ResponseInterface
 
     public function __toString() : string
     {
-        if ($this->getHeader(Header::DATE) === null) {
+        if ($this->getHeader(ResponseHeader::DATE) === null) {
             $this->setDate(new DateTime());
         }
-        if ($this->getHeader(Header::CONTENT_TYPE) === null) {
+        if ($this->getHeader(ResponseHeader::CONTENT_TYPE) === null) {
             $this->setContentType('text/html');
         }
         if ($this->hasDownload()) {
@@ -471,10 +471,10 @@ class Response extends Message implements ResponseInterface
         if ($this->headersSent || \headers_sent()) {
             throw new LogicException('Headers are already sent');
         }
-        if ($this->getHeader(Header::DATE) === null) {
+        if ($this->getHeader(ResponseHeader::DATE) === null) {
             $this->setDate(new DateTime());
         }
-        if ($this->getHeader(Header::CONTENT_TYPE) === null) {
+        if ($this->getHeader(ResponseHeader::CONTENT_TYPE) === null) {
             $this->negotiateContentType();
         }
         if ($this->isAutoEtag() && !$this->hasDownload()) {
@@ -639,7 +639,7 @@ class Response extends Message implements ResponseInterface
         $date->modify('+' . $seconds . ' seconds');
         $this->setExpires($date);
         $this->setHeader(
-            Header::CACHE_CONTROL,
+            ResponseHeader::CACHE_CONTROL,
             ($public ? 'public' : 'private') . ', max-age=' . $seconds
         );
         $this->cacheSeconds = $seconds;
@@ -654,7 +654,7 @@ class Response extends Message implements ResponseInterface
     public function setNoCache() : static
     {
         $this->setHeader(
-            Header::CACHE_CONTROL,
+            ResponseHeader::CACHE_CONTROL,
             'no-cache, no-store, max-age=0'
         );
         $this->cacheSeconds = 0;
@@ -713,7 +713,7 @@ class Response extends Message implements ResponseInterface
     public function setContentType(string $mime, string $charset = 'UTF-8') : static
     {
         $this->setHeader(
-            Header::CONTENT_TYPE,
+            ResponseHeader::CONTENT_TYPE,
             $mime . ($charset ? '; charset=' . $charset : '')
         );
         return $this;
@@ -730,7 +730,7 @@ class Response extends Message implements ResponseInterface
      */
     public function setContentLanguage(string $language) : static
     {
-        $this->setHeader(Header::CONTENT_LANGUAGE, $language);
+        $this->setHeader(ResponseHeader::CONTENT_LANGUAGE, $language);
         return $this;
     }
 
@@ -745,7 +745,7 @@ class Response extends Message implements ResponseInterface
      */
     public function setContentEncoding(string $encoding) : static
     {
-        $this->setHeader(Header::CONTENT_ENCODING, $encoding);
+        $this->setHeader(ResponseHeader::CONTENT_ENCODING, $encoding);
         return $this;
     }
 
@@ -760,7 +760,7 @@ class Response extends Message implements ResponseInterface
      */
     public function setContentLength(int $length) : static
     {
-        $this->setHeader(Header::CONTENT_LENGTH, (string) $length);
+        $this->setHeader(ResponseHeader::CONTENT_LENGTH, (string) $length);
         return $this;
     }
 
@@ -778,7 +778,7 @@ class Response extends Message implements ResponseInterface
         $date = clone $datetime;
         $date->setTimezone(new DateTimeZone('UTC'));
         $this->setHeader(
-            Header::DATE,
+            ResponseHeader::DATE,
             $date->format(DateTimeInterface::RFC7231)
         );
         return $this;

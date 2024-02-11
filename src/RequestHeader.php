@@ -16,8 +16,9 @@ namespace Framework\HTTP;
  *
  * @package http
  */
-class RequestHeader extends Header
+class RequestHeader
 {
+    use HeaderTrait;
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
      */

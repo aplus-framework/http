@@ -16,8 +16,9 @@ namespace Framework\HTTP;
  *
  * @package http
  */
-class ResponseHeader extends Header
+class ResponseHeader
 {
+    use HeaderTrait;
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Ranges
      */

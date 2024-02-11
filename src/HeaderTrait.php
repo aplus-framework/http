@@ -10,13 +10,13 @@
 namespace Framework\HTTP;
 
 /**
- * Class Header.
+ * Trait HeaderTrait.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
  *
  * @package http
  */
-class Header
+trait HeaderTrait
 {
     // -------------------------------------------------------------------------
     // General headers (Request and Response)

@@ -91,7 +91,7 @@ trait ResponseDownload
         $filename = \htmlspecialchars($filename, \ENT_QUOTES | \ENT_HTML5);
         $filename = \strtr($filename, ['/' => '_', '\\' => '_']);
         $this->setHeader(
-            Header::CONTENT_DISPOSITION,
+            ResponseHeader::CONTENT_DISPOSITION,
             $inline ? 'inline' : \sprintf('attachment; filename="%s"', $filename)
         );
         $this->setAcceptRanges($acceptRanges);
@@ -102,9 +102,9 @@ trait ResponseDownload
                 return $this;
             }
         }
-        $this->setHeader(Header::CONTENT_LENGTH, (string) $this->filesize);
+        $this->setHeader(ResponseHeader::CONTENT_LENGTH, (string) $this->filesize);
         $this->setHeader(
-            Header::CONTENT_TYPE,
+            ResponseHeader::CONTENT_TYPE,
             \mime_content_type($this->filepath) ?: 'application/octet-stream'
         );
         $this->sendType = 'normal';
@@ -117,7 +117,7 @@ trait ResponseDownload
         if ($this->byteRanges === false) {
             // https://datatracker.ietf.org/doc/html/rfc7233#section-4.2
             $this->setStatus(Status::RANGE_NOT_SATISFIABLE);
-            $this->setHeader(Header::CONTENT_RANGE, '*/' . $this->filesize);
+            $this->setHeader(ResponseHeader::CONTENT_RANGE, '*/' . $this->filesize);
             return;
         }
         $this->setStatus(Status::PARTIAL_CONTENT);
@@ -213,15 +213,15 @@ trait ResponseDownload
     {
         $this->sendType = 'single';
         $this->setHeader(
-            Header::CONTENT_LENGTH,
+            ResponseHeader::CONTENT_LENGTH,
             (string) ($lastByte - $firstByte + 1)
         );
         $this->setHeader(
-            Header::CONTENT_TYPE,
+            ResponseHeader::CONTENT_TYPE,
             \mime_content_type($this->filepath) ?: 'application/octet-stream'
         );
         $this->setHeader(
-            Header::CONTENT_RANGE,
+            ResponseHeader::CONTENT_RANGE,
             \sprintf('bytes %d-%d/%d', $firstByte, $lastByte, $this->filesize)
         );
     }
@@ -248,9 +248,9 @@ trait ResponseDownload
             $length += $range[1] - $range[0] + 1;
         }
         $length += \strlen($this->getBoundaryLine());
-        $this->setHeader(Header::CONTENT_LENGTH, (string) $length);
+        $this->setHeader(ResponseHeader::CONTENT_LENGTH, (string) $length);
         $this->setHeader(
-            Header::CONTENT_TYPE,
+            ResponseHeader::CONTENT_TYPE,
             "multipart/x-byteranges; boundary={$this->boundary}"
         );
     }
