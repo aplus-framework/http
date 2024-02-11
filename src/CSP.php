@@ -27,141 +27,109 @@ class CSP implements \Stringable
      * Restricts the URLs which can be used in a document's `<base>` element.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/base-uri
-     *
-     * @var string
      */
-    public const baseUri = 'base-uri';
+    public const string baseUri = 'base-uri';
     /**
      * Defines the valid sources for web workers and nested browsing contexts
      * loaded using elements such as `<frame>` and `<iframe>`.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/child-src
-     *
-     * @var string
      */
-    public const childSrc = 'child-src';
+    public const string childSrc = 'child-src';
     /**
      * Restricts the URLs which can be loaded using script interfaces.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/connect-src
-     *
-     * @var string
      */
-    public const connectSrc = 'connect-src';
+    public const string connectSrc = 'connect-src';
     /**
      * Serves as a fallback for the other fetch directives.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/default-src
-     *
-     * @var string
      */
-    public const defaultSrc = 'default-src';
+    public const string defaultSrc = 'default-src';
     /**
      * Specifies valid sources for fonts loaded using `@font-face`.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/font-src
-     *
-     * @var string
      */
-    public const fontSrc = 'font-src';
+    public const string fontSrc = 'font-src';
     /**
      * Restricts the URLs which can be used as the target of a form submissions
      * from a given context.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/form-action
-     *
-     * @var string
      */
-    public const formAction = 'form-action';
+    public const string formAction = 'form-action';
     /**
      * Specifies valid parents that may embed a page using `<frame>`, `<iframe>`,
      * `<object>`, `<embed>`, or `<applet>`.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors
-     *
-     * @var string
      */
-    public const frameAncestors = 'frame-ancestors';
+    public const string frameAncestors = 'frame-ancestors';
     /**
      * Specifies valid sources for nested browsing contexts loading using
      * elements such as `<frame>` and `<iframe>`.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-src
-     *
-     * @var string
      */
-    public const frameSrc = 'frame-src';
+    public const string frameSrc = 'frame-src';
     /**
      * Specifies valid sources of images and favicons.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/img-src
-     *
-     * @var string
      */
-    public const imgSrc = 'img-src';
+    public const string imgSrc = 'img-src';
     /**
      * Specifies valid sources of application manifest files.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/manifest-src
-     *
-     * @var string
      */
-    public const manifestSrc = 'manifest-src';
+    public const string manifestSrc = 'manifest-src';
     /**
      * Specifies valid sources for loading media using the `<audio>`, `<video>`
      * and `<track>` elements.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/media-src
-     *
-     * @var string
      */
-    public const mediaSrc = 'media-src';
+    public const string mediaSrc = 'media-src';
     /**
      * Restricts the URLs to which a document can initiate navigation by any
      * means, including `<form>` (if form-action is not specified), `<a>`,
      * `window.location`, `window.open`, etc.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/navigate-to
-     *
-     * @var string
      */
-    public const navigateTo = 'navigate-to';
+    public const string navigateTo = 'navigate-to';
     /**
      * Specifies valid sources for the `<object>`, `<embed>`, and `<applet>`
      * elements.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/object-src
-     *
-     * @var string
      */
-    public const objectSrc = 'object-src';
+    public const string objectSrc = 'object-src';
     /**
      * Restricts the set of plugins that can be embedded into a document by
      * limiting the types of resources which can be loaded.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/plugin-types
      * @deprecated
-     *
-     * @var string
      */
-    public const pluginTypes = 'plugin-types';
+    public const string pluginTypes = 'plugin-types';
     /**
      * Specifies valid sources to be prefetched or prerendered.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/prefetch-src
      * @deprecated
-     *
-     * @var string
      */
-    public const prefetchSrc = 'prefetch-src';
+    public const string prefetchSrc = 'prefetch-src';
     /**
      * Fires a SecurityPolicyViolationEvent.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to
-     *
-     * @var string
      */
-    public const reportTo = 'report-to';
+    public const string reportTo = 'report-to';
     /**
      * Instructs the user agent to report attempts to violate the Content
      * Security Policy. These violation reports consist of JSON documents sent
@@ -169,69 +137,53 @@ class CSP implements \Stringable
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-uri
      * @deprecated
-     *
-     * @var string
      */
-    public const reportUri = 'report-uri';
+    public const string reportUri = 'report-uri';
     /**
      * Enables a sandbox for the requested resource similar to the `<iframe>`
      * sandbox attribute.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/sandbox
-     *
-     * @var string
      */
-    public const sandbox = 'sandbox';
+    public const string sandbox = 'sandbox';
     /**
      * Specifies valid sources for JavaScript and WebAssembly resources.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src
-     *
-     * @var string
      */
-    public const scriptSrc = 'script-src';
+    public const string scriptSrc = 'script-src';
     /**
      * Specifies valid sources for JavaScript inline event handlers.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src-attr
-     *
-     * @var string
      */
-    public const scriptSrcAttr = 'script-src-attr';
+    public const string scriptSrcAttr = 'script-src-attr';
     /**
      * Specifies valid sources for JavaScript `<script>` elements.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src-elem
-     *
-     * @var string
      */
-    public const scriptSrcElem = 'script-src-elem';
+    public const string scriptSrcElem = 'script-src-elem';
     /**
      * Specifies valid sources for stylesheets.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src
-     *
-     * @var string
      */
-    public const styleSrc = 'style-src';
+    public const string styleSrc = 'style-src';
     /**
      * Specifies valid sources for inline styles applied to individual DOM
      * elements.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src-attr
-     *
-     * @var string
      */
-    public const styleSrcAttr = 'style-src-attr';
+    public const string styleSrcAttr = 'style-src-attr';
     /**
      * Specifies valid sources for stylesheets `<style>` elements and `<link>`
      * elements with `rel="stylesheet"`.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src-elem
-     *
-     * @var string
      */
-    public const styleSrcElem = 'style-src-elem';
+    public const string styleSrcElem = 'style-src-elem';
     /**
      * Instructs user agents to treat all of a site's insecure URLs (those
      * served over HTTP) as though they have been replaced with secure URLs
@@ -239,19 +191,15 @@ class CSP implements \Stringable
      * large numbers of insecure legacy URLs that need to be rewritten.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/upgrade-insecure-requests
-     *
-     * @var string
      */
-    public const upgradeInsecureRequests = 'upgrade-insecure-requests';
+    public const string upgradeInsecureRequests = 'upgrade-insecure-requests';
     /**
      * Specifies valid sources for Worker, SharedWorker, or ServiceWorker
      * scripts.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/worker-src
-     *
-     * @var string
      */
-    public const workerSrc = 'worker-src';
+    public const string workerSrc = 'worker-src';
     /**
      * @var array<string,array<string>>
      */
