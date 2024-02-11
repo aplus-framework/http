@@ -13,7 +13,6 @@ use BadMethodCallException;
 use Framework\Helpers\ArraySimple;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Deprecated;
 use JetBrains\PhpStorm\Pure;
 use LogicException;
 use stdClass;
@@ -892,41 +891,6 @@ class Request extends Message implements RequestInterface
         array | int $filterOptions = 0
     ) : mixed {
         return $this->filterInput(\INPUT_POST, $name, $filter, $filterOptions);
-    }
-
-    /**
-     * Get the connection IP via a proxy header.
-     *
-     * @return string|null
-     *
-     * @deprecated Use {@see Request::getHeader()}
-     *
-     * @codeCoverageIgnore
-     */
-    #[Deprecated(
-        reason: 'since HTTP Library version 5.5, use getHeader() instead',
-        replacement: '%class%->getHeader()'
-    )]
-    public function getProxiedIp() : ?string
-    {
-        \trigger_error(
-            'Method ' . __METHOD__ . ' is deprecated',
-            \E_USER_DEPRECATED
-        );
-        foreach ([
-            'X-Real-IP',
-            'X-Forwarded-For',
-            'Client-IP',
-            'X-Client-IP',
-            'X-Cluster-Client-IP',
-        ] as $header) {
-            $header = $this->getHeader($header);
-            if ($header) {
-                $ip = \explode(',', $header, 2)[0];
-                return \trim($ip);
-            }
-        }
-        return null;
     }
 
     /**

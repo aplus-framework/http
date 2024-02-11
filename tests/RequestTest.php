@@ -150,7 +150,7 @@ final class RequestTest extends TestCase
             'height' => '500px',
             'width' => '800',
         ], $this->request->getParsedBody());
-        self::assertSame('red', $this->request->getParsedBody('color', \FILTER_SANITIZE_STRING));
+        self::assertSame('red', $this->request->getParsedBody('color', \FILTER_SANITIZE_FULL_SPECIAL_CHARS));
         self::assertSame(800, $this->request->getParsedBody('width', \FILTER_VALIDATE_INT));
         self::assertFalse($this->request->getParsedBody('height', \FILTER_VALIDATE_INT));
         $this->request->setMethod('POST');
