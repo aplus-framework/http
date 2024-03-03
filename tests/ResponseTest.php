@@ -445,6 +445,18 @@ final class ResponseTest extends TestCase
         self::assertSame($message, (string) $this->response);
     }
 
+    public function testToStringWithoutBodyAndContentType() : void
+    {
+        $startLine = 'HTTP/1.1 200 OK';
+        $headerLines = [
+            'Date: ' . \gmdate(\DATE_RFC7231),
+        ];
+        $message = $startLine . "\r\n"
+            . \implode("\r\n", $headerLines) . "\r\n"
+            . "\r\n";
+        self::assertSame($message, (string) $this->response);
+    }
+
     public function testToStringWithDownload() : void
     {
         $filename = __DIR__ . '/files/file.txt';
