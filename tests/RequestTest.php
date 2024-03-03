@@ -9,6 +9,7 @@
  */
 namespace Tests\HTTP;
 
+use Framework\HTTP\Response;
 use Framework\HTTP\UploadedFile;
 use Framework\HTTP\URL;
 use Framework\HTTP\UserAgent;
@@ -802,5 +803,12 @@ final class RequestTest extends TestCase
         $this->expectException(\BadMethodCallException::class);
         $this->expectExceptionMessage('Method not found: fooBar');
         $this->request->fooBar(); // @phpstan-ignore-line
+    }
+
+    public function testMakeResponse() : void
+    {
+        $response = $this->request->makeResponse();
+        self::assertInstanceOf(Response::class, $response);
+        self::assertNotSame($response, $this->request->makeResponse());
     }
 }

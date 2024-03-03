@@ -1091,4 +1091,14 @@ class Request extends Message implements RequestInterface
         }
         return $this;
     }
+
+    /**
+     * Make a Response with the current Request.
+     *
+     * @return Response
+     */
+    public function makeResponse() : Response
+    {
+        return new Response($this);
+    }
 }
