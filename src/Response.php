@@ -65,7 +65,8 @@ class Response extends Message implements ResponseInterface
         if ($this->getHeader(ResponseHeader::DATE) === null) {
             $this->setDate(new DateTime());
         }
-        if ($this->getHeader(ResponseHeader::CONTENT_TYPE) === null) {
+        if ($this->getHeader(ResponseHeader::CONTENT_TYPE) === null
+            && $this->getBody() !== '') {
             $this->setContentType('text/html');
         }
         if ($this->hasDownload()) {
