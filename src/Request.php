@@ -894,6 +894,30 @@ class Request extends Message implements RequestInterface
     }
 
     /**
+     * Get PATCH data.
+     *
+     * @param string|null $name
+     * @param int|null $filter
+     * @param array<int,int>|int $filterOptions
+     *
+     * @return mixed
+     */
+    public function getPatch(
+        string $name = null,
+        int $filter = null,
+        array | int $filterOptions = 0
+    ) : mixed {
+        if ($this->getMethod() === Method::PATCH) {
+            return $this->getParsedBody($name, $filter, $filterOptions);
+        }
+        $value = [];
+        if ($name !== null) {
+            $value = ArraySimple::value($name, $value);
+        }
+        return $value;
+    }
+
+    /**
      * Get the Referer header.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer

@@ -176,6 +176,22 @@ final class RequestTest extends TestCase
         self::assertSame('0', $this->request->getBody());
     }
 
+    public function testPatch() : void
+    {
+        // @phpstan-ignore-next-line
+        $this->request->setBody('color=red&height=500px&width=800');
+        self::assertSame([], $this->request->getPatch());
+        self::assertNull($this->request->getPatch('color'));
+        $this->request->setMethod('PATCH');
+        $this->request->setHeader('Content-Type', 'application/x-www-form-urlencoded');
+        self::assertSame([
+            'color' => 'red',
+            'height' => '500px',
+            'width' => '800',
+        ], $this->request->getPatch());
+        self::assertSame('red', $this->request->getPatch('color'));
+    }
+
     public function testCharset() : void
     {
         self::assertSame([
