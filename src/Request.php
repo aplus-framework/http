@@ -910,11 +910,7 @@ class Request extends Message implements RequestInterface
         if ($this->getMethod() === Method::PATCH) {
             return $this->getParsedBody($name, $filter, $filterOptions);
         }
-        $value = [];
-        if ($name !== null) {
-            $value = ArraySimple::value($name, $value);
-        }
-        return $value;
+        return $name === null ? [] : null;
     }
 
     /**
@@ -934,11 +930,7 @@ class Request extends Message implements RequestInterface
         if ($this->getMethod() === Method::PUT) {
             return $this->getParsedBody($name, $filter, $filterOptions);
         }
-        $value = [];
-        if ($name !== null) {
-            $value = ArraySimple::value($name, $value);
-        }
-        return $value;
+        return $name === null ? [] : null;
     }
 
     /**
