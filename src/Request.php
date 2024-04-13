@@ -534,6 +534,7 @@ class Request extends Message implements RequestInterface
         }
         if ($this->parsedBody === null) {
             // TODO: On PHP 8.4 use isForm() and request_parse_body()
+            // [$this->parsedBody, $_FILES] = request_parse_body();
             $this->isFormUrl()
                 ? \parse_str($this->getBody(), $this->parsedBody)
                 : $this->parsedBody = [];
