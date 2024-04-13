@@ -1062,6 +1062,17 @@ class Request extends Message implements RequestInterface
     }
 
     /**
+     * Tells if the Content-Type header is multipart/form-data.
+     *
+     * @return bool
+     */
+    #[Pure]
+    public function isFormData() : bool
+    {
+        return $this->parseContentType() === 'multipart/form-data';
+    }
+
+    /**
      * Say if the request is a JSON call.
      *
      * @return bool

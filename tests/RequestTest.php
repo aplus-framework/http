@@ -688,6 +688,16 @@ final class RequestTest extends TestCase
         self::assertFalse($this->request->isForm());
     }
 
+    public function testIsFormData() : void
+    {
+        self::assertFalse($this->request->isFormData());
+        $this->request->setHeader(
+            'Content-Type',
+            'multipart/form-data; boundary=---------------------------24713327432370132601268317390'
+        );
+        self::assertTrue($this->request->isFormData());
+    }
+
     public function testIsPost() : void
     {
         self::assertFalse($this->request->isPost());
