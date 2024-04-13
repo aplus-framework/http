@@ -522,13 +522,13 @@ class Request extends Message implements RequestInterface
      *
      * @see Request::filterInput()
      *
-     * @return array<int|string,mixed>|mixed|string|null
+     * @return array<mixed>|mixed|string|null
      */
     public function getParsedBody(
         string $name = null,
         int $filter = null,
         array | int $filterOptions = 0
-    ) {
+    ) : mixed {
         if ($this->getMethod() === Method::POST) {
             return $this->getPost($name, $filter, $filterOptions);
         }
