@@ -1072,6 +1072,18 @@ class Request extends Message implements RequestInterface
     }
 
     /**
+     * Tells if the Content-Type header is application/x-www-form-urlencoded or
+     * multipart/form-data.
+     *
+     * @return bool
+     */
+    #[Pure]
+    public function isForm() : bool
+    {
+        return $this->isFormUrl() || $this->isFormData();
+    }
+
+    /**
      * Say if the request is a JSON call.
      *
      * @return bool
