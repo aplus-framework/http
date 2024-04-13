@@ -683,9 +683,14 @@ final class RequestTest extends TestCase
         );
     }
 
-    public function testIsForm() : void
+    public function testIsFormUrl() : void
     {
-        self::assertFalse($this->request->isForm());
+        self::assertFalse($this->request->isFormUrl());
+        $this->request->setHeader(
+            'Content-Type',
+            'application/x-www-form-urlencoded'
+        );
+        self::assertTrue($this->request->isFormUrl());
     }
 
     public function testIsFormData() : void

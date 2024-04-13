@@ -531,7 +531,7 @@ class Request extends Message implements RequestInterface
             return $this->getPost($name, $filter, $filterOptions);
         }
         if ($this->parsedBody === null) {
-            $this->isForm()
+            $this->isFormUrl()
                 ? \parse_str($this->getBody(), $this->parsedBody)
                 : $this->parsedBody = [];
         }
@@ -1050,13 +1050,12 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * Say if the request is done with application/x-www-form-urlencoded
-     * Content-Type.
+     * Tells if the Content-Type header is application/x-www-form-urlencoded.
      *
      * @return bool
      */
     #[Pure]
-    public function isForm() : bool
+    public function isFormUrl() : bool
     {
         return $this->parseContentType() === 'application/x-www-form-urlencoded';
     }
