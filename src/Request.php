@@ -514,6 +514,8 @@ class Request extends Message implements RequestInterface
     /**
      * Get the Parsed Body or part of it.
      *
+     * @todo https://php.watch/versions/8.4/request_parse_body
+     *
      * @param string|null $name
      * @param int|null $filter
      * @param array<int,int>|int $filterOptions
@@ -531,6 +533,7 @@ class Request extends Message implements RequestInterface
             return $this->getPost($name, $filter, $filterOptions);
         }
         if ($this->parsedBody === null) {
+            // TODO: On PHP 8.4 use isForm() and request_parse_body()
             $this->isFormUrl()
                 ? \parse_str($this->getBody(), $this->parsedBody)
                 : $this->parsedBody = [];
