@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use JsonException;
 use LogicException;
+use Override;
 
 /**
  * Class Response.
@@ -60,6 +61,7 @@ class Response extends Message implements ResponseInterface
         $this->setProtocol($this->request->getProtocol());
     }
 
+    #[Override]
     public function __toString() : string
     {
         if ($this->getHeader(ResponseHeader::DATE) === null) {
@@ -91,6 +93,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return string
      */
+    #[Override]
     public function getBody() : string
     {
         if ($this->sendedBody !== null) {
@@ -111,6 +114,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return static
      */
+    #[Override]
     public function setBody(string $body) : static
     {
         if (\ob_get_length()) {
@@ -143,46 +147,55 @@ class Response extends Message implements ResponseInterface
         return parent::setBody($this->getBody() . $content);
     }
 
+    #[Override]
     public function setCookie(Cookie $cookie) : static
     {
         return parent::setCookie($cookie);
     }
 
+    #[Override]
     public function setCookies(array $cookies) : static
     {
         return parent::setCookies($cookies);
     }
 
+    #[Override]
     public function removeCookie(string $name) : static
     {
         return parent::removeCookie($name);
     }
 
+    #[Override]
     public function removeCookies(array $names) : static
     {
         return parent::removeCookies($names);
     }
 
+    #[Override]
     public function setHeader(string $name, string $value) : static
     {
         return parent::setHeader($name, $value);
     }
 
+    #[Override]
     public function setHeaders(array $headers) : static
     {
         return parent::setHeaders($headers);
     }
 
+    #[Override]
     public function appendHeader(string $name, string $value) : static
     {
         return parent::appendHeader($name, $value);
     }
 
+    #[Override]
     public function removeHeader(string $name) : static
     {
         return parent::removeHeader($name);
     }
 
+    #[Override]
     public function removeHeaders() : static
     {
         return parent::removeHeaders();
@@ -317,6 +330,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return static
      */
+    #[Override]
     public function setStatusCode(int $code) : static
     {
         return parent::setStatusCode($code);
@@ -327,6 +341,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return int
      */
+    #[Override]
     #[Pure]
     public function getStatusCode() : int
     {
@@ -340,6 +355,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return bool
      */
+    #[Override]
     public function isStatusCode(int $code) : bool
     {
         return parent::isStatusCode($code);

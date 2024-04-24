@@ -15,6 +15,7 @@ use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 use LogicException;
+use Override;
 use stdClass;
 use UnexpectedValueException;
 
@@ -106,6 +107,7 @@ class Request extends Message implements RequestInterface
         throw new BadMethodCallException("Method not found: {$method}");
     }
 
+    #[Override]
     public function __toString() : string
     {
         if ($this->parseContentType() === 'multipart/form-data') {
@@ -823,6 +825,7 @@ class Request extends Message implements RequestInterface
         return $_SERVER['REMOTE_ADDR'];
     }
 
+    #[Override]
     #[Pure]
     public function getMethod() : string
     {
@@ -836,6 +839,7 @@ class Request extends Message implements RequestInterface
      *
      * @return bool
      */
+    #[Override]
     public function isMethod(string $method) : bool
     {
         return parent::isMethod($method);
@@ -985,6 +989,7 @@ class Request extends Message implements RequestInterface
      *
      * @return URL
      */
+    #[Override]
     #[Pure]
     public function getUrl() : URL
     {
