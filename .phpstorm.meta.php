@@ -397,6 +397,23 @@ registerArgumentsSet(
     'X-XSS-Protection',
 );
 registerArgumentsSet(
+    'response_headers_multiline',
+    \Framework\HTTP\ResponseHeader::DATE,
+    \Framework\HTTP\ResponseHeader::EXPIRES,
+    \Framework\HTTP\ResponseHeader::LAST_MODIFIED,
+    \Framework\HTTP\ResponseHeader::PROXY_AUTHENTICATE,
+    \Framework\HTTP\ResponseHeader::RETRY_AFTER,
+    \Framework\HTTP\ResponseHeader::SET_COOKIE,
+    \Framework\HTTP\ResponseHeader::WWW_AUTHENTICATE,
+    'Date',
+    'Expires',
+    'Last-Modified',
+    'Proxy-Authenticate',
+    'Retry-After',
+    'Set-Cookie',
+    'WWW-Authenticate',
+);
+registerArgumentsSet(
     'cookie_samesite',
     'Lax',
     'None',
@@ -696,6 +713,11 @@ expectedArguments(
     \Framework\HTTP\Response::setHeader(),
     0,
     argumentsSet('response_headers')
+);
+expectedArguments(
+    \Framework\HTTP\Response::appendHeader(),
+    0,
+    argumentsSet('response_headers_multiline')
 );
 expectedArguments(
     \Framework\HTTP\Response::redirect(),
