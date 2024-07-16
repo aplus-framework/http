@@ -243,6 +243,9 @@ class HTTPCollector extends Collector
         <?php
         endif;
         echo $this->renderHeadersTable($this->response->getHeaderLines());
+        echo '<p><small>* Note that some headers can be set outside the Response';
+        echo ' class, for example by the session or the server.';
+        echo ' So they don\'t appear here.</small></p>';
         echo $this->renderResponseCookies();
         echo $this->renderResponseBody();
         return \ob_get_clean(); // @phpstan-ignore-line
