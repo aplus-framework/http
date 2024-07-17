@@ -538,7 +538,7 @@ class Request extends Message implements RequestInterface
             // TODO: On PHP 8.4 use isForm() and request_parse_body()
             // [$this->parsedBody, $_FILES] = request_parse_body();
             // Add methods {get,set}ParseBodyOptions(?array $options = null)
-            $this->isFormUrl()
+            $this->isFormUrlEncoded()
                 ? \parse_str($this->getBody(), $this->parsedBody)
                 : $this->parsedBody = [];
         }
@@ -1065,7 +1065,7 @@ class Request extends Message implements RequestInterface
      * @return bool
      */
     #[Pure]
-    public function isFormUrl() : bool
+    public function isFormUrlEncoded() : bool
     {
         return $this->parseContentType() === 'application/x-www-form-urlencoded';
     }
@@ -1090,7 +1090,7 @@ class Request extends Message implements RequestInterface
     #[Pure]
     public function isForm() : bool
     {
-        return $this->isFormUrl() || $this->isFormData();
+        return $this->isFormUrlEncoded() || $this->isFormData();
     }
 
     /**

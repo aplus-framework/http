@@ -146,7 +146,7 @@ class HTTPCollector extends Collector
 
     protected function renderRequestForm() : string
     {
-        if (!$this->request->isPost() && !$this->request->isFormUrl()) {
+        if (!$this->request->isPost() && !$this->request->isFormUrlEncoded()) {
             return '';
         }
         \ob_start(); ?>
