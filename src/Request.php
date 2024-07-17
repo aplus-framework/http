@@ -13,9 +13,9 @@ use BadMethodCallException;
 use Framework\Helpers\ArraySimple;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Deprecated;
 use JetBrains\PhpStorm\Pure;
 use LogicException;
+use Override;
 use stdClass;
 use UnexpectedValueException;
 
@@ -107,6 +107,7 @@ class Request extends Message implements RequestInterface
         throw new BadMethodCallException("Method not found: {$method}");
     }
 
+    #[Override]
     public function __toString() : string
     {
         if ($this->parseContentType() === 'multipart/form-data') {
@@ -515,24 +516,29 @@ class Request extends Message implements RequestInterface
     /**
      * Get the Parsed Body or part of it.
      *
+     * @todo https://php.watch/versions/8.4/request_parse_body
+     *
      * @param string|null $name
      * @param int|null $filter
      * @param array<int,int>|int $filterOptions
      *
      * @see Request::filterInput()
      *
-     * @return array<int|string,mixed>|mixed|string|null
+     * @return array<mixed>|mixed|string|null
      */
     public function getParsedBody(
         string $name = null,
         int $filter = null,
         array | int $filterOptions = 0
-    ) {
+    ) : mixed {
         if ($this->getMethod() === Method::POST) {
             return $this->getPost($name, $filter, $filterOptions);
         }
         if ($this->parsedBody === null) {
-            $this->isForm()
+            // TODO: On PHP 8.4 use isForm() and request_parse_body()
+            // [$this->parsedBody, $_FILES] = request_parse_body();
+            // Add methods {get,set}ParseBodyOptions(?array $options = null)
+            $this->isFormUrlEncoded()
                 ? \parse_str($this->getBody(), $this->parsedBody)
                 : $this->parsedBody = [];
         }
@@ -819,6 +825,7 @@ class Request extends Message implements RequestInterface
         return $_SERVER['REMOTE_ADDR'];
     }
 
+    #[Override]
     #[Pure]
     public function getMethod() : string
     {
@@ -832,6 +839,7 @@ class Request extends Message implements RequestInterface
      *
      * @return bool
      */
+    #[Override]
     public function isMethod(string $method) : bool
     {
         return parent::isMethod($method);
@@ -895,38 +903,43 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * Get the connection IP via a proxy header.
+     * Get PATCH data.
      *
-     * @return string|null
+     * @param string|null $name
+     * @param int|null $filter
+     * @param array<int,int>|int $filterOptions
      *
-     * @deprecated Use {@see Request::getHeader()}
-     *
-     * @codeCoverageIgnore
+     * @return mixed
      */
-    #[Deprecated(
-        reason: 'since HTTP Library version 5.5, use getHeader() instead',
-        replacement: '%class%->getHeader()'
-    )]
-    public function getProxiedIp() : ?string
-    {
-        \trigger_error(
-            'Method ' . __METHOD__ . ' is deprecated',
-            \E_USER_DEPRECATED
-        );
-        foreach ([
-            'X-Real-IP',
-            'X-Forwarded-For',
-            'Client-IP',
-            'X-Client-IP',
-            'X-Cluster-Client-IP',
-        ] as $header) {
-            $header = $this->getHeader($header);
-            if ($header) {
-                $ip = \explode(',', $header, 2)[0];
-                return \trim($ip);
-            }
+    public function getPatch(
+        string $name = null,
+        int $filter = null,
+        array | int $filterOptions = 0
+    ) : mixed {
+        if ($this->getMethod() === Method::PATCH) {
+            return $this->getParsedBody($name, $filter, $filterOptions);
         }
-        return null;
+        return $name === null ? [] : null;
+    }
+
+    /**
+     * Get PUT data.
+     *
+     * @param string|null $name
+     * @param int|null $filter
+     * @param array<int,int>|int $filterOptions
+     *
+     * @return mixed
+     */
+    public function getPut(
+        string $name = null,
+        int $filter = null,
+        array | int $filterOptions = 0
+    ) : mixed {
+        if ($this->getMethod() === Method::PUT) {
+            return $this->getParsedBody($name, $filter, $filterOptions);
+        }
+        return $name === null ? [] : null;
     }
 
     /**
@@ -976,6 +989,7 @@ class Request extends Message implements RequestInterface
      *
      * @return URL
      */
+    #[Override]
     #[Pure]
     public function getUrl() : URL
     {
@@ -1046,15 +1060,37 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * Say if the request is done with application/x-www-form-urlencoded
-     * Content-Type.
+     * Tells if the Content-Type header is application/x-www-form-urlencoded.
+     *
+     * @return bool
+     */
+    #[Pure]
+    public function isFormUrlEncoded() : bool
+    {
+        return $this->parseContentType() === 'application/x-www-form-urlencoded';
+    }
+
+    /**
+     * Tells if the Content-Type header is multipart/form-data.
+     *
+     * @return bool
+     */
+    #[Pure]
+    public function isFormData() : bool
+    {
+        return $this->parseContentType() === 'multipart/form-data';
+    }
+
+    /**
+     * Tells if the Content-Type header is application/x-www-form-urlencoded or
+     * multipart/form-data.
      *
      * @return bool
      */
     #[Pure]
     public function isForm() : bool
     {
-        return $this->parseContentType() === 'application/x-www-form-urlencoded';
+        return $this->isFormUrlEncoded() || $this->isFormData();
     }
 
     /**
@@ -1126,5 +1162,15 @@ class Request extends Message implements RequestInterface
             $this->port = $host['port'];
         }
         return $this;
+    }
+
+    /**
+     * Make a Response with the current Request.
+     *
+     * @return Response
+     */
+    public function makeResponse() : Response
+    {
+        return new Response($this);
     }
 }

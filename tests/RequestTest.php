@@ -9,6 +9,7 @@
  */
 namespace Tests\HTTP;
 
+use Framework\HTTP\Response;
 use Framework\HTTP\UploadedFile;
 use Framework\HTTP\URL;
 use Framework\HTTP\UserAgent;
@@ -150,7 +151,7 @@ final class RequestTest extends TestCase
             'height' => '500px',
             'width' => '800',
         ], $this->request->getParsedBody());
-        self::assertSame('red', $this->request->getParsedBody('color', \FILTER_SANITIZE_STRING));
+        self::assertSame('red', $this->request->getParsedBody('color', \FILTER_SANITIZE_FULL_SPECIAL_CHARS));
         self::assertSame(800, $this->request->getParsedBody('width', \FILTER_VALIDATE_INT));
         self::assertFalse($this->request->getParsedBody('height', \FILTER_VALIDATE_INT));
         $this->request->setMethod('POST');
@@ -173,6 +174,38 @@ final class RequestTest extends TestCase
         // @phpstan-ignore-next-line
         $this->request->setBody('0');
         self::assertSame('0', $this->request->getBody());
+    }
+
+    public function testPatch() : void
+    {
+        // @phpstan-ignore-next-line
+        $this->request->setBody('color=red&height=500px&width=800');
+        self::assertSame([], $this->request->getPatch());
+        self::assertNull($this->request->getPatch('color'));
+        $this->request->setMethod('PATCH');
+        $this->request->setHeader('Content-Type', 'application/x-www-form-urlencoded');
+        self::assertSame([
+            'color' => 'red',
+            'height' => '500px',
+            'width' => '800',
+        ], $this->request->getPatch());
+        self::assertSame('red', $this->request->getPatch('color'));
+    }
+
+    public function testPut() : void
+    {
+        // @phpstan-ignore-next-line
+        $this->request->setBody('color=red&height=500px&width=800');
+        self::assertSame([], $this->request->getPut());
+        self::assertNull($this->request->getPut('color'));
+        $this->request->setMethod('PUT');
+        $this->request->setHeader('Content-Type', 'application/x-www-form-urlencoded');
+        self::assertSame([
+            'color' => 'red',
+            'height' => '500px',
+            'width' => '800',
+        ], $this->request->getPut());
+        self::assertSame('red', $this->request->getPut('color'));
     }
 
     public function testCharset() : void
@@ -650,8 +683,43 @@ final class RequestTest extends TestCase
         );
     }
 
+    public function testIsFormUrlEncoded() : void
+    {
+        self::assertFalse($this->request->isFormUrlEncoded());
+        $this->request->setHeader(
+            'Content-Type',
+            'application/x-www-form-urlencoded'
+        );
+        self::assertTrue($this->request->isFormUrlEncoded());
+    }
+
+    public function testIsFormData() : void
+    {
+        self::assertFalse($this->request->isFormData());
+        $this->request->setHeader(
+            'Content-Type',
+            'multipart/form-data; boundary=---------------------------24713327432370132601268317390'
+        );
+        self::assertTrue($this->request->isFormData());
+    }
+
     public function testIsForm() : void
     {
+        self::assertFalse($this->request->isForm());
+        $this->request->setHeader(
+            'Content-Type',
+            'application/x-www-form-urlencoded'
+        );
+        self::assertTrue($this->request->isForm());
+        $this->request->setHeader(
+            'Content-Type',
+            'multipart/form-data; boundary=---------------------------24713327432370132601268317390'
+        );
+        self::assertTrue($this->request->isForm());
+        $this->request->setHeader(
+            'Content-Type',
+            'foo'
+        );
         self::assertFalse($this->request->isForm());
     }
 
@@ -802,5 +870,12 @@ final class RequestTest extends TestCase
         $this->expectException(\BadMethodCallException::class);
         $this->expectExceptionMessage('Method not found: fooBar');
         $this->request->fooBar(); // @phpstan-ignore-line
+    }
+
+    public function testMakeResponse() : void
+    {
+        $response = $this->request->makeResponse();
+        self::assertInstanceOf(Response::class, $response);
+        self::assertNotSame($response, $this->request->makeResponse());
     }
 }

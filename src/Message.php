@@ -126,7 +126,7 @@ abstract class Message implements MessageInterface
         if ($value === null) {
             return null;
         }
-        $name = Header::getName($name);
+        $name = ResponseHeader::getName($name);
         return $name . ': ' . $value;
     }
 
@@ -138,7 +138,7 @@ abstract class Message implements MessageInterface
     {
         $lines = [];
         foreach ($this->getHeaders() as $name => $value) {
-            $name = Header::getName($name);
+            $name = ResponseHeader::getName($name);
             if (\str_contains($value, "\n")) {
                 foreach (\explode("\n", $value) as $val) {
                     $lines[] = $name . ': ' . $val;
@@ -213,7 +213,7 @@ abstract class Message implements MessageInterface
      */
     private function getHeaderValueSeparator(string $headerName) : string
     {
-        if (Header::isMultiline($headerName)) {
+        if (ResponseHeader::isMultiline($headerName)) {
             return "\n";
         }
         return ', ';

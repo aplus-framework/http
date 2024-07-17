@@ -5,6 +5,7 @@
         <exclude name="BooleanArgumentFlag"/>
         <exclude name="ErrorControlOperator"/>
         <exclude name="StaticAccess"/>
+        <exclude name="UndefinedVariable"/>
     </rule>
     <!-- codesize -->
     <rule ref="rulesets/codesize.xml/NPathComplexity">

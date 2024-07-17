@@ -78,6 +78,7 @@ class HTTPCollector extends Collector
         }
         \ob_start(); ?>
         <p title="REMOTE_ADDR"><strong>IP:</strong> <?= $this->request->getIp() ?></p>
+        <p><strong>Is Secure:</strong> <?= $this->request->isSecure() ? 'Yes' : 'No' ?></p>
         <p><strong>Protocol:</strong> <?= $this->request->getProtocol() ?></p>
         <p><strong>Method:</strong> <?= $this->request->getMethod() ?></p>
         <p><strong>URL:</strong> <?= $this->request->getUrl() ?></p>
@@ -145,7 +146,7 @@ class HTTPCollector extends Collector
 
     protected function renderRequestForm() : string
     {
-        if (!$this->request->isPost() && !$this->request->isForm()) {
+        if (!$this->request->isPost() && !$this->request->isFormUrlEncoded()) {
             return '';
         }
         \ob_start(); ?>
@@ -242,6 +243,9 @@ class HTTPCollector extends Collector
         <?php
         endif;
         echo $this->renderHeadersTable($this->response->getHeaderLines());
+        echo '<p><small>* Note that some headers can be set outside the Response';
+        echo ' class, for example by the session or the server.';
+        echo ' So they don\'t appear here.</small></p>';
         echo $this->renderResponseCookies();
         echo $this->renderResponseBody();
         return \ob_get_clean(); // @phpstan-ignore-line

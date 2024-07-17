@@ -16,212 +16,149 @@ namespace Framework\HTTP;
  *
  * @package http
  */
-class RequestHeader extends Header
+class RequestHeader
 {
+    use HeaderTrait;
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
-     *
-     * @var string
      */
-    public const ACCEPT = 'Accept';
+    public const string ACCEPT = 'Accept';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Charset
-     *
-     * @var string
      */
-    public const ACCEPT_CHARSET = 'Accept-Charset';
+    public const string ACCEPT_CHARSET = 'Accept-Charset';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding
-     *
-     * @var string
      */
-    public const ACCEPT_ENCODING = 'Accept-Encoding';
+    public const string ACCEPT_ENCODING = 'Accept-Encoding';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language
-     *
-     * @var string
      */
-    public const ACCEPT_LANGUAGE = 'Accept-Language';
+    public const string ACCEPT_LANGUAGE = 'Accept-Language';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Request-Headers
-     *
-     * @var string
      */
-    public const ACCESS_CONTROL_REQUEST_HEADERS = 'Access-Control-Request-Headers';
+    public const string ACCESS_CONTROL_REQUEST_HEADERS = 'Access-Control-Request-Headers';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Request-Method
-     *
-     * @var string
      */
-    public const ACCESS_CONTROL_REQUEST_METHOD = 'Access-Control-Request-Method';
+    public const string ACCESS_CONTROL_REQUEST_METHOD = 'Access-Control-Request-Method';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization
-     *
-     * @var string
      */
-    public const AUTHORIZATION = 'Authorization';
+    public const string AUTHORIZATION = 'Authorization';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie
-     *
-     * @var string
      */
-    public const COOKIE = 'Cookie';
+    public const string COOKIE = 'Cookie';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/DNT
-     *
-     * @var string
      */
-    public const DNT = 'DNT';
+    public const string DNT = 'DNT';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect
-     *
-     * @var string
      */
-    public const EXPECT = 'Expect';
+    public const string EXPECT = 'Expect';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded
-     *
-     * @var string
      */
-    public const FORWARDED = 'Forwarded';
+    public const string FORWARDED = 'Forwarded';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/From
-     *
-     * @var string
      */
-    public const FROM = 'From';
+    public const string FROM = 'From';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Host
-     *
-     * @var string
      */
-    public const HOST = 'Host';
+    public const string HOST = 'Host';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Match
-     *
-     * @var string
      */
-    public const IF_MATCH = 'If-Match';
+    public const string IF_MATCH = 'If-Match';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Modified-Since
-     *
-     * @var string
      */
-    public const IF_MODIFIED_SINCE = 'If-Modified-Since';
+    public const string IF_MODIFIED_SINCE = 'If-Modified-Since';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match
-     *
-     * @var string
      */
-    public const IF_NONE_MATCH = 'If-None-Match';
+    public const string IF_NONE_MATCH = 'If-None-Match';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Range
-     *
-     * @var string
      */
-    public const IF_RANGE = 'If-Range';
+    public const string IF_RANGE = 'If-Range';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Unmodified-Since
-     *
-     * @var string
      */
-    public const IF_UNMODIFIED_SINCE = 'If-Unmodified-Since';
+    public const string IF_UNMODIFIED_SINCE = 'If-Unmodified-Since';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin
-     *
-     * @var string
      */
-    public const ORIGIN = 'Origin';
+    public const string ORIGIN = 'Origin';
+    /**
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Priority
+     */
+    public const string PRIORITY = 'Priority';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Proxy-Authorization
-     *
-     * @var string
      */
-    public const PROXY_AUTHORIZATION = 'Proxy-Authorization';
+    public const string PROXY_AUTHORIZATION = 'Proxy-Authorization';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Range
-     *
-     * @var string
      */
-    public const RANGE = 'Range';
+    public const string RANGE = 'Range';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer
-     *
-     * @var string
      */
-    public const REFERER = 'Referer';
+    public const string REFERER = 'Referer';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Sec-Fetch-Dest
-     *
-     * @var string
      */
-    public const SEC_FETCH_DEST = 'Sec-Fetch-Dest';
+    public const string SEC_FETCH_DEST = 'Sec-Fetch-Dest';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Sec-Fetch-Mode
-     *
-     * @var string
      */
-    public const SEC_FETCH_MODE = 'Sec-Fetch-Mode';
+    public const string SEC_FETCH_MODE = 'Sec-Fetch-Mode';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Sec-Fetch-Site
-     *
-     * @var string
      */
-    public const SEC_FETCH_SITE = 'Sec-Fetch-Site';
+    public const string SEC_FETCH_SITE = 'Sec-Fetch-Site';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Sec-Fetch-User
-     *
-     * @var string
      */
-    public const SEC_FETCH_USER = 'Sec-Fetch-User';
+    public const string SEC_FETCH_USER = 'Sec-Fetch-User';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/TE
-     *
-     * @var string
      */
-    public const TE = 'TE';
+    public const string TE = 'TE';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade-Insecure-Requests
-     *
-     * @var string
      */
-    public const UPGRADE_INSECURE_REQUESTS = 'Upgrade-Insecure-Requests';
+    public const string UPGRADE_INSECURE_REQUESTS = 'Upgrade-Insecure-Requests';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent
-     *
-     * @var string
      */
-    public const USER_AGENT = 'User-Agent';
+    public const string USER_AGENT = 'User-Agent';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For
-     *
-     * @var string
      */
-    public const X_FORWARDED_FOR = 'X-Forwarded-For';
+    public const string X_FORWARDED_FOR = 'X-Forwarded-For';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Host
-     *
-     * @var string
      */
-    public const X_FORWARDED_HOST = 'X-Forwarded-Host';
+    public const string X_FORWARDED_HOST = 'X-Forwarded-Host';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto
-     *
-     * @var string
      */
-    public const X_FORWARDED_PROTO = 'X-Forwarded-Proto';
+    public const string X_FORWARDED_PROTO = 'X-Forwarded-Proto';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Real-IP
-     *
-     * @var string
      */
-    public const X_REAL_IP = 'X-Real-IP';
+    public const string X_REAL_IP = 'X-Real-IP';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Requested-With
-     *
-     * @var string
      */
-    public const X_REQUESTED_WITH = 'X-Requested-With';
+    public const string X_REQUESTED_WITH = 'X-Requested-With';
 
     /**
      * @param array<string,scalar> $input

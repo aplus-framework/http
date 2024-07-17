@@ -32,10 +32,8 @@ class Status
      * is already finished.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/100
-     *
-     * @var int
      */
-    public const CONTINUE = 100;
+    public const int CONTINUE = 100;
     /**
      * 101 Switching Protocols.
      *
@@ -44,10 +42,8 @@ class Status
      *
      * @see Header::UPGRADE
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/101
-     *
-     * @var int
      */
-    public const SWITCHING_PROTOCOLS = 101;
+    public const int SWITCHING_PROTOCOLS = 101;
     /**
      * 102 Processing (WebDAV).
      *
@@ -55,10 +51,8 @@ class Status
      * request, but no response is available yet.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/102
-     *
-     * @var int
      */
-    public const PROCESSING = 102;
+    public const int PROCESSING = 102;
     /**
      * 103 Early Hints.
      *
@@ -68,10 +62,8 @@ class Status
      *
      * @see Header::LINK
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103
-     *
-     * @var int
      */
-    public const EARLY_HINTS = 103;
+    public const int EARLY_HINTS = 103;
     // -------------------------------------------------------------------------
     // Successful responses
     // -------------------------------------------------------------------------
@@ -94,10 +86,8 @@ class Status
      * server.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200
-     *
-     * @var int
      */
-    public const OK = 200;
+    public const int OK = 200;
     /**
      * 201 Created.
      *
@@ -106,10 +96,8 @@ class Status
      * PUT requests.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201
-     *
-     * @var int
      */
-    public const CREATED = 201;
+    public const int CREATED = 201;
     /**
      * 202 Accepted.
      *
@@ -119,10 +107,8 @@ class Status
      * another process or server handles the request, or for batch processing.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/202
-     *
-     * @var int
      */
-    public const ACCEPTED = 202;
+    public const int ACCEPTED = 202;
     /**
      * 203 Non-Authoritative Information.
      *
@@ -133,10 +119,8 @@ class Status
      * is preferred to this status.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/203
-     *
-     * @var int
      */
-    public const NON_AUTHORITATIVE_INFORMATION = 203;
+    public const int NON_AUTHORITATIVE_INFORMATION = 203;
     /**
      * 204 No Content.
      *
@@ -145,20 +129,16 @@ class Status
      * with the new ones.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204
-     *
-     * @var int
      */
-    public const NO_CONTENT = 204;
+    public const int NO_CONTENT = 204;
     /**
      * 205 Reset Content.
      *
      * Tells the user-agent to reset the document which sent this request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/205
-     *
-     * @var int
      */
-    public const RESET_CONTENT = 205;
+    public const int RESET_CONTENT = 205;
     /**
      * 206 Partial Content.
      *
@@ -168,10 +148,8 @@ class Status
      * @see RequestHeader::RANGE
      * @see Header::CONTENT_RANGE
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/206
-     *
-     * @var int
      */
-    public const PARTIAL_CONTENT = 206;
+    public const int PARTIAL_CONTENT = 206;
     /**
      * 207 Multi-Status (WebDAV).
      *
@@ -179,10 +157,8 @@ class Status
      * multiple status codes might be appropriate.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/207
-     *
-     * @var int
      */
-    public const MULTI_STATUS = 207;
+    public const int MULTI_STATUS = 207;
     /**
      * 208 Already Reported (WebDAV).
      *
@@ -191,10 +167,8 @@ class Status
      * collection.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/208
-     *
-     * @var int
      */
-    public const ALREADY_REPORTED = 208;
+    public const int ALREADY_REPORTED = 208;
     /**
      * 226 IM Used (HTTP Delta encoding).
      *
@@ -203,10 +177,8 @@ class Status
      * applied to the current instance.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/226
-     *
-     * @var int
      */
-    public const IM_USED = 226;
+    public const int IM_USED = 226;
     // -------------------------------------------------------------------------
     // Redirection messages
     // -------------------------------------------------------------------------
@@ -219,10 +191,8 @@ class Status
      * the user can pick.)
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/300
-     *
-     * @var int
      */
-    public const MULTIPLE_CHOICES = 300;
+    public const int MULTIPLE_CHOICES = 300;
     /**
      * 301 Moved Permanently.
      *
@@ -230,10 +200,8 @@ class Status
      * URL is given in the response.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/301
-     *
-     * @var int
      */
-    public const MOVED_PERMANENTLY = 301;
+    public const int MOVED_PERMANENTLY = 301;
     /**
      * 302 Found.
      *
@@ -243,10 +211,8 @@ class Status
      * requests.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/302
-     *
-     * @var int
      */
-    public const FOUND = 302;
+    public const int FOUND = 302;
     /**
      * 303 See Other.
      *
@@ -254,10 +220,8 @@ class Status
      * resource at another URI with a GET request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/303
-     *
-     * @var int
      */
-    public const SEE_OTHER = 303;
+    public const int SEE_OTHER = 303;
     /**
      * 304 Not Modified.
      *
@@ -266,10 +230,8 @@ class Status
      * version of the response.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/304
-     *
-     * @var int
      */
-    public const NOT_MODIFIED = 304;
+    public const int NOT_MODIFIED = 304;
     /**
      * 305 Use Proxy.
      *
@@ -278,10 +240,8 @@ class Status
      * due to security concerns regarding in-band configuration of a proxy.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/305
-     *
-     * @var int
      */
-    public const USE_PROXY = 305;
+    public const int USE_PROXY = 305;
     /**
      * 306 unused.
      *
@@ -289,10 +249,8 @@ class Status
      * a previous version of the HTTP/1.1 specification.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/306
-     *
-     * @var int
      */
-    public const SWITCH_PROXY = 306;
+    public const int SWITCH_PROXY = 306;
     /**
      * 307 Temporary Redirect.
      *
@@ -304,10 +262,8 @@ class Status
      * used in the second request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/307
-     *
-     * @var int
      */
-    public const TEMPORARY_REDIRECT = 307;
+    public const int TEMPORARY_REDIRECT = 307;
     /**
      * 308 Permanent Redirect.
      *
@@ -321,10 +277,8 @@ class Status
      * @see ResponseHeader::LOCATION
      * @see Status::MOVED_PERMANENTLY
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/308
-     *
-     * @var int
      */
-    public const PERMANENT_REDIRECT = 308;
+    public const int PERMANENT_REDIRECT = 308;
     // -------------------------------------------------------------------------
     // Client error responses
     // -------------------------------------------------------------------------
@@ -334,10 +288,8 @@ class Status
      * The server could not understand the request due to invalid syntax.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
-     *
-     * @var int
      */
-    public const BAD_REQUEST = 400;
+    public const int BAD_REQUEST = 400;
     /**
      * 401 Unauthorized.
      *
@@ -346,10 +298,8 @@ class Status
      * itself to get the requested response.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
-     *
-     * @var int
      */
-    public const UNAUTHORIZED = 401;
+    public const int UNAUTHORIZED = 401;
     /**
      * 402 Payment Required.
      *
@@ -358,10 +308,8 @@ class Status
      * status code is used very rarely and no standard convention exists.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/402
-     *
-     * @var int
      */
-    public const PAYMENT_REQUIRED = 402;
+    public const int PAYMENT_REQUIRED = 402;
     /**
      * 403 Forbidden.
      *
@@ -371,10 +319,8 @@ class Status
      *
      * @see Status::UNAUTHORIZED
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
-     *
-     * @var int
      */
-    public const FORBIDDEN = 403;
+    public const int FORBIDDEN = 403;
     /**
      * 404 Not Found.
      *
@@ -386,10 +332,8 @@ class Status
      * most famous one due to its frequent occurrence on the web.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
-     *
-     * @var int
      */
-    public const NOT_FOUND = 404;
+    public const int NOT_FOUND = 404;
     /**
      * 405 Method Not Allowed.
      *
@@ -398,10 +342,8 @@ class Status
      *
      * @see ResponseHeader::ALLOW
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405
-     *
-     * @var int
      */
-    public const METHOD_NOT_ALLOWED = 405;
+    public const int METHOD_NOT_ALLOWED = 405;
     /**
      * 406 Not Acceptable.
      *
@@ -410,10 +352,8 @@ class Status
      * criteria given by the user agent.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406
-     *
-     * @var int
      */
-    public const NOT_ACCEPTABLE = 406;
+    public const int NOT_ACCEPTABLE = 406;
     /**
      * 407 Proxy Authentication Required.
      *
@@ -422,10 +362,8 @@ class Status
      *
      * @see Status::UNAUTHORIZED
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/407
-     *
-     * @var int
      */
-    public const PROXY_AUTHENTICATION_REQUIRED = 407;
+    public const int PROXY_AUTHENTICATION_REQUIRED = 407;
     /**
      * 408 Request Timeout.
      *
@@ -437,10 +375,8 @@ class Status
      * servers merely shut down the connection without sending this message.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/408
-     *
-     * @var int
      */
-    public const REQUEST_TIMEOUT = 408;
+    public const int REQUEST_TIMEOUT = 408;
     /**
      * 409 Conflict.
      *
@@ -448,10 +384,8 @@ class Status
      * the server.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/409
-     *
-     * @var int
      */
-    public const CONFLICT = 409;
+    public const int CONFLICT = 409;
     /**
      * 410 Gone.
      *
@@ -463,10 +397,8 @@ class Status
      * been deleted with this status code.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/410
-     *
-     * @var int
      */
-    public const GONE = 410;
+    public const int GONE = 410;
     /**
      * 411 Length Required.
      *
@@ -475,10 +407,8 @@ class Status
      *
      * @see Header::CONTENT_LENGTH
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/411
-     *
-     * @var int
      */
-    public const LENGTH_REQUIRED = 411;
+    public const int LENGTH_REQUIRED = 411;
     /**
      * 412 Precondition Failed.
      *
@@ -486,10 +416,8 @@ class Status
      * does not meet.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/412
-     *
-     * @var int
      */
-    public const PRECONDITION_FAILED = 412;
+    public const int PRECONDITION_FAILED = 412;
     /**
      * 413 Payload Too Large.
      *
@@ -498,10 +426,8 @@ class Status
      *
      * @see ResponseHeader::RETRY_AFTER
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/413
-     *
-     * @var int
      */
-    public const PAYLOAD_TOO_LARGE = 413;
+    public const int PAYLOAD_TOO_LARGE = 413;
     /**
      * 414 URI Too Long.
      *
@@ -509,10 +435,8 @@ class Status
      * interpret.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/414
-     *
-     * @var int
      */
-    public const URI_TOO_LARGE = 414;
+    public const int URI_TOO_LARGE = 414;
     /**
      * 415 Unsupported Media Type.
      *
@@ -520,10 +444,8 @@ class Status
      * so the server is rejecting the request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/415
-     *
-     * @var int
      */
-    public const UNSUPPORTED_MEDIA_TYPE = 415;
+    public const int UNSUPPORTED_MEDIA_TYPE = 415;
     /**
      * 416 Range Not Satisfiable.
      *
@@ -533,10 +455,8 @@ class Status
      *
      * @see RequestHeader::RANGE
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/416
-     *
-     * @var int
      */
-    public const RANGE_NOT_SATISFIABLE = 416;
+    public const int RANGE_NOT_SATISFIABLE = 416;
     /**
      * 417 Expectation Failed.
      *
@@ -545,20 +465,16 @@ class Status
      *
      * @see RequestHeader::EXPECT
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/417
-     *
-     * @var int
      */
-    public const EXPECTATION_FAILED = 417;
+    public const int EXPECTATION_FAILED = 417;
     /**
      * 418 I'm a teapot.
      *
      * The server refuses the attempt to brew coffee with a teapot.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/418
-     *
-     * @var int
      */
-    public const IM_A_TEAPOT = 418;
+    public const int IM_A_TEAPOT = 418;
     /**
      * 421 Misdirected Request.
      *
@@ -568,10 +484,8 @@ class Status
      * in the request URI.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/421
-     *
-     * @var int
      */
-    public const MISDIRECTED_REQUEST = 421;
+    public const int MISDIRECTED_REQUEST = 421;
     /**
      * 422 Unprocessable Entity (WebDAV).
      *
@@ -579,30 +493,24 @@ class Status
      * errors.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422
-     *
-     * @var int
      */
-    public const UNPROCESSABLE_ENTITY = 422;
+    public const int UNPROCESSABLE_ENTITY = 422;
     /**
      * 423 Locked (WebDAV).
      *
      * The resource that is being accessed is locked.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/423
-     *
-     * @var int
      */
-    public const LOCKED = 423;
+    public const int LOCKED = 423;
     /**
      * 424 Failed Dependency (WebDAV).
      *
      * The request failed due to failure of a previous request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/424
-     *
-     * @var int
      */
-    public const FAILED_DEPENDENCY = 424;
+    public const int FAILED_DEPENDENCY = 424;
     /**
      * 425 Too Early.
      *
@@ -610,10 +518,8 @@ class Status
      * might be replayed.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/425
-     *
-     * @var int
      */
-    public const TOO_EARLY = 425;
+    public const int TOO_EARLY = 425;
     /**
      * 426 Upgrade Required.
      *
@@ -624,10 +530,8 @@ class Status
      *
      * @see Header::UPGRADE
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/426
-     *
-     * @var int
      */
-    public const UPGRADE_REQUIRED = 426;
+    public const int UPGRADE_REQUIRED = 426;
     /**
      * 428 Precondition Required.
      *
@@ -638,10 +542,8 @@ class Status
      * a conflict.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/428
-     *
-     * @var int
      */
-    public const PRECONDITION_REQUIRED = 428;
+    public const int PRECONDITION_REQUIRED = 428;
     /**
      * 429 Too Many Requests.
      *
@@ -649,10 +551,8 @@ class Status
      * limiting").
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
-     *
-     * @var int
      */
-    public const TOO_MANY_REQUESTS = 429;
+    public const int TOO_MANY_REQUESTS = 429;
     /**
      * 431 Request Header Fields Too Large.
      *
@@ -661,10 +561,8 @@ class Status
      * the request header fields.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/431
-     *
-     * @var int
      */
-    public const REQUEST_HEADER_FIELDS_TOO_LARGE = 431;
+    public const int REQUEST_HEADER_FIELDS_TOO_LARGE = 431;
     /**
      * 451 Unavailable For Legal Reasons.
      *
@@ -672,10 +570,8 @@ class Status
      * as a web page censored by a government.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/451
-     *
-     * @var int
      */
-    public const UNAVAILABLE_FOR_LEGAL_REASONS = 451;
+    public const int UNAVAILABLE_FOR_LEGAL_REASONS = 451;
     /**
      * 499 Client Closed Request (nginx).
      *
@@ -683,10 +579,8 @@ class Status
      * closes the connection while nginx is processing the request.
      *
      * @see https://httpstatuses.com/499
-     *
-     * @var int
      */
-    public const CLIENT_CLOSED_REQUEST = 499;
+    public const int CLIENT_CLOSED_REQUEST = 499;
     // -------------------------------------------------------------------------
     // Server error responses
     // -------------------------------------------------------------------------
@@ -696,10 +590,8 @@ class Status
      * The server has encountered a situation it doesn't know how to handle.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500
-     *
-     * @var int
      */
-    public const INTERNAL_SERVER_ERROR = 500;
+    public const int INTERNAL_SERVER_ERROR = 500;
     /**
      * 501 Not Implemented.
      *
@@ -708,10 +600,8 @@ class Status
      * must not return this code) are `GET` and `HEAD`.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/501
-     *
-     * @var int
      */
-    public const NOT_IMPLEMENTED = 501;
+    public const int NOT_IMPLEMENTED = 501;
     /**
      * 502 Bad Gateway.
      *
@@ -719,10 +609,8 @@ class Status
      * get a response needed to handle the request, got an invalid response.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502
-     *
-     * @var int
      */
-    public const BAD_GATEWAY = 502;
+    public const int BAD_GATEWAY = 502;
     /**
      * 503 Service Unavailable.
      *
@@ -738,10 +626,8 @@ class Status
      *
      * @see ResponseHeader::RETRY_AFTER
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503
-     *
-     * @var int
      */
-    public const SERVICE_UNAVAILABLE = 503;
+    public const int SERVICE_UNAVAILABLE = 503;
     /**
      * 504 Gateway Timeout.
      *
@@ -749,20 +635,16 @@ class Status
      * cannot get a response in time.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/504
-     *
-     * @var int
      */
-    public const GATEWAY_TIMEOUT = 504;
+    public const int GATEWAY_TIMEOUT = 504;
     /**
      * 505 HTTP Version Not Supported.
      *
      * The HTTP version used in the request is not supported by the server.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/505
-     *
-     * @var int
      */
-    public const HTTP_VERSION_NOT_SUPPORTED = 505;
+    public const int HTTP_VERSION_NOT_SUPPORTED = 505;
     /**
      * 506 Variant Also Negotiates.
      *
@@ -772,10 +654,8 @@ class Status
      * process.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/506
-     *
-     * @var int
      */
-    public const VARIANT_ALSO_NEGOTIATES = 506;
+    public const int VARIANT_ALSO_NEGOTIATES = 506;
     /**
      * 507 Insufficient Storage (WebDAV).
      *
@@ -784,20 +664,16 @@ class Status
      * request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/507
-     *
-     * @var int
      */
-    public const INSUFFICIENT_STORAGE = 507;
+    public const int INSUFFICIENT_STORAGE = 507;
     /**
      * 508 Loop Detected (WebDAV).
      *
      * The server detected an infinite loop while processing the request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/508
-     *
-     * @var int
      */
-    public const LOOP_DETECTED = 508;
+    public const int LOOP_DETECTED = 508;
     /**
      * 510 Not Extended.
      *
@@ -805,10 +681,8 @@ class Status
      * it.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/510
-     *
-     * @var int
      */
-    public const NOT_EXTENDED = 510;
+    public const int NOT_EXTENDED = 510;
     /**
      * 511 Network Authentication Required.
      *
@@ -816,10 +690,8 @@ class Status
      * gain network access.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/511
-     *
-     * @var int
      */
-    public const NETWORK_AUTHENTICATION_REQUIRED = 511;
+    public const int NETWORK_AUTHENTICATION_REQUIRED = 511;
     /**
      * 599 Network Connect Timeout Error.
      *
@@ -828,10 +700,8 @@ class Status
      * in front of the proxy.
      *
      * @see https://httpstatuses.com/599
-     *
-     * @var int
      */
-    public const NETWORK_CONNECT_TIMEOUT_ERROR = 599;
+    public const int NETWORK_CONNECT_TIMEOUT_ERROR = 599;
     /**
      * Response status codes and reasons.
      *
