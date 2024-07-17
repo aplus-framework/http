@@ -96,6 +96,10 @@ class RequestHeader
      */
     public const string ORIGIN = 'Origin';
     /**
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Priority
+     */
+    public const string PRIORITY = 'Priority';
+    /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Proxy-Authorization
      */
     public const string PROXY_AUTHORIZATION = 'Proxy-Authorization';

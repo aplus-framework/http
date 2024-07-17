@@ -162,6 +162,7 @@ trait HeaderTrait
         'if-range' => 'If-Range',
         'if-unmodified-since' => 'If-Unmodified-Since',
         'origin' => 'Origin',
+        'priority' => 'Priority',
         'proxy-authorization' => 'Proxy-Authorization',
         'range' => 'Range',
         'referer' => 'Referer',
