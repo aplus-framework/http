@@ -50,8 +50,8 @@ Add the following lines to test get Request information:
         'host' => $request->getHeader('Host'),
         'isSecure' => $request->isSecure(),
         'isAjax' => $request->isAjax(),
-        'url' => $request->getUrl()->getAsString(),
-        'userAgent' => $request->getUserAgent()->getAsString(),
+        'url' => $request->getUrl()->toString(),
+        'userAgent' => $request->getUserAgent()->toString(),
     ]);
 
 Now, lets try a call with Curl:
@@ -291,8 +291,9 @@ HTTP method is neither GET nor POST.
 Request working with Arrays
 ###########################
 
-The ``getGet``, ``getPost``, ``getFile``, ``getParsedBody``, ``getEnv`` and
-``getServer`` methods can get data from arrays via strings with square brackets.
+The ``getGet``, ``getPost``, ``getPut``, ``getPatch``, ``getFile``,
+``getParsedBody``, ``getEnv`` and ``getServer`` methods can get data from arrays
+via strings with square brackets.
 
 For example, let's say ``$_POST`` equals the array below:
 
@@ -353,14 +354,14 @@ Response Headers
 Headers can be set using the ``setHeader`` method, using a string in the first
 parameter with the name of the header and in the second the value.
 
-Also, you can use constants from the **Header** and **ResponseHeader** classes:
+Also, you can use constants from the **ResponseHeader** class:
 
 .. code-block:: php
 
-    use Framework\HTTP\Header;
+    use Framework\HTTP\ResponseHeader;
 
     $response->setHeader('Content-Type', 'text/xml'); // static
-    $response->setHeader(Header::CONTENT_TYPE, 'text/xml'); // static
+    $response->setHeader(ResponseHeader::CONTENT_TYPE, 'text/xml'); // static
     $response->setContentType('text/xml'); // static
 
 Response Body
@@ -584,7 +585,7 @@ message can be saved.
     <?php
     require __DIR__ . '/header.php';
 
-    if ( ! $request->isPost() || ! $antiCsrf->verify()) {
+    if (!$request->isPost() || !$antiCsrf->verify()) {
         exit ('Request is invalid.');
     }
     echo 'OK. Anti-CSRF is valid. You can save the message!';
