@@ -81,8 +81,8 @@ class RequestMock extends \Framework\HTTP\Request
 
     public function filterInput(
         int $type,
-        string $name = null,
-        int $filter = null,
+        ?string $name = null,
+        ?int $filter = null,
         array | int $options = []
     ) : mixed {
         return parent::filterInput($type, $name, $filter, $options);

@@ -306,7 +306,7 @@ class CSP implements \Stringable
      *
      * @return array<string>|null
      */
-    public function getDirective(string $name) : array | null
+    public function getDirective(string $name) : ?array
     {
         return $this->directives[\strtolower($name)] ?? null;
     }

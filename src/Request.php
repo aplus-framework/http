@@ -29,7 +29,7 @@ use UnexpectedValueException;
 class Request extends Message implements RequestInterface
 {
     /**
-     * @var array<string,array<mixed>|UploadedFile>
+     * @var array<string,UploadedFile|array<mixed>>
      */
     protected array $files = [];
     /**
@@ -51,7 +51,7 @@ class Request extends Message implements RequestInterface
     /**
      * Request X-Request-ID header.
      */
-    protected string | false $id;
+    protected false | string $id;
     /**
      * @var array<string,array<mixed>|null>
      */
@@ -61,8 +61,8 @@ class Request extends Message implements RequestInterface
         'ENCODING' => null,
         'LANGUAGE' => null,
     ];
-    protected false | URL $referrer;
-    protected false | UserAgent $userAgent;
+    protected URL | false $referrer;
+    protected UserAgent | false $userAgent;
     protected bool $isAjax;
     /**
      * Tell if is a HTTPS connection.
@@ -299,8 +299,8 @@ class Request extends Message implements RequestInterface
      */
     protected function filterInput(
         int $type,
-        string $name = null,
-        int $filter = null,
+        ?string $name = null,
+        ?int $filter = null,
         array | int $options = 0
     ) : mixed {
         $input = match ($type) {
@@ -527,8 +527,8 @@ class Request extends Message implements RequestInterface
      * @return array<mixed>|mixed|string|null
      */
     public function getParsedBody(
-        string $name = null,
-        int $filter = null,
+        ?string $name = null,
+        ?int $filter = null,
         array | int $filterOptions = 0
     ) : mixed {
         if ($this->getMethod() === Method::POST) {
@@ -577,9 +577,9 @@ class Request extends Message implements RequestInterface
      */
     public function getJson(
         ?bool $associative = null,
-        int $flags = null,
+        ?int $flags = null,
         int $depth = 512
-    ) : array | stdClass | false {
+    ) : array | false | stdClass {
         if ($flags === null) {
             $flags = $this->getJsonFlags();
         }
@@ -744,15 +744,15 @@ class Request extends Message implements RequestInterface
      * @return mixed
      */
     public function getEnv(
-        string $name = null,
-        int $filter = null,
+        ?string $name = null,
+        ?int $filter = null,
         array | int $filterOptions = 0
     ) : mixed {
         return $this->filterInput(\INPUT_ENV, $name, $filter, $filterOptions);
     }
 
     /**
-     * @return array<string,array<mixed>|UploadedFile>
+     * @return array<string,UploadedFile|array<mixed>>
      */
     public function getFiles() : array
     {
@@ -785,8 +785,8 @@ class Request extends Message implements RequestInterface
      * @return mixed
      */
     public function getGet(
-        string $name = null,
-        int $filter = null,
+        ?string $name = null,
+        ?int $filter = null,
         array | int $filterOptions = 0
     ) : mixed {
         return $this->filterInput(\INPUT_GET, $name, $filter, $filterOptions);
@@ -806,7 +806,7 @@ class Request extends Message implements RequestInterface
      *
      * @return string|null
      */
-    public function getId() : string | null
+    public function getId() : ?string
     {
         if (isset($this->id)) {
             return $this->id === false ? null : $this->id;
@@ -857,7 +857,7 @@ class Request extends Message implements RequestInterface
      * @return mixed an array containing all data, the key value or null
      * if the key was not found
      */
-    public function getRedirectData(string $key = null) : mixed
+    public function getRedirectData(?string $key = null) : mixed
     {
         static $data;
         if ($data === null && \session_status() !== \PHP_SESSION_ACTIVE) {
@@ -895,8 +895,8 @@ class Request extends Message implements RequestInterface
      * @return mixed
      */
     public function getPost(
-        string $name = null,
-        int $filter = null,
+        ?string $name = null,
+        ?int $filter = null,
         array | int $filterOptions = 0
     ) : mixed {
         return $this->filterInput(\INPUT_POST, $name, $filter, $filterOptions);
@@ -912,8 +912,8 @@ class Request extends Message implements RequestInterface
      * @return mixed
      */
     public function getPatch(
-        string $name = null,
-        int $filter = null,
+        ?string $name = null,
+        ?int $filter = null,
         array | int $filterOptions = 0
     ) : mixed {
         if ($this->getMethod() === Method::PATCH) {
@@ -932,8 +932,8 @@ class Request extends Message implements RequestInterface
      * @return mixed
      */
     public function getPut(
-        string $name = null,
-        int $filter = null,
+        ?string $name = null,
+        ?int $filter = null,
         array | int $filterOptions = 0
     ) : mixed {
         if ($this->getMethod() === Method::PUT) {
@@ -977,8 +977,8 @@ class Request extends Message implements RequestInterface
      * @return mixed
      */
     public function getServer(
-        string $name = null,
-        int $filter = null,
+        ?string $name = null,
+        ?int $filter = null,
         array | int $filterOptions = 0
     ) : mixed {
         return $this->filterInput(\INPUT_SERVER, $name, $filter, $filterOptions);
@@ -1013,11 +1013,11 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @param string|UserAgent $userAgent
+     * @param UserAgent|string $userAgent
      *
      * @return static
      */
-    protected function setUserAgent(string | UserAgent $userAgent) : static
+    protected function setUserAgent(UserAgent | string $userAgent) : static
     {
         if (!$userAgent instanceof UserAgent) {
             $userAgent = new UserAgent($userAgent);
@@ -1118,7 +1118,7 @@ class Request extends Message implements RequestInterface
     /**
      * @see https://www.sitepoint.com/community/t/-files-array-structure/2728/5
      *
-     * @return array<string,array<mixed>|UploadedFile>
+     * @return array<string,UploadedFile|array<mixed>>
      */
     protected function getInputFiles() : array
     {
@@ -1128,7 +1128,7 @@ class Request extends Message implements RequestInterface
         $makeObjects = static function (
             array $array,
             callable $makeObjects
-        ) : array | UploadedFile {
+        ) : UploadedFile | array {
             $return = [];
             foreach ($array as $k => $v) {
                 if (\is_array($v)) {

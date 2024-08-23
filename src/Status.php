@@ -801,7 +801,7 @@ class Status
      *
      * @return string
      */
-    public static function getReason(int $code, string $default = null) : string
+    public static function getReason(int $code, ?string $default = null) : string
     {
         $code = static::validate($code);
         if (isset(static::$status[$code])) {

@@ -232,7 +232,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return CSP|null
      */
-    public function getCsp() : CSP | null
+    public function getCsp() : ?CSP
     {
         return $this->csp ?? null;
     }
@@ -242,7 +242,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return CSP|null
      */
-    public function getCspReportOnly() : CSP | null
+    public function getCspReportOnly() : ?CSP
     {
         return $this->cspReportOnly ?? null;
     }
@@ -313,7 +313,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return static
      */
-    public function setStatus(int $code, string $reason = null) : static
+    public function setStatus(int $code, ?string $reason = null) : static
     {
         $this->setStatusCode($code);
         $reason ?: $reason = Status::getReason($code);
@@ -412,7 +412,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return static
      */
-    public function redirect(string $location, array $data = [], int $code = null) : static
+    public function redirect(string $location, array $data = [], ?int $code = null) : static
     {
         if ($code === null) {
             $code = $this->request->getMethod() === Method::GET
@@ -628,7 +628,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return static
      */
-    public function setJson(mixed $data, int $flags = null, int $depth = 512) : static
+    public function setJson(mixed $data, ?int $flags = null, int $depth = 512) : static
     {
         if ($flags === null) {
             $flags = $this->getJsonFlags();
@@ -700,7 +700,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return static
      */
-    public function setAutoEtag(bool $active = true, string $hashAlgo = null) : static
+    public function setAutoEtag(bool $active = true, ?string $hashAlgo = null) : static
     {
         $this->autoEtag = $active;
         if ($hashAlgo !== null) {

@@ -87,7 +87,7 @@ class AntiCSRF
      *
      * @return static
      */
-    public function setToken(string $token = null) : static
+    public function setToken(?string $token = null) : static
     {
         $_SESSION['$']['csrf_token'] = $token ?? \base64_encode(\random_bytes(8));
         return $this;

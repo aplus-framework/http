@@ -97,7 +97,7 @@ abstract class Message implements MessageInterface
     }
 
     #[Pure]
-    public function hasHeader(string $name, string $value = null) : bool
+    public function hasHeader(string $name, ?string $value = null) : bool
     {
         return $value === null
             ? $this->getHeader($name) !== null
@@ -460,11 +460,11 @@ abstract class Message implements MessageInterface
     /**
      * Set the Message URL.
      *
-     * @param string|URL $url
+     * @param URL|string $url
      *
      * @return static
      */
-    protected function setUrl(string | URL $url) : static
+    protected function setUrl(URL | string $url) : static
     {
         if (!$url instanceof URL) {
             $url = new URL($url);

@@ -26,7 +26,7 @@ interface MessageInterface extends Stringable
 
     public function getHeader(string $name) : ?string;
 
-    public function hasHeader(string $name, string $value = null) : bool;
+    public function hasHeader(string $name, ?string $value = null) : bool;
 
     /**
      * @return array<string,string>

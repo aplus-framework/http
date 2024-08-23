@@ -396,7 +396,7 @@ class UserAgent implements \JsonSerializable, \Stringable
      * @return bool
      */
     #[Pure]
-    public function isBrowser(string $key = null) : bool
+    public function isBrowser(?string $key = null) : bool
     {
         if ($key === null || $this->isBrowser === false) {
             return $this->isBrowser;
@@ -414,7 +414,7 @@ class UserAgent implements \JsonSerializable, \Stringable
      * @return bool
      */
     #[Pure]
-    public function isMobile(string $key = null) : bool
+    public function isMobile(?string $key = null) : bool
     {
         if ($key === null || $this->isMobile === false) {
             return $this->isMobile;
@@ -432,7 +432,7 @@ class UserAgent implements \JsonSerializable, \Stringable
      * @return bool
      */
     #[Pure]
-    public function isRobot(string $key = null) : bool
+    public function isRobot(?string $key = null) : bool
     {
         if ($key === null || $this->isRobot === false) {
             return $this->isRobot;
