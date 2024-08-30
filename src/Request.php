@@ -506,7 +506,7 @@ class Request extends Message implements RequestInterface
             \PREG_SET_ORDER
         );
         foreach ($matches as $match) {
-            if (isset($match[1], $match[3])) {
+            if (isset($match[3])) {
                 $data[$match[1]] = $match[3] ?: $match[4] ?? '';
             }
         }
