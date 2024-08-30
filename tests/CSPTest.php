@@ -139,7 +139,7 @@ final class CSPTest extends TestCase
     protected function getNonceAttrValue(string $attribute) : string
     {
         \preg_match('# nonce="(.*)"#', $attribute, $matches);
-        return "'nonce-{$matches[1]}'";
+        return "'nonce-{$matches[1]}'"; // @phpstan-ignore-line
     }
 
     public function testScriptNonceAttr() : void
