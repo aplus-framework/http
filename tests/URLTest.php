@@ -23,22 +23,46 @@ final class URLTest extends TestCase
 
     public function testSameUrl() : void
     {
-        $url = 'http://domain.tld';
-        self::assertNotSame($url, (new URL($url))->__toString());
-        $url = 'http://domain.tld/';
-        self::assertSame($url, (new URL($url))->__toString());
-        $url = 'http://domain.tld/foo';
-        self::assertSame($url, (new URL($url))->__toString());
-        $url = 'http://domain.tld/foo/';
-        self::assertSame($url, (new URL($url))->__toString());
-        $url = 'http://domain.tld/foo/bar';
-        self::assertSame($url, (new URL($url))->__toString());
-        $url = 'http://domain.tld/foo/bar/';
-        self::assertSame($url, (new URL($url))->__toString());
-        $url = 'http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id';
-        self::assertSame($url, (new URL($url))->__toString());
-        $url = 'http://user:pass@domain.tld:8080/foo/bar/?a=1&b=2#id';
-        self::assertSame($url, (new URL($url))->__toString());
+        $expected = 'http://domain.tld';
+        $url = new URL($expected);
+        self::assertNotSame($expected, $url->getUrl());
+        self::assertNotSame($expected, $url->toString());
+        self::assertNotSame($expected, $url->__toString());
+        $expected = 'http://domain.tld/';
+        $url = new URL($expected);
+        self::assertSame($expected, $url->getUrl());
+        self::assertSame($expected, $url->toString());
+        self::assertSame($expected, $url->__toString());
+        $expected = 'http://domain.tld/foo';
+        $url = new URL($expected);
+        self::assertSame($expected, $url->getUrl());
+        self::assertSame($expected, $url->toString());
+        self::assertSame($expected, $url->__toString());
+        $expected = 'http://domain.tld/foo/';
+        $url = new URL($expected);
+        self::assertSame($expected, $url->getUrl());
+        self::assertSame($expected, $url->toString());
+        self::assertSame($expected, $url->__toString());
+        $expected = 'http://domain.tld/foo/bar';
+        $url = new URL($expected);
+        self::assertSame($expected, $url->getUrl());
+        self::assertSame($expected, $url->toString());
+        self::assertSame($expected, $url->__toString());
+        $expected = 'http://domain.tld/foo/bar/';
+        $url = new URL($expected);
+        self::assertSame($expected, $url->getUrl());
+        self::assertSame($expected, $url->toString());
+        self::assertSame($expected, $url->__toString());
+        $expected = 'http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id';
+        $url = new URL($expected);
+        self::assertSame($expected, $url->getUrl());
+        self::assertSame($expected, $url->toString());
+        self::assertSame($expected, $url->__toString());
+        $expected = 'http://user:pass@domain.tld:8080/foo/bar/?a=1&b=2#id';
+        $url = new URL($expected);
+        self::assertSame($expected, $url->getUrl());
+        self::assertSame($expected, $url->toString());
+        self::assertSame($expected, $url->__toString());
     }
 
     public function testPathEndsWithBar() : void

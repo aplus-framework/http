@@ -60,7 +60,6 @@ class URL implements \JsonSerializable, \Stringable
     /**
      * @return string
      */
-    #[Pure]
     public function __toString() : string
     {
         return $this->toString();
@@ -262,8 +261,17 @@ class URL implements \JsonSerializable, \Stringable
      *
      * @return string
      */
-    #[Pure]
     public function toString() : string
+    {
+        return $this->getUrl();
+    }
+
+    /**
+     * @since 6.1
+     *
+     * @return string
+     */
+    public function getUrl() : string
     {
         $url = $this->getScheme() . '://';
         $part = $this->getUser();
