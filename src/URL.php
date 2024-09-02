@@ -50,7 +50,7 @@ class URL implements \JsonSerializable, \Stringable
     /**
      * URL constructor.
      *
-     * @param string $url
+     * @param string $url An absolute URL
      */
     public function __construct(string $url)
     {
