@@ -65,6 +65,34 @@ final class URLTest extends TestCase
         self::assertSame($expected, $url->__toString());
     }
 
+    public function testRelative() : void
+    {
+        $url = 'http://domain.tld';
+        $object = new URL($url);
+        self::assertNotSame('', $object->getRelative());
+        $url = 'http://domain.tld/';
+        $object = new URL($url);
+        self::assertSame('/', $object->getRelative());
+        $url = 'http://domain.tld?foo=bar';
+        $object = new URL($url);
+        self::assertSame('/?foo=bar', $object->getRelative());
+        $url = 'http://domain.tld/?foo=bar';
+        $object = new URL($url);
+        self::assertSame('/?foo=bar', $object->getRelative());
+        $url = 'http://domain.tld#contact';
+        $object = new URL($url);
+        self::assertSame('/#contact', $object->getRelative());
+        $url = 'http://domain.tld/?foo=bar#contact';
+        $object = new URL($url);
+        self::assertSame('/?foo=bar#contact', $object->getRelative());
+        $url = 'http://domain.tld/foo/bar#contact';
+        $object = new URL($url);
+        self::assertSame('/foo/bar#contact', $object->getRelative());
+        $url = 'http://domain.tld/foo/bar/#contact';
+        $object = new URL($url);
+        self::assertSame('/foo/bar/#contact', $object->getRelative());
+    }
+
     public function testPathEndsWithBar() : void
     {
         $url = 'http://domain.tld';

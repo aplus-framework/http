@@ -284,16 +284,29 @@ class URL implements \JsonSerializable, \Stringable
             $url .= '@';
         }
         $url .= $this->getHost();
-        $url .= $this->getPath();
+        $url .= $this->getRelative();
+        return $url;
+    }
+
+    /**
+     * Get the relative URL.
+     *
+     * @since 6.1
+     *
+     * @return string
+     */
+    public function getRelative() : string
+    {
+        $relative = $this->getPath();
         $part = $this->getQuery();
         if ($part !== null) {
-            $url .= '?' . $part;
+            $relative .= '?' . $part;
         }
         $part = $this->getFragment();
         if ($part !== null) {
-            $url .= '#' . $part;
+            $relative .= '#' . $part;
         }
-        return $url;
+        return $relative;
     }
 
     /**
