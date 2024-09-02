@@ -85,7 +85,33 @@ final class URLTest extends TestCase
     public function testInvalidURL() : void
     {
         $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid URL: //unknown');
         new URL('//unknown');
+    }
+
+    public function testInvalidUrlNoScheme() : void
+    {
+        $url = new URL('https://unknown.com');
+        self::assertSame('https', $url->getScheme());
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid URL: //unknown.com');
+        new URL('//unknown.com');
+    }
+
+    public function testInvalidUrlNoSchemeAndNoBars() : void
+    {
+        $url = new URL('https://unknown.com');
+        self::assertSame('https', $url->getScheme());
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid URL: unknown.com');
+        new URL('unknown.com');
+    }
+
+    public function testInvalidUrlNoHost() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid URL: /foo/bar');
+        new URL('/foo/bar');
     }
 
     public function testOrigin() : void
