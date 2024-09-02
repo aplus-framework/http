@@ -72,7 +72,7 @@ class URL implements \JsonSerializable, \Stringable
      *
      * @return static
      */
-    public function addQuery(string $query, $value = null) : static
+    public function addQuery(string $query, int | string | null $value = null) : static
     {
         $this->queryData[$query] = $value;
         return $this;
