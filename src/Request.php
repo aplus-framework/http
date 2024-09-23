@@ -33,7 +33,7 @@ class Request extends Message implements RequestInterface
      */
     protected array $files = [];
     /**
-     * @var array<string,mixed>|null
+     * @var array<mixed>|null
      */
     protected ?array $parsedBody = null;
     /**
