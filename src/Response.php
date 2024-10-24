@@ -316,8 +316,7 @@ class Response extends Message implements ResponseInterface
     public function setStatus(int $code, ?string $reason = null) : static
     {
         $this->setStatusCode($code);
-        $reason ?: $reason = Status::getReason($code);
-        $this->setStatusReason($reason);
+        $this->setStatusReason(Status::getReason($code, $reason));
         return $this;
     }
 
