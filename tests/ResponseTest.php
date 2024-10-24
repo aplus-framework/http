@@ -350,6 +350,27 @@ final class ResponseTest extends TestCase
         );
     }
 
+    public function testExpires() : void
+    {
+        self::assertNull($this->response->getHeader('Expires'));
+        $datetime = new \DateTime('+5 seconds');
+        $this->response->setExpires($datetime);
+        self::assertSame(
+            $datetime->format('D, d M Y H:i:s') . ' GMT',
+            $this->response->getHeader('Expires')
+        );
+    }
+
+    public function testExpiresWithDefaultParam() : void
+    {
+        self::assertNull($this->response->getHeader('Expires'));
+        $this->response->setExpires();
+        self::assertSame(
+            \gmdate('D, d M Y H:i:s') . ' GMT',
+            $this->response->getHeader('Expires')
+        );
+    }
+
     public function testLastModified() : void
     {
         self::assertNull($this->response->getHeader('Last-Modified'));

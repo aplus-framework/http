@@ -830,7 +830,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return static
      */
-    public function setExpires(DateTime $datetime) : static
+    public function setExpires(DateTime $datetime = new DateTime()) : static
     {
         $date = clone $datetime;
         $date->setTimezone(new DateTimeZone('UTC'));
