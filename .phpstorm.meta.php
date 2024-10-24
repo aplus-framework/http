@@ -574,6 +574,23 @@ registerArgumentsSet(
     'sha384',
     'sha512',
 );
+registerArgumentsSet(
+    'content_encodings',
+    'br',
+    'compress',
+    'deflate',
+    'gzip',
+    'zstd',
+);
+registerArgumentsSet(
+    'content_types',
+    'application/json',
+    'application/xml',
+    'text/css',
+    'text/html',
+    'text/javascript',
+    'text/xml',
+);
 expectedReturnValues(
     \Framework\HTTP\MessageInterface::getProtocol(),
     argumentsSet('protocols')
@@ -640,6 +657,16 @@ expectedArguments(
     \Framework\HTTP\Request::setJsonFlags(),
     0,
     argumentsSet('json_decode_flags')
+);
+expectedArguments(
+    \Framework\HTTP\Response::setContentEncoding(),
+    0,
+    argumentsSet('content_encodings')
+);
+expectedArguments(
+    \Framework\HTTP\Response::setContentType(),
+    0,
+    argumentsSet('content_types')
 );
 expectedArguments(
     \Framework\HTTP\Response::setJson(),
