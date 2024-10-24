@@ -159,6 +159,18 @@ final class ResponseTest extends TestCase
         self::assertNotEmpty($this->response->getCookies());
     }
 
+    public function testContentLength() : void
+    {
+        self::assertNull($this->response->getHeader('Content-Length'));
+        $this->response->setContentLength(3);
+        self::assertSame('3', $this->response->getHeader('Content-Length'));
+        $this->response->setContentLength();
+        self::assertSame('0', $this->response->getHeader('Content-Length'));
+        $this->response->setBody('foo');
+        $this->response->setContentLength();
+        self::assertSame('3', $this->response->getHeader('Content-Length'));
+    }
+
     public function testDate() : void
     {
         self::assertNull($this->response->getHeader('Date'));

@@ -568,7 +568,7 @@ class Response extends Message implements ResponseInterface
     {
         // Content-Length is required by Firefox,
         // otherwise it does not send the If-None-Match header
-        $this->setContentLength(\strlen($this->getBody()));
+        $this->setContentLength();
         $etag = \hash($this->autoEtagHashAlgo, $this->getBody());
         $this->setEtag($etag);
         $etag = '"' . $etag . '"';
@@ -769,14 +769,15 @@ class Response extends Message implements ResponseInterface
     /**
      * Set the Content-Length header.
      *
-     * @param int $length
+     * @param int|null $length
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Length
      *
      * @return static
      */
-    public function setContentLength(int $length) : static
+    public function setContentLength(?int $length = null) : static
     {
+        $length ??= \strlen($this->getBody());
         $this->setHeader(ResponseHeader::CONTENT_LENGTH, (string) $length);
         return $this;
     }
