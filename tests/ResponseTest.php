@@ -170,6 +170,16 @@ final class ResponseTest extends TestCase
         );
     }
 
+    public function testDateWithDefaultParam() : void
+    {
+        self::assertNull($this->response->getHeader('Date'));
+        $this->response->setDate();
+        self::assertSame(
+            \gmdate('D, d M Y H:i:s') . ' GMT',
+            $this->response->getHeader('Date')
+        );
+    }
+
     public function testEtag() : void
     {
         self::assertNull($this->response->getHeader('ETag'));

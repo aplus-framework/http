@@ -65,7 +65,7 @@ class Response extends Message implements ResponseInterface
     public function __toString() : string
     {
         if ($this->getHeader(ResponseHeader::DATE) === null) {
-            $this->setDate(new DateTime());
+            $this->setDate();
         }
         if ($this->getHeader(ResponseHeader::CONTENT_TYPE) === null
             && $this->getBody() !== '') {
@@ -489,7 +489,7 @@ class Response extends Message implements ResponseInterface
             throw new LogicException('Headers are already sent');
         }
         if ($this->getHeader(ResponseHeader::DATE) === null) {
-            $this->setDate(new DateTime());
+            $this->setDate();
         }
         if ($this->getHeader(ResponseHeader::CONTENT_TYPE) === null) {
             $this->negotiateContentType();
@@ -790,7 +790,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return static
      */
-    public function setDate(DateTime $datetime) : static
+    public function setDate(DateTime $datetime = new DateTime()) : static
     {
         $date = clone $datetime;
         $date->setTimezone(new DateTimeZone('UTC'));
