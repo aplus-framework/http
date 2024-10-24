@@ -850,7 +850,7 @@ class Response extends Message implements ResponseInterface
      *
      * @return static
      */
-    public function setLastModified(DateTime $datetime) : static
+    public function setLastModified(DateTime $datetime = new DateTime()) : static
     {
         $date = clone $datetime;
         $date->setTimezone(new DateTimeZone('UTC'));

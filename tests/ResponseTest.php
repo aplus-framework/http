@@ -361,6 +361,16 @@ final class ResponseTest extends TestCase
         );
     }
 
+    public function testLastModifiedWithDefaultParam() : void
+    {
+        self::assertNull($this->response->getHeader('Last-Modified'));
+        $this->response->setLastModified();
+        self::assertSame(
+            \gmdate('D, d M Y H:i:s') . ' GMT',
+            $this->response->getHeader('Last-Modified')
+        );
+    }
+
     public function testNotModified() : void
     {
         $this->response->setNotModified();
