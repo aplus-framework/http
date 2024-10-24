@@ -768,7 +768,7 @@ class Response extends Message implements ResponseInterface
     /**
      * Set the Content-Length header.
      *
-     * @param int|null $length
+     * @param int|null $length Set a value or leave null to set the body length automatically
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Length
      *
@@ -784,7 +784,7 @@ class Response extends Message implements ResponseInterface
     /**
      * Set the Date header.
      *
-     * @param DateTime $datetime
+     * @param DateTime $datetime A DateTime value or default to the current DateTime
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Date
      *
@@ -804,8 +804,8 @@ class Response extends Message implements ResponseInterface
     /**
      * Set the ETag header.
      *
-     * @param string $etag
-     * @param bool $strong
+     * @param string $etag The ETag value without the quotes around it
+     * @param bool $strong False for a weak validator, otherwise true
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag
      *
@@ -824,7 +824,7 @@ class Response extends Message implements ResponseInterface
     /**
      * Set the Expires header.
      *
-     * @param DateTime $datetime
+     * @param DateTime $datetime A DateTime value or default to the current DateTime
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expires
      *
@@ -844,7 +844,7 @@ class Response extends Message implements ResponseInterface
     /**
      * Set the Last-Modified header.
      *
-     * @param DateTime $datetime
+     * @param DateTime $datetime A DateTime value or default to the current DateTime
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Last-Modified
      *
