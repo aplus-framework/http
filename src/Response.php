@@ -202,6 +202,19 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
+     * @param array<string> $names
+     *
+     * @see Response::removeHeader()
+     *
+     * @return static
+     */
+    #[Override]
+    public function removeHeadersByNames(array $names) : static
+    {
+        return parent::removeHeadersByNames($names);
+    }
+
+    /**
      * Set the Content-Security-Policy instance.
      *
      * @param CSP $csp

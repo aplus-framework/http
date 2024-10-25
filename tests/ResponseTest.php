@@ -314,6 +314,21 @@ final class ResponseTest extends TestCase
         self::assertSame([], $this->response->getHeaders());
     }
 
+    public function testRemoveHeadersByNames() : void
+    {
+        self::assertSame([], $this->response->getHeaders());
+        $this->response->setHeader('content-type', 'text/html');
+        $this->response->setHeader('foo', 'bar');
+        self::assertSame([
+            'content-type' => 'text/html',
+            'foo' => 'bar',
+        ], $this->response->getHeaders());
+        $this->response->removeHeadersByNames(['content-type']);
+        self::assertSame([
+            'foo' => 'bar',
+        ], $this->response->getHeaders());
+    }
+
     public function testHeadersAreAlreadySent() : void
     {
         $response = new class(new RequestMock(['domain.tld'])) extends Response {
