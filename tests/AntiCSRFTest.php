@@ -37,6 +37,33 @@ final class AntiCSRFTest extends TestCase
         (new AntiCSRF(new RequestMock()));
     }
 
+    public function testTokenBytesLengthInConstructor() : void
+    {
+        \session_start();
+        $request = new RequestMock();
+        $request->setMethod('POST');
+        $anti = new AntiCSRF($request, 32);
+        self::assertSame(32, $anti->getTokenBytesLength());
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'AntiCSRF token bytes length must be greater than 2, 1 given'
+        );
+        new AntiCSRF($request, 1);
+    }
+
+    public function testTokenBytesLength() : void
+    {
+        $this->prepare();
+        self::assertSame(8, $this->anti->getTokenBytesLength());
+        $this->anti->setTokenBytesLength(3);
+        self::assertSame(3, $this->anti->getTokenBytesLength());
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'AntiCSRF token bytes length must be greater than 2, 2 given'
+        );
+        $this->anti->setTokenBytesLength(2);
+    }
+
     public function testMakeToken() : void
     {
         $this->prepare();

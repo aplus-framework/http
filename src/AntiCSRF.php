@@ -9,6 +9,7 @@
  */
 namespace Framework\HTTP;
 
+use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use LogicException;
 
@@ -28,21 +29,43 @@ class AntiCSRF
     protected Request $request;
     protected bool $verified = false;
     protected bool $enabled = true;
+    protected int $tokenBytesLength = 8;
 
     /**
      * AntiCSRF constructor.
      *
      * @param Request $request
+     * @param int|null $tokenBytesLength
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request, ?int $tokenBytesLength = null)
     {
         if (\session_status() !== \PHP_SESSION_ACTIVE) {
             throw new LogicException('Session must be active to use AntiCSRF class');
         }
         $this->request = $request;
+        if ($tokenBytesLength !== null) {
+            $this->setTokenBytesLength($tokenBytesLength);
+        }
         if ($this->getToken() === null) {
             $this->setToken();
         }
+    }
+
+    public function setTokenBytesLength(int $length) : static
+    {
+        if ($length < 3) {
+            throw new InvalidArgumentException(
+                'AntiCSRF token bytes length must be greater than 2, ' . $length . ' given'
+            );
+        }
+        $this->tokenBytesLength = $length;
+        return $this;
+    }
+
+    #[Pure]
+    public function getTokenBytesLength() : int
+    {
+        return $this->tokenBytesLength;
     }
 
     /**
@@ -89,7 +112,8 @@ class AntiCSRF
      */
     public function setToken(?string $token = null) : static
     {
-        $_SESSION['$']['csrf_token'] = $token ?? \base64_encode(\random_bytes(8));
+        $_SESSION['$']['csrf_token'] = $token
+            ?? \base64_encode(\random_bytes($this->getTokenBytesLength())); // @phpstan-ignore-line
         return $this;
     }
 
