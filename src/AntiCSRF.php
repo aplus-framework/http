@@ -30,21 +30,37 @@ class AntiCSRF
     protected bool $verified = false;
     protected bool $enabled = true;
     protected int $tokenBytesLength = 8;
+    protected string $generateTokenFunction = 'base64_encode';
+    /**
+     * @var array<string>
+     */
+    protected array $generateTokenFunctions = [
+        'base64_encode',
+        'bin2hex',
+        'md5',
+    ];
 
     /**
      * AntiCSRF constructor.
      *
      * @param Request $request
      * @param int|null $tokenBytesLength
+     * @param string|null $generateTokenFunction
      */
-    public function __construct(Request $request, ?int $tokenBytesLength = null)
-    {
+    public function __construct(
+        Request $request,
+        ?int $tokenBytesLength = null,
+        ?string $generateTokenFunction = null,
+    ) {
         if (\session_status() !== \PHP_SESSION_ACTIVE) {
             throw new LogicException('Session must be active to use AntiCSRF class');
         }
         $this->request = $request;
         if ($tokenBytesLength !== null) {
             $this->setTokenBytesLength($tokenBytesLength);
+        }
+        if ($generateTokenFunction !== null) {
+            $this->setGenerateTokenFunction($generateTokenFunction);
         }
         if ($this->getToken() === null) {
             $this->setToken();
@@ -112,9 +128,31 @@ class AntiCSRF
      */
     public function setToken(?string $token = null) : static
     {
-        $_SESSION['$']['csrf_token'] = $token
-            ?? \base64_encode(\random_bytes($this->getTokenBytesLength())); // @phpstan-ignore-line
+        $_SESSION['$']['csrf_token'] = $token ?? $this->generateToken();
         return $this;
+    }
+
+    public function setGenerateTokenFunction(string $function) : static
+    {
+        if (!\in_array($function, $this->generateTokenFunctions, true)) {
+            throw new InvalidArgumentException(
+                'Invalid generate token function name: ' . $function
+            );
+        }
+        $this->generateTokenFunction = $function;
+        return $this;
+    }
+
+    #[Pure]
+    public function getGenerateTokenFunction() : string
+    {
+        return $this->generateTokenFunction;
+    }
+
+    public function generateToken() : string
+    {
+        $bytes = \random_bytes($this->getTokenBytesLength()); // @phpstan-ignore-line
+        return $this->getGenerateTokenFunction()($bytes); // @phpstan-ignore-line
     }
 
     /**

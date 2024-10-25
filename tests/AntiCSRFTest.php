@@ -64,6 +64,55 @@ final class AntiCSRFTest extends TestCase
         $this->anti->setTokenBytesLength(2);
     }
 
+    /**
+     * @dataProvider tokenFunctionProvider
+     *
+     * @param string $function
+     * @param int $length
+     *
+     * @return void
+     */
+    public function testGenerateTokenFunctionInConstructor(string $function, int $length) : void
+    {
+        \session_start();
+        $request = new RequestMock();
+        $request->setMethod('POST');
+        $anti = new AntiCSRF($request, generateTokenFunction: $function);
+        self::assertSame($function, $anti->getGenerateTokenFunction());
+        self::assertSame($length, \strlen($anti->generateToken()));
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Invalid generate token function name: foo'
+        );
+        new AntiCSRF($request, generateTokenFunction: 'foo');
+    }
+
+    /**
+     * @dataProvider tokenFunctionProvider
+     *
+     * @param string $function
+     * @param int $length
+     *
+     * @return void
+     */
+    public function testGenerateToken(string $function, int $length) : void
+    {
+        $this->prepare();
+        $this->anti->setGenerateTokenFunction($function);
+        self::assertSame($function, $this->anti->getGenerateTokenFunction());
+        self::assertSame($length, \strlen($this->anti->generateToken()));
+    }
+
+    public function testInvalidGenerateTokenFunction() : void
+    {
+        $this->prepare();
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Invalid generate token function name: foo'
+        );
+        $this->anti->setGenerateTokenFunction('foo');
+    }
+
     public function testMakeToken() : void
     {
         $this->prepare();
@@ -145,5 +194,17 @@ final class AntiCSRFTest extends TestCase
         self::assertSame('', $this->anti->input());
         $_SESSION['$']['csrf_token'] = 'bar';
         self::assertTrue($this->anti->verify());
+    }
+
+    /**
+     * @return array<array<scalar>>
+     */
+    public static function tokenFunctionProvider() : array
+    {
+        return [
+            ['base64_encode', 12],
+            ['bin2hex', 16],
+            ['md5', 32],
+        ];
     }
 }
