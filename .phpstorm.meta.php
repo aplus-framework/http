@@ -591,6 +591,22 @@ registerArgumentsSet(
     'text/javascript',
     'text/xml',
 );
+registerArgumentsSet(
+    'anti_csrf_token_functions',
+    'base64_encode',
+    'bin2hex',
+    'md5',
+);
+expectedArguments(
+    \Framework\HTTP\AntiCSRF::__construct(),
+    2,
+    argumentsSet('anti_csrf_token_functions')
+);
+expectedArguments(
+    \Framework\HTTP\AntiCSRF::setGenerateTokenFunction(),
+    0,
+    argumentsSet('anti_csrf_token_functions')
+);
 expectedReturnValues(
     \Framework\HTTP\MessageInterface::getProtocol(),
     argumentsSet('protocols')
