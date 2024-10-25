@@ -244,6 +244,21 @@ abstract class Message implements MessageInterface
     }
 
     /**
+     * Remove headers by names.
+     *
+     * @param array<string> $names
+     *
+     * @return static
+     */
+    protected function removeHeadersByNames(array $names) : static
+    {
+        foreach ($names as $name) {
+            $this->removeHeader($name);
+        }
+        return $this;
+    }
+
+    /**
      * Say if the Message has a Cookie.
      *
      * @param string $name Cookie name

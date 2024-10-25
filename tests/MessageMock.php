@@ -44,6 +44,11 @@ class MessageMock extends Message
         return parent::removeHeaders();
     }
 
+    public function removeHeadersByNames(array $names) : static
+    {
+        return parent::removeHeadersByNames($names);
+    }
+
     public function setBody(?string $body) : static
     {
         return parent::setBody($body);

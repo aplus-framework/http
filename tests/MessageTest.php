@@ -97,6 +97,24 @@ final class MessageTest extends TestCase
         );
         $this->message->removeHeaders();
         self::assertSame([], $this->message->getHeaders());
+        $this->message->setHeaders([
+            'content-type' => 'application/json',
+            'allow' => '*',
+        ]);
+        self::assertSame(
+            [
+                'content-type' => 'application/json',
+                'allow' => '*',
+            ],
+            $this->message->getHeaders()
+        );
+        $this->message->removeHeadersByNames(['content-type']);
+        self::assertSame(
+            [
+                'allow' => '*',
+            ],
+            $this->message->getHeaders()
+        );
     }
 
     public function testHeaderLine() : void
