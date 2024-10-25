@@ -189,6 +189,19 @@ class Response extends Message implements ResponseInterface
         return parent::appendHeader($name, $value);
     }
 
+    /**
+     * Remove a header by name.
+     *
+     * NOTE: This method does not remove headers set by PHP, such as with
+     * sessions or the `header()` function. To do this type of removal use the
+     * `header_remove()` function.
+     *
+     * @see https://www.php.net/manual/en/function.header-remove.php
+     *
+     * @param string $name
+     *
+     * @return static
+     */
     #[Override]
     public function removeHeader(string $name) : static
     {

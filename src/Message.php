@@ -233,7 +233,7 @@ abstract class Message implements MessageInterface
     }
 
     /**
-     * Remove many headers by a list of headers.
+     * Remove all headers.
      *
      * @return static
      */
