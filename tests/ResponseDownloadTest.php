@@ -50,7 +50,8 @@ final class ResponseDownloadTest extends TestCase
     {
         $this->response->setDownload(__FILE__);
         self::assertSame(Status::PARTIAL_CONTENT, $this->response->getStatusCode());
-        self::assertSame('text/x-php', $this->response->getHeader('Content-Type'));
+        // See: https://github.com/php/php-src/issues/17039
+        //self::assertSame('text/x-php', $this->response->getHeader('Content-Type'));
         self::assertSame('500', $this->response->getHeader('Content-Length'));
         self::assertStringStartsWith('bytes 0-499/', $this->response->getHeader('Content-Range'));
     }
