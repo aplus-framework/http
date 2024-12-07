@@ -48,6 +48,10 @@ class RequestHeader
      */
     public const string AUTHORIZATION = 'Authorization';
     /**
+     * @see https://datatracker.ietf.org/doc/html/rfc8586
+     */
+    public const string CDN_LOOP = 'CDN-Loop';
+    /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie
      */
     public const string COOKIE = 'Cookie';

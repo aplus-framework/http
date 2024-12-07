@@ -184,6 +184,7 @@ registerArgumentsSet(
     \Framework\HTTP\RequestHeader::ACCESS_CONTROL_REQUEST_METHOD,
     \Framework\HTTP\RequestHeader::AUTHORIZATION,
     \Framework\HTTP\RequestHeader::CACHE_CONTROL,
+    \Framework\HTTP\RequestHeader::CDN_LOOP,
     \Framework\HTTP\RequestHeader::CONNECTION,
     \Framework\HTTP\RequestHeader::CONTENT_DISPOSITION,
     \Framework\HTTP\RequestHeader::CONTENT_ENCODING,

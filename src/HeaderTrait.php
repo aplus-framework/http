@@ -150,6 +150,7 @@ trait HeaderTrait
         'access-control-request-headers' => 'Access-Control-Request-Headers',
         'access-control-request-method' => 'Access-Control-Request-Method',
         'authorization' => 'Authorization',
+        'cdn-loop' => 'CDN-Loop',
         'cookie' => 'Cookie',
         'dnt' => 'DNT',
         'expect' => 'Expect',
@@ -246,6 +247,7 @@ trait HeaderTrait
     public static function getMultilines() : array
     {
         return [
+            'cdn-loop',
             'date',
             'expires',
             'if-modified-since',
