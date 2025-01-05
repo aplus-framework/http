@@ -238,7 +238,7 @@ class HTTPCollector extends Collector
                 }
             } ?>
             <p>
-                <strong>Time Sending:</strong> <?= \round($info['end'] - $info['start'], 6) ?> seconds
+                <strong>Time Sending:</strong> <?= Debugger::roundSecondsToMilliseconds($info['end'] - $info['start']) ?> ms
             </p>
         <?php
         endif;
