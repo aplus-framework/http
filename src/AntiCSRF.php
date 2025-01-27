@@ -100,7 +100,8 @@ class AntiCSRF
      */
     public function getUserToken() : ?string
     {
-        return $this->request->getParsedBody($this->getTokenName());
+        $token = $this->request->getParsedBody($this->getTokenName());
+        return \is_string($token) ? $token : null;
     }
 
     /**
