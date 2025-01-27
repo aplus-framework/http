@@ -152,6 +152,17 @@ final class AntiCSRFTest extends TestCase
         self::assertFalse($this->anti->verify());
     }
 
+    public function testUserTokenIsNotString() : void
+    {
+        $this->prepare();
+        $_POST = [
+            'csrf_token' => [
+                'foo' => 'bar',
+            ],
+        ];
+        self::assertFalse($this->anti->verify());
+    }
+
     public function testVerifySuccess() : void
     {
         $this->prepare();
