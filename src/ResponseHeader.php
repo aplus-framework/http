@@ -162,5 +162,8 @@ class ResponseHeader
     // -------------------------------------------------------------------------
     // Custom
     // -------------------------------------------------------------------------
+    /**
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Powered-By
+     */
     public const string X_POWERED_BY = 'X-Powered-By';
 }
