@@ -342,6 +342,7 @@ registerArgumentsSet(
     \Framework\HTTP\ResponseHeader::X_FRAME_OPTIONS,
     \Framework\HTTP\ResponseHeader::X_POWERED_BY,
     \Framework\HTTP\ResponseHeader::X_REQUEST_ID,
+    \Framework\HTTP\ResponseHeader::X_ROBOTS_TAG,
     \Framework\HTTP\ResponseHeader::X_XSS_PROTECTION,
     'Accept-Ranges',
     'Access-Control-Allow-Credentials',
@@ -397,6 +398,7 @@ registerArgumentsSet(
     'X-Frame-Options',
     'X-Powered-By',
     'X-Request-ID',
+    'X-Robots-Tag',
     'X-XSS-Protection',
 );
 registerArgumentsSet(
@@ -407,6 +409,7 @@ registerArgumentsSet(
     \Framework\HTTP\ResponseHeader::PROXY_AUTHENTICATE,
     \Framework\HTTP\ResponseHeader::RETRY_AFTER,
     \Framework\HTTP\ResponseHeader::SET_COOKIE,
+    \Framework\HTTP\ResponseHeader::X_ROBOTS_TAG,
     \Framework\HTTP\ResponseHeader::WWW_AUTHENTICATE,
     'Date',
     'Expires',
@@ -414,6 +417,7 @@ registerArgumentsSet(
     'Proxy-Authenticate',
     'Retry-After',
     'Set-Cookie',
+    'X-Robots-Tag',
     'WWW-Authenticate',
 );
 registerArgumentsSet(

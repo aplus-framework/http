@@ -19,6 +19,7 @@ namespace Framework\HTTP;
 class ResponseHeader
 {
     use HeaderTrait;
+
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Ranges
      */
@@ -155,6 +156,11 @@ class ResponseHeader
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
      */
     public const string X_FRAME_OPTIONS = 'X-Frame-Options';
+    /**
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Robots-Tag
+     * @see https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag
+     */
+    public const string X_ROBOTS_TAG = 'X-Robots-Tag';
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
      */

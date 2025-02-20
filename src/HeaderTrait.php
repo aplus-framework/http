@@ -216,6 +216,7 @@ trait HeaderTrait
         'x-content-type-options' => 'X-Content-Type-Options',
         'x-dns-prefetch-control' => 'X-DNS-Prefetch-Control',
         'x-frame-options' => 'X-Frame-Options',
+        'x-robots-tag' => 'X-Robots-Tag',
         'x-xss-protection' => 'X-XSS-Protection',
         // ---------------------------------------------------------------------
         // Custom (Response)
@@ -257,6 +258,7 @@ trait HeaderTrait
             'proxy-authenticate',
             'retry-after',
             'set-cookie',
+            'x-robots-tag',
             'www-authenticate',
         ];
     }
