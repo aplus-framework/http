@@ -213,4 +213,29 @@ final class HTTPCollectorTest extends TestCase
             'end',
         ], \array_keys($this->collector->getActivities()[0])); // @phpstan-ignore-line
     }
+
+    public function testResponseReplaceHeadersDisabled() : void
+    {
+        $response = $this->prepare();
+        \ob_start();
+        $response->send();
+        \ob_end_clean();
+        self::assertStringNotContainsString(
+            'Note that the Response is replacing headers',
+            $this->collector->getContents()
+        );
+    }
+
+    public function testResponseReplaceHeadersEnabled() : void
+    {
+        $response = $this->prepare();
+        $response->setReplaceHeaders();
+        \ob_start();
+        $response->send();
+        \ob_end_clean();
+        self::assertStringContainsString(
+            'Note that the Response is replacing headers',
+            $this->collector->getContents()
+        );
+    }
 }

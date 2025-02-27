@@ -343,6 +343,40 @@ final class ResponseTest extends TestCase
         $response->sendHeaders();
     }
 
+    public function testReplaceHeadersDisabled() : void
+    {
+        self::assertFalse($this->response->isReplacingHeaders());
+        $this->response
+            ->setHeader('Date', 'foo')
+            ->appendHeader('Date', 'bar')
+            ->appendHeader('Date', 'baz');
+        \ob_start();
+        $this->response->send();
+        \ob_get_clean();
+        $headers = xdebug_get_headers();
+        self::assertContains('Date: foo', $headers);
+        self::assertContains('Date: bar', $headers);
+        self::assertContains('Date: baz', $headers);
+    }
+
+    public function testReplaceHeadersEnabled() : void
+    {
+        self::assertFalse($this->response->isReplacingHeaders());
+        $this->response->setReplaceHeaders();
+        self::assertTrue($this->response->isReplacingHeaders());
+        $this->response
+            ->setHeader('Date', 'foo')
+            ->appendHeader('Date', 'bar')
+            ->appendHeader('Date', 'baz');
+        \ob_start();
+        $this->response->send();
+        \ob_get_clean();
+        $headers = xdebug_get_headers();
+        self::assertNotContains('Date: foo', $headers);
+        self::assertNotContains('Date: bar', $headers);
+        self::assertContains('Date: baz', $headers);
+    }
+
     public function testInvalidStatusCode() : void
     {
         $this->expectException(\InvalidArgumentException::class);

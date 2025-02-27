@@ -243,6 +243,9 @@ class HTTPCollector extends Collector
         <?php
         endif;
         echo $this->renderHeadersTable($this->response->getHeaderLines());
+        if ($this->response->isReplacingHeaders()) {
+            echo '<p><small>* Note that the Response is replacing headers.</small></p>';
+        }
         echo '<p><small>* Note that some headers can be set outside the Response';
         echo ' class, for example by the session or the server.';
         echo ' So they don\'t appear here.</small></p>';

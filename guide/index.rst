@@ -364,6 +364,41 @@ Also, you can use constants from the **ResponseHeader** class:
     $response->setHeader(ResponseHeader::CONTENT_TYPE, 'text/xml'); // static
     $response->setContentType('text/xml'); // static
 
+Repeated Header Names
+^^^^^^^^^^^^^^^^^^^^^
+
+The HTTP response allows some headers to be repeated, such as the
+**X-Robot-Tag** header.
+
+See the example below setting the header and appending one more:
+
+.. code-block:: php
+
+    $response->setHeader('X-Robots-Tag', 'nofollow')
+             ->appendHeader('X-Robots-Tag', 'googlebot: noindex')
+
+Then the response will send multiple headers with the same name:
+
+.. code-block:: http
+
+    X-Robots-Tag: nofollow
+    X-Robots-Tag: googlebot: noindex
+
+If you need to replace the headers, call the ``setReplaceHeaders`` method before
+sending the response:
+
+.. code-block:: php
+
+    $response->setReplaceHeaders();
+    $response->setHeader('X-Robots-Tag', 'nofollow')
+             ->appendHeader('X-Robots-Tag', 'googlebot: noindex')
+
+Then the headers will be replaced. And only the last one is sent in the response:
+
+.. code-block:: http
+
+    X-Robots-Tag: googlebot: noindex
+
 Response Body
 #############
 

@@ -49,6 +49,7 @@ class Response extends Message implements ResponseInterface
     protected HTTPCollector $debugCollector;
     protected CSP $csp;
     protected CSP $cspReportOnly;
+    protected bool $replaceHeaders = false;
 
     /**
      * Response constructor.
@@ -524,11 +525,42 @@ class Response extends Message implements ResponseInterface
         }
         $this->negotiateCsp();
         $code = $this->getStatusCode();
+        $replace = $this->isReplacingHeaders();
         \header($this->getStartLine(), true, $code);
         foreach ($this->getHeaderLines() as $line) {
-            \header($line, true, $code);
+            \header($line, $replace, $code);
         }
         $this->headersSent = true;
+    }
+
+    /**
+     * The replace parameter indicates whether the header should replace a
+     * previous similar header, or add a next header of the same type.
+     * By default, it will replace, but if you pass in false as the first
+     * argument you can force multiple headers of the same type.
+     *
+     * @param bool $replace
+     *
+     * @see Response::sendHeaders()
+     *
+     * @return static
+     */
+    public function setReplaceHeaders(bool $replace = true) : static
+    {
+        $this->replaceHeaders = $replace;
+        return $this;
+    }
+
+    /**
+     * Tells if headers are being replaced.
+     *
+     * @see Response::setReplaceHeaders()
+     *
+     * @return bool
+     */
+    public function isReplacingHeaders() : bool
+    {
+        return $this->replaceHeaders;
     }
 
     /**
