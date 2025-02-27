@@ -538,6 +538,8 @@ class Response extends Message implements ResponseInterface
      * By default, it will replace, but if you pass in false as the first
      * argument you can force multiple headers of the same type.
      *
+     * @since 6.5
+     *
      * @param bool $replace
      *
      * @see Response::sendHeaders()
@@ -553,6 +555,7 @@ class Response extends Message implements ResponseInterface
     /**
      * Tells if headers are being replaced.
      *
+     * @since 6.5
      * @see Response::setReplaceHeaders()
      *
      * @return bool
