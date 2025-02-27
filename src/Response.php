@@ -524,11 +524,10 @@ class Response extends Message implements ResponseInterface
             $this->negotiateEtag();
         }
         $this->negotiateCsp();
-        $code = $this->getStatusCode();
+        \header($this->getStartLine());
         $replace = $this->isReplacingHeaders();
-        \header($this->getStartLine(), true, $code);
         foreach ($this->getHeaderLines() as $line) {
-            \header($line, $replace, $code);
+            \header($line, $replace);
         }
         $this->headersSent = true;
     }
