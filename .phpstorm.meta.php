@@ -590,10 +590,12 @@ registerArgumentsSet(
 registerArgumentsSet(
     'content_types',
     'application/json',
+    'application/octet-stream',
     'application/xml',
     'text/css',
     'text/html',
     'text/javascript',
+    'text/plain',
     'text/xml',
 );
 registerArgumentsSet(
