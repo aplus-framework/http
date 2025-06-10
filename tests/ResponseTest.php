@@ -639,14 +639,28 @@ final class ResponseTest extends TestCase
         $this->response->setStatus(483);
     }
 
-    public function testSetContents() : void
+    public function testSetContentType() : void
     {
         self::assertNull($this->response->getHeader('content-type'));
         $this->response->setContentType('foo');
         self::assertSame('foo; charset=UTF-8', $this->response->getHeader('content-type'));
+        $this->response->setContentType('foo', '');
+        self::assertSame('foo', $this->response->getHeader('content-type'));
+        $this->response->setContentType('foo', '0');
+        self::assertSame('foo', $this->response->getHeader('content-type'));
+        $this->response->setContentType('foo', null);
+        self::assertSame('foo', $this->response->getHeader('content-type'));
+    }
+
+    public function testSetContentLanguage() : void
+    {
         self::assertNull($this->response->getHeader('content-language'));
         $this->response->setContentLanguage('de');
         self::assertSame('de', $this->response->getHeader('content-language'));
+    }
+
+    public function testSetContentEncoding() : void
+    {
         self::assertNull($this->response->getHeader('content-encoding'));
         $this->response->setContentEncoding('gzip');
         self::assertSame('gzip', $this->response->getHeader('content-encoding'));
