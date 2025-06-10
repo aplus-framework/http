@@ -781,13 +781,13 @@ class Response extends Message implements ResponseInterface
      * Set the Content-Type header.
      *
      * @param string $mime
-     * @param string $charset
+     * @param string|null $charset
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
      *
      * @return static
      */
-    public function setContentType(string $mime, string $charset = 'UTF-8') : static
+    public function setContentType(string $mime, ?string $charset = 'UTF-8') : static
     {
         $this->setHeader(
             ResponseHeader::CONTENT_TYPE,
