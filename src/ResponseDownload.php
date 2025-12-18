@@ -86,7 +86,10 @@ trait ResponseDownload
                 "Could not get the file modification time of '{$this->filepath}'"
             );
         }
-        $this->setHeader(ResponseHeader::LAST_MODIFIED, \gmdate(\DATE_RFC7231, $filemtime));
+        $this->setHeader(
+            ResponseHeader::LAST_MODIFIED,
+            \gmdate('D, d M Y H:i:s \G\M\T', $filemtime)
+        );
         $filename ??= \basename($filepath);
         $filename = \htmlspecialchars($filename, \ENT_QUOTES | \ENT_HTML5);
         $filename = \strtr($filename, ['/' => '_', '\\' => '_']);

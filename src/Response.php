@@ -10,7 +10,6 @@
 namespace Framework\HTTP;
 
 use DateTime;
-use DateTimeInterface;
 use DateTimeZone;
 use Framework\HTTP\Debug\HTTPCollector;
 use InvalidArgumentException;
@@ -857,7 +856,7 @@ class Response extends Message implements ResponseInterface
         $date->setTimezone(new DateTimeZone('UTC'));
         $this->setHeader(
             ResponseHeader::DATE,
-            $date->format(DateTimeInterface::RFC7231)
+            $date->format('D, d M Y H:i:s \G\M\T')
         );
         return $this;
     }
@@ -897,7 +896,7 @@ class Response extends Message implements ResponseInterface
         $date->setTimezone(new DateTimeZone('UTC'));
         $this->setHeader(
             ResponseHeader::EXPIRES,
-            $date->format(DateTimeInterface::RFC7231)
+            $date->format('D, d M Y H:i:s \G\M\T')
         );
         return $this;
     }
@@ -917,7 +916,7 @@ class Response extends Message implements ResponseInterface
         $date->setTimezone(new DateTimeZone('UTC'));
         $this->setHeader(
             ResponseHeader::LAST_MODIFIED,
-            $date->format(DateTimeInterface::RFC7231)
+            $date->format('D, d M Y H:i:s \G\M\T')
         );
         return $this;
     }
