@@ -437,7 +437,7 @@ final class ResponseTest extends TestCase
     {
         $startLine = 'HTTP/1.1 200 OK';
         $headerLines = [
-            'Date: ' . \gmdate(\DATE_RFC7231),
+            'Date: ' . \gmdate('D, d M Y H:i:s \G\M\T'),
             'Content-Type: text/html; charset=UTF-8',
         ];
         $body = <<<'HTML'
@@ -463,7 +463,7 @@ final class ResponseTest extends TestCase
     {
         $startLine = 'HTTP/1.1 200 OK';
         $headerLines = [
-            'Date: ' . \gmdate(\DATE_RFC7231),
+            'Date: ' . \gmdate('D, d M Y H:i:s \G\M\T'),
         ];
         $message = $startLine . "\r\n"
             . \implode("\r\n", $headerLines) . "\r\n"
@@ -478,12 +478,12 @@ final class ResponseTest extends TestCase
         $length = \strlen($body);
         $startLine = 'HTTP/1.1 200 OK';
         $headerLines = [
-            'Last-Modified: ' . \gmdate(\DATE_RFC7231, (int) \filemtime($filename)),
+            'Last-Modified: ' . \gmdate('D, d M Y H:i:s \G\M\T', (int) \filemtime($filename)),
             'Content-Disposition: attachment; filename="file.txt"',
             'Accept-Ranges: bytes',
             'Content-Length: ' . $length,
             'Content-Type: text/plain',
-            'Date: ' . \gmdate(\DATE_RFC7231),
+            'Date: ' . \gmdate('D, d M Y H:i:s \G\M\T'),
         ];
         $this->response->setDownload($filename);
         $message = $startLine . "\r\n"
@@ -515,12 +515,12 @@ final class ResponseTest extends TestCase
         $length = \strlen($body);
         $startLine = 'HTTP/1.1 206 Partial Content';
         $headerLines = [
-            'Last-Modified: ' . \gmdate(\DATE_RFC7231, (int) \filemtime($filename)),
+            'Last-Modified: ' . \gmdate('D, d M Y H:i:s \G\M\T', (int) \filemtime($filename)),
             'Content-Disposition: attachment; filename="fo_o.b&quot;ar"',
             'Accept-Ranges: bytes',
             'Content-Length: ' . $length,
             'Content-Type: multipart/x-byteranges; boundary=' . $boundary,
-            'Date: ' . \gmdate(\DATE_RFC7231),
+            'Date: ' . \gmdate('D, d M Y H:i:s \G\M\T'),
         ];
         $this->response->setDownload($filename, filename: 'fo/o.b"ar');
         $message = $startLine . "\r\n"
