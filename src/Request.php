@@ -71,6 +71,7 @@ class Request extends Message implements RequestInterface
      */
     protected bool $isSecure;
     protected int $jsonFlags = 0;
+    protected string $ipKey = 'REMOTE_ADDR';
 
     /**
      * Request constructor.
@@ -822,7 +823,37 @@ class Request extends Message implements RequestInterface
      */
     public function getIp() : string
     {
-        return $_SERVER['REMOTE_ADDR'];
+        return $_SERVER[$this->getIpKey()];
+    }
+
+    /**
+     * Set the key used to get the IP address from the superglobal $_SERVER.
+     *
+     * @param string $ipKey
+     *
+     * @throws InvalidArgumentException for IP key not set in the $_SERVER var
+     *
+     * @return static
+     */
+    public function setIpKey(string $ipKey) : static
+    {
+        if (!isset($_SERVER[$ipKey])) {
+            throw new InvalidArgumentException(
+                'The IP Key "' . $ipKey . '" is not set in the $_SERVER'
+            );
+        }
+        $this->ipKey = $ipKey;
+        return $this;
+    }
+
+    /**
+     * Get the key used to get the IP address from the superglobal $_SERVER.
+     *
+     * @return string
+     */
+    public function getIpKey() : string
+    {
+        return $this->ipKey;
     }
 
     #[Override]

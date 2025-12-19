@@ -266,6 +266,7 @@ final class RequestTest extends TestCase
             'Host: domain.tld',
             'Referer: http://domain.tld/contact.html',
             'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
+            'X-Forwarded-For: 45.167.104.99',
             'X-Request-ID: abc123',
             'X-Requested-With: XMLHTTPREQUEST',
         ];
@@ -642,6 +643,7 @@ final class RequestTest extends TestCase
             'host' => 'domain.tld',
             'referer' => 'http://domain.tld/contact.html',
             'user-agent' => 'Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
+            'x-forwarded-for' => '45.167.104.99',
             'x-request-id' => 'abc123',
             'x-requested-with' => 'XMLHTTPREQUEST',
         ], $this->request->getHeaders());
@@ -650,6 +652,21 @@ final class RequestTest extends TestCase
     public function testIP() : void
     {
         self::assertSame('192.168.1.100', $this->request->getIp());
+    }
+
+    public function testIpKey() : void
+    {
+        $this->request->setIpKey('HTTP_X_FORWARDED_FOR');
+        self::assertSame('45.167.104.99', $this->request->getIp());
+    }
+
+    public function testIpKeyException() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The IP Key "HTTP_CF_CONNECTING_IP" is not set in the $_SERVER'
+        );
+        $this->request->setIpKey('HTTP_CF_CONNECTING_IP');
     }
 
     public function testIsAjax() : void
