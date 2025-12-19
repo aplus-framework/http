@@ -38,7 +38,7 @@
         }
     ],
     "require": {
-        "php": ">=8.3",
+        "php": ">=8.5",
         "ext-fileinfo": "*",
         "ext-json": "*",
         "aplus/debug": "^4.3",
