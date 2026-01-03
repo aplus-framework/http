@@ -34,6 +34,7 @@ class Cookie implements \Stringable
     protected ?string $path = null;
     protected ?string $sameSite = null;
     protected bool $secure = false;
+    protected bool $partitioned = false;
     protected string $value;
 
     /**
@@ -85,6 +86,10 @@ class Cookie implements \Stringable
         $part = $this->getSameSite();
         if ($part !== null) {
             $string .= '; SameSite=' . $part;
+        }
+        $part = $this->isPartitioned();
+        if ($part) {
+            $string .= '; Partitioned';
         }
         return $string;
     }
@@ -276,6 +281,29 @@ class Cookie implements \Stringable
     }
 
     /**
+     * @param bool $partitioned
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/Privacy/Guides/Privacy_sandbox/Partitioned_cookies
+     * @see https://wiki.php.net/rfc/chips
+     *
+     * @return static
+     */
+    public function setPartitioned(bool $partitioned = true) : static
+    {
+        $this->partitioned = $partitioned;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    #[Pure]
+    public function isPartitioned() : bool
+    {
+        return $this->partitioned;
+    }
+
+    /**
      * @return bool
      */
     public function send() : bool
@@ -299,6 +327,7 @@ class Cookie implements \Stringable
         if ($value !== null) {
             $options['samesite'] = $value;
         }
+        $options['partitioned'] = $this->isPartitioned();
         // @phpstan-ignore-next-line
         return \setcookie($this->getName(), $this->getValue(), $options);
     }
@@ -346,6 +375,9 @@ class Cookie implements \Stringable
                     break;
                 case 'samesite':
                     $cookie->setSameSite($val);
+                    break;
+                case 'partitioned':
+                    $cookie->setPartitioned();
                     break;
             }
         }

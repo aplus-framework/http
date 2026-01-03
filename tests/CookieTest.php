@@ -42,7 +42,10 @@ final class CookieTest extends TestCase
         self::assertSame((string) $time, $this->cookie->getExpires()->format('U'));
         $this->cookie->setExpires(new \DateTime('-5 hours'));
         self::assertInstanceOf(\DateTime::class, $this->cookie->getExpires());
-        self::assertSame((string) (\time() - 5 * 60 * 60), $this->cookie->getExpires()->format('U'));
+        self::assertSame(
+            (string) (\time() - 5 * 60 * 60),
+            $this->cookie->getExpires()->format('U')
+        );
         self::assertTrue($this->cookie->isExpired());
         $this->cookie->setExpires(null);
         self::assertNull($this->cookie->getExpires());
@@ -97,6 +100,15 @@ final class CookieTest extends TestCase
         self::assertFalse($this->cookie->isSecure());
     }
 
+    public function testPartitioned() : void
+    {
+        self::assertFalse($this->cookie->isPartitioned());
+        $this->cookie->setPartitioned();
+        self::assertTrue($this->cookie->isPartitioned());
+        $this->cookie->setPartitioned(false);
+        self::assertFalse($this->cookie->isPartitioned());
+    }
+
     /**
      * @runInSeparateProcess
      */
@@ -118,6 +130,7 @@ final class CookieTest extends TestCase
         $this->cookie->setDomain('domain.tld')
             ->setPath('/blog')
             ->setSecure()
+            ->setPartitioned()
             ->setHttpOnly()
             ->setSameSite('strict')
             ->setValue('baz')
@@ -136,15 +149,35 @@ final class CookieTest extends TestCase
         );
     }
 
+    /**
+     * @runInSeparateProcess
+     */
+    public function testSendWithPartitionedAndWithoutSecure() : void
+    {
+        $this->cookie->setPartitioned();
+        $this->expectException(\ValueError::class);
+        $this->expectExceptionMessage(
+            'setcookie(): "partitioned" option cannot be used without "secure" option'
+        );
+        $this->cookie->send();
+    }
+
     public function testString() : void
     {
         $time = \time() + 30;
-        $expected = 'foo=baz; expires='
-            . \date('D, d M Y H:i:s', $time)
-            . ' GMT; Max-Age=30; path=/blog; domain=domain.tld; secure; HttpOnly; SameSite=Strict';
+        $expected = 'foo=baz'
+            . '; expires=' . \date('D, d M Y H:i:s', $time) . ' GMT'
+            . '; Max-Age=30'
+            . '; path=/blog'
+            . '; domain=domain.tld'
+            . '; secure'
+            . '; HttpOnly'
+            . '; SameSite=Strict'
+            . '; Partitioned';
         $this->cookie->setDomain('domain.tld')
             ->setPath('/blog')
             ->setSecure()
+            ->setPartitioned()
             ->setHttpOnly()
             ->setSameSite('strict')
             ->setValue('baz')
@@ -163,7 +196,17 @@ final class CookieTest extends TestCase
 
     public function testParse() : void
     {
-        $cookie = Cookie::parse('session_id=35ab1d7a4955d926a3694ab5990c0eb1; expires=Thu, 11-Jul-2019 04:57:19 GMT; Max-Age=0; path=/admin; domain=localhost; secure; HttpOnly; SameSite=Strict');
+        $cookie = Cookie::parse(
+            'session_id=35ab1d7a4955d926a3694ab5990c0eb1'
+            . '; expires=Thu, 11-Jul-2019 04:57:19 GMT'
+            . '; Max-Age=0'
+            . '; path=/admin'
+            . '; domain=localhost'
+            . '; secure'
+            . '; HttpOnly'
+            . '; SameSite=Strict'
+            . '; Partitioned'
+        );
         self::assertSame('session_id', $cookie->getName());
         self::assertSame('35ab1d7a4955d926a3694ab5990c0eb1', $cookie->getValue());
         self::assertSame('Thu, 11 Jul 2019 04:57:19 +0000', $cookie->getExpires()->format('r'));
@@ -172,11 +215,13 @@ final class CookieTest extends TestCase
         self::assertTrue($cookie->isSecure());
         self::assertTrue($cookie->isHttpOnly());
         self::assertSame('Strict', $cookie->getSameSite());
+        self::assertTrue($cookie->isPartitioned());
         $cookie = Cookie::parse('sid=foo;secure;;HttpOnly;');
         self::assertSame('sid', $cookie->getName());
         self::assertSame('foo', $cookie->getValue());
         self::assertTrue($cookie->isSecure());
         self::assertTrue($cookie->isHttpOnly());
+        self::assertFalse($cookie->isPartitioned());
         self::assertNull(Cookie::parse('sid'));
         self::assertNull(Cookie::parse(';sid=foo'));
     }
