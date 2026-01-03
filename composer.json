@@ -41,8 +41,8 @@
         "php": ">=8.5",
         "ext-fileinfo": "*",
         "ext-json": "*",
-        "aplus/debug": "^4.3",
-        "aplus/helpers": "^4.0"
+        "aplus/debug": "^5.0",
+        "aplus/helpers": "^5.0"
     },
     "require-dev": {
         "ext-xdebug": "*",
