@@ -266,7 +266,7 @@ final class RequestTest extends TestCase
             'Host: domain.tld',
             'Referer: http://domain.tld/contact.html',
             'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
-            'X-Forwarded-For: 45.167.104.99',
+            'X-Forwarded-For: 45.181.102.88',
             'X-Request-ID: abc123',
             'X-Requested-With: XMLHTTPREQUEST',
         ];
@@ -643,7 +643,7 @@ final class RequestTest extends TestCase
             'host' => 'domain.tld',
             'referer' => 'http://domain.tld/contact.html',
             'user-agent' => 'Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
-            'x-forwarded-for' => '45.167.104.99',
+            'x-forwarded-for' => '45.181.102.88',
             'x-request-id' => 'abc123',
             'x-requested-with' => 'XMLHTTPREQUEST',
         ], $this->request->getHeaders());
@@ -657,7 +657,7 @@ final class RequestTest extends TestCase
     public function testIpKey() : void
     {
         $this->request->setIpKey('HTTP_X_FORWARDED_FOR');
-        self::assertSame('45.167.104.99', $this->request->getIp());
+        self::assertSame('45.181.102.88', $this->request->getIp());
     }
 
     public function testIpKeyException() : void
