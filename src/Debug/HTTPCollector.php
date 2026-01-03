@@ -79,7 +79,7 @@ class HTTPCollector extends Collector
         \ob_start(); ?>
         <p>
             <strong>IP:</strong> <?= $this->request->getIp() ?>
-            <span class="opaque">(<?= $this->request->getIpKey() ?>)</span>
+            <span class="text-opaque">(<?= $this->request->getIpKey() ?>)</span>
         </p>
         <p><strong>Is Secure:</strong> <?= $this->request->isSecure() ? 'Yes' : 'No' ?></p>
         <p><strong>Protocol:</strong> <?= $this->request->getProtocol() ?></p>
