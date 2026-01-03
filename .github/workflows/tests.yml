@@ -56,7 +56,7 @@ jobs:
           composer global require php-coveralls/php-coveralls
           php-coveralls --coverage_clover=build/logs/clover.xml -v
 
-  tests-last:
+  tests-latest:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
 
