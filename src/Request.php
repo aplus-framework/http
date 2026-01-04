@@ -16,6 +16,7 @@ use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 use LogicException;
 use Override;
+use RequestParseBodyException;
 use stdClass;
 use UnexpectedValueException;
 
@@ -35,7 +36,11 @@ class Request extends Message implements RequestInterface
     /**
      * @var array<mixed>|null
      */
-    protected ?array $parsedBody = null;
+    protected ?array $parsedBodyTexts = null;
+    /**
+     * @var array<mixed>|null
+     */
+    public ?array $parsedBodyFiles = null;
     /**
      * @var array<string,mixed>|null
      */
@@ -529,6 +534,8 @@ class Request extends Message implements RequestInterface
      *
      * @see Request::filterInput()
      *
+     * @throws RequestParseBodyException
+     *
      * @return array<mixed>|mixed|string|null
      */
     public function getParsedBody(
@@ -536,23 +543,45 @@ class Request extends Message implements RequestInterface
         ?int $filter = null,
         array | int $filterOptions = 0
     ) : mixed {
+        // TODO: If enable_post_data_reading ini-setting is disabled, getPost will always be empty!
         if ($this->getMethod() === Method::POST) {
             return $this->getPost($name, $filter, $filterOptions);
         }
-        if ($this->parsedBody === null) {
-            // TODO: On PHP 8.4 use isForm() and request_parse_body()
-            // [$this->parsedBody, $_FILES] = request_parse_body();
-            // Add methods {get,set}ParseBodyOptions(?array $options = null)
-            $this->isFormUrlEncoded()
-                ? \parse_str($this->getBody(), $this->parsedBody)
-                : $this->parsedBody = [];
+        if ($this->parsedBodyTexts === null) {
+            $this->parseBody($this->getParseBodyOptions());
         }
         $variable = $name === null
-            ? $this->parsedBody
-            : ArraySimple::value($name, $this->parsedBody);
+            ? $this->parsedBodyTexts
+            : ArraySimple::value($name, $this->parsedBodyTexts);
         return $filter !== null
             ? \filter_var($variable, $filter, $filterOptions)
             : $variable;
+    }
+
+    /**
+     * @param array<string,mixed>|null $options
+     *
+     * @throws RequestParseBodyException
+     * @throws LogicException
+     *
+     * @return static
+     */
+    public function parseBody(?array $options = null) : static
+    {
+        if ($this->isParsedBody()) {
+            throw new LogicException('Parse error: the request body has already been parsed');
+        }
+        $options ??= $this->getParseBodyOptions();
+        [
+            $this->parsedBodyTexts,
+            $this->parsedBodyFiles,
+        ] = \request_parse_body($options);
+        return $this;
+    }
+
+    public function isParsedBody() : bool
+    {
+        return isset($this->parsedBodyTexts);
     }
 
     /**
