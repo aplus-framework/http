@@ -40,7 +40,7 @@ class Request extends Message implements RequestInterface
     /**
      * @var array<mixed>|null
      */
-    public ?array $parsedBodyFiles = null;
+    protected ?array $parsedBodyFiles = null;
     /**
      * @var array<string,mixed>|null
      */
