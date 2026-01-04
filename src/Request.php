@@ -1176,7 +1176,8 @@ class Request extends Message implements RequestInterface
      */
     protected function getInputFiles() : array
     {
-        if (empty($_FILES)) {
+        $files = $this->parsedBodyFiles ?? $_FILES;
+        if (empty($files)) {
             return [];
         }
         $makeObjects = static function (
@@ -1193,7 +1194,7 @@ class Request extends Message implements RequestInterface
             }
             return $return;
         };
-        return $makeObjects(ArraySimple::files(), $makeObjects); // @phpstan-ignore-line
+        return $makeObjects(ArraySimple::files($files), $makeObjects); // @phpstan-ignore-line
     }
 
     /**
