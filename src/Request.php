@@ -37,6 +37,10 @@ class Request extends Message implements RequestInterface
      */
     protected ?array $parsedBody = null;
     /**
+     * @var array<string,mixed>|null
+     */
+    protected ?array $parseBodyOptions = null;
+    /**
      * HTTP Authorization Header parsed.
      *
      * @var array<string,string|null>|null
@@ -549,6 +553,25 @@ class Request extends Message implements RequestInterface
         return $filter !== null
             ? \filter_var($variable, $filter, $filterOptions)
             : $variable;
+    }
+
+    /**
+     * @return array<string,mixed>|null
+     */
+    public function getParseBodyOptions() : ?array
+    {
+        return $this->parseBodyOptions;
+    }
+
+    /**
+     * @param array<string,mixed>|null $options
+     *
+     * @see https://www.php.net/manual/en/function.request-parse-body.php#refsect1-function.request-parse-body-parameters
+     */
+    public function setParseBodyOptions(?array $options) : static
+    {
+        $this->parseBodyOptions = $options;
+        return $this;
     }
 
     /**

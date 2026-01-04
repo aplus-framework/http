@@ -895,4 +895,19 @@ final class RequestTest extends TestCase
         self::assertInstanceOf(Response::class, $response);
         self::assertNotSame($response, $this->request->makeResponse());
     }
+
+    public function testParseBodyOptions() : void
+    {
+        self::assertNull($this->request->getParseBodyOptions());
+        $options = [
+            'foo' => 'bar',
+            'bar' => 'baz',
+        ];
+        $this->request->setParseBodyOptions($options);
+        self::assertSame($options, $this->request->getParseBodyOptions());
+        $this->request->setParseBodyOptions([]);
+        self::assertSame([], $this->request->getParseBodyOptions());
+        $this->request->setParseBodyOptions(null);
+        self::assertNull($this->request->getParseBodyOptions());
+    }
 }
