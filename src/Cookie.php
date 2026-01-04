@@ -162,6 +162,11 @@ class Cookie implements \Stringable
     }
 
     /**
+     * Set the cookie name.
+     *
+     * NOTE: This method is protected to prevent the cookie name from being
+     * changed outside the constructor method.
+     *
      * @param string $name
      *
      * @return static
