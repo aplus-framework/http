@@ -1153,7 +1153,6 @@ class Request extends Message implements RequestInterface
      *
      * @return bool
      */
-    #[Pure]
     public function isFormUrlEncoded() : bool
     {
         return $this->parseContentType() === 'application/x-www-form-urlencoded';
@@ -1164,7 +1163,6 @@ class Request extends Message implements RequestInterface
      *
      * @return bool
      */
-    #[Pure]
     public function isFormData() : bool
     {
         return $this->parseContentType() === 'multipart/form-data';
@@ -1176,7 +1174,6 @@ class Request extends Message implements RequestInterface
      *
      * @return bool
      */
-    #[Pure]
     public function isForm() : bool
     {
         return $this->isFormUrlEncoded() || $this->isFormData();
@@ -1187,7 +1184,6 @@ class Request extends Message implements RequestInterface
      *
      * @return bool
      */
-    #[Pure]
     public function isJson() : bool
     {
         return $this->parseContentType() === 'application/json';
@@ -1198,7 +1194,6 @@ class Request extends Message implements RequestInterface
      *
      * @return bool
      */
-    #[Pure]
     public function isPost() : bool
     {
         return $this->getMethod() === Method::POST;

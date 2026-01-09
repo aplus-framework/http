@@ -488,7 +488,6 @@ abstract class Message implements MessageInterface
         return $this;
     }
 
-    #[Pure]
     protected function parseContentType() : ?string
     {
         $contentType = $this->getHeader('Content-Type');
