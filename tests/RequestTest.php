@@ -44,6 +44,17 @@ final class RequestTest extends TestCase
         );
     }
 
+    public function testFilterInputCookie() : void
+    {
+        self::assertSame(
+            'abc',
+            $this->request->filterInput(\INPUT_COOKIE, 'session_id')
+        );
+        self::assertNull(
+            $this->request->filterInput(\INPUT_COOKIE, 'foobar')
+        );
+    }
+
     /**
      * @runInSeparateProcess
      */
@@ -174,6 +185,28 @@ final class RequestTest extends TestCase
         // @phpstan-ignore-next-line
         $this->request->setBody('0');
         self::assertSame('0', $this->request->getBody());
+    }
+
+    public function testRepeatParseBody() : void
+    {
+        $this->request->parseBody();
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Parse error: the request body has already been parsed');
+        $this->request->parseBody();
+    }
+
+    public function testRequestParseBody() : void
+    {
+        $this->expectException(\RequestParseBodyException::class);
+        $this->expectExceptionMessage('Request does not provide a content type');
+        $this->request->requestParseBodyOriginal();
+    }
+
+    public function testIsParsedBody() : void
+    {
+        self::assertFalse($this->request->isParsedBody());
+        $this->request->parseBody();
+        self::assertTrue($this->request->isParsedBody());
     }
 
     public function testPatch() : void
@@ -465,8 +498,8 @@ final class RequestTest extends TestCase
     public function testDigestAuth() : void
     {
         $_SERVER['HTTP_AUTHORIZATION'] = 'Digest realm="testrealm@host.com",'
-        . ' qop="auth,auth-int", nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093",'
-        . ' opaque="5ccc069c403ebaf9f0171e9517f40e41"';
+            . ' qop="auth,auth-int", nonce="dcd98b7102dd2f0e8b11d0f600bfb0c093",'
+            . ' opaque="5ccc069c403ebaf9f0171e9517f40e41"';
         $expected = [
             'username' => null,
             'realm' => 'testrealm@host.com',
@@ -517,6 +550,7 @@ final class RequestTest extends TestCase
         self::assertSame([], $this->request->getEnv());
     }
 
+    // TODO: ParsedBody with files!
     public function testFiles() : void
     {
         $_FILES = [

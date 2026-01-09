@@ -10,11 +10,12 @@
 namespace Tests\HTTP;
 
 use Framework\HTTP\UserAgent;
+use RequestParseBodyException;
 
 class RequestMock extends \Framework\HTTP\Request
 {
     /**
-     * @var array<string,mixed>|null
+     * @var array<int,array<mixed>>|null
      */
     public ?array $parsedBody = null;
     public UserAgent | false $userAgent;
@@ -107,6 +108,27 @@ class RequestMock extends \Framework\HTTP\Request
     public function setHost(string $host) : static
     {
         return parent::setHost($host);
+    }
+
+    protected function requestParseBody(?array $options = null) : array
+    {
+        \parse_str($this->getBody(), $texts);
+        return [
+            $texts,
+            [],
+        ];
+    }
+
+    /**
+     * @param array<string,mixed>|null $options
+     *
+     * @throws RequestParseBodyException
+     *
+     * @return array<int,array<mixed>>
+     */
+    public function requestParseBodyOriginal(?array $options = null) : array
+    {
+        return parent::requestParseBody($options);
     }
 
     /**
