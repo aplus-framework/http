@@ -1210,7 +1210,7 @@ class Request extends Message implements RequestInterface
      */
     protected function getInputFiles() : array
     {
-        $files = $this->parsedBodyFiles ?? $_FILES;
+        $files = $this->parsedBody[1] ?? $_FILES;
         if (empty($files)) {
             return [];
         }
