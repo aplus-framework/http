@@ -586,7 +586,7 @@ class Request extends Message implements RequestInterface
 
     public function isParsedBody() : bool
     {
-        return isset($this->parsedBodyTexts);
+        return isset($this->parsedBody);
     }
 
     /**
