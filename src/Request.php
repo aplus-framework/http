@@ -1196,7 +1196,7 @@ class Request extends Message implements RequestInterface
      */
     public function isPost() : bool
     {
-        return $this->getMethod() === Method::POST;
+        return $this->isMethod(Method::POST);
     }
 
     /**
