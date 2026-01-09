@@ -34,13 +34,9 @@ class Request extends Message implements RequestInterface
      */
     protected array $files = [];
     /**
-     * @var array<mixed>|null
+     * @var array<int,array<mixed>>|null
      */
-    protected ?array $parsedBodyTexts = null;
-    /**
-     * @var array<mixed>|null
-     */
-    protected ?array $parsedBodyFiles = null;
+    protected ?array $parsedBody = null;
     /**
      * @var array<string,mixed>|null
      */
@@ -572,11 +568,20 @@ class Request extends Message implements RequestInterface
             throw new LogicException('Parse error: the request body has already been parsed');
         }
         $options ??= $this->getParseBodyOptions();
-        [
-            $this->parsedBodyTexts,
-            $this->parsedBodyFiles,
-        ] = \request_parse_body($options);
+        $this->parsedBody = $this->requestParseBody($options);
         return $this;
+    }
+
+    /**
+     * @param array<string,mixed>|null $options
+     *
+     * @throws RequestParseBodyException
+     *
+     * @return array<int,array<mixed>>
+     */
+    protected function requestParseBody(?array $options = null) : array
+    {
+        return \request_parse_body($options);
     }
 
     public function isParsedBody() : bool
