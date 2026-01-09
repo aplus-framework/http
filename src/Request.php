@@ -543,12 +543,13 @@ class Request extends Message implements RequestInterface
         if ($this->getMethod() === Method::POST) {
             return $this->getPost($name, $filter, $filterOptions);
         }
-        if ($this->parsedBodyTexts === null) {
+        if ($this->isForm() && !$this->isParsedBody()) {
             $this->parseBody($this->getParseBodyOptions());
         }
+        $this->parsedBody[0] ??= [];
         $variable = $name === null
-            ? $this->parsedBodyTexts
-            : ArraySimple::value($name, $this->parsedBodyTexts);
+            ? $this->parsedBody[0]
+            : ArraySimple::value($name, $this->parsedBody[0]);
         return $filter !== null
             ? \filter_var($variable, $filter, $filterOptions)
             : $variable;
