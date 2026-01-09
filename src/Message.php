@@ -495,6 +495,7 @@ abstract class Message implements MessageInterface
             return null;
         }
         $contentType = \explode(';', $contentType, 2)[0];
+        $contentType = \strtolower($contentType);
         return \trim($contentType);
     }
 
