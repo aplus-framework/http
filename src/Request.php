@@ -540,7 +540,7 @@ class Request extends Message implements RequestInterface
         array | int $filterOptions = 0
     ) : mixed {
         // TODO: If enable_post_data_reading ini-setting is disabled, getPost will always be empty!
-        if ($this->getMethod() === Method::POST) {
+        if ($this->isMethod(Method::POST)) {
             return $this->getPost($name, $filter, $filterOptions);
         }
         if (!$this->isParsedBody()) {
