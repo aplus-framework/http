@@ -543,10 +543,9 @@ class Request extends Message implements RequestInterface
         if ($this->getMethod() === Method::POST) {
             return $this->getPost($name, $filter, $filterOptions);
         }
-        if ($this->isForm() && !$this->isParsedBody()) {
+        if (!$this->isParsedBody()) {
             $this->parseBody($this->getParseBodyOptions());
         }
-        $this->parsedBody[0] ??= [];
         $variable = $name === null
             ? $this->parsedBody[0]
             : ArraySimple::value($name, $this->parsedBody[0]);
@@ -567,6 +566,10 @@ class Request extends Message implements RequestInterface
     {
         if ($this->isParsedBody()) {
             throw new LogicException('Parse error: the request body has already been parsed');
+        }
+        if (!$this->isForm()) {
+            $this->parsedBody = [[], []];
+            return $this;
         }
         $options ??= $this->getParseBodyOptions();
         $this->parsedBody = $this->requestParseBody($options);

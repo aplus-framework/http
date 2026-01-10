@@ -179,7 +179,7 @@ final class RequestTest extends TestCase
         $this->request->setMethod('GET');
         // @phpstan-ignore-next-line
         $this->request->setBody('');
-        $this->request->parsedBody = [];
+        $this->request->parsedBody = null;
         self::assertSame('', $this->request->getBody());
         self::assertSame([], $this->request->getParsedBody());
         // @phpstan-ignore-next-line
