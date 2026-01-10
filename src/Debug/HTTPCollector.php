@@ -275,6 +275,7 @@ class HTTPCollector extends Collector
                 <th>Is Secure</th>
                 <th>Is HTTP Only</th>
                 <th>SameSite</th>
+                <th>Is Partitioned</th>
             </tr>
             </thead>
             <tbody>
@@ -288,6 +289,7 @@ class HTTPCollector extends Collector
                     <td><?= $cookie->isSecure() ? 'Yes' : 'No' ?></td>
                     <td><?= $cookie->isHttpOnly() ? 'Yes' : 'No' ?></td>
                     <td><?= \htmlentities((string) $cookie->getSameSite()) ?></td>
+                    <td><?= $cookie->isPartitioned() ? 'Yes' : 'No' ?></td>
                 </tr>
             <?php endforeach ?>
             </tbody>
