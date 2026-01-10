@@ -283,7 +283,7 @@ class HTTPCollector extends Collector
                 <tr>
                     <td><?= \htmlentities($cookie->getName()) ?></td>
                     <td><?= \htmlentities($cookie->getValue()) ?></td>
-                    <td><?= $cookie->getExpires()?->format('D, d-M-Y H:i:s \G\M\T') ?></td>
+                    <td><?= $cookie->getExpires()?->format('D, d M Y H:i:s \G\M\T') ?></td>
                     <td><?= \htmlentities((string) $cookie->getPath()) ?></td>
                     <td><?= \htmlentities((string) $cookie->getDomain()) ?></td>
                     <td><?= $cookie->isSecure() ? 'Yes' : 'No' ?></td>
