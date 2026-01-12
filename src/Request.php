@@ -543,6 +543,25 @@ class Request extends Message implements RequestInterface
         if ($this->isMethod(Method::POST)) {
             return $this->getPost($name, $filter, $filterOptions);
         }
+        return $this->getFilteredParsedBody($name, $filter, $filterOptions);
+    }
+
+    /**
+     * @param string|null $name
+     * @param int|null $filter
+     * @param array<int,int>|int $filterOptions
+     *
+     * @see Request::filterInput()
+     *
+     * @throws RequestParseBodyException
+     *
+     * @return array<mixed>|mixed|string|null
+     */
+    protected function getFilteredParsedBody(
+        ?string $name = null,
+        ?int $filter = null,
+        array | int $filterOptions = 0
+    ) : mixed {
         if (!$this->isParsedBody()) {
             $this->parseBody($this->getParseBodyOptions());
         }
