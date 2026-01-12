@@ -54,10 +54,6 @@ class Request extends Message implements RequestInterface
     protected string $host;
     protected int $port;
     /**
-     * Request X-Request-ID header.
-     */
-    protected false | string $id;
-    /**
      * @var array<string,array<mixed>|null>
      */
     protected array $negotiation = [
@@ -878,11 +874,7 @@ class Request extends Message implements RequestInterface
      */
     public function getId() : ?string
     {
-        if (isset($this->id)) {
-            return $this->id === false ? null : $this->id;
-        }
-        $this->id = $_SERVER['HTTP_X_REQUEST_ID'] ?? false;
-        return $this->getId();
+        return $_SERVER['HTTP_X_REQUEST_ID'] ?? null;
     }
 
     /**
