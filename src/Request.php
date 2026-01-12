@@ -1010,7 +1010,14 @@ class Request extends Message implements RequestInterface
         ?int $filter = null,
         array | int $filterOptions = 0
     ) : mixed {
-        return $this->filterInput(\INPUT_POST, $name, $filter, $filterOptions);
+        // See: https://php.watch/codex/enable_post_data_reading
+        if (\ini_get('enable_post_data_reading')) {
+            return $this->filterInput(\INPUT_POST, $name, $filter, $filterOptions);
+        }
+        if ($this->isMethod(Method::POST)) {
+            return $this->getFilteredParsedBody($name, $filter, $filterOptions);
+        }
+        return $name === null ? [] : null;
     }
 
     /**
