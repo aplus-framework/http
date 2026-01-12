@@ -1235,6 +1235,9 @@ class Request extends Message implements RequestInterface
      */
     protected function getInputFiles() : array
     {
+        if (!$this->isParsedBody() && !$this->isEnabledPostDataReading()) {
+            $this->parseBody($this->getParseBodyOptions());
+        }
         $files = $this->parsedBody[1] ?? $_FILES;
         if (empty($files)) {
             return [];
