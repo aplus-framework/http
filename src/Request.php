@@ -526,8 +526,6 @@ class Request extends Message implements RequestInterface
      * @param int|null $filter
      * @param array<int,int>|int $filterOptions
      *
-     * @see Request::filterInput()
-     *
      * @throws RequestParseBodyException
      *
      * @return array<mixed>|mixed|string|null
@@ -547,8 +545,6 @@ class Request extends Message implements RequestInterface
      * @param string|null $name
      * @param int|null $filter
      * @param array<int,int>|int $filterOptions
-     *
-     * @see Request::filterInput()
      *
      * @throws RequestParseBodyException
      *
@@ -817,8 +813,6 @@ class Request extends Message implements RequestInterface
      * @param int|null $filter
      * @param array<int,int>|int $filterOptions
      *
-     * @see Request::filterInput()
-     *
      * @return mixed
      */
     public function getEnv(
@@ -857,8 +851,6 @@ class Request extends Message implements RequestInterface
      * @param string|null $name
      * @param int|null $filter
      * @param array<int,int>|int $filterOptions
-     *
-     * @see Request::filterInput()
      *
      * @return mixed
      */
@@ -998,7 +990,7 @@ class Request extends Message implements RequestInterface
      * @param int|null $filter
      * @param array<int,int>|int $filterOptions
      *
-     * @see Request::filterInput()
+     * @throws RequestParseBodyException
      *
      * @return mixed
      */
@@ -1024,6 +1016,8 @@ class Request extends Message implements RequestInterface
      * @param int|null $filter
      * @param array<int,int>|int $filterOptions
      *
+     * @throws RequestParseBodyException
+     *
      * @return mixed
      */
     public function getPatch(
@@ -1043,6 +1037,8 @@ class Request extends Message implements RequestInterface
      * @param string|null $name
      * @param int|null $filter
      * @param array<int,int>|int $filterOptions
+     *
+     * @throws RequestParseBodyException
      *
      * @return mixed
      */
@@ -1086,8 +1082,6 @@ class Request extends Message implements RequestInterface
      * @param string|null $name
      * @param int|null $filter
      * @param array<int,int>|int $filterOptions
-     *
-     * @see Request::filterInput()
      *
      * @return mixed
      */
