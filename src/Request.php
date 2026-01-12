@@ -30,9 +30,9 @@ use UnexpectedValueException;
 class Request extends Message implements RequestInterface
 {
     /**
-     * @var array<string,UploadedFile|array<mixed>>
+     * @var array<string,UploadedFile|array<mixed>>|null
      */
-    protected array $files = [];
+    protected ?array $files = null;
     /**
      * @var array<int,array<mixed>>|null
      */
@@ -286,7 +286,7 @@ class Request extends Message implements RequestInterface
 
     protected function prepareFiles() : void
     {
-        if (!empty($this->files)) {
+        if (isset($this->files)) {
             return;
         }
         $this->files = $this->getInputFiles();
