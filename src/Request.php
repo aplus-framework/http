@@ -1034,8 +1034,8 @@ class Request extends Message implements RequestInterface
         ?int $filter = null,
         array | int $filterOptions = 0
     ) : mixed {
-        if ($this->getMethod() === Method::PATCH) {
-            return $this->getParsedBody($name, $filter, $filterOptions);
+        if ($this->isMethod(Method::PATCH)) {
+            return $this->getFilteredParsedBody($name, $filter, $filterOptions);
         }
         return $name === null ? [] : null;
     }
@@ -1054,8 +1054,8 @@ class Request extends Message implements RequestInterface
         ?int $filter = null,
         array | int $filterOptions = 0
     ) : mixed {
-        if ($this->getMethod() === Method::PUT) {
-            return $this->getParsedBody($name, $filter, $filterOptions);
+        if ($this->isMethod(Method::PUT)) {
+            return $this->getFilteredParsedBody($name, $filter, $filterOptions);
         }
         return $name === null ? [] : null;
     }
