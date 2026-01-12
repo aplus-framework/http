@@ -999,8 +999,7 @@ class Request extends Message implements RequestInterface
         ?int $filter = null,
         array | int $filterOptions = 0
     ) : mixed {
-        // See: https://php.watch/codex/enable_post_data_reading
-        if (\ini_get('enable_post_data_reading')) {
+        if ($this->isEnabledPostDataReading()) {
             return $this->filterInput(\INPUT_POST, $name, $filter, $filterOptions);
         }
         if ($this->isMethod(Method::POST)) {
@@ -1217,6 +1216,16 @@ class Request extends Message implements RequestInterface
     public function isPost() : bool
     {
         return $this->isMethod(Method::POST);
+    }
+
+    /**
+     * @see https://php.watch/codex/enable_post_data_reading
+     *
+     * @return bool
+     */
+    protected function isEnabledPostDataReading() : bool
+    {
+        return \ini_get('enable_post_data_reading') === '1';
     }
 
     /**
