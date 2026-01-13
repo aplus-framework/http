@@ -124,6 +124,7 @@ trait HeaderTrait
         'keep-alive' => 'Keep-Alive',
         'link' => 'Link',
         'pragma' => 'Pragma',
+        'upgrade' => 'Upgrade',
         'via' => 'Via',
         'warning' => 'Warning',
         // ---------------------------------------------------------------------
