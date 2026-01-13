@@ -36,6 +36,7 @@ final class RequestHeaderTest extends TestCase
             $name = \strtr(\strtolower($name), ['_' => '-']);
             $value = \strtolower($value);
             self::assertSame($name, $value);
+            self::assertTrue(RequestHeader::hasName($name), "'{$name}' is not defined");
         }
     }
 }

@@ -23,6 +23,7 @@ final class ResponseHeaderTest extends TestCase
             $name = \strtr(\strtolower($name), ['_' => '-']);
             $value = \strtolower($value);
             self::assertSame($name, $value);
+            self::assertTrue(ResponseHeader::hasName($name), "'{$name}' is not defined");
         }
     }
 }
