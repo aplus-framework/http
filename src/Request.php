@@ -127,10 +127,10 @@ class Request extends Message implements RequestInterface
     {
         $bodyParts = [];
         /**
-         * @var array<string,string> $post
+         * @var array<string,string> $parsedBody
          */
-        $post = ArraySimple::convert($this->getPost());
-        foreach ($post as $field => $value) {
+        $parsedBody = ArraySimple::convert($this->getParsedBody());
+        foreach ($parsedBody as $field => $value) {
             $field = \htmlspecialchars($field, \ENT_QUOTES | \ENT_HTML5);
             $bodyParts[] = \implode("\r\n", [
                 "Content-Disposition: form-data; name=\"{$field}\"",
