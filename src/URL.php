@@ -415,8 +415,8 @@ class URL implements JsonSerializable, Stringable
      */
     public function setQuery(string $data, array $only = []) : static
     {
-        \parse_str(\ltrim($data, '?'), $data);
-        return $this->setQueryData($data, $only);
+        \parse_str(\ltrim($data, '?'), $result);
+        return $this->setQueryData($result, $only);
     }
 
     /**
