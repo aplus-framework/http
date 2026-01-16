@@ -718,6 +718,13 @@ final class RequestTest extends TestCase
     public function testIsSecure() : void
     {
         self::assertFalse($this->request->isSecure());
+        unset($this->request->isSecure);
+        $_SERVER['REQUEST_SCHEME'] = 'HTTPS';
+        self::assertTrue($this->request->isSecure());
+        unset($this->request->isSecure, $_SERVER['REQUEST_SCHEME']);
+        $_SERVER['HTTPS'] = 'On';
+        self::assertTrue($this->request->isSecure());
+        unset($this->request->isSecure, $_SERVER['REQUEST_SCHEME'], $_SERVER['HTTPS']);
         self::assertFalse($this->request->isSecure());
     }
 

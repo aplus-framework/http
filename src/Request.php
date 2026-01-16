@@ -66,7 +66,7 @@ class Request extends Message implements RequestInterface
     protected UserAgent | false | null $userAgent = null;
     protected bool $isAjax;
     /**
-     * Tell if is a HTTPS connection.
+     * Tell if is an HTTPS connection.
      *
      * @var bool
      */
@@ -1164,9 +1164,11 @@ class Request extends Message implements RequestInterface
         if (isset($this->isSecure)) {
             return $this->isSecure;
         }
-        $scheme = $_SERVER['REQUEST_SCHEME'] ?? null;
-        $https = $_SERVER['HTTPS'] ?? null;
-        return $this->isSecure = ($scheme === 'https' || $https === 'on');
+        $scheme = $_SERVER['REQUEST_SCHEME'] ?? '';
+        $https = $_SERVER['HTTPS'] ?? '';
+        return $this->isSecure = (
+            \strtolower($scheme) === 'https' || \strtolower($https) === 'on'
+        );
     }
 
     /**
