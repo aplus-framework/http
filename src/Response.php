@@ -532,10 +532,14 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
-     * The replace parameter indicates whether the header should replace a
-     * previous similar header, or add a next header of the same type.
-     * By default, it will replace, but if you pass in false as the first
-     * argument you can force multiple headers of the same type.
+     * The $replace parameter indicates whether headers should replace previous
+     * headers with the same name or append another.
+     *
+     * By default, it will not replace, allowing multiple headers with the same
+     * name to be appended.
+     *
+     * If you want headers to replace previous ones that have the same name,
+     * pass true in the $replace parameter.
      *
      * @since 6.5
      *

@@ -126,7 +126,7 @@ class Cookie implements \Stringable
     /**
      * @param DateTime|int|string|null $expires
      *
-     * @throws Exception if can not create from format
+     * @throws Exception if it can not create from format
      *
      * @return static
      */

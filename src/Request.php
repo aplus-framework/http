@@ -1140,7 +1140,7 @@ class Request extends Message implements RequestInterface
      * Check if is an AJAX Request based in the X-Requested-With Header.
      *
      * The X-Requested-With Header containing the "XMLHttpRequest" value is
-     * used by various javascript libraries.
+     * used by various JavaScript libraries.
      *
      * @return bool
      */
