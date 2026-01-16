@@ -18,7 +18,7 @@ class RequestMock extends \Framework\HTTP\Request
      * @var array<int,array<mixed>>|null
      */
     public ?array $parsedBody = null;
-    public UserAgent | false $userAgent;
+    public UserAgent | false | null $userAgent = null;
     /**
      * @var array<int,array<string,mixed>>
      */

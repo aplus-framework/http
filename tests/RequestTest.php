@@ -95,7 +95,13 @@ final class RequestTest extends TestCase
             UserAgent::class,
             $this->request->getUserAgent()
         );
-        $this->request->userAgent = false;
+        $this->request->userAgent = null;
+        $_SERVER['HTTP_USER_AGENT'] = '0';
+        self::assertInstanceOf(
+            UserAgent::class,
+            $this->request->getUserAgent()
+        );
+        $this->request->userAgent = null;
         unset($_SERVER['HTTP_USER_AGENT']);
         self::assertNull($this->request->getUserAgent());
     }

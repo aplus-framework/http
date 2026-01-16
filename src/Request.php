@@ -63,7 +63,7 @@ class Request extends Message implements RequestInterface
         'LANGUAGE' => null,
     ];
     protected URL | false $referrer;
-    protected UserAgent | false $userAgent;
+    protected UserAgent | false | null $userAgent = null;
     protected bool $isAjax;
     /**
      * Tell if is a HTTPS connection.
@@ -1104,12 +1104,17 @@ class Request extends Message implements RequestInterface
      */
     public function getUserAgent() : ?UserAgent
     {
-        if (isset($this->userAgent) && $this->userAgent instanceof UserAgent) {
+        if ($this->userAgent instanceof UserAgent) {
             return $this->userAgent;
         }
+        if ($this->userAgent === false) {
+            return null;
+        }
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
-        $userAgent ? $this->setUserAgent($userAgent) : $this->userAgent = false;
-        return $this->userAgent ?: null;
+        isset($userAgent)
+            ? $this->setUserAgent($userAgent)
+            : $this->userAgent = false;
+        return $this->getUserAgent();
     }
 
     /**
