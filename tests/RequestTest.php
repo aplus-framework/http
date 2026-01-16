@@ -868,6 +868,12 @@ final class RequestTest extends TestCase
     {
         self::assertSame('http://domain.tld/contact.html', (string) $this->request->getReferer());
         self::assertInstanceOf(URL::class, $this->request->getReferer());
+        $this->request->referrer = null;
+        unset($_SERVER['HTTP_REFERER']);
+        self::assertNull($this->request->getReferer());
+        $this->request->referrer = null;
+        $_SERVER['HTTP_REFERER'] = '0';
+        self::assertNull($this->request->getReferer());
     }
 
     /**

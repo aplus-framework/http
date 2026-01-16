@@ -9,6 +9,7 @@
  */
 namespace Tests\HTTP;
 
+use Framework\HTTP\URL;
 use Framework\HTTP\UserAgent;
 use RequestParseBodyException;
 
@@ -18,6 +19,7 @@ class RequestMock extends \Framework\HTTP\Request
      * @var array<int,array<mixed>>|null
      */
     public ?array $parsedBody = null;
+    public URL | false | null $referrer = null;
     public UserAgent | false | null $userAgent = null;
     /**
      * @var array<int,array<string,mixed>>

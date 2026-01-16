@@ -62,7 +62,7 @@ class Request extends Message implements RequestInterface
         'ENCODING' => null,
         'LANGUAGE' => null,
     ];
-    protected URL | false $referrer;
+    protected URL | false | null $referrer = null;
     protected UserAgent | false | null $userAgent = null;
     protected bool $isAjax;
     /**
@@ -1053,18 +1053,23 @@ class Request extends Message implements RequestInterface
      */
     public function getReferer() : ?URL
     {
-        if (!isset($this->referrer)) {
-            $this->referrer = false;
-            $referer = $_SERVER['HTTP_REFERER'] ?? null;
-            if ($referer !== null) {
-                try {
-                    $this->referrer = new URL($referer);
-                } catch (InvalidArgumentException) {
-                    $this->referrer = false;
-                }
-            }
+        if ($this->referrer instanceof URL) {
+            return $this->referrer;
         }
-        return $this->referrer ?: null;
+        if ($this->referrer === false) {
+            return null;
+        }
+        $referer = $_SERVER['HTTP_REFERER'] ?? null;
+        if ($referer === null) {
+            $this->referrer = false;
+            return null;
+        }
+        try {
+            $this->referrer = new URL($referer);
+        } catch (InvalidArgumentException) {
+            $this->referrer = false;
+        }
+        return $this->getReferer();
     }
 
     /**
