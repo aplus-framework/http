@@ -14,6 +14,7 @@ use DateTimeZone;
 use Exception;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
+use Stringable;
 
 /**
  * Class Cookie.
@@ -25,7 +26,7 @@ use JetBrains\PhpStorm\Pure;
  *
  * @package http
  */
-class Cookie implements \Stringable
+class Cookie implements Stringable
 {
     protected ?string $domain = null;
     protected ?DateTime $expires = null;

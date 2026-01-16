@@ -12,7 +12,9 @@ namespace Framework\HTTP;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
+use JsonSerializable;
 use RuntimeException;
+use Stringable;
 
 /**
  * Class URL.
@@ -23,7 +25,7 @@ use RuntimeException;
  *
  * @package http
  */
-class URL implements \JsonSerializable, \Stringable
+class URL implements JsonSerializable, Stringable
 {
     /**
      * The #fragment (id).

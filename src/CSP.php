@@ -11,6 +11,7 @@ namespace Framework\HTTP;
 
 use InvalidArgumentException;
 use LogicException;
+use Stringable;
 
 /**
  * Class CSP.
@@ -21,7 +22,7 @@ use LogicException;
  *
  * @package http
  */
-class CSP implements \Stringable
+class CSP implements Stringable
 {
     /**
      * Restricts the URLs which can be used in a document's `<base>` element.

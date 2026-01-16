@@ -10,13 +10,15 @@
 namespace Framework\HTTP;
 
 use JetBrains\PhpStorm\Pure;
+use JsonSerializable;
+use Stringable;
 
 /**
  * Class UserAgent.
  *
  * @package http
  */
-class UserAgent implements \JsonSerializable, \Stringable
+class UserAgent implements JsonSerializable, Stringable
 {
     protected ?string $agent = null;
     protected ?string $browser = null;
