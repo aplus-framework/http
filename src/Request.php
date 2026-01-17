@@ -119,6 +119,8 @@ class Request extends Message implements RequestInterface
     }
 
     /**
+     * NOTE: Created by comparing a request made with Firefox.
+     *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#multipartform-data
      *
      * @return string
@@ -144,7 +146,9 @@ class Request extends Message implements RequestInterface
         $files = ArraySimple::convert($this->getFiles());
         foreach ($files as $field => $file) {
             $field = \htmlspecialchars($field, \ENT_QUOTES | \ENT_HTML5);
-            $filename = \htmlspecialchars($file->getName(), \ENT_QUOTES | \ENT_HTML5);
+            $field = \preg_replace('/\[\d+]/', '[]', $field);
+            $filename = \htmlspecialchars($file->getFullPath(), \ENT_QUOTES | \ENT_HTML5);
+            $contentType = $file->getClientType() ?: 'application/octet-stream';
             $getContentsOf = $file->isMoved() ? $file->getDestination() : $file->getTmpName();
             $data = '';
             if ($getContentsOf !== '') {
@@ -152,14 +156,20 @@ class Request extends Message implements RequestInterface
             }
             $bodyParts[] = \implode("\r\n", [
                 "Content-Disposition: form-data; name=\"{$field}\"; filename=\"{$filename}\"",
-                'Content-Type: ' . $file->getClientType(),
+                'Content-Type: ' . $contentType,
                 '',
                 $data,
             ]);
         }
-        $boundary = \explode(';', $this->getContentType(), 2);
-        $boundary = \trim($boundary[1]);
-        $boundary = \substr($boundary, \strlen('boundary='));
+        $boundary = '';
+        $boundaryParts = \explode(';', $this->getContentType());
+        foreach ($boundaryParts as $boundaryPart) {
+            $boundaryPart = \trim($boundaryPart);
+            if (\str_starts_with(\strtolower($boundaryPart), 'boundary=')) {
+                $boundary = \substr($boundaryPart, \strlen('boundary='));
+                break;
+            }
+        }
         foreach ($bodyParts as &$part) {
             $part = "--{$boundary}\r\n{$part}";
         }
@@ -175,6 +185,7 @@ class Request extends Message implements RequestInterface
         /*
         $serverLength = (string) $_SERVER['CONTENT_LENGTH'];
         $algoLength = (string) \strlen($bodyParts);
+        \var_dump($serverLength, $algoLength);
         if ($serverLength !== $algoLength) {
             throw new \Exception(
                 '$_SERVER CONTENT_LENGTH is ' . $serverLength

@@ -352,11 +352,11 @@ final class RequestTest extends TestCase
                 'full_path' => [
                     1 => [
                         'aa' => [
-                            0 => 'Test.php',
+                            0 => 'dir/Test.php',
                             1 => '',
                         ],
                     ],
-                    2 => 'Other File.php',
+                    2 => 'dir/Other File.php',
                 ],
                 'type' => [
                     1 => [
@@ -422,26 +422,26 @@ final class RequestTest extends TestCase
             'Porto Alegre',
         ];
         $files[0] = [
-            'Content-Disposition: form-data; name="files[1][aa][0]"; filename="Test.php"',
+            'Content-Disposition: form-data; name="files[][aa][]"; filename="dir/Test.php"',
             'Content-Type: application/x-httpd-php',
             '',
             \file_get_contents($filepath),
         ];
         $files[1] = [
-            'Content-Disposition: form-data; name="files[1][aa][1]"; filename=""',
-            'Content-Type: ',
+            'Content-Disposition: form-data; name="files[][aa][]"; filename=""',
+            'Content-Type: application/octet-stream',
             '',
             '',
         ];
         $files[2] = [
-            'Content-Disposition: form-data; name="files[2]"; filename="Other File.php"',
+            'Content-Disposition: form-data; name="files[]"; filename="dir/Other File.php"',
             'Content-Type: text/x-php',
             '',
             \file_get_contents($filepath),
         ];
         $files[3] = [
             'Content-Disposition: form-data; name="foo"; filename=""',
-            'Content-Type: ',
+            'Content-Type: application/octet-stream',
             '',
             '',
         ];
@@ -460,7 +460,7 @@ final class RequestTest extends TestCase
         $body .= \implode("\r\n", $files[3]) . "\r\n";
         $body .= $boundary . "--\r\n";
         $contentLength = \strlen($body);
-        self::assertSame(953, $contentLength);
+        self::assertSame(1004, $contentLength);
         $message = $startLine . "\r\n"
             . \implode("\r\n", $headerLines) . "\r\n"
             . "\r\n"
