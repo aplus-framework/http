@@ -527,6 +527,30 @@ final class ResponseTest extends TestCase
         self::assertSame('483 Custom', $this->response->getStatus());
     }
 
+    public function testStatusByProtocol() : void
+    {
+        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.0';
+        $request = new Request();
+        $response = new Response($request);
+        self::assertSame('200 OK', $response->getStatus());
+        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
+        $request = new Request();
+        $response = new Response($request);
+        self::assertSame('200 OK', $response->getStatus());
+        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/2.0';
+        $request = new Request();
+        $response = new Response($request);
+        self::assertSame('200', $response->getStatus());
+        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/2';
+        $request = new Request();
+        $response = new Response($request);
+        self::assertSame('200', $response->getStatus());
+        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/3';
+        $request = new Request();
+        $response = new Response($request);
+        self::assertSame('200', $response->getStatus());
+    }
+
     public function testStartLine() : void
     {
         self::assertSame(
