@@ -176,6 +176,19 @@ final class CSPTest extends TestCase
         ], $csp->getDirective('style-src'));
     }
 
+    public function testInvalidNonceAttr() : void
+    {
+        $csp = new class() extends CSP {
+            public function getNonceAttr(string $type) : string
+            {
+                return parent::getNonceAttr($type);
+            }
+        };
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid CSP directive: foo');
+        $csp->getNonceAttr('foo');
+    }
+
     public function testGetStyleContents() : void
     {
         $html = \file_get_contents(__DIR__ . '/files/csp.php');
