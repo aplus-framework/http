@@ -178,12 +178,7 @@ final class CSPTest extends TestCase
 
     public function testInvalidNonceAttr() : void
     {
-        $csp = new class() extends CSP {
-            public function getNonceAttr(string $type) : string
-            {
-                return parent::getNonceAttr($type);
-            }
-        };
+        $csp = new CSPMock();
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid CSP directive: foo');
         $csp->getNonceAttr('foo');
@@ -283,12 +278,7 @@ final class CSPTest extends TestCase
 
     public function testSanitizeValue() : void
     {
-        $csp = new class() extends CSP {
-            public function sanitizeValue(string $value) : string
-            {
-                return parent::sanitizeValue($value);
-            }
-        };
+        $csp = new CSPMock();
         self::assertSame("'none'", $csp->sanitizeValue('none'));
         self::assertSame("'self'", $csp->sanitizeValue('self'));
         self::assertSame("'strict-dynamic'", $csp->sanitizeValue('strict-dynamic'));
