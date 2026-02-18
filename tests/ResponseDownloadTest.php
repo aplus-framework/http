@@ -219,4 +219,13 @@ final class ResponseDownloadTest extends TestCase
         self::assertLessThan(4, $endTime - $startTime);
         self::assertTrue($this->response->isSent());
     }
+
+    public function testContentType() : void
+    {
+        $filepath = __DIR__ . '/files/logo.png';
+        $this->response->setDownload($filepath, acceptRanges: false);
+        self::assertSame('image/png', $this->response->getHeader('Content-Type'));
+        $this->response->setDownload($filepath, acceptRanges: false, contentType: 'foo/bar');
+        self::assertSame('foo/bar', $this->response->getHeader('Content-Type'));
+    }
 }

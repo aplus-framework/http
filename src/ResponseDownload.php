@@ -52,6 +52,7 @@ trait ResponseDownload
      * @param int $delay Delay between flushs in microseconds
      * @param int $readLength Bytes read by flush
      * @param string|null $filename A custom filename
+     * @param string|null $contentType A custom Content-Type
      *
      * @throws InvalidArgumentException If invalid file path
      * @throws RuntimeException If can not get the file size or modification time
@@ -64,7 +65,8 @@ trait ResponseDownload
         bool $acceptRanges = true,
         int $delay = 0,
         int $readLength = 1024,
-        ?string $filename = null
+        ?string $filename = null,
+        ?string $contentType = null
     ) : static {
         $realpath = \realpath($filepath);
         if ($realpath === false || !\is_file($realpath)) {
@@ -106,10 +108,10 @@ trait ResponseDownload
             }
         }
         $this->setHeader(ResponseHeader::CONTENT_LENGTH, (string) $this->filesize);
-        $this->setHeader(
-            ResponseHeader::CONTENT_TYPE,
-            \mime_content_type($this->filepath) ?: 'application/octet-stream'
-        );
+        if ($contentType === null) {
+            $contentType = \mime_content_type($this->filepath) ?: 'application/octet-stream';
+        }
+        $this->setHeader(ResponseHeader::CONTENT_TYPE, $contentType);
         $this->sendType = 'normal';
         return $this;
     }
