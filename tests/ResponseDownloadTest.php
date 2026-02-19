@@ -223,6 +223,15 @@ final class ResponseDownloadTest extends TestCase
     public function testContentType() : void
     {
         $filepath = __DIR__ . '/files/logo.png';
+        $this->response->setDownload($filepath);
+        self::assertSame('image/png', $this->response->getHeader('Content-Type'));
+        $this->response->setDownload($filepath, contentType: 'foo/bar');
+        self::assertSame('foo/bar', $this->response->getHeader('Content-Type'));
+    }
+
+    public function testContentTypeWithoutAcceptRanges() : void
+    {
+        $filepath = __DIR__ . '/files/logo.png';
         $this->response->setDownload($filepath, acceptRanges: false);
         self::assertSame('image/png', $this->response->getHeader('Content-Type'));
         $this->response->setDownload($filepath, acceptRanges: false, contentType: 'foo/bar');

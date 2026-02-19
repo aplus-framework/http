@@ -39,6 +39,7 @@ trait ResponseDownload
     private $handle;
     private int $delay = 0;
     private int $readLength = 1024;
+    private ?string $contentType = null;
 
     /**
      * Sets a file to download/stream.
@@ -75,6 +76,7 @@ trait ResponseDownload
         $this->filepath = $realpath;
         $this->delay = $delay;
         $this->readLength = $readLength;
+        $this->contentType = $contentType;
         $filesize = @\filesize($this->filepath);
         if ($filesize === false) {
             throw new RuntimeException(
@@ -108,12 +110,15 @@ trait ResponseDownload
             }
         }
         $this->setHeader(ResponseHeader::CONTENT_LENGTH, (string) $this->filesize);
-        if ($contentType === null) {
-            $contentType = \mime_content_type($this->filepath) ?: 'application/octet-stream';
-        }
-        $this->setHeader(ResponseHeader::CONTENT_TYPE, $contentType);
+        $this->setHeader(ResponseHeader::CONTENT_TYPE, $this->makeContentType());
         $this->sendType = 'normal';
         return $this;
+    }
+
+    private function makeContentType() : string
+    {
+        return $this->contentType
+            ?? \mime_content_type($this->filepath) ?: 'application/octet-stream';
     }
 
     private function prepareRange(string $rangeLine) : void
@@ -223,7 +228,7 @@ trait ResponseDownload
         );
         $this->setHeader(
             ResponseHeader::CONTENT_TYPE,
-            \mime_content_type($this->filepath) ?: 'application/octet-stream'
+            $this->makeContentType()
         );
         $this->setHeader(
             ResponseHeader::CONTENT_RANGE,
