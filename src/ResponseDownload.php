@@ -311,7 +311,7 @@ trait ResponseDownload
             $bytesRead = $bytesLeft > $this->readLength ? $this->readLength : $bytesLeft;
             $bytesLeft -= $bytesRead;
             $this->flush($bytesRead);
-            if (\connection_status() !== \CONNECTION_NORMAL) {
+            if (!$this->isConnectionStatusNormal()) {
                 break;
             }
         }
@@ -335,10 +335,15 @@ trait ResponseDownload
     {
         while (!\feof($this->handle)) {
             $this->flush($this->readLength);
-            if (\connection_status() !== \CONNECTION_NORMAL) {
+            if (!$this->isConnectionStatusNormal()) {
                 break;
             }
         }
+    }
+
+    private function isConnectionStatusNormal() : bool
+    {
+        return \connection_status() === \CONNECTION_NORMAL;
     }
 
     /**
