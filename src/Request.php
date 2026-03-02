@@ -987,6 +987,18 @@ class Request extends Message implements RequestInterface
     }
 
     /**
+     * Make an empty value according to the name type.
+     *
+     * @param string|null $name
+     *
+     * @return array<mixed>|null
+     */
+    protected function makeEmptyValue(?string $name) : ?array
+    {
+        return $name === null ? [] : null;
+    }
+
+    /**
      * Get POST data.
      *
      * @param string|null $name
@@ -1008,7 +1020,7 @@ class Request extends Message implements RequestInterface
         if ($this->isMethod(Method::POST)) {
             return $this->getFilteredParsedBody($name, $filter, $filterOptions);
         }
-        return $name === null ? [] : null;
+        return $this->makeEmptyValue($name);
     }
 
     /**
@@ -1030,7 +1042,7 @@ class Request extends Message implements RequestInterface
         if ($this->isMethod(Method::PATCH)) {
             return $this->getFilteredParsedBody($name, $filter, $filterOptions);
         }
-        return $name === null ? [] : null;
+        return $this->makeEmptyValue($name);
     }
 
     /**
@@ -1052,7 +1064,7 @@ class Request extends Message implements RequestInterface
         if ($this->isMethod(Method::PUT)) {
             return $this->getFilteredParsedBody($name, $filter, $filterOptions);
         }
-        return $name === null ? [] : null;
+        return $this->makeEmptyValue($name);
     }
 
     /**
