@@ -568,9 +568,9 @@ class Request extends Message implements RequestInterface
         $variable = $name === null
             ? $this->parsedBody[0]
             : ArraySimple::value($name, $this->parsedBody[0]);
-        return $filter !== null
-            ? \filter_var($variable, $filter, $filterOptions)
-            : $variable;
+        return $filter === null
+            ? $variable
+            : \filter_var($variable, $filter, $filterOptions);
     }
 
     /**
