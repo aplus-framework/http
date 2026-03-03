@@ -233,6 +233,13 @@ trait HeaderTrait
         'sec-websocket-version' => 'Sec-WebSocket-Version',
     ];
 
+    /**
+     * @since 7
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
     public static function hasName(string $name) : bool
     {
         return isset(static::$headers[$name]);

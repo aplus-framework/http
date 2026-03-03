@@ -115,6 +115,11 @@ trait ResponseDownload
         return $this;
     }
 
+    /**
+     * @since 7
+     *
+     * @return string
+     */
     private function makeContentType() : string
     {
         return $this->contentType
@@ -341,6 +346,11 @@ trait ResponseDownload
         }
     }
 
+    /**
+     * @since 7
+     *
+     * @return bool
+     */
     private function isConnectionStatusNormal() : bool
     {
         return \connection_status() === \CONNECTION_NORMAL;

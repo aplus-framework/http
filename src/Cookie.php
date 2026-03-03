@@ -287,6 +287,8 @@ class Cookie implements Stringable
     }
 
     /**
+     * @since 7
+     *
      * @param bool $partitioned
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/Privacy/Guides/Privacy_sandbox/Partitioned_cookies
@@ -301,6 +303,8 @@ class Cookie implements Stringable
     }
 
     /**
+     * @since 7
+     *
      * @return bool
      */
     #[Pure]
