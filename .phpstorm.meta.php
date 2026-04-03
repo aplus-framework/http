@@ -604,6 +604,17 @@ registerArgumentsSet(
     'bin2hex',
     'md5',
 );
+registerArgumentsSet(
+    'ip_keys',
+    'HTTP_CF_CONNECTING_IP',
+    'HTTP_CLIENT_IP',
+    'HTTP_FORWARDED_FOR',
+    'HTTP_FORWARDED',
+    'HTTP_X_CLUSTER_CLIENT_IP',
+    'HTTP_X_FORWARDED_FOR',
+    'HTTP_X_FORWARDED',
+    'REMOTE_ADDR',
+);
 expectedArguments(
     \Framework\HTTP\AntiCSRF::__construct(),
     2,
@@ -730,6 +741,11 @@ expectedArguments(
     \Framework\HTTP\RequestInterface::hasHeader(),
     0,
     argumentsSet('request_headers')
+);
+expectedArguments(
+    \Framework\HTTP\Request::setIpKey(),
+    0,
+    argumentsSet('ip_keys')
 );
 expectedArguments(
     \Framework\HTTP\Request::hasHeader(),
