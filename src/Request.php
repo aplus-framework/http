@@ -892,18 +892,26 @@ class Request extends Message implements RequestInterface
     /**
      * Get the connection IP.
      *
+     * @param bool $validate True to validate the IP address, otherwise false
+     *
+     * @throws RuntimeException for invalid IP address
+     *
      * @return string
      */
-    public function getIp() : string
+    public function getIp(bool $validate = true) : string
     {
         $key = $this->getIpKey();
-        if ($key === 'HTTP_FORWARDED') {
-            return $this->getIpFromHttpForwarded();
+        $ip = match($key) {
+            'HTTP_FORWARDED' => $this->getIpFromHttpForwarded(),
+            'HTTP_X_FORWARDED_FOR' => $this->getIpFromHttpXForwardedFor(),
+            default => $_SERVER[$key]
+        };
+        if ($validate && !\filter_var($ip, \FILTER_VALIDATE_IP)) {
+            throw new RuntimeException(
+                "The value of {$key} is not a valid IP address"
+            );
         }
-        if ($key === 'HTTP_X_FORWARDED_FOR') {
-            return $this->getIpFromHttpXForwardedFor();
-        }
-        return $_SERVER[$key];
+        return $ip;
     }
 
     /**
