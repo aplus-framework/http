@@ -17,6 +17,7 @@ use JetBrains\PhpStorm\Pure;
 use LogicException;
 use Override;
 use RequestParseBodyException;
+use RuntimeException;
 use stdClass;
 use UnexpectedValueException;
 
@@ -901,7 +902,43 @@ class Request extends Message implements RequestInterface
             $ip = \trim($ip);
             return $ip;
         }
+        if ($key === 'HTTP_FORWARDED') {
+            return $this->getIpFromHttpForwarded();
+        }
         return $_SERVER[$key];
+    }
+
+    /**
+     * Get IP from the Forwarded header.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Forwarded
+     *
+     * @return string The IP address
+     */
+    protected function getIpFromHttpForwarded() : string
+    {
+        $directives = \strtolower($_SERVER['HTTP_FORWARDED']);
+        $directives = \explode(',', $directives, 2)[0];
+        $directives = \explode(';', $directives);
+        foreach ($directives as $directive) {
+            $directive = \trim($directive);
+            if (!\str_starts_with($directive, 'for')) {
+                continue;
+            }
+            $directive = \explode('=', $directive, 2)[1];
+            $directive = \trim($directive);
+            if (\str_starts_with($directive, '"')) {
+                $directive = \substr($directive, 1, -1);
+            }
+            if (\str_starts_with($directive, '[')) {
+                $pos = \strrpos($directive, ']');
+                $directive = \substr($directive, 1, $pos - 1);
+            }
+            return $directive;
+        }
+        throw new RuntimeException(
+            'The IP address could not be get from the Forwarded header'
+        );
     }
 
     /**

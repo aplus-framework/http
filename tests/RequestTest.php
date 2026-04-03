@@ -14,6 +14,7 @@ use Framework\HTTP\UploadedFile;
 use Framework\HTTP\URL;
 use Framework\HTTP\UserAgent;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 final class RequestTest extends TestCase
 {
@@ -700,6 +701,29 @@ final class RequestTest extends TestCase
         self::assertSame('45.181.102.88', $this->request->getIp());
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '203.0.113.195, 2001:db8:85a3:8d3:1319:8a2e:370:7348';
         self::assertSame('203.0.113.195', $this->request->getIp());
+    }
+
+    public function testIpKeyWithHttpForwarded() : void
+    {
+        $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.60;proto=http;by=203.0.113.43';
+        $this->request->setIpKey('HTTP_FORWARDED');
+        self::assertSame('192.0.2.60', $this->request->getIp());
+        $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.43, for=198.51.100.17';
+        self::assertSame('192.0.2.43', $this->request->getIp());
+        $_SERVER['HTTP_FORWARDED'] = 'proto=http;by=203.0.113.43;for=192.0.2.60';
+        self::assertSame('192.0.2.60', $this->request->getIp());
+        $_SERVER['HTTP_FORWARDED'] = 'For="[2001:db8:cafe::17]:4711"';
+        self::assertSame('2001:db8:cafe::17', $this->request->getIp());
+        $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.43, for="[2001:db8:cafe::17]"';
+        self::assertSame('192.0.2.43', $this->request->getIp());
+        $_SERVER['HTTP_FORWARDED'] = 'for="[2001:db8:cafe::17]", for=192.0.2.43';
+        self::assertSame('2001:db8:cafe::17', $this->request->getIp());
+        $_SERVER['HTTP_FORWARDED'] = 'for="foo", for=192.0.2.43';
+        self::assertSame('foo', $this->request->getIp());
+        $_SERVER['HTTP_FORWARDED'] = 'foo';
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The IP address could not be get from the Forwarded header');
+        $this->request->getIp();
     }
 
     public function testIpKeyException() : void
