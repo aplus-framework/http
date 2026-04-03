@@ -698,6 +698,8 @@ final class RequestTest extends TestCase
     {
         $this->request->setIpKey('HTTP_X_FORWARDED_FOR');
         self::assertSame('45.181.102.88', $this->request->getIp());
+        $_SERVER['HTTP_X_FORWARDED_FOR'] = '203.0.113.195, 2001:db8:85a3:8d3:1319:8a2e:370:7348';
+        self::assertSame('203.0.113.195', $this->request->getIp());
     }
 
     public function testIpKeyException() : void

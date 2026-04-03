@@ -895,7 +895,13 @@ class Request extends Message implements RequestInterface
      */
     public function getIp() : string
     {
-        return $_SERVER[$this->getIpKey()];
+        $key = $this->getIpKey();
+        if ($key === 'HTTP_X_FORWARDED_FOR') {
+            $ip = \explode(',', $_SERVER[$key], 2)[0];
+            $ip = \trim($ip);
+            return $ip;
+        }
+        return $_SERVER[$key];
     }
 
     /**
