@@ -897,15 +897,27 @@ class Request extends Message implements RequestInterface
     public function getIp() : string
     {
         $key = $this->getIpKey();
-        if ($key === 'HTTP_X_FORWARDED_FOR') {
-            $ip = \explode(',', $_SERVER[$key], 2)[0];
-            $ip = \trim($ip);
-            return $ip;
-        }
         if ($key === 'HTTP_FORWARDED') {
             return $this->getIpFromHttpForwarded();
         }
+        if ($key === 'HTTP_X_FORWARDED_FOR') {
+            return $this->getIpFromHttpXForwardedFor();
+        }
         return $_SERVER[$key];
+    }
+
+    /**
+     * Get IP from the X-Forwarded-For header.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Forwarded-For
+     *
+     * @return string The IP address
+     */
+    protected function getIpFromHttpXForwardedFor() : string
+    {
+        $ip = \explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'], 2)[0];
+        $ip = \trim($ip);
+        return $ip;
     }
 
     /**
