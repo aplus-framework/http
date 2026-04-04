@@ -718,8 +718,8 @@ final class RequestTest extends TestCase
         self::assertSame('192.0.2.43', $this->request->getIp());
         $_SERVER['HTTP_FORWARDED'] = 'for="[2001:db8:cafe::17]", for=192.0.2.43';
         self::assertSame('2001:db8:cafe::17', $this->request->getIp());
-        $_SERVER['HTTP_FORWARDED'] = 'for="foo", for=192.0.2.43';
-        self::assertSame('foo', $this->request->getIp(false));
+        $_SERVER['HTTP_FORWARDED'] = 'for="Foo", for=192.0.2.43';
+        self::assertSame('Foo', $this->request->getIp(false));
         $_SERVER['HTTP_FORWARDED'] = 'foo';
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The IP address could not be get from the Forwarded header');
@@ -731,9 +731,9 @@ final class RequestTest extends TestCase
      */
     public function testIpKeyWithHttpForwardedWithObfuscatedIdentifier() : void
     {
-        $_SERVER['HTTP_FORWARDED'] = 'for="foo", for=192.0.2.43';
+        $_SERVER['HTTP_FORWARDED'] = 'for="fooBar", for=192.0.2.43';
         $this->request->setIpKey('HTTP_FORWARDED');
-        self::assertSame('foo', $this->request->getIp(false));
+        self::assertSame('fooBar', $this->request->getIp(false));
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The value of HTTP_FORWARDED is not a valid IP address');
         $this->request->getIp();

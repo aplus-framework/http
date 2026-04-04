@@ -937,12 +937,11 @@ class Request extends Message implements RequestInterface
      */
     protected function getIpFromHttpForwarded() : string
     {
-        $directives = \strtolower($_SERVER['HTTP_FORWARDED']);
-        $directives = \explode(',', $directives, 2)[0];
+        $directives = \explode(',', $_SERVER['HTTP_FORWARDED'], 2)[0];
         $directives = \explode(';', $directives);
         foreach ($directives as $directive) {
             $directive = \trim($directive);
-            if (!\str_starts_with($directive, 'for')) {
+            if (!\str_starts_with(\strtolower($directive), 'for')) {
                 continue;
             }
             $directive = \explode('=', $directive, 2)[1];
