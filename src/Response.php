@@ -521,9 +521,7 @@ class Response extends Message implements ResponseInterface
             $this->setDate();
         }
         $this->negotiateContentType();
-        if ($this->isAutoEtag() && !$this->hasDownload()) {
-            $this->negotiateEtag();
-        }
+        $this->negotiateEtag();
         $this->negotiateCsp();
         \header($this->getStartLine());
         $replace = $this->isReplacingHeaders();
@@ -619,6 +617,11 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
+     * Negotiate the ETag header.
+     *
+     * It does nothing if {@see Framework\HTTP\Response::isAutoEtag()} is false
+     * or {@see Framework\HTTP\ResponseDownload::hasDownload()} is true.
+     *
      * Set the ETag header, based on the Response body, and start the
      * negotiation.
      *
@@ -634,6 +637,9 @@ class Response extends Message implements ResponseInterface
      */
     protected function negotiateEtag() : void
     {
+        if (!$this->isAutoEtag() || $this->hasDownload()) {
+            return;
+        }
         // Content-Length is required by Firefox,
         // otherwise it does not send the If-None-Match header
         $this->setContentLength();
