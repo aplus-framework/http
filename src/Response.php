@@ -326,7 +326,7 @@ class Response extends Message implements ResponseInterface
     public function getStatus() : string
     {
         $reason = '';
-        if ($this->getProtocol() < 'HTTP/2') {
+        if ($this->getProtocol() < Protocol::HTTP_2) {
             $reason = ' ' . $this->statusReason;
         }
         return $this->statusCode . $reason;
