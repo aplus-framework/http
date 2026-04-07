@@ -517,9 +517,7 @@ class Response extends Message implements ResponseInterface
         if ($this->headersSent || \headers_sent()) {
             throw new LogicException('Headers are already sent');
         }
-        if ($this->getHeader(ResponseHeader::DATE) === null) {
-            $this->setDate();
-        }
+        $this->negotiateDate();
         $this->negotiateContentType();
         $this->negotiateEtag();
         $this->negotiateCsp();
@@ -665,6 +663,13 @@ class Response extends Message implements ResponseInterface
         if ($ifMatch !== null && $ifMatch !== $etag) {
             $this->setBody('');
             $this->setStatus(Status::PRECONDITION_FAILED);
+        }
+    }
+
+    protected function negotiateDate() : void
+    {
+        if ($this->getHeader(ResponseHeader::DATE) === null) {
+            $this->setDate();
         }
     }
 
