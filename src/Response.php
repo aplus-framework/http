@@ -520,9 +520,7 @@ class Response extends Message implements ResponseInterface
         if ($this->getHeader(ResponseHeader::DATE) === null) {
             $this->setDate();
         }
-        if ($this->getHeader(ResponseHeader::CONTENT_TYPE) === null) {
-            $this->negotiateContentType();
-        }
+        $this->negotiateContentType();
         if ($this->isAutoEtag() && !$this->hasDownload()) {
             $this->negotiateEtag();
         }
@@ -597,8 +595,8 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
-     * Negotiates the Content-Type header, setting the MIME type "text/html" if
-     * the response body is not empty.
+     * Negotiates the Content-Type header (if it is not set), setting the MIME
+     * type "text/html" if the response body is not empty.
      *
      * If the response body is empty, it removes the Content-Type header,
      * and it will not appear to the client from the request.
@@ -610,6 +608,9 @@ class Response extends Message implements ResponseInterface
      */
     protected function negotiateContentType() : void
     {
+        if ($this->getHeader(ResponseHeader::CONTENT_TYPE) !== null) {
+            return;
+        }
         if ($this->getBody() !== '') {
             $this->setContentType('text/html');
             return;
