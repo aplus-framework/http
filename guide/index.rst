@@ -670,11 +670,11 @@ Values for a single directive can be passed with the ``setDirective`` method:
     ]);
 
 Methods that start with ``set`` override directive values. To just add new values,
-use the ``addValue`` method:
+use the ``addValues`` method:
 
 .. code-block:: php
 
-    $csp->addValue(CSP::styleSrc, [
+    $csp->addValues(CSP::styleSrc, [
         'self',
         'cdn.foo.tld',
     ]);
@@ -731,10 +731,14 @@ CSP Hashes
 To cache the page in browsers, such as by `ETag`_, we can use hashes of the
 contents of the ``script`` and ``style`` tags.
 
-Let's look at the following HTML page:
+Let's look at the following HTML page. We will activate the output buffer with
+`ob_start <https://www.php.net/manual/en/function.ob-start.php>`_:
 
-.. code-block:: html
+.. code-block:: php
 
+    <?php
+    ob_start();
+    ?>
     <!doctype html>
     <html lang="en">
     <head>
@@ -756,18 +760,42 @@ Let's look at the following HTML page:
     </script>
     </body>
     </html>
+    <?php
+    $html = ob_get_clean();
+
+Next, we retrieve the output using
+`ob_get_clean <https://www.php.net/manual/en/function.ob-get-clean.php>`_ and
+save its contents to the ``$html`` variable.
 
 In order to get all the hashes of the ``style`` tags we can pass the content of
 the HTML page in the ``getStyleHashes`` method and it will return an array with
 all the hashes.
+
+.. code-block:: php
+
+    $styleHashes = CSP::getStyleHashes($html);
+
+We can use the ``var_dump`` function to obtain style hashes:
+
+.. code-block:: php
+
+    var_dump($styleHashes);
+
+.. code-block:: text
+
+    array(1) {
+      [0]=>
+      string(51) "sha256-CvbCUHrSwRhSRk6O3h7eTuSY9r3oKFudXNGTM/oLBI8="
+    }
 
 And then we can add them in the ``style-src`` directive via the ``addValues``
 method:
 
 .. code-block:: php
 
-    $styleHashes = CSP::getStyleHashes($html);
-    $csp->addValue(CSP::styleSrc, $styleHashes);
+    $csp->addValues(CSP::styleSrc, [
+        'sha256-CvbCUHrSwRhSRk6O3h7eTuSY9r3oKFudXNGTM/oLBI8='
+    ]);
 
 The CSP header will look like the following:
 
@@ -776,12 +804,45 @@ The CSP header will look like the following:
     Content-Security-Policy: style-src 'sha256-CvbCUHrSwRhSRk6O3h7eTuSY9r3oKFudXNGTM/oLBI8=';
 
 Similarly, we can get the hashes of the ``script`` tags and add them via the
-``addValues`` method:
+``addValues`` method.
+
+First, let's get the script hashes:
 
 .. code-block:: php
 
     $scriptHashes = CSP::getScriptHashes($html);
-    $csp->addValue(CSP::scriptSrc, $scriptHashes);
+
+We can view them with a ``var_dump``:
+
+.. code-block:: php
+
+    var_dump($scriptHashes);
+
+.. code-block:: text
+
+    array(2) {
+      [0]=>
+      string(51) "sha256-IfEVrz7Me6SW7O7OHy04/VaUhErMLxjWHdJd8MYN5b0="
+      [1]=>
+      string(51) "sha256-0TppQmjw9at2nEl3givShY5l6nABmQ84qrh1dRgvMJ0="
+    }
+
+So, we added the script hashes to the CSP object:
+
+.. code-block:: php
+
+    $csp->addValues(CSP::scriptSrc, [
+        'sha256-IfEVrz7Me6SW7O7OHy04/VaUhErMLxjWHdJd8MYN5b0=',
+        'sha256-0TppQmjw9at2nEl3givShY5l6nABmQ84qrh1dRgvMJ0='
+    ]);
+
+Finally, we send the Content-Security-Policy header with the directives and also
+the HTML content:
+
+.. code-block:: php
+
+    header('Content-Security-Policy: ' . $csp);
+    echo $html;
 
 The CSP header will look similar to the following example:
 
@@ -789,38 +850,59 @@ The CSP header will look similar to the following example:
 
     Content-Security-Policy: style-src 'sha256-CvbCUHrSwRhSRk6O3h7eTuSY9r3oKFudXNGTM/oLBI8='; script-src 'sha256-IfEVrz7Me6SW7O7OHy04/VaUhErMLxjWHdJd8MYN5b0=' 'sha256-0TppQmjw9at2nEl3givShY5l6nABmQ84qrh1dRgvMJ0=';
 
+And the HTML can be cached because it doesn't have dynamic CSP nonces, only
+hashes in the header.
+
 CSP in Response
 ###############
 
 An object of the CSP class can be set to an object of the Framework\HTTP\Response
-class and then it will be sent with the response via the ``send`` method:
+class and then it will be sent with the response via the ``send`` method.
+
+Below, we see how to instantiate the objects:
 
 .. code-block:: php
+
+    use Framework\HTTP\CSP;
+    use Framework\HTTP\Request;
+    use Framework\HTTP\Response;
 
     $csp = new CSP([
         CSP::defaultSrc => [
             'self',
         ],
-        CSP::styleSrc => [
-            'self',
-            'cdn.foo.tld',
-        ],
-        CSP::scriptSrc => [
-            'self',
-            'cdn.foo.tld',
-        ],
     ]);
 
-    $response = new Framework\HTTP\Response;
+    $response = new Response(new Request());
     $response->setCsp($csp);
 
-Only if you're sure the page doesn't have any malicious scripts, get the hashes
-from the response body and add them to the CSP object:
+We can use the CSP object through the Response. Adding nonces dynamically:
 
 .. code-block:: php
 
-    $scriptHashes = CSP::getScriptHashes($response->getBody());
-    $csp->addValue(CSP::scriptSrc, $scriptHashes);
+    <?php
+    ob_start();
+    ?>
+    ...
+    <head>
+        <style<?= $response->getCsp()->getStyleNonceAttr() ?>>
+            ...
+        </style>
+    </head>
+    <body>
+        <script<?= $response->getCsp()->getScriptNonceAttr() ?>>
+            ...
+        </script>
+    </body>
+    ...
+    <?php
+    $html = ob_get_clean();
+
+With the captured HTML, we can set the response body:
+
+.. code-block:: php
+
+    $response->setBody($html);
 
 Then the response can be sent:
 
