@@ -695,6 +695,42 @@ final class ResponseTest extends TestCase
      */
     public function testCsp() : void
     {
+        $csp = new CSP([
+            CSP::defaultSrc => [
+                'self',
+            ],
+        ]);
+        $this->response->setCsp($csp);
+        $this->response->setBody('Hello!');
+        \ob_start();
+        $this->response->send();
+        \ob_get_clean();
+        self::assertContains(
+            "Content-Security-Policy: default-src 'self';",
+            xdebug_get_headers()
+        );
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testCspNotSet() : void
+    {
+        $this->response->setBody('Hello!');
+        \ob_start();
+        $this->response->send();
+        \ob_get_clean();
+        self::assertNotContains(
+            "Content-Security-Policy: default-src 'self';",
+            xdebug_get_headers()
+        );
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testCspSettersAndGetters() : void
+    {
         self::assertNull($this->response->getCsp());
         self::assertFalse($this->response->hasCsp());
         $csp = new CSP([
@@ -705,13 +741,6 @@ final class ResponseTest extends TestCase
         $this->response->setCsp($csp);
         self::assertSame($csp, $this->response->getCsp());
         self::assertTrue($this->response->hasCsp());
-        \ob_start();
-        $this->response->send();
-        \ob_get_clean();
-        self::assertContains(
-            "Content-Security-Policy: default-src 'self';",
-            xdebug_get_headers()
-        );
         $this->response->removeCsp();
         self::assertNull($this->response->getCsp());
         self::assertFalse($this->response->hasCsp());
@@ -720,7 +749,87 @@ final class ResponseTest extends TestCase
     /**
      * @runInSeparateProcess
      */
+    public function testCspNegotiationWithoutBody() : void
+    {
+        $csp = new CSP([
+            CSP::defaultSrc => [
+                'self',
+            ],
+        ]);
+        $this->response->setCsp($csp);
+        $this->response->setBody('');
+        \ob_start();
+        $this->response->send();
+        \ob_get_clean();
+        self::assertNotContains(
+            "Content-Security-Policy: default-src 'self';",
+            xdebug_get_headers()
+        );
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testCspNegotiationWithInvalidContentType() : void
+    {
+        $csp = new CSP([
+            CSP::defaultSrc => [
+                'self',
+            ],
+        ]);
+        $this->response->setCsp($csp);
+        $this->response->setJson([
+            'name' => 'John Doe',
+        ]);
+        \ob_start();
+        $this->response->send();
+        \ob_get_clean();
+        self::assertNotContains(
+            "Content-Security-Policy: default-src 'self';",
+            xdebug_get_headers()
+        );
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
     public function testCspReportOnly() : void
+    {
+        $csp = new CSP([
+            CSP::defaultSrc => [
+                'self',
+            ],
+        ]);
+        $this->response->setCspReportOnly($csp);
+        $this->response->setBody('Hello!');
+        \ob_start();
+        $this->response->send();
+        \ob_get_clean();
+        self::assertContains(
+            "Content-Security-Policy-Report-Only: default-src 'self';",
+            xdebug_get_headers()
+        );
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testCspReportOnlyNotSet() : void
+    {
+        $this->response->setBody('Hello!');
+        \ob_start();
+        $this->response->send();
+        \ob_get_clean();
+        self::assertNotContains(
+            "Content-Security-Policy-Report-Only: default-src 'self';",
+            xdebug_get_headers()
+        );
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testCspReportOnlySettersAndGetters() : void
     {
         self::assertNull($this->response->getCspReportOnly());
         self::assertFalse($this->response->hasCspReportOnly());
@@ -732,16 +841,53 @@ final class ResponseTest extends TestCase
         $this->response->setCspReportOnly($csp);
         self::assertSame($csp, $this->response->getCspReportOnly());
         self::assertTrue($this->response->hasCspReportOnly());
-        \ob_start();
-        $this->response->send();
-        \ob_get_clean();
-        self::assertContains(
-            "Content-Security-Policy-Report-Only: default-src 'self';",
-            xdebug_get_headers()
-        );
         $this->response->removeCspReportOnly();
         self::assertNull($this->response->getCspReportOnly());
         self::assertFalse($this->response->hasCspReportOnly());
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testCspReportOnlyNegotiationWithoutBody() : void
+    {
+        $csp = new CSP([
+            CSP::defaultSrc => [
+                'self',
+            ],
+        ]);
+        $this->response->setCspReportOnly($csp);
+        $this->response->setBody('');
+        \ob_start();
+        $this->response->send();
+        \ob_get_clean();
+        self::assertNotContains(
+            "Content-Security-Policy-Report-Only: default-src 'self';",
+            xdebug_get_headers()
+        );
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testCspReportOnlyNegotiationWithInvalidContentType() : void
+    {
+        $csp = new CSP([
+            CSP::defaultSrc => [
+                'self',
+            ],
+        ]);
+        $this->response->setCspReportOnly($csp);
+        $this->response->setJson([
+            'name' => 'John Doe',
+        ]);
+        \ob_start();
+        $this->response->send();
+        \ob_get_clean();
+        self::assertNotContains(
+            "Content-Security-Policy-Report-Only: default-src 'self';",
+            xdebug_get_headers()
+        );
     }
 
     /**

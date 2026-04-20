@@ -568,21 +568,29 @@ class Response extends Message implements ResponseInterface
 
     /**
      * Set the Content-Security-Policy and Content-Security-Policy-Report-Only
-     * headers if the CSP classes are set and the response has not downloads.
+     * headers if the CSP classes are set and the response has an empty body,
+     * has not downloads and the Content-Type is not text/html.
      *
      * @return void
      */
     protected function negotiateCsp() : void
     {
+        if ($this->getBody() === '' || $this->hasDownload()) {
+            return;
+        }
+        $contentType = (string) $this->getHeader(ResponseHeader::CONTENT_TYPE);
+        if (!\str_contains($contentType, 'text/html')) {
+            return;
+        }
         $csp = $this->getCsp();
-        if ($csp && !$this->hasDownload()) {
+        if ($csp) {
             $this->setHeader(
                 ResponseHeader::CONTENT_SECURITY_POLICY,
                 $csp->render()
             );
         }
         $csp = $this->getCspReportOnly();
-        if ($csp && !$this->hasDownload()) {
+        if ($csp) {
             $this->setHeader(
                 ResponseHeader::CONTENT_SECURITY_POLICY_REPORT_ONLY,
                 $csp->render()
