@@ -67,8 +67,7 @@ class Response extends Message implements ResponseInterface
         if ($this->getHeader(ResponseHeader::DATE) === null) {
             $this->setDate();
         }
-        if ($this->getHeader(ResponseHeader::CONTENT_TYPE) === null
-            && $this->getBody() !== '') {
+        if ($this->getContentType() === null && $this->getBody() !== '') {
             $this->setContentType('text/html');
         }
         if ($this->hasDownload()) {
@@ -578,7 +577,7 @@ class Response extends Message implements ResponseInterface
         if ($this->getBody() === '' || $this->hasDownload()) {
             return;
         }
-        $contentType = (string) $this->getHeader(ResponseHeader::CONTENT_TYPE);
+        $contentType = (string) $this->getContentType();
         if (!\str_contains($contentType, 'text/html')) {
             return;
         }
@@ -612,7 +611,7 @@ class Response extends Message implements ResponseInterface
      */
     protected function negotiateContentType() : void
     {
-        if ($this->getHeader(ResponseHeader::CONTENT_TYPE) !== null) {
+        if ($this->getContentType() !== null) {
             return;
         }
         if ($this->getBody() !== '') {
@@ -821,6 +820,16 @@ class Response extends Message implements ResponseInterface
             $mime . ($charset ? '; charset=' . $charset : '')
         );
         return $this;
+    }
+
+    /**
+     * Get the Content-Type header.
+     *
+     * @return string|null
+     */
+    public function getContentType() : ?string
+    {
+        return $this->getHeader(ResponseHeader::CONTENT_TYPE);
     }
 
     /**
