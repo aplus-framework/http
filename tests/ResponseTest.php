@@ -41,7 +41,8 @@ final class ResponseTest extends TestCase
             'REQUEST_METHOD' => 'POST',
         ]);
         $request = new RequestMock(['domain.tld']);
-        $this->response = new class($request) extends Response {
+        $this->response = new class($request) extends Response
+        {
         };
         \session_start();
         $this->response->redirect('/new', ['foo']);
@@ -331,7 +332,8 @@ final class ResponseTest extends TestCase
 
     public function testHeadersAreAlreadySent() : void
     {
-        $response = new class(new RequestMock(['domain.tld'])) extends Response {
+        $response = new class(new RequestMock(['domain.tld'])) extends Response
+        {
             public function sendHeaders() : void
             {
                 parent::sendHeaders();

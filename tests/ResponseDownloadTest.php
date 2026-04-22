@@ -24,7 +24,8 @@ final class ResponseDownloadTest extends TestCase
             'domain.tld',
         ]);
         $this->request->setHeader('Range', 'bytes=0-499');
-        $this->response = new class($this->request) extends Response {
+        $this->response = new class($this->request) extends Response
+        {
             public string $body = '';
         };
     }
