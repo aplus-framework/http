@@ -404,9 +404,8 @@ class UserAgent implements JsonSerializable, Stringable
             return $this->isBrowser;
         }
         $key = \strtolower($key);
-        $config = static::$config['browsers'] ?? [];
-        return isset($config[$key])
-            && $this->browser === $config[$key];
+        $config = static::$config['browsers'];
+        return isset($config[$key]) && $this->browser === $config[$key];
     }
 
     /**
@@ -423,9 +422,8 @@ class UserAgent implements JsonSerializable, Stringable
             return $this->isMobile;
         }
         $key = \strtolower($key);
-        $config = static::$config['mobiles'] ?? [];
-        return isset($config[$key])
-            && $this->mobile === $config[$key];
+        $config = static::$config['mobiles'];
+        return isset($config[$key]) && $this->mobile === $config[$key];
     }
 
     /**
@@ -442,9 +440,8 @@ class UserAgent implements JsonSerializable, Stringable
             return $this->isRobot;
         }
         $key = \strtolower($key);
-        $config = static::$config['robots'] ?? [];
-        return isset($config[$key])
-            && $this->robot === $config[$key];
+        $config = static::$config['robots'];
+        return isset($config[$key]) && $this->robot === $config[$key];
     }
 
     #[Pure]
