@@ -403,6 +403,7 @@ class UserAgent implements JsonSerializable, Stringable
         if ($key === null || $this->isBrowser === false) {
             return $this->isBrowser;
         }
+        $key = \strtolower($key);
         $config = static::$config['browsers'] ?? [];
         return isset($config[$key])
             && $this->browser === $config[$key];
@@ -421,6 +422,7 @@ class UserAgent implements JsonSerializable, Stringable
         if ($key === null || $this->isMobile === false) {
             return $this->isMobile;
         }
+        $key = \strtolower($key);
         $config = static::$config['mobiles'] ?? [];
         return isset($config[$key])
             && $this->mobile === $config[$key];
@@ -439,6 +441,7 @@ class UserAgent implements JsonSerializable, Stringable
         if ($key === null || $this->isRobot === false) {
             return $this->isRobot;
         }
+        $key = \strtolower($key);
         $config = static::$config['robots'] ?? [];
         return isset($config[$key])
             && $this->robot === $config[$key];
