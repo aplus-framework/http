@@ -31,6 +31,8 @@ final class UserAgentTest extends TestCase
         self::assertFalse($agent->isBrowser());
         self::assertTrue($agent->isRobot());
         self::assertFalse($agent->isRobot('Bob'));
+        self::assertTrue($agent->isRobot('BingBot'));
+        self::assertTrue($agent->isRobot('bingbot'));
         self::assertFalse($agent->isMobile());
         self::assertSame('Robot', $agent->getType());
     }
@@ -51,7 +53,9 @@ final class UserAgentTest extends TestCase
         $agent = new UserAgent($this->userAgent);
         self::assertTrue($agent->isBrowser());
         self::assertTrue($agent->isBrowser('Safari'));
+        self::assertTrue($agent->isBrowser('safari'));
         self::assertFalse($agent->isBrowser('Firefox'));
+        self::assertFalse($agent->isBrowser('firefox'));
         self::assertFalse($agent->isRobot());
         self::assertFalse($agent->isMobile());
     }
@@ -75,6 +79,7 @@ final class UserAgentTest extends TestCase
         self::assertTrue($agent->isBrowser());
         self::assertFalse($agent->isRobot());
         self::assertTrue($agent->isMobile());
+        self::assertTrue($agent->isMobile('Android'));
         self::assertTrue($agent->isMobile('android'));
     }
 
