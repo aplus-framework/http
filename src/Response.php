@@ -122,6 +122,11 @@ class Response extends Message implements ResponseInterface
         return parent::setBody($body);
     }
 
+    public function hasBody() : bool
+    {
+        return $this->getBody() !== '';
+    }
+
     /**
      * Prepend a string to the body.
      *

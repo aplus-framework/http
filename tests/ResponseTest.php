@@ -80,11 +80,13 @@ final class ResponseTest extends TestCase
     public function testBody() : void
     {
         self::assertSame('', $this->response->getBody());
+        self::assertFalse($this->response->hasBody());
         echo '<p>This will be Lost when call setBody()</p>';
         self::assertSame(
             '<p>This will be Lost when call setBody()</p>',
             $this->response->getBody()
         );
+        self::assertTrue($this->response->hasBody());
         $this->response->setBody('<h1>Title</h1>');
         self::assertSame(
             '<h1>Title</h1>',
