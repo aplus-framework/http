@@ -519,8 +519,22 @@ class Response extends Message implements ResponseInterface
         }
         $this->sendHeaders();
         $this->sendCookies();
+        $this->checkSendContentsConflicts();
         $this->sendContents();
         $this->isSent = true;
+    }
+
+    protected function checkSendContentsConflicts() : void
+    {
+        if ($this->hasStream() && $this->hasDownload()) {
+            throw new LogicException('Stream and download cannot be set together');
+        }
+        if ($this->hasStream() && $this->hasBody()) {
+            throw new LogicException('Stream and body cannot be set together');
+        }
+        if ($this->hasDownload() && $this->hasBody()) {
+            throw new LogicException('Download and body cannot be set together');
+        }
     }
 
     protected function sendContents() : void

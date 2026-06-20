@@ -14,6 +14,7 @@ use Framework\HTTP\CSP;
 use Framework\HTTP\Request;
 use Framework\HTTP\Response;
 use Framework\HTTP\Status;
+use LogicException;
 use PHPUnit\Framework\TestCase;
 
 final class ResponseTest extends TestCase
@@ -53,7 +54,7 @@ final class ResponseTest extends TestCase
 
     public function testRedirectDataWithoutSession() : void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Session must be active to set redirect data');
         $this->response->redirect('/new', ['foo']);
     }
@@ -129,6 +130,33 @@ final class ResponseTest extends TestCase
             'Hello from stream!',
             $contents
         );
+    }
+
+    public function testCheckSendContentsConflictsStreamAndDownload() : void
+    {
+        $this->response->setStream(static fn () => '');
+        $this->response->setDownload(__FILE__);
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Stream and download cannot be set together');
+        $this->response->send();
+    }
+
+    public function testCheckSendContentsConflictsStreamAndBody() : void
+    {
+        $this->response->setStream(static fn () => '');
+        $this->response->setBody('foo');
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Stream and body cannot be set together');
+        $this->response->send();
+    }
+
+    public function testCheckSendContentsConflictsDownloadAndBody() : void
+    {
+        $this->response->setDownload(__FILE__);
+        $this->response->setBody('foo');
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Download and body cannot be set together');
+        $this->response->send();
     }
 
     public function testCache() : void
@@ -358,7 +386,7 @@ final class ResponseTest extends TestCase
             }
         };
         $response->sendHeaders();
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Headers are already sent');
         $response->sendHeaders();
     }
@@ -510,7 +538,7 @@ final class ResponseTest extends TestCase
         ], xdebug_get_headers());
         self::assertSame('Hello!', $contents);
         self::assertTrue($this->response->isSent());
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Response is already sent');
         $this->response->send();
     }
@@ -678,7 +706,7 @@ final class ResponseTest extends TestCase
 
     public function testUnknownStatus() : void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Unknown status code must have a default reason: 483');
         $this->response->setStatus(483);
     }
