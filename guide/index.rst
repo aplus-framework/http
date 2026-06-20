@@ -488,6 +488,86 @@ a video at a certain time.
 
     $response->setDownload('filepath.pdf', true, acceptRanges: true); // static
 
+Response with Stream
+####################
+
+Use the ``setStream`` method to set a function that sends a stream.
+
+In the example below, see how to set
+`Server-Sent Events <https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events>`_
+using the nginx server.
+
+The "X-Accel-Buffering" header is used to disable response buffering in nginx.
+
+Along with PHP's flush functions, this will cause the buffer to be sent to the
+User-Agent in real time.
+
+This is the **sse.php** file:
+
+.. code-block:: php
+
+    require __DIR__ . '/vendor/autoload.php';
+
+    use Framework\HTTP\Request;
+    use Framework\HTTP\Response;
+
+    $request = new Request();
+    $response = new Response($request);
+
+    $response->setHeader('X-Accel-Buffering', 'no');
+    $response->setHeader('Content-Type', 'text/event-stream');
+    $response->setHeader('Cache-Control', 'no-cache');
+
+    $response->setStream(static function () : void {
+        while(true) {
+            echo "event: datetime\n";
+            echo 'data: ' . date('Y-m-d H:i:s') . "\n";
+            echo "\n";
+
+            if (ob_get_contents()) {
+                ob_end_flush();
+            }
+            flush();
+
+            // Break the loop if the client aborted the connection (closed the page)
+            if (connection_aborted()) {
+                break;
+            }
+
+            sleep(1);
+        }
+    });
+
+    $response->send();
+
+Below, we have the **index.html** file that will consume the response with the
+stream:
+
+.. code-block:: html
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Server Sent Events</title>
+    </head>
+
+    <body>
+        <div>
+            Datetime: <span id="sse">xx</span>
+        </div>
+        <script>
+            const eventSource = new EventSource('sse.php');
+            eventSource.addEventListener('datetime', e => {
+                document.getElementById('sse').innerText = e.data;
+            });
+        </script>
+    </body>
+
+    </html>
+
 Sending the Response
 ####################
 
