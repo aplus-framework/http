@@ -9,6 +9,7 @@
  */
 namespace Framework\HTTP;
 
+use Closure;
 use DateTime;
 use DateTimeZone;
 use Framework\HTTP\Debug\HTTPCollector;
@@ -49,6 +50,7 @@ class Response extends Message implements ResponseInterface
     protected CSP $csp;
     protected CSP $cspReportOnly;
     protected bool $replaceHeaders = false;
+    protected Closure $stream;
 
     /**
      * Response constructor.
@@ -466,6 +468,29 @@ class Response extends Message implements ResponseInterface
     }
 
     /**
+     * Set a callback function to be sent as a stream.
+     *
+     * @param callable $callback
+     *
+     * @return static
+     */
+    public function setStream(callable $callback) : static
+    {
+        $this->stream = $callback(...);
+        return $this;
+    }
+
+    public function hasStream() : bool
+    {
+        return isset($this->stream);
+    }
+
+    protected function sendStream() : void
+    {
+        ($this->stream)();
+    }
+
+    /**
      * Send the Response headers, cookies and body to the output.
      *
      * @throws LogicException if Response is already sent
@@ -494,8 +519,21 @@ class Response extends Message implements ResponseInterface
         }
         $this->sendHeaders();
         $this->sendCookies();
-        $this->hasDownload() ? $this->sendDownload() : $this->sendBody();
+        $this->sendContents();
         $this->isSent = true;
+    }
+
+    protected function sendContents() : void
+    {
+        if ($this->hasStream()) {
+            $this->sendStream();
+            return;
+        }
+        if ($this->hasDownload()) {
+            $this->sendDownload();
+            return;
+        }
+        $this->sendBody();
     }
 
     protected function sendBody() : void

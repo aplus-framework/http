@@ -115,6 +115,22 @@ final class ResponseTest extends TestCase
         );
     }
 
+    public function testStream() : void
+    {
+        self::assertFalse($this->response->hasStream());
+        $this->response->setStream(static function () : void {
+            echo 'Hello from stream!';
+        });
+        self::assertTrue($this->response->hasStream());
+        \ob_start();
+        $this->response->send();
+        $contents = \ob_get_clean();
+        self::assertSame(
+            'Hello from stream!',
+            $contents
+        );
+    }
+
     public function testCache() : void
     {
         self::assertNull($this->response->getHeader('Cache-Control'));
