@@ -491,21 +491,15 @@ a video at a certain time.
 Response with Stream
 ####################
 
-Use the ``setStream`` method to set a function that sends a stream.
+To send a stream directly to User-Agent, set a function in the ``setStream``
+method.
 
-In the example below, see how to set
-`Server-Sent Events <https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events>`_
-using the nginx server.
-
-The "X-Accel-Buffering" header is used to disable response buffering in nginx.
-
-Along with PHP's flush functions, this will cause the buffer to be sent to the
-User-Agent in real time.
-
-This is the **sse.php** file:
+The file below (**sse.php**) shows how to send a stream using
+`Server-Sent Events <https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events>`_:
 
 .. code-block:: php
 
+    <?php
     require __DIR__ . '/vendor/autoload.php';
 
     use Framework\HTTP\Request;
