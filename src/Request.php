@@ -587,10 +587,6 @@ class Request extends Message implements RequestInterface
         if ($this->isParsedBody()) {
             throw new LogicException('Parse error: the request body has already been parsed');
         }
-        if (!$this->isForm()) {
-            $this->parsedBody = [[], []];
-            return $this;
-        }
         $options ??= $this->getParseBodyOptions();
         $this->parsedBody = $this->requestParseBody($options);
         return $this;

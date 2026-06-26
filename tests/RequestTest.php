@@ -155,10 +155,7 @@ final class RequestTest extends TestCase
         self::assertSame('', $this->request->getBody());
         // @phpstan-ignore-next-line
         $this->request->setBody('color=red&height=500px&width=800');
-        self::assertSame('color=red&height=500px&width=800', $this->request->getBody());
-        self::assertSame([], $this->request->getParsedBody());
-        $this->request->parsedBody = null;
-        $this->request->setHeader('Content-Type', 'application/x-www-form-urlencoded');
+        $this->request->setFormContentType();
         self::assertSame([
             'color' => 'red',
             'height' => '500px',
@@ -196,6 +193,7 @@ final class RequestTest extends TestCase
 
     public function testRepeatParseBody() : void
     {
+        $this->request->setFormContentType();
         $this->request->parseBody();
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Parse error: the request body has already been parsed');
@@ -211,6 +209,7 @@ final class RequestTest extends TestCase
 
     public function testIsParsedBody() : void
     {
+        $this->request->setFormContentType();
         self::assertFalse($this->request->isParsedBody());
         $this->request->parseBody();
         self::assertTrue($this->request->isParsedBody());

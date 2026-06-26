@@ -115,11 +115,24 @@ class RequestMock extends \Framework\HTTP\Request
 
     protected function requestParseBody(?array $options = null) : array
     {
+        if (!$this->isForm()) {
+            $contentType = $this->getContentType();
+            if ($contentType !== null) {
+                throw new RequestParseBodyException('Content-Type "' . $contentType . '" is not supported');
+            }
+            throw new RequestParseBodyException('Request does not provide a content type');
+        }
         \parse_str($this->getBody(), $texts);
         return [
             $texts,
             [],
         ];
+    }
+
+    public function setFormContentType() : static
+    {
+        $this->setHeader('Content-Type', 'application/x-www-form-urlencoded');
+        return $this;
     }
 
     /**
