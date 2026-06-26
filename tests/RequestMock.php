@@ -12,6 +12,7 @@ namespace Tests\HTTP;
 use Framework\HTTP\URL;
 use Framework\HTTP\UserAgent;
 use RequestParseBodyException;
+use ValueError;
 
 class RequestMock extends \Framework\HTTP\Request
 {
@@ -121,6 +122,11 @@ class RequestMock extends \Framework\HTTP\Request
                 throw new RequestParseBodyException('Content-Type "' . $contentType . '" is not supported');
             }
             throw new RequestParseBodyException('Request does not provide a content type');
+        }
+        if ($this->isFormData()) {
+            throw new ValueError(
+                'multipart/form-data is not allowed for testing. Please use application/x-www-form-urlencoded instead'
+            );
         }
         \parse_str($this->getBody(), $texts);
         return [
