@@ -9,6 +9,7 @@
  */
 namespace Tests\HTTP\Debug;
 
+use Closure;
 use Framework\HTTP\Cookie;
 use Framework\HTTP\Debug\HTTPCollector;
 use Framework\HTTP\Request;
@@ -63,6 +64,16 @@ final class HTTPCollectorTest extends TestCase
         self::assertStringContainsString('Headers', $contents);
         self::assertStringContainsString('Host', $contents);
         self::assertStringNotContainsString('User-Agent', $contents);
+    }
+
+    public function testRequestIp() : void
+    {
+        $this->prepare()->getRequest()->setIpKey(static function () {
+            return '192.168.0.222';
+        });
+        $contents = $this->collector->getContents();
+        self::assertStringContainsString('192.168.0.222', $contents);
+        self::assertStringContainsString(Closure::class, $contents);
     }
 
     public function testRequestUserAgent() : void

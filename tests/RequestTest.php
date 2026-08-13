@@ -747,6 +747,24 @@ final class RequestTest extends TestCase
         $this->request->setIpKey('HTTP_CF_CONNECTING_IP');
     }
 
+    public function testIpKeyWithClosure() : void
+    {
+        $this->request->setIpKey(static function () {
+            return '192.168.0.201';
+        });
+        self::assertSame('192.168.0.201', $this->request->getIp());
+    }
+
+    public function testIpKeyWithClosureAndException() : void
+    {
+        $this->request->setIpKey(static function () {
+            return 'foo';
+        });
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The value of Closure is not a valid IP address');
+        $this->request->getIp();
+    }
+
     public function testIsAjax() : void
     {
         self::assertTrue($this->request->isAjax());

@@ -9,6 +9,7 @@
  */
 namespace Framework\HTTP\Debug;
 
+use Closure;
 use Framework\Debug\Collector;
 use Framework\Debug\Debugger;
 use Framework\Helpers\ArraySimple;
@@ -76,10 +77,15 @@ class HTTPCollector extends Collector
         if (!isset($this->request)) {
             return '<p>A Request instance has not been set on this collector.</p>';
         }
-        \ob_start(); ?>
+        \ob_start();
+        $ipKey = $this->request->getIpKey();
+        if ($ipKey instanceof Closure) {
+            $ipKey = Closure::class;
+        }
+        ?>
         <p>
             <strong>IP:</strong> <?= $this->request->getIp() ?>
-            <span class="text-opaque">(<?= $this->request->getIpKey() ?>)</span>
+            <span class="text-opaque">(<?= $ipKey ?>)</span>
         </p>
         <p><strong>Is Secure:</strong> <?= $this->request->isSecure() ? 'Yes' : 'No' ?></p>
         <p><strong>Protocol:</strong> <?= $this->request->getProtocol() ?></p>

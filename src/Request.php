@@ -10,6 +10,7 @@
 namespace Framework\HTTP;
 
 use BadMethodCallException;
+use Closure;
 use Framework\Helpers\ArraySimple;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
@@ -73,7 +74,7 @@ class Request extends Message implements RequestInterface
      */
     protected bool $isSecure;
     protected int $jsonFlags = 0;
-    protected string $ipKey = 'REMOTE_ADDR';
+    protected Closure | string $ipKey = 'REMOTE_ADDR';
 
     /**
      * Request constructor.
@@ -897,17 +898,27 @@ class Request extends Message implements RequestInterface
     public function getIp(bool $validate = true) : string
     {
         $key = $this->getIpKey();
+        if ($key instanceof Closure) {
+            $ip = $key();
+            $this->validateIp($validate, $ip, Closure::class);
+            return $ip;
+        }
         $ip = match($key) {
             'HTTP_FORWARDED' => $this->getIpFromHttpForwarded(),
             'HTTP_X_FORWARDED_FOR' => $this->getIpFromHttpXForwardedFor(),
             default => $_SERVER[$key]
         };
+        $this->validateIp($validate, $ip, $key);
+        return $ip;
+    }
+
+    protected function validateIp(bool $validate, string $ip, string $key) : void
+    {
         if ($validate && !\filter_var($ip, \FILTER_VALIDATE_IP)) {
             throw new RuntimeException(
                 "The value of {$key} is not a valid IP address"
             );
         }
-        return $ip;
     }
 
     /**
@@ -957,17 +968,18 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * Set the key used to get the IP address from the superglobal $_SERVER.
+     * Set the key used to get the IP address from the superglobal $_SERVER or a
+     * Closure.
      *
-     * @param string $ipKey
+     * @param Closure|string $ipKey
      *
      * @throws InvalidArgumentException for IP key not set in the $_SERVER var
      *
      * @return static
      */
-    public function setIpKey(string $ipKey) : static
+    public function setIpKey(Closure | string $ipKey) : static
     {
-        if (!isset($_SERVER[$ipKey])) {
+        if (\is_string($ipKey) && !isset($_SERVER[$ipKey])) {
             throw new InvalidArgumentException(
                 'The IP Key "' . $ipKey . '" is not set in the $_SERVER'
             );
@@ -977,11 +989,12 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * Get the key used to get the IP address from the superglobal $_SERVER.
+     * Get the key used to get the IP address from the superglobal $_SERVER or
+     * Closure.
      *
-     * @return string
+     * @return Closure|string
      */
-    public function getIpKey() : string
+    public function getIpKey() : Closure | string
     {
         return $this->ipKey;
     }
