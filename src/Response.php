@@ -47,8 +47,8 @@ class Response extends Message implements ResponseInterface
     protected bool $autoEtag = false;
     protected string $autoEtagHashAlgo = 'xxh3';
     protected HTTPCollector $debugCollector;
-    protected CSP $csp;
-    protected CSP $cspReportOnly;
+    protected ?CSP $csp;
+    protected ?CSP $cspReportOnly;
     protected bool $replaceHeaders = false;
     protected Closure $stream;
 
@@ -306,7 +306,7 @@ class Response extends Message implements ResponseInterface
      */
     public function removeCsp() : static
     {
-        unset($this->csp);
+        $this->csp = null;
         return $this;
     }
 
@@ -317,7 +317,7 @@ class Response extends Message implements ResponseInterface
      */
     public function removeCspReportOnly() : static
     {
-        unset($this->cspReportOnly);
+        $this->cspReportOnly = null;
         return $this;
     }
 

@@ -70,9 +70,9 @@ class Request extends Message implements RequestInterface
     /**
      * Tell if is an HTTPS connection.
      *
-     * @var bool
+     * @var bool|null
      */
-    protected bool $isSecure;
+    protected ?bool $isSecure;
     protected int $jsonFlags = 0;
     protected Closure | string $ipKey = 'REMOTE_ADDR';
 

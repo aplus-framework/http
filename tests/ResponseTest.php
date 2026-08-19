@@ -526,6 +526,7 @@ final class ResponseTest extends TestCase
         \ob_start();
         $this->response->send();
         $contents = \ob_get_clean();
+        // @phpstan-ignore-next-line
         $xdebugCookieDateFormat = \PHP_VERSION_ID < 80200
             ? 'D, d-M-Y H:i:s'
             : 'D, d M Y H:i:s';

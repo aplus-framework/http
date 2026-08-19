@@ -477,7 +477,7 @@ final class RequestTest extends TestCase
 
     public function testCookies() : void
     {
-        self::assertIsArray($this->request->getCookies());
+        self::assertIsArray($this->request->getCookies()); // @phpstan-ignore-line
     }
 
     public function testBasicAuth() : void
@@ -626,7 +626,7 @@ final class RequestTest extends TestCase
             ],
         ];
         $this->request = new RequestMock();
-        self::assertIsArray($this->request->getFiles());
+        self::assertIsArray($this->request->getFiles()); // @phpstan-ignore-line
         self::assertInstanceOf(
             UploadedFile::class,
             // @phpstan-ignore-next-line
@@ -774,13 +774,15 @@ final class RequestTest extends TestCase
     public function testIsSecure() : void
     {
         self::assertFalse($this->request->isSecure());
-        unset($this->request->isSecure);
+        $this->request->isSecure = null;
         $_SERVER['REQUEST_SCHEME'] = 'HTTPS';
         self::assertTrue($this->request->isSecure());
-        unset($this->request->isSecure, $_SERVER['REQUEST_SCHEME']);
+        $this->request->isSecure = null;
+        unset($_SERVER['REQUEST_SCHEME']);
         $_SERVER['HTTPS'] = 'On';
         self::assertTrue($this->request->isSecure());
-        unset($this->request->isSecure, $_SERVER['REQUEST_SCHEME'], $_SERVER['HTTPS']);
+        $this->request->isSecure = null;
+        unset($_SERVER['REQUEST_SCHEME'], $_SERVER['HTTPS']);
         self::assertFalse($this->request->isSecure());
     }
 

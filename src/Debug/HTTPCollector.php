@@ -341,7 +341,7 @@ class HTTPCollector extends Collector
         <?php
         if (empty($headerLines)) {
             echo '<p>No headers.</p>';
-            return \ob_get_clean(); // @phpstan-ignore-line
+            return \ob_get_clean();
         } ?>
         <table>
             <thead>
@@ -361,7 +361,7 @@ class HTTPCollector extends Collector
             </tbody>
         </table>
         <?php
-        return \ob_get_clean(); // @phpstan-ignore-line
+        return \ob_get_clean();
     }
 
     protected function getCodeLanguage(?string $contentType) : string
