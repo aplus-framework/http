@@ -366,7 +366,7 @@ class HTTPCollector extends Collector
             </tbody>
         </table>
         <?php
-        return \ob_get_clean();
+        return \ob_get_clean(); // @phpstan-ignore-line
     }
 
     protected function getCodeLanguage(?string $contentType) : string
