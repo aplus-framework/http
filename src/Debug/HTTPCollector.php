@@ -88,16 +88,16 @@ class HTTPCollector extends Collector
             <span class="text-opaque">(<?= $ipKey ?>)</span>
         </p>
         <p><strong>Is Secure:</strong> <?= $this->request->isSecure() ? 'Yes' : 'No' ?></p>
-        <p><strong>Protocol:</strong> <?= \htmlentities($this->request->getProtocol()) ?></p>
-        <p><strong>Method:</strong> <?= \htmlentities($this->request->getMethod()) ?></p>
-        <p><strong>URL:</strong> <?= \htmlentities($this->request->getUrl()->toString()) ?></p>
-        <p><strong>Server:</strong> <?= \htmlentities((string) $this->request->getServer('SERVER_SOFTWARE')) ?></p>
-        <p><strong>Hostname:</strong> <?= \htmlentities((string) \gethostname()) ?></p>
+        <p><strong>Protocol:</strong> <?= D::esc($this->request->getProtocol()) ?></p>
+        <p><strong>Method:</strong> <?= D::esc($this->request->getMethod()) ?></p>
+        <p><strong>URL:</strong> <?= D::esc($this->request->getUrl()->toString()) ?></p>
+        <p><strong>Server:</strong> <?= D::esc($this->request->getServer('SERVER_SOFTWARE')) ?></p>
+        <p><strong>Hostname:</strong> <?= D::esc(\gethostname()) ?></p>
         <?php
         $allowedHosts = $this->request->getAllowedHosts();
         $allowedHosts = empty($allowedHosts) ? '*' : \implode(', ', $allowedHosts);
         ?>
-        <p><strong>Allowed Hosts:</strong> <?= \htmlentities($allowedHosts) ?></p>
+        <p><strong>Allowed Hosts:</strong> <?= D::esc($allowedHosts) ?></p>
         <?= $this->renderRequestUserAgent() ?>
         <?php
         echo $this->renderHeadersTable($this->request->getHeaderLines());
@@ -127,12 +127,12 @@ class HTTPCollector extends Collector
             </thead>
             <tbody>
             <tr>
-                <td><?= \htmlentities($userAgent->getType()) ?></td>
-                <td><?= \htmlentities($userAgent->getName()) ?></td>
+                <td><?= D::esc($userAgent->getType()) ?></td>
+                <td><?= D::esc($userAgent->getName()) ?></td>
                 <td><?= $userAgent->isBrowser()
-                        ? \htmlentities((string) $userAgent->getBrowserVersion())
+                        ? D::esc($userAgent->getBrowserVersion())
                         : '' ?></td>
-                <td><?= \htmlentities((string) $userAgent->getPlatform()) ?></td>
+                <td><?= D::esc($userAgent->getPlatform()) ?></td>
                 <td><?= $userAgent->isMobile() ? 'Yes' : 'No' ?></td>
             </tr>
             </tbody>
@@ -153,7 +153,7 @@ class HTTPCollector extends Collector
         <h2>Body Contents</h2>
         <pre><code class="<?= $this->getCodeLanguage(
             $this->request->getHeader('Content-Type')
-        ) ?>"><?= \htmlentities($body) ?></code></pre>
+        ) ?>"><?= D::esc($body) ?></code></pre>
         <?php
         return \ob_get_clean(); // @phpstan-ignore-line
     }
@@ -175,9 +175,9 @@ class HTTPCollector extends Collector
             <tbody>
             <?php foreach (ArraySimple::convert($this->request->getParsedBody()) as $field => $value): ?>
                 <tr>
-                    <td><?= \htmlentities($field) ?></td>
+                    <td><?= D::esc($field) ?></td>
                     <td>
-                        <pre><?= \htmlentities($value) ?></pre>
+                        <pre><?= D::esc($value) ?></pre>
                     </td>
                 </tr>
             <?php endforeach ?>
@@ -211,16 +211,16 @@ class HTTPCollector extends Collector
             <tbody>
             <?php foreach (ArraySimple::convert($this->request->getFiles()) as $field => $file): ?>
                 <tr>
-                    <td><?= \htmlentities($field) ?></td>
-                    <td><?= \htmlentities($file->getName()) ?></td>
-                    <td><?= \htmlentities($file->getFullPath()) ?></td>
-                    <td><?= \htmlentities($file->getType()) ?></td>
-                    <td><?= \htmlentities($file->getClientType()) ?></td>
-                    <td><?= \htmlentities($file->getExtension()) ?></td>
+                    <td><?= D::esc($field) ?></td>
+                    <td><?= D::esc($file->getName()) ?></td>
+                    <td><?= D::esc($file->getFullPath()) ?></td>
+                    <td><?= D::esc($file->getType()) ?></td>
+                    <td><?= D::esc($file->getClientType()) ?></td>
+                    <td><?= D::esc($file->getExtension()) ?></td>
                     <td><?= D::convertSize($file->getSize()) ?></td>
                     <td><?= $file->getDestination() ?></td>
                     <td><?= $file->getError() ?></td>
-                    <td><?= \htmlentities($file->getErrorMessage()) ?></td>
+                    <td><?= D::esc($file->getErrorMessage()) ?></td>
                 </tr>
             <?php endforeach ?>
             </tbody>
@@ -235,8 +235,8 @@ class HTTPCollector extends Collector
             return '<p>A Response instance has not been set on this collector.</p>';
         }
         \ob_start(); ?>
-        <p><strong>Protocol:</strong> <?= \htmlentities($this->response->getProtocol()) ?></p>
-        <p><strong>Status:</strong> <?= \htmlentities($this->response->getStatus()) ?></p>
+        <p><strong>Protocol:</strong> <?= D::esc($this->response->getProtocol()) ?></p>
+        <p><strong>Status:</strong> <?= D::esc($this->response->getStatus()) ?></p>
         <p><strong>Sent:</strong> <?= $this->response->isSent() ? 'Yes' : 'No' ?></p>
         <?php
         if ($this->response->isSent()):
@@ -292,14 +292,14 @@ class HTTPCollector extends Collector
             <tbody>
             <?php foreach ($this->response->getCookies() as $cookie): ?>
                 <tr>
-                    <td><?= \htmlentities($cookie->getName()) ?></td>
-                    <td><?= \htmlentities($cookie->getValue()) ?></td>
+                    <td><?= D::esc($cookie->getName()) ?></td>
+                    <td><?= D::esc($cookie->getValue()) ?></td>
                     <td><?= $cookie->getExpires()?->format('D, d M Y H:i:s \G\M\T') ?></td>
-                    <td><?= \htmlentities((string) $cookie->getPath()) ?></td>
-                    <td><?= \htmlentities((string) $cookie->getDomain()) ?></td>
+                    <td><?= D::esc($cookie->getPath()) ?></td>
+                    <td><?= D::esc($cookie->getDomain()) ?></td>
                     <td><?= $cookie->isSecure() ? 'Yes' : 'No' ?></td>
                     <td><?= $cookie->isHttpOnly() ? 'Yes' : 'No' ?></td>
-                    <td><?= \htmlentities((string) $cookie->getSameSite()) ?></td>
+                    <td><?= D::esc($cookie->getSameSite()) ?></td>
                     <td><?= $cookie->isPartitioned() ? 'Yes' : 'No' ?></td>
                 </tr>
             <?php endforeach ?>
@@ -329,7 +329,7 @@ class HTTPCollector extends Collector
         } ?>
         <pre><code class="<?= $this->getCodeLanguage(
             $this->response->getHeader('Content-Type')
-        ) ?>"><?= \htmlentities($body) ?></code></pre>
+        ) ?>"><?= D::esc($body) ?></code></pre>
         <?php
         return \ob_get_clean(); // @phpstan-ignore-line
     }
@@ -359,8 +359,8 @@ class HTTPCollector extends Collector
             <?php foreach ($headerLines as $line):
                 [$name, $value] = \explode(': ', $line, 2); ?>
                 <tr>
-                    <td><?= \htmlentities($name) ?></td>
-                    <td><?= \htmlentities($value) ?></td>
+                    <td><?= D::esc($name) ?></td>
+                    <td><?= D::esc($value) ?></td>
                 </tr>
             <?php endforeach ?>
             </tbody>
