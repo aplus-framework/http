@@ -88,16 +88,16 @@ class HTTPCollector extends Collector
             <span class="text-opaque">(<?= $ipKey ?>)</span>
         </p>
         <p><strong>Is Secure:</strong> <?= $this->request->isSecure() ? 'Yes' : 'No' ?></p>
-        <p><strong>Protocol:</strong> <?= $this->request->getProtocol() ?></p>
-        <p><strong>Method:</strong> <?= $this->request->getMethod() ?></p>
-        <p><strong>URL:</strong> <?= $this->request->getUrl() ?></p>
-        <p><strong>Server:</strong> <?= $this->request->getServer('SERVER_SOFTWARE') ?></p>
-        <p><strong>Hostname:</strong> <?= \gethostname() ?></p>
+        <p><strong>Protocol:</strong> <?= \htmlentities($this->request->getProtocol()) ?></p>
+        <p><strong>Method:</strong> <?= \htmlentities($this->request->getMethod()) ?></p>
+        <p><strong>URL:</strong> <?= \htmlentities($this->request->getUrl()->toString()) ?></p>
+        <p><strong>Server:</strong> <?= \htmlentities((string) $this->request->getServer('SERVER_SOFTWARE')) ?></p>
+        <p><strong>Hostname:</strong> <?= \htmlentities((string) \gethostname()) ?></p>
         <?php
         $allowedHosts = $this->request->getAllowedHosts();
         $allowedHosts = empty($allowedHosts) ? '*' : \implode(', ', $allowedHosts);
         ?>
-        <p><strong>Allowed Hosts:</strong> <?= $allowedHosts ?></p>
+        <p><strong>Allowed Hosts:</strong> <?= \htmlentities($allowedHosts) ?></p>
         <?= $this->renderRequestUserAgent() ?>
         <?php
         echo $this->renderHeadersTable($this->request->getHeaderLines());
