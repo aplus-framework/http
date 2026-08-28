@@ -11,7 +11,7 @@ namespace Framework\HTTP\Debug;
 
 use Closure;
 use Framework\Debug\Collector;
-use Framework\Debug\Debugger;
+use Framework\Debug\Debugger as D;
 use Framework\Helpers\ArraySimple;
 use Framework\HTTP\Request;
 use Framework\HTTP\Response;
@@ -217,7 +217,7 @@ class HTTPCollector extends Collector
                     <td><?= \htmlentities($file->getType()) ?></td>
                     <td><?= \htmlentities($file->getClientType()) ?></td>
                     <td><?= \htmlentities($file->getExtension()) ?></td>
-                    <td><?= Debugger::convertSize($file->getSize()) ?></td>
+                    <td><?= D::convertSize($file->getSize()) ?></td>
                     <td><?= $file->getDestination() ?></td>
                     <td><?= $file->getError() ?></td>
                     <td><?= \htmlentities($file->getErrorMessage()) ?></td>
@@ -252,7 +252,7 @@ class HTTPCollector extends Collector
                 }
             } ?>
             <p>
-                <strong>Time Sending:</strong> <?= Debugger::roundSecondsToMilliseconds($info['end'] - $info['start']) ?> ms
+                <strong>Time Sending:</strong> <?= D::roundSecondsToMilliseconds($info['end'] - $info['start']) ?> ms
             </p>
         <?php
         endif;
