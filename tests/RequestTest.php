@@ -9,6 +9,7 @@
  */
 namespace Tests\HTTP;
 
+use Framework\HTTP\Request;
 use Framework\HTTP\Response;
 use Framework\HTTP\UploadedFile;
 use Framework\HTTP\URL;
@@ -113,6 +114,21 @@ final class RequestTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid host: a_b');
         $this->request->setHost('a_b');
+    }
+
+    public function testAllowedHosts() : void
+    {
+        $request = new Request();
+        self::assertSame([], $request->getAllowedHosts());
+        $_SERVER['HTTP_HOST'] = 'foo.tld';
+        $request = new Request([
+            'foo.tld',
+            'bar.tld',
+        ]);
+        self::assertSame([
+            'foo.tld',
+            'bar.tld',
+        ], $request->getAllowedHosts());
     }
 
     public function testInvalidHost() : void

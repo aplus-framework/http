@@ -75,6 +75,10 @@ class Request extends Message implements RequestInterface
     protected ?bool $isSecure;
     protected int $jsonFlags = 0;
     protected Closure | string $ipKey = 'REMOTE_ADDR';
+    /**
+     * @var array<string>
+     */
+    protected array $allowedHosts;
 
     /**
      * Request constructor.
@@ -86,6 +90,7 @@ class Request extends Message implements RequestInterface
      */
     public function __construct(array $allowedHosts = [])
     {
+        $this->allowedHosts = $allowedHosts;
         if ($allowedHosts) {
             $this->validateHost($allowedHosts);
         }
@@ -223,6 +228,16 @@ class Request extends Message implements RequestInterface
         $url .= $_SERVER['REQUEST_URI'];
         $this->setUrl($url);
         $this->setHost($this->getUrl()->getHost());
+    }
+
+    /**
+     * Get the allowed hosts.
+     *
+     * @return array<string>
+     */
+    public function getAllowedHosts() : array
+    {
+        return $this->allowedHosts;
     }
 
     public function getHeader(string $name) : ?string
