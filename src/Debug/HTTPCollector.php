@@ -93,6 +93,11 @@ class HTTPCollector extends Collector
         <p><strong>URL:</strong> <?= $this->request->getUrl() ?></p>
         <p><strong>Server:</strong> <?= $this->request->getServer('SERVER_SOFTWARE') ?></p>
         <p><strong>Hostname:</strong> <?= \gethostname() ?></p>
+        <?php
+        $allowedHosts = $this->request->getAllowedHosts();
+        $allowedHosts = empty($allowedHosts) ? '*' : \implode(', ', $allowedHosts);
+        ?>
+        <p><strong>Allowed Hosts:</strong> <?= $allowedHosts ?></p>
         <?= $this->renderRequestUserAgent() ?>
         <?php
         echo $this->renderHeadersTable($this->request->getHeaderLines());
