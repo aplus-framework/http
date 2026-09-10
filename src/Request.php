@@ -662,6 +662,8 @@ class Request extends Message implements RequestInterface
      *
      * @see https://www.php.net/manual/en/function.json-decode.php
      * @see https://www.php.net/manual/en/json.constants.php
+     * @see Framework\HTTP\Message::getJsonFlags()
+     * @see Framework\HTTP\Message::setJsonFlags()
      *
      * @return array<string,mixed>|false|stdClass If option JSON_THROW_ON_ERROR
      * is not set, return false if json_decode fail. Otherwise, return a

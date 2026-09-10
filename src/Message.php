@@ -506,6 +506,10 @@ abstract class Message implements MessageInterface
      *
      * @param int $flags
      *
+     * @see https://www.php.net/manual/en/function.json-decode.php
+     * @see https://www.php.net/manual/en/function.json-encode.php
+     * @see https://www.php.net/manual/en/json.constants.php
+     *
      * @return static
      */
     public function setJsonFlags(int $flags) : static

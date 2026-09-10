@@ -760,12 +760,14 @@ class Response extends Message implements ResponseInterface
      *  <b>JSON_UNESCAPED_SLASHES</b>,
      *  <b>JSON_UNESCAPED_UNICODE</b>,
      *  </p>
-     *  <p>Default is <b>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE</b>
-     *  when null. <b>JSON_THROW_ON_ERROR</b> is enforced by default.</p>
+     *  <p>Default is none when null. <b>JSON_THROW_ON_ERROR</b> is enforced by
+     * default.</p>
      * @param int<1,max> $depth Set the maximum depth. Must be greater than zero.
      *
      * @see https://www.php.net/manual/en/function.json-encode.php
      * @see https://www.php.net/manual/en/json.constants.php
+     * @see Framework\HTTP\Message::getJsonFlags()
+     * @see Framework\HTTP\Message::setJsonFlags()
      *
      * @throws JsonException if json_encode() fails
      *
