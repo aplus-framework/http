@@ -193,7 +193,7 @@ final class MessageTest extends TestCase
     public function testJsonFlags() : void
     {
         self::assertSame(
-            \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE,
+            0,
             $this->message->getJsonFlags()
         );
         $this->message->setJsonFlags(\JSON_FORCE_OBJECT);

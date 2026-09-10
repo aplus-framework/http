@@ -449,12 +449,12 @@ final class ResponseTest extends TestCase
     public function testJsonFlags() : void
     {
         self::assertSame(
-            \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE,
+            0,
             $this->response->getJsonFlags()
         );
-        $this->response->setJsonFlags(\JSON_FORCE_OBJECT);
+        $this->response->setJsonFlags(\JSON_FORCE_OBJECT | \JSON_THROW_ON_ERROR);
         self::assertSame(
-            \JSON_FORCE_OBJECT,
+            \JSON_THROW_ON_ERROR | \JSON_FORCE_OBJECT,
             $this->response->getJsonFlags()
         );
     }

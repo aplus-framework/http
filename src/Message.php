@@ -55,7 +55,7 @@ abstract class Message implements MessageInterface
      * @var array<string,string>
      */
     protected array $headers = [];
-    protected int $jsonFlags = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
+    protected int $jsonFlags = 0;
 
     public function __toString() : string
     {

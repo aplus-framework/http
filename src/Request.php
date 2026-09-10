@@ -73,7 +73,6 @@ class Request extends Message implements RequestInterface
      * @var bool|null
      */
     protected ?bool $isSecure;
-    protected int $jsonFlags = 0;
     protected Closure | string $ipKey = 'REMOTE_ADDR';
     /**
      * @var array<string>
