@@ -64,7 +64,7 @@ class Response extends Message implements ResponseInterface
     }
 
     #[Override]
-    public function __toString() : string
+    public function toString() : string
     {
         if ($this->getHeader(ResponseHeader::DATE) === null) {
             $this->setDate();
@@ -77,7 +77,7 @@ class Response extends Message implements ResponseInterface
             $this->sendDownload();
             $this->inToString = false;
         }
-        return parent::__toString();
+        return parent::toString();
     }
 
     /**

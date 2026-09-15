@@ -59,6 +59,11 @@ abstract class Message implements MessageInterface
 
     public function __toString() : string
     {
+        return $this->toString();
+    }
+
+    public function toString() : string
+    {
         $eol = "\r\n";
         $message = $this->getStartLine() . $eol;
         foreach ($this->getHeaderLines() as $headerLine) {

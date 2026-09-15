@@ -116,12 +116,12 @@ class Request extends Message implements RequestInterface
     }
 
     #[Override]
-    public function __toString() : string
+    public function toString() : string
     {
         if ($this->parseContentType() === 'multipart/form-data') {
             $this->setBody($this->getMultipartBody());
         }
-        return parent::__toString();
+        return parent::toString();
     }
 
     /**
