@@ -14,7 +14,14 @@ use PHPUnit\Framework\TestCase;
 final class UploadedFileTest extends TestCase
 {
     /**
-     * @var array<string,int|string>
+     * @var array{
+     *      name: string,
+     *      full_path: string,
+     *      type: string,
+     *      size: int,
+     *      tmp_name: string,
+     *      error: int,
+     * }
      */
     protected array $file = [
         'name' => 'logo.jpg',
@@ -25,7 +32,14 @@ final class UploadedFileTest extends TestCase
         'error' => \UPLOAD_ERR_OK,
     ];
     /**
-     * @var array<string,int|string>
+     * @var array{
+     *      name: string,
+     *      full_path: string,
+     *      type: string,
+     *      size: int,
+     *      tmp_name: string,
+     *      error: int,
+     * }
      */
     protected array $file2 = [
         'name' => 'file.txt',

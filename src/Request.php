@@ -13,7 +13,6 @@ use BadMethodCallException;
 use Closure;
 use Framework\Helpers\ArraySimple;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 use LogicException;
 use Override;
@@ -389,11 +388,14 @@ class Request extends Message implements RequestInterface
     /**
      * Get Basic authorization.
      *
-     * @return array<string>|null Two keys: username and password
+     * @return array{
+     *      username: string|null,
+     *      password: string|null,
+     * }|null Two keys: username and password
      */
-    #[ArrayShape(['username' => 'string|null', 'password' => 'string|null'])]
     public function getBasicAuth() : ?array
     {
+        // @phpstan-ignore-next-line
         return $this->getAuthType() === 'Basic'
             ? $this->auth
             : null;
@@ -402,11 +404,13 @@ class Request extends Message implements RequestInterface
     /**
      * Get Bearer authorization.
      *
-     * @return array<string>|null One key: token
+     * @return array{
+     *      token: string|null,
+     * }|null One key: token
      */
-    #[ArrayShape(['token' => 'string|null'])]
     public function getBearerAuth() : ?array
     {
+        // @phpstan-ignore-next-line
         return $this->getAuthType() === 'Bearer'
             ? $this->auth
             : null;
@@ -415,22 +419,21 @@ class Request extends Message implements RequestInterface
     /**
      * Get Digest authorization.
      *
-     * @return array<string>|null Nine keys: username, realm, nonce, uri,
-     * response, opaque, qop, nc, cnonce
+     * @return array{
+     *      username: string|null,
+     *      realm: string|null,
+     *      nonce: string|null,
+     *      uri: string|null,
+     *      response: string|null,
+     *      opaque: string|null,
+     *      qop: string|null,
+     *      nc: string|null,
+     *      cnonce: string|null,
+     * }|null Nine keys: username, realm, nonce, uri, response, opaque, qop, nc, cnonce
      */
-    #[ArrayShape([
-        'username' => 'string|null',
-        'realm' => 'string|null',
-        'nonce' => 'string|null',
-        'uri' => 'string|null',
-        'response' => 'string|null',
-        'opaque' => 'string|null',
-        'qop' => 'string|null',
-        'nc' => 'string|null',
-        'cnonce' => 'string|null',
-    ])]
     public function getDigestAuth() : ?array
     {
+        // @phpstan-ignore-next-line
         return $this->getAuthType() === 'Digest'
             ? $this->auth
             : null;
@@ -461,9 +464,11 @@ class Request extends Message implements RequestInterface
     /**
      * @param string $attributes
      *
-     * @return array<string,string|null>
+     * @return array{
+     *      username: string|null,
+     *      password: string|null,
+     * }
      */
-    #[ArrayShape(['username' => 'string|null', 'password' => 'string|null'])]
     #[Pure]
     protected function parseBasicAuth(string $attributes) : array
     {
@@ -484,9 +489,10 @@ class Request extends Message implements RequestInterface
     /**
      * @param string $attributes
      *
-     * @return array<string,string|null>
+     * @return array{
+     *      token: string|null,
+     * }
      */
-    #[ArrayShape(['token' => 'string|null'])]
     #[Pure]
     protected function parseBearerAuth(string $attributes) : array
     {
@@ -502,19 +508,18 @@ class Request extends Message implements RequestInterface
     /**
      * @param string $attributes
      *
-     * @return array<string,string|null>
+     * @return array{
+     *      username: string|null,
+     *      realm: string|null,
+     *      nonce: string|null,
+     *      uri: string|null,
+     *      response: string|null,
+     *      opaque: string|null,
+     *      qop: string|null,
+     *      nc: string|null,
+     *      cnonce: string|null,
+     * }
      */
-    #[ArrayShape([
-        'username' => 'string|null',
-        'realm' => 'string|null',
-        'nonce' => 'string|null',
-        'uri' => 'string|null',
-        'response' => 'string|null',
-        'opaque' => 'string|null',
-        'qop' => 'string|null',
-        'nc' => 'string|null',
-        'cnonce' => 'string|null',
-    ])]
     protected function parseDigestAuth(string $attributes) : array
     {
         $data = [
@@ -551,7 +556,7 @@ class Request extends Message implements RequestInterface
      *
      * @throws RequestParseBodyException
      *
-     * @return array<mixed>|mixed|string|null
+     * @return mixed
      */
     public function getParsedBody(
         ?string $name = null,
@@ -571,7 +576,7 @@ class Request extends Message implements RequestInterface
      *
      * @throws RequestParseBodyException
      *
-     * @return array<mixed>|mixed|string|null
+     * @return mixed
      */
     protected function getFilteredParsedBody(
         ?string $name = null,
@@ -705,7 +710,7 @@ class Request extends Message implements RequestInterface
 
     /**
      * @param string $type
-     * @param array<int,string> $negotiable
+     * @param array<string> $negotiable
      *
      * @return string
      */
@@ -735,7 +740,7 @@ class Request extends Message implements RequestInterface
     /**
      * Negotiate the Accept header.
      *
-     * @param array<int,string> $negotiable Allowed mime types
+     * @param array<string> $negotiable Allowed mime types
      *
      * @return string The negotiated mime type
      */
@@ -759,7 +764,7 @@ class Request extends Message implements RequestInterface
     /**
      * Negotiate the Accept-Charset.
      *
-     * @param array<int,string> $negotiable Allowed charsets
+     * @param array<string> $negotiable Allowed charsets
      *
      * @return string The negotiated charset
      */
@@ -783,7 +788,7 @@ class Request extends Message implements RequestInterface
     /**
      * Negotiate the Accept-Encoding.
      *
-     * @param array<int,string> $negotiable The allowed encodings
+     * @param array<string> $negotiable The allowed encodings
      *
      * @return string The negotiated encoding
      */
@@ -807,7 +812,7 @@ class Request extends Message implements RequestInterface
     /**
      * Negotiated the Accept-Language.
      *
-     * @param array<int,string> $negotiable Allowed languages
+     * @param array<string> $negotiable Allowed languages
      *
      * @return string The negotiated language
      */
@@ -1366,6 +1371,16 @@ class Request extends Message implements RequestInterface
                     $return[$k] = $makeObjects($v, $makeObjects);
                     continue;
                 }
+                /**
+                 * @var array{
+                 *      name: string,
+                 *      type: string,
+                 *      tmp_name: string,
+                 *      error: int,
+                 *      size: int,
+                 *      full_path: string,
+                 * } $array
+                 */
                 return new UploadedFile($array);
             }
             return $return;

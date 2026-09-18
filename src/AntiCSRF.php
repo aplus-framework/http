@@ -32,7 +32,7 @@ class AntiCSRF
     protected int $tokenBytesLength = 8;
     protected string $generateTokenFunction = 'base64_encode';
     /**
-     * @var array<string>
+     * @var array<int,string>
      */
     protected array $generateTokenFunctions = [
         'base64_encode',

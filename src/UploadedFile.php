@@ -821,7 +821,14 @@ class UploadedFile
     /**
      * UploadedFile constructor.
      *
-     * @param array<string,mixed> $file a $_FILE item
+     * @param array{
+     *      name: string,
+     *      type: string,
+     *      tmp_name: string,
+     *      error: int,
+     *      size: int,
+     *      full_path: string,
+     * } $file a $_FILE item
      */
     public function __construct(array $file)
     {

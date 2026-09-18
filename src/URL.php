@@ -10,7 +10,6 @@
 namespace Framework\HTTP;
 
 use InvalidArgumentException;
-use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 use JsonSerializable;
 use RuntimeException;
@@ -93,9 +92,9 @@ class URL implements JsonSerializable, Stringable
     }
 
     /**
-     * @param array<int,string> $allowed
+     * @param array<string> $allowed
      *
-     * @return array<string,mixed>
+     * @return array<mixed>
      */
     #[Pure]
     protected function filterQuery(array $allowed) : array
@@ -144,18 +143,17 @@ class URL implements JsonSerializable, Stringable
     }
 
     /**
-     * @return array<string,mixed>
+     * @return array{
+     *      scheme: string,
+     *      user: string|null,
+     *      pass: string|null,
+     *      hostname: string,
+     *      port: int|null,
+     *      path: array<string>,
+     *      query: array<mixed>,
+     *      fragment: string|null,
+     * }
      */
-    #[ArrayShape([
-        'scheme' => 'string',
-        'user' => 'null|string',
-        'pass' => 'null|string',
-        'hostname' => 'string',
-        'port' => 'int|null',
-        'path' => 'string[]',
-        'query' => 'mixed[]',
-        'fragment' => 'null|string',
-    ])]
     #[Pure]
     public function getParsedUrl() : array
     {
@@ -239,9 +237,9 @@ class URL implements JsonSerializable, Stringable
     }
 
     /**
-     * @param array<int,string> $allowedKeys
+     * @param array<string> $allowedKeys
      *
-     * @return array<string,mixed>
+     * @return array<mixed>
      */
     #[Pure]
     public function getQueryData(array $allowedKeys = []) : array

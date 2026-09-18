@@ -34,13 +34,7 @@ class Response extends Message implements ResponseInterface
     protected bool $isSent = false;
     protected bool $headersSent = false;
     protected Request $request;
-    /**
-     * HTTP Response Status Code.
-     */
     protected int $statusCode = Status::OK;
-    /**
-     * HTTP Response Status Reason.
-     */
     protected string $statusReason = 'OK';
     protected ?string $sendedBody = null;
     protected bool $inToString = false;
@@ -435,7 +429,7 @@ class Response extends Message implements ResponseInterface
      * Sets the HTTP Redirect Response with data accessible in the next HTTP Request.
      *
      * @param string $location Location Header value
-     * @param array|mixed[] $data Session data available on next Request
+     * @param array<mixed> $data Session data available on next Request
      * @param int|null $code HTTP Redirect status code. Leave null to determine
      * based on the current HTTP method.
      *

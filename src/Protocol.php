@@ -41,7 +41,7 @@ class Protocol
      */
     public const string HTTP_3 = 'HTTP/3';
     /**
-     * @var array<string>
+     * @var array<int,string>
      */
     protected static array $protocols = [
         'HTTP/1.0',

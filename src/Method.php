@@ -85,7 +85,7 @@ class Method
      */
     public const string TRACE = 'TRACE';
     /**
-     * @var array<string>
+     * @var array<int,string>
      */
     protected static array $methods = [
         'CONNECT',

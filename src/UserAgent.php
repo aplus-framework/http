@@ -30,7 +30,12 @@ class UserAgent implements JsonSerializable, Stringable
     protected bool $isMobile = false;
     protected bool $isRobot = false;
     /**
-     * @var array<string,array<string,string>>
+     * @var array{
+     *      platforms: array<string,string>,
+     *      browsers: array<string,string>,
+     *      mobiles: array<string,string>,
+     *      robots: array<string,string>,
+     * }
      */
     protected static array $config = [
         'platforms' => [
