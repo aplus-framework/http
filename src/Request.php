@@ -670,7 +670,7 @@ class Request extends Message implements RequestInterface
      * @see Framework\HTTP\Message::getJsonFlags()
      * @see Framework\HTTP\Message::setJsonFlags()
      *
-     * @return array<string,mixed>|false|stdClass If option JSON_THROW_ON_ERROR
+     * @return array<mixed>|false|stdClass If option JSON_THROW_ON_ERROR
      * is not set, return false if json_decode fail. Otherwise, return a
      * stdClass instance, or an array if the $associative argument is passed as
      * true.

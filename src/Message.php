@@ -316,7 +316,7 @@ abstract class Message implements MessageInterface
     /**
      * Set a list of Cookies.
      *
-     * @param array<int,Cookie> $cookies
+     * @param array<Cookie> $cookies
      *
      * @return static
      */
@@ -344,7 +344,7 @@ abstract class Message implements MessageInterface
     /**
      * Remove many Cookies by names.
      *
-     * @param array<int,string> $names
+     * @param array<string> $names
      *
      * @return static
      */
