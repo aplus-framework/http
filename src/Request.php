@@ -13,7 +13,6 @@ use BadMethodCallException;
 use Closure;
 use Framework\Helpers\ArraySimple;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 use LogicException;
 use Override;
 use RequestParseBodyException;
@@ -469,7 +468,6 @@ class Request extends Message implements RequestInterface
      *      password: string|null,
      * }
      */
-    #[Pure]
     protected function parseBasicAuth(string $attributes) : array
     {
         $data = [
@@ -493,7 +491,6 @@ class Request extends Message implements RequestInterface
      *      token: string|null,
      * }
      */
-    #[Pure]
     protected function parseBearerAuth(string $attributes) : array
     {
         $data = [
@@ -828,7 +825,6 @@ class Request extends Message implements RequestInterface
      *
      * @return string|null
      */
-    #[Pure]
     public function getContentType() : ?string
     {
         return $_SERVER['HTTP_CONTENT_TYPE'] ?? null;
@@ -891,7 +887,6 @@ class Request extends Message implements RequestInterface
     /**
      * @return string
      */
-    #[Pure]
     public function getHost() : string
     {
         return $this->host;
@@ -1021,7 +1016,6 @@ class Request extends Message implements RequestInterface
     }
 
     #[Override]
-    #[Pure]
     public function getMethod() : string
     {
         return parent::getMethod();
@@ -1210,7 +1204,6 @@ class Request extends Message implements RequestInterface
      * @return URL
      */
     #[Override]
-    #[Pure]
     public function getUrl() : URL
     {
         return parent::getUrl();

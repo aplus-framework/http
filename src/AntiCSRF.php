@@ -10,7 +10,6 @@
 namespace Framework\HTTP;
 
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 use LogicException;
 
 /**
@@ -78,7 +77,6 @@ class AntiCSRF
         return $this;
     }
 
-    #[Pure]
     public function getTokenBytesLength() : int
     {
         return $this->tokenBytesLength;
@@ -89,7 +87,6 @@ class AntiCSRF
      *
      * @return string
      */
-    #[Pure]
     public function getTokenName() : string
     {
         return $this->tokenName;
@@ -113,7 +110,6 @@ class AntiCSRF
      *
      * @return string|null
      */
-    #[Pure]
     public function getToken() : ?string
     {
         return $_SESSION['$']['csrf_token'] ?? null;
@@ -143,7 +139,6 @@ class AntiCSRF
         return $this;
     }
 
-    #[Pure]
     public function getGenerateTokenFunction() : string
     {
         return $this->generateTokenFunction;
@@ -200,7 +195,6 @@ class AntiCSRF
      *
      * @return bool
      */
-    #[Pure]
     public function isSafeMethod() : bool
     {
         return \in_array($this->request->getMethod(), [
@@ -225,7 +219,6 @@ class AntiCSRF
         return \hash_equals($_SESSION['$']['csrf_token'], $userToken);
     }
 
-    #[Pure]
     protected function isVerified() : bool
     {
         return $this->verified;
@@ -247,7 +240,6 @@ class AntiCSRF
      *
      * @return string
      */
-    #[Pure]
     public function input() : string
     {
         if ($this->isEnabled() === false) {
@@ -265,7 +257,6 @@ class AntiCSRF
      *
      * @return bool
      */
-    #[Pure]
     public function isEnabled() : bool
     {
         return $this->enabled;

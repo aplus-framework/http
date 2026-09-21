@@ -10,7 +10,6 @@
 namespace Framework\HTTP;
 
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 use RuntimeException;
 
 /**
@@ -168,7 +167,6 @@ trait ResponseDownload
      *
      * @phpstan-ignore-next-line
      */
-    #[Pure]
     private function parseByteRange(string $line) : array | false
     {
         if (!\str_starts_with($line, 'bytes=')) {
@@ -212,7 +210,6 @@ trait ResponseDownload
      *
      * @return false|int
      */
-    #[Pure]
     private function validBytePos(string $pos) : false | int
     {
         if (!\is_numeric($pos) || $pos < \PHP_INT_MIN || $pos > \PHP_INT_MAX) {
@@ -284,20 +281,17 @@ trait ResponseDownload
         }
     }
 
-    #[Pure]
     private function getBoundaryLine() : string
     {
         return "\r\n--{$this->boundary}--\r\n";
     }
 
-    #[Pure]
     private function getMultiPartTopLine() : string
     {
         return $this->getBoundaryLine()
             . "Content-Type: application/octet-stream\r\n";
     }
 
-    #[Pure]
     private function getContentRangeLine(int $fistByte, int $lastByte) : string
     {
         return \sprintf(
@@ -361,7 +355,6 @@ trait ResponseDownload
      *
      * @return bool
      */
-    #[Pure]
     public function hasDownload() : bool
     {
         return isset($this->filepath);

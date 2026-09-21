@@ -11,7 +11,6 @@ namespace Framework\HTTP;
 
 use BadMethodCallException;
 use InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 
 /**
  * Class Message.
@@ -101,7 +100,6 @@ abstract class Message implements MessageInterface
         );
     }
 
-    #[Pure]
     public function hasHeader(string $name, ?string $value = null) : bool
     {
         return $value === null
@@ -109,7 +107,6 @@ abstract class Message implements MessageInterface
             : $this->getHeader($name) === $value;
     }
 
-    #[Pure]
     public function getHeader(string $name) : ?string
     {
         return $this->headers[\strtolower($name)] ?? null;
@@ -118,13 +115,11 @@ abstract class Message implements MessageInterface
     /**
      * @return array<string,string>
      */
-    #[Pure]
     public function getHeaders() : array
     {
         return $this->headers;
     }
 
-    #[Pure]
     public function getHeaderLine(string $name) : ?string
     {
         $value = $this->getHeader($name);
@@ -138,7 +133,6 @@ abstract class Message implements MessageInterface
     /**
      * @return array<int,string>
      */
-    #[Pure]
     public function getHeaderLines() : array
     {
         $lines = [];
@@ -270,7 +264,6 @@ abstract class Message implements MessageInterface
      *
      * @return bool
      */
-    #[Pure]
     public function hasCookie(string $name) : bool
     {
         return (bool) $this->getCookie($name);
@@ -283,7 +276,6 @@ abstract class Message implements MessageInterface
      *
      * @return Cookie|null
      */
-    #[Pure]
     public function getCookie(string $name) : ?Cookie
     {
         return $this->cookies[$name] ?? null;
@@ -294,7 +286,6 @@ abstract class Message implements MessageInterface
      *
      * @return array<string,Cookie>
      */
-    #[Pure]
     public function getCookies() : array
     {
         return $this->cookies;
@@ -361,7 +352,6 @@ abstract class Message implements MessageInterface
      *
      * @return string
      */
-    #[Pure]
     public function getBody() : string
     {
         return $this->body ?? '';
@@ -385,7 +375,6 @@ abstract class Message implements MessageInterface
      *
      * @return string
      */
-    #[Pure]
     public function getProtocol() : string
     {
         return $this->protocol;
@@ -410,7 +399,6 @@ abstract class Message implements MessageInterface
      * @return string $method One of: CONNECT, DELETE, GET, HEAD, OPTIONS,
      * PATCH, POST, PUT, or TRACE
      */
-    #[Pure]
     protected function getMethod() : string
     {
         return $this->method;
@@ -455,7 +443,6 @@ abstract class Message implements MessageInterface
      *
      * @return int
      */
-    #[Pure]
     protected function getStatusCode() : int
     {
         return $this->statusCode;
@@ -471,7 +458,6 @@ abstract class Message implements MessageInterface
      *
      * @return URL
      */
-    #[Pure]
     protected function getUrl() : URL
     {
         return $this->url;
