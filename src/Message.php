@@ -15,7 +15,7 @@ use InvalidArgumentException;
 /**
  * Class Message.
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Messages
  * @see https://datatracker.ietf.org/doc/html/rfc7231
  *
  * @package http

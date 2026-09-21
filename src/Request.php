@@ -23,7 +23,7 @@ use UnexpectedValueException;
 /**
  * Class Request.
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#HTTP_Requests
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Messages#http_requests
  *
  * @package http
  */

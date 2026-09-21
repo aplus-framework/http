@@ -21,7 +21,7 @@ use Override;
 /**
  * Class Response.
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Messages#HTTP_Responses
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Messages#http_responses
  *
  * @package http
  */
