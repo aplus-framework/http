@@ -284,9 +284,9 @@ class HTTPCollector extends Collector
                 <th>Path</th>
                 <th>Domain</th>
                 <th>Is Secure</th>
+                <th>Is Partitioned</th>
                 <th>Is HTTP Only</th>
                 <th>SameSite</th>
-                <th>Is Partitioned</th>
             </tr>
             </thead>
             <tbody>
@@ -298,9 +298,9 @@ class HTTPCollector extends Collector
                     <td><?= D::esc($cookie->getPath()) ?></td>
                     <td><?= D::esc($cookie->getDomain()) ?></td>
                     <td><?= $cookie->isSecure() ? 'Yes' : 'No' ?></td>
+                    <td><?= $cookie->isPartitioned() ? 'Yes' : 'No' ?></td>
                     <td><?= $cookie->isHttpOnly() ? 'Yes' : 'No' ?></td>
                     <td><?= D::esc($cookie->getSameSite()) ?></td>
-                    <td><?= $cookie->isPartitioned() ? 'Yes' : 'No' ?></td>
                 </tr>
             <?php endforeach ?>
             </tbody>
