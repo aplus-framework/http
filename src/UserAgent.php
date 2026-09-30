@@ -86,6 +86,7 @@ class UserAgent implements JsonSerializable, Stringable
         // The order of this array should NOT be changed. Many browsers return
         // multiple browser types so we want to identify the sub-type first.
         'browsers' => [
+            'aplus' => 'Aplus',
             'curl' => 'Curl',
             'postmanruntime' => 'Postman',
             'opr' => 'Opera',
