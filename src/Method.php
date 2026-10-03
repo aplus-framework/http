@@ -21,49 +21,66 @@ use InvalidArgumentException;
 class Method
 {
     /**
-     * The HTTP CONNECT method starts two-way communications with the requested
-     * resource. It can be used to open a tunnel.
+     * CONNECT request method.
+     *
+     * The CONNECT HTTP method requests that a proxy establish an HTTP tunnel to
+     * a destination server, and if successful, blindly forward data in both
+     * directions until the tunnel is closed.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/CONNECT
      */
     public const string CONNECT = 'CONNECT';
     /**
-     * The HTTP DELETE request method deletes the specified resource.
+     * DELETE request method.
+     *
+     * The DELETE HTTP method asks the server to delete a specified resource.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/DELETE
      */
     public const string DELETE = 'DELETE';
     /**
-     * The HTTP GET method requests a representation of the specified resource.
-     * Requests using GET should only be used to request data (they shouldn't
-     * include data).
+     * GET request method.
+     *
+     * The GET HTTP method requests a representation of the specified resource.
+     * Requests using GET should only be used to request data and shouldn't
+     * contain a body.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/GET
      */
     public const string GET = 'GET';
     /**
-     * The HTTP HEAD method requests the headers that would be returned if the
-     * HEAD request's URL was instead requested with the HTTP GET method.
+     * HEAD request method.
+     *
+     * The HEAD HTTP method requests the metadata of a resource in the form of
+     * headers that the server would have sent if the GET method was used
+     * instead.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/HEAD
      */
     public const string HEAD = 'HEAD';
     /**
-     * The HTTP OPTIONS method requests permitted communication options for a
-     * given URL or server. A client can specify a URL with this method, or an
-     * asterisk (*) to refer to the entire server.
+     * OPTIONS request method.
+     *
+     * The OPTIONS HTTP method requests permitted communication options for a
+     * given URL or server. This can be used to test the allowed HTTP methods
+     * for a request, or to determine whether a request would succeed when
+     * making a CORS preflighted request.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/OPTIONS
      */
     public const string OPTIONS = 'OPTIONS';
     /**
-     * The HTTP PATCH request method applies partial modifications to a resource.
+     * PATCH request method.
+     *
+     * The PATCH HTTP method applies partial modifications to a resource.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/PATCH
      */
     public const string PATCH = 'PATCH';
     /**
-     * The HTTP POST method sends data to the server. The type of the body of
+     * POST request method.
+     *
+     * The POST HTTP method sends data to the server. The type of the body of
      * the request is indicated by the Content-Type header.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/POST
@@ -71,8 +88,10 @@ class Method
      */
     public const string POST = 'POST';
     /**
-     * The HTTP PUT request method creates a new resource or replaces a
-     * representation of the target resource with the request payload.
+     * PUT request method.
+     *
+     * The PUT HTTP method creates a new resource or replaces a representation
+     * of the target resource with the request content.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/PUT
      */
@@ -89,8 +108,10 @@ class Method
      */
     public const string QUERY = 'QUERY';
     /**
-     * The HTTP TRACE method performs a message loop-back test along the path to
-     * the target resource, providing a useful debugging mechanism.
+     * TRACE request method.
+     *
+     * The TRACE HTTP method performs a message loop-back test along the path
+     * to the target resource.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/TRACE
      */
