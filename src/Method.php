@@ -78,6 +78,17 @@ class Method
      */
     public const string PUT = 'PUT';
     /**
+     * QUERY request method.
+     *
+     * The QUERY HTTP method initiates a server-side query. It requests that the
+     * target resource process the request content in a safe and idempotent
+     * manner, returning the result in the response.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/QUERY
+     * @see HeaderTrait::CONTENT_TYPE
+     */
+    public const string QUERY = 'QUERY';
+    /**
      * The HTTP TRACE method performs a message loop-back test along the path to
      * the target resource, providing a useful debugging mechanism.
      *
@@ -96,6 +107,7 @@ class Method
         'PATCH',
         'POST',
         'PUT',
+        'QUERY',
         'TRACE',
     ];
 
