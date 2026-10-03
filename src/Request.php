@@ -48,7 +48,7 @@ class Request extends Message implements RequestInterface
      */
     protected ?array $auth = null;
     /**
-     * @var string|null Basic or Digest
+     * @var string|null Basic, Bearer or Digest
      */
     protected ?string $authType = null;
     protected string $host;
