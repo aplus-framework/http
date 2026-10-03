@@ -545,15 +545,21 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * Get the Parsed Body or part of it.
+     * Parses and filters the request body.
      *
-     * @param string|null $name
-     * @param int|null $filter
-     * @param array<int,int>|int $filterOptions
+     * Get data when the request the Content-Type is
+     * `application/x-www-form-urlencoded` or `multipart/form-data`.
      *
-     * @throws RequestParseBodyException
+     * Files can be obtained using the {@see Framework\HTTP\Request::getFiles()}
+     * method.
      *
-     * @return mixed
+     * @param string|null $name The array key name as a string, or null to return all data
+     * @param int|null $filter Optional filter applied to the value returned with `$name`
+     * @param array<int,int>|int $filterOptions Filter options
+     *
+     * @throws RequestParseBodyException for errors when parsing the body
+     *
+     * @return mixed Returns the value according to the `$name` and the filtering
      */
     public function getParsedBody(
         ?string $name = null,
@@ -567,13 +573,21 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @param string|null $name
-     * @param int|null $filter
-     * @param array<int,int>|int $filterOptions
+     * Parses and filters the request body.
      *
-     * @throws RequestParseBodyException
+     * Get data when the request the Content-Type is
+     * `application/x-www-form-urlencoded` or `multipart/form-data`.
      *
-     * @return mixed
+     * Files can be obtained using the {@see Framework\HTTP\Request::getFiles()}
+     * method.
+     *
+     * @param string|null $name The array key name as a string, or null to return all data
+     * @param int|null $filter Optional filter applied to the value returned with `$name`
+     * @param array<int,int>|int $filterOptions Filter options
+     *
+     * @throws RequestParseBodyException for errors when parsing the body
+     *
+     * @return mixed Returns the value according to the `$name` and the filtering
      */
     protected function getFilteredParsedBody(
         ?string $name = null,
@@ -592,10 +606,18 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @param array<string,mixed>|null $options
+     * Parses the request body.
      *
-     * @throws RequestParseBodyException
-     * @throws LogicException
+     * @param array{
+     *      max_file_uploads?: int|string,
+     *      max_input_vars?: int|string,
+     *      max_multipart_body_parts?: int|string,
+     *      post_max_size?: int|string,
+     *      upload_max_filesize?: int|string,
+     * }|null $options Options used in {@see request_parse_body()}
+     *
+     * @throws RequestParseBodyException for errors when parsing the body
+     * @throws LogicException when the body has already been parsed
      *
      * @return static
      */
@@ -610,9 +632,17 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @param array<string,mixed>|null $options
+     * Call the request_parse_body() function.
      *
-     * @throws RequestParseBodyException
+     * @param array{
+     *      max_file_uploads?: int|string,
+     *      max_input_vars?: int|string,
+     *      max_multipart_body_parts?: int|string,
+     *      post_max_size?: int|string,
+     *      upload_max_filesize?: int|string,
+     * }|null $options
+     *
+     * @throws RequestParseBodyException for errors when parsing the body
      *
      * @return array<int,array<mixed>>
      */
@@ -627,7 +657,13 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @return array<string,mixed>|null
+     * @return array{
+     *      max_file_uploads?: int|string,
+     *      max_input_vars?: int|string,
+     *      max_multipart_body_parts?: int|string,
+     *      post_max_size?: int|string,
+     *      upload_max_filesize?: int|string,
+     * }|null
      */
     public function getParseBodyOptions() : ?array
     {
@@ -635,7 +671,13 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * @param array<string,mixed>|null $options
+     * @param array{
+     *      max_file_uploads?: int|string,
+     *      max_input_vars?: int|string,
+     *      max_multipart_body_parts?: int|string,
+     *      post_max_size?: int|string,
+     *      upload_max_filesize?: int|string,
+     * }|null $options
      *
      * @see https://www.php.net/manual/en/function.request-parse-body.php#refsect1-function.request-parse-body-parameters
      */
@@ -1087,13 +1129,19 @@ class Request extends Message implements RequestInterface
     /**
      * Get POST data.
      *
-     * @param string|null $name
-     * @param int|null $filter
-     * @param array<int,int>|int $filterOptions
+     * Get data when the request method is POST and the Content-Type is
+     * `application/x-www-form-urlencoded` or `multipart/form-data`.
      *
-     * @throws RequestParseBodyException
+     * Files can be obtained using the {@see Framework\HTTP\Request::getFiles()}
+     * method.
      *
-     * @return mixed
+     * @param string|null $name The array key name as a string, or null to return all data
+     * @param int|null $filter Optional filter applied to the value returned with `$name`
+     * @param array<int,int>|int $filterOptions Filter options
+     *
+     * @throws RequestParseBodyException for errors when parsing the body
+     *
+     * @return mixed Returns the value according to the `$name` and the filtering
      */
     public function getPost(
         ?string $name = null,
@@ -1112,13 +1160,19 @@ class Request extends Message implements RequestInterface
     /**
      * Get PATCH data.
      *
-     * @param string|null $name
-     * @param int|null $filter
-     * @param array<int,int>|int $filterOptions
+     * Get data when the request method is PATCH and the Content-Type is
+     * `application/x-www-form-urlencoded` or `multipart/form-data`.
      *
-     * @throws RequestParseBodyException
+     * Files can be obtained using the {@see Framework\HTTP\Request::getFiles()}
+     * method.
      *
-     * @return mixed
+     * @param string|null $name The array key name as a string, or null to return all data
+     * @param int|null $filter Optional filter applied to the value returned with `$name`
+     * @param array<int,int>|int $filterOptions Filter options
+     *
+     * @throws RequestParseBodyException for errors when parsing the body
+     *
+     * @return mixed Returns the value according to the `$name` and the filtering
      */
     public function getPatch(
         ?string $name = null,
@@ -1134,13 +1188,19 @@ class Request extends Message implements RequestInterface
     /**
      * Get PUT data.
      *
-     * @param string|null $name
-     * @param int|null $filter
-     * @param array<int,int>|int $filterOptions
+     * Get data when the request method is PUT and the Content-Type is
+     * `application/x-www-form-urlencoded` or `multipart/form-data`.
      *
-     * @throws RequestParseBodyException
+     * Files can be obtained using the {@see Framework\HTTP\Request::getFiles()}
+     * method.
      *
-     * @return mixed
+     * @param string|null $name The array key name as a string, or null to return all data
+     * @param int|null $filter Optional filter applied to the value returned with `$name`
+     * @param array<int,int>|int $filterOptions Filter options
+     *
+     * @throws RequestParseBodyException for errors when parsing the body
+     *
+     * @return mixed Returns the value according to the `$name` and the filtering
      */
     public function getPut(
         ?string $name = null,
