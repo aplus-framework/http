@@ -916,6 +916,8 @@ class Request extends Message implements RequestInterface
      * @param int|null $filter
      * @param array<int,int>|int $filterOptions
      *
+     * @see Framework\HTTP\Method::GET
+     *
      * @return mixed
      */
     public function getGet(
@@ -1139,6 +1141,8 @@ class Request extends Message implements RequestInterface
      * @param int|null $filter Optional filter applied to the value returned with `$name`
      * @param array<int,int>|int $filterOptions Filter options
      *
+     * @see Framework\HTTP\Method::POST
+     *
      * @throws RequestParseBodyException for errors when parsing the body
      *
      * @return mixed Returns the value according to the `$name` and the filtering
@@ -1170,6 +1174,8 @@ class Request extends Message implements RequestInterface
      * @param int|null $filter Optional filter applied to the value returned with `$name`
      * @param array<int,int>|int $filterOptions Filter options
      *
+     * @see Framework\HTTP\Method::PATCH
+     *
      * @throws RequestParseBodyException for errors when parsing the body
      *
      * @return mixed Returns the value according to the `$name` and the filtering
@@ -1198,6 +1204,8 @@ class Request extends Message implements RequestInterface
      * @param int|null $filter Optional filter applied to the value returned with `$name`
      * @param array<int,int>|int $filterOptions Filter options
      *
+     * @see Framework\HTTP\Method::PUT
+     *
      * @throws RequestParseBodyException for errors when parsing the body
      *
      * @return mixed Returns the value according to the `$name` and the filtering
@@ -1217,6 +1225,8 @@ class Request extends Message implements RequestInterface
      * Get QUERY data.
      *
      * Get the response body when the request method is QUERY.
+     *
+     * @see Framework\HTTP\Method::QUERY
      *
      * @return string|null the request body or null if it is not a request with
      * the QUERY method
