@@ -14,7 +14,7 @@ use InvalidArgumentException;
 /**
  * Class Protocol.
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview
  *
  * @package http
  */

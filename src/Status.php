@@ -15,7 +15,7 @@ use LogicException;
 /**
  * Class Status.
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
  *
  * @package http
  */

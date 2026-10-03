@@ -18,8 +18,8 @@ use Stringable;
 /**
  * Class Cookie.
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
- * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies
  * @see https://datatracker.ietf.org/doc/html/rfc6265
  * @see https://www.php.net/manual/en/function.setcookie.php
  *

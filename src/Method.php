@@ -14,7 +14,7 @@ use InvalidArgumentException;
 /**
  * Class Method.
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods
  *
  * @package http
  */
