@@ -263,6 +263,15 @@ final class RequestTest extends TestCase
         self::assertSame('red', $this->request->getPut('color'));
     }
 
+    public function testQuery() : void
+    {
+        // @phpstan-ignore-next-line
+        $this->request->setBody('select * from users');
+        self::assertNull($this->request->getQuery());
+        $this->request->setMethod('QUERY');
+        self::assertSame('select * from users', $this->request->getQuery());
+    }
+
     public function testCharset() : void
     {
         self::assertSame([

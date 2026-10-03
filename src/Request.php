@@ -1214,6 +1214,22 @@ class Request extends Message implements RequestInterface
     }
 
     /**
+     * Get QUERY data.
+     *
+     * Get the response body when the request method is QUERY.
+     *
+     * @return string|null the request body or null if it is not a request with
+     * the QUERY method
+     */
+    public function getQuery() : ?string
+    {
+        if ($this->isMethod(Method::QUERY)) {
+            return $this->getBody();
+        }
+        return null;
+    }
+
+    /**
      * Get the Referer header.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer
