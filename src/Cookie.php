@@ -64,8 +64,15 @@ class Cookie implements Stringable
         $string = $this->getName() . '=' . $this->getValue();
         $part = $this->getExpires();
         if ($part !== null) {
-            $string .= '; expires=' . $this->expires->format('D, d M Y H:i:s \G\M\T');
-            $string .= '; Max-Age=' . $this->expires->diff(new DateTime('-1 second'))->s;
+            $timestamp = $this->expires->getTimestamp();
+            if ($timestamp > 0) {
+                $string .= '; expires=' . $this->expires->format('D, d M Y H:i:s \G\M\T');
+                $age = $timestamp - \time();
+                if ($age < 1) {
+                    $age = 0;
+                }
+                $string .= '; Max-Age=' . $age;
+            }
         }
         $part = $this->getPath();
         if ($part !== null) {
