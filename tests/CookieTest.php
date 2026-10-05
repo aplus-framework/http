@@ -175,7 +175,30 @@ final class CookieTest extends TestCase
             ->setExpires($time);
         self::assertSame($expected, $this->cookie->toString());
         self::assertSame($expected, (string) $this->cookie);
-        self::assertInstanceOf(Cookie::class, $this->cookie);
+    }
+
+    public function testStringWithMaxAgeEqualsZero() : void
+    {
+        $time = \time() - 30;
+        $expected = 'foo=baz'
+            . '; expires=' . \date('D, d M Y H:i:s', $time) . ' GMT'
+            . '; Max-Age=0'
+            . '; path=/blog'
+            . '; domain=domain.tld'
+            . '; secure'
+            . '; HttpOnly'
+            . '; SameSite=Strict'
+            . '; Partitioned';
+        $this->cookie->setDomain('domain.tld')
+            ->setPath('/blog')
+            ->setSecure()
+            ->setPartitioned()
+            ->setHttpOnly()
+            ->setSameSite('strict')
+            ->setValue('baz')
+            ->setExpires($time);
+        self::assertSame($expected, $this->cookie->toString());
+        self::assertSame($expected, (string) $this->cookie);
     }
 
     public function testValue() : void
