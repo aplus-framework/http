@@ -142,7 +142,7 @@ class Cookie implements Stringable
             $expires->setTimezone(new DateTimeZone('UTC'));
         } elseif (\is_numeric($expires)) {
             $expires = DateTime::createFromFormat('U', (string) $expires, new DateTimeZone('UTC'));
-        } elseif ($expires !== null) {
+        } elseif (\is_string($expires)) {
             $expires = new DateTime($expires, new DateTimeZone('UTC'));
         }
         $this->expires = $expires; // @phpstan-ignore-line
