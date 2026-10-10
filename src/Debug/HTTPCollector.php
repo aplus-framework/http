@@ -10,6 +10,7 @@
 namespace Framework\HTTP\Debug;
 
 use Closure;
+use Framework\Debug\Activity;
 use Framework\Debug\Collector;
 use Framework\Debug\Debugger as D;
 use Framework\Helpers\ArraySimple;
@@ -49,13 +50,13 @@ class HTTPCollector extends Collector
                 $data['message'] === 'response' &&
                 $data['type'] === 'send'
             ) {
-                $activities[] = [
-                    'collector' => $this->getName(),
-                    'class' => static::class,
-                    'description' => 'Send response',
-                    'start' => $data['start'],
-                    'end' => $data['end'],
-                ];
+                $activities[] = new Activity(
+                    collector: $this->getName(),
+                    class: static::class,
+                    description: 'Send response',
+                    start: $data['start'],
+                    end: $data['end'],
+                );
             }
         }
         return $activities;

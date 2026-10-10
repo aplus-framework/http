@@ -10,6 +10,7 @@
 namespace Tests\HTTP\Debug;
 
 use Closure;
+use Framework\Debug\Activity;
 use Framework\HTTP\Cookie;
 use Framework\HTTP\Debug\HTTPCollector;
 use Framework\HTTP\Request;
@@ -216,13 +217,10 @@ final class HTTPCollectorTest extends TestCase
         \ob_start();
         $response->send();
         \ob_end_clean();
-        self::assertSame([
-            'collector',
-            'class',
-            'description',
-            'start',
-            'end',
-        ], \array_keys($this->collector->getActivities()[0])); // @phpstan-ignore-line
+        self::assertInstanceOf(
+            Activity::class,
+            $this->collector->getActivities()[0] // @phpstan-ignore-line
+        );
     }
 
     public function testResponseReplaceHeadersDisabled() : void
