@@ -18,7 +18,9 @@ final class RequestProxyTest extends TestCase
     public function setUp() : void
     {
         $this->proxyRequest = new RequestProxyMock([
-            'real-domain.tld:8080',
+            'allowed_hosts' => [
+                'real-domain.tld:8080',
+            ],
         ]);
     }
 
