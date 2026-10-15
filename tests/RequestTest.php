@@ -725,8 +725,10 @@ final class RequestTest extends TestCase
 
     public function testIpKeyInConstructor() : void
     {
-        $request = new Request(['ip_key' => 'REMOTE_ADDR']);
-        self::assertSame($request->getIpKey(), 'REMOTE_ADDR');
+        $_SERVER['HTTP_FOO'] = '127.0.0.2';
+        $request = new Request(['ip_key' => 'HTTP_FOO']);
+        self::assertSame($request->getIpKey(), 'HTTP_FOO');
+        self::assertSame($request->getIp(), '127.0.0.2');
     }
 
     public function testIpKeyWithHttpXForwardedFor() : void
