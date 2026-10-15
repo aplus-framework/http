@@ -81,7 +81,8 @@ class Request extends Message implements RequestInterface
      * Request constructor.
      *
      * @param array{
-     *      allowed_hosts?: array<string>
+     *      allowed_hosts?: array<string>,
+     *      ip_key?: Closure|string,
      * } $config
      *
      * @throws UnexpectedValueException if invalid Host
@@ -90,6 +91,9 @@ class Request extends Message implements RequestInterface
     {
         if (!empty($config['allowed_hosts'])) {
             $this->setAllowedHosts($config['allowed_hosts']);
+        }
+        if (!empty($config['ip_key'])) {
+            $this->setIpKey($config['ip_key']);
         }
         $this->prepareStatusLine();
     }

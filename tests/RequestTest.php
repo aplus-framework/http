@@ -723,6 +723,12 @@ final class RequestTest extends TestCase
         self::assertSame('192.168.1.100', $this->request->getIp());
     }
 
+    public function testIpKeyInConstructor() : void
+    {
+        $request = new Request(['ip_key' => 'REMOTE_ADDR']);
+        self::assertSame($request->getIpKey(), 'REMOTE_ADDR');
+    }
+
     public function testIpKeyWithHttpXForwardedFor() : void
     {
         $this->request->setIpKey('HTTP_X_FORWARDED_FOR');
