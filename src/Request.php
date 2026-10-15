@@ -86,6 +86,7 @@ class Request extends Message implements RequestInterface
      * } $config
      *
      * @throws UnexpectedValueException if invalid Host
+     * @throws InvalidArgumentException for IP key not set in the $_SERVER var
      */
     public function __construct(array $config = [])
     {
