@@ -67,12 +67,16 @@ final class HTTPCollectorTest extends TestCase
         self::assertStringNotContainsString('User-Agent', $contents);
     }
 
-    public function testRequestIp() : void
+    public function testRequestIpWithClosure() : void
     {
-        $this->prepare()->getRequest()->setIpKey(static function () {
+        $this->prepare();
+        $request = new Request(['ip_key' => static function () {
             return '192.168.0.222';
-        });
-        $contents = $this->collector->getContents();
+        }]);
+        $response = new Response($request);
+        $collector = new HTTPCollector();
+        $response->setDebugCollector($collector);
+        $contents = $collector->getContents();
         self::assertStringContainsString('192.168.0.222', $contents);
         self::assertStringContainsString(Closure::class, $contents);
     }

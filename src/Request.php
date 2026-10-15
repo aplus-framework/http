@@ -76,6 +76,7 @@ class Request extends Message implements RequestInterface
      * @var array<string>
      */
     protected array $allowedHosts = [];
+    protected string $ip;
 
     /**
      * Request constructor.
@@ -96,6 +97,7 @@ class Request extends Message implements RequestInterface
         if (!empty($config['ip_key'])) {
             $this->setIpKey($config['ip_key']);
         }
+        $this->setIp();
         $this->prepareStatusLine();
     }
 
@@ -958,32 +960,40 @@ class Request extends Message implements RequestInterface
     /**
      * Get the connection IP.
      *
-     * @param bool $validate True to validate the IP address, otherwise false
-     *
-     * @throws RuntimeException for invalid IP address
-     *
      * @return string
      */
-    public function getIp(bool $validate = true) : string
+    public function getIp() : string
+    {
+        return $this->ip;
+    }
+
+    /**
+     * @throws RuntimeException for invalid IP address
+     *
+     * @return static
+     */
+    protected function setIp() : static
     {
         $key = $this->getIpKey();
         if ($key instanceof Closure) {
             $ip = $key();
-            $this->validateIp($validate, $ip, Closure::class);
-            return $ip;
+            $this->validateIp($ip, Closure::class);
+            $this->ip = $ip;
+            return $this;
         }
         $ip = match($key) {
             'HTTP_FORWARDED' => $this->getIpFromHttpForwarded(),
             'HTTP_X_FORWARDED_FOR' => $this->getIpFromHttpXForwardedFor(),
             default => $_SERVER[$key]
         };
-        $this->validateIp($validate, $ip, $key);
-        return $ip;
+        $this->validateIp($ip, $key);
+        $this->ip = $ip;
+        return $this;
     }
 
-    protected function validateIp(bool $validate, string $ip, string $key) : void
+    protected function validateIp(string $ip, string $key) : void
     {
-        if ($validate && !\filter_var($ip, \FILTER_VALIDATE_IP)) {
+        if (!\filter_var($ip, \FILTER_VALIDATE_IP)) {
             throw new RuntimeException(
                 "The value of {$key} is not a valid IP address"
             );
@@ -1046,7 +1056,7 @@ class Request extends Message implements RequestInterface
      *
      * @return static
      */
-    public function setIpKey(Closure | string $ipKey) : static
+    protected function setIpKey(Closure | string $ipKey) : static
     {
         if (\is_string($ipKey) && !isset($_SERVER[$ipKey])) {
             throw new InvalidArgumentException(

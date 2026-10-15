@@ -355,6 +355,7 @@ final class RequestTest extends TestCase
             'HTTP_CONTENT_TYPE' => 'multipart/form-data; boundary=---------------------------8721656041911415653955004498',
             'HTTP_HOST' => 'domain.tld',
             'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
+            'REMOTE_ADDR' => '127.0.0.1',
             'REQUEST_METHOD' => 'POST',
             'REQUEST_SCHEME' => 'http',
             'REQUEST_URI' => '/blog/posts',
@@ -733,33 +734,50 @@ final class RequestTest extends TestCase
 
     public function testIpKeyWithHttpXForwardedFor() : void
     {
-        $this->request->setIpKey('HTTP_X_FORWARDED_FOR');
-        self::assertSame('45.181.102.88', $this->request->getIp());
+        $_SERVER['HTTP_X_FORWARDED_FOR'] = '45.181.102.88';
+        $request = new Request(['ip_key' => 'HTTP_X_FORWARDED_FOR']);
+        self::assertSame('45.181.102.88', $request->getIp());
+    }
+
+    public function testIpKeyWithHttpXForwardedForWithMultipleIps() : void
+    {
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '203.0.113.195, 2001:db8:85a3:8d3:1319:8a2e:370:7348';
-        self::assertSame('203.0.113.195', $this->request->getIp());
+        $request = new Request(['ip_key' => 'HTTP_X_FORWARDED_FOR']);
+        self::assertSame('203.0.113.195', $request->getIp());
     }
 
     public function testIpKeyWithHttpForwarded() : void
     {
         $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.60;proto=http;by=203.0.113.43';
-        $this->request->setIpKey('HTTP_FORWARDED');
-        self::assertSame('192.0.2.60', $this->request->getIp());
+        $request = new Request(['ip_key' => 'HTTP_FORWARDED']);
+        self::assertSame('192.0.2.60', $request->getIp());
         $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.43, for=198.51.100.17';
-        self::assertSame('192.0.2.43', $this->request->getIp());
+        $request = new Request(['ip_key' => 'HTTP_FORWARDED']);
+        self::assertSame('192.0.2.43', $request->getIp());
         $_SERVER['HTTP_FORWARDED'] = 'proto=http;by=203.0.113.43;for=192.0.2.60';
-        self::assertSame('192.0.2.60', $this->request->getIp());
+        $request = new Request(['ip_key' => 'HTTP_FORWARDED']);
+        self::assertSame('192.0.2.60', $request->getIp());
         $_SERVER['HTTP_FORWARDED'] = 'For="[2001:db8:cafe::17]:4711"';
-        self::assertSame('2001:db8:cafe::17', $this->request->getIp());
+        $request = new Request(['ip_key' => 'HTTP_FORWARDED']);
+        self::assertSame('2001:db8:cafe::17', $request->getIp());
         $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.43, for="[2001:db8:cafe::17]"';
-        self::assertSame('192.0.2.43', $this->request->getIp());
+        $request = new Request(['ip_key' => 'HTTP_FORWARDED']);
+        self::assertSame('192.0.2.43', $request->getIp());
         $_SERVER['HTTP_FORWARDED'] = 'for="[2001:db8:cafe::17]", for=192.0.2.43';
-        self::assertSame('2001:db8:cafe::17', $this->request->getIp());
-        $_SERVER['HTTP_FORWARDED'] = 'for="Foo", for=192.0.2.43';
-        self::assertSame('Foo', $this->request->getIp(false));
+        $request = new Request(['ip_key' => 'HTTP_FORWARDED']);
+        self::assertSame('2001:db8:cafe::17', $request->getIp());
         $_SERVER['HTTP_FORWARDED'] = 'foo';
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The IP address could not be get from the Forwarded header');
-        $this->request->getIp();
+        $request = new Request(['ip_key' => 'HTTP_FORWARDED']);
+    }
+
+    public function testIpKeyWithHttpForwardedInvalidIp() : void
+    {
+        $_SERVER['HTTP_FORWARDED'] = 'for="Foo", for=192.0.2.43';
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The value of HTTP_FORWARDED is not a valid IP address');
+        new Request(['ip_key' => 'HTTP_FORWARDED']);
     }
 
     /**
@@ -768,11 +786,9 @@ final class RequestTest extends TestCase
     public function testIpKeyWithHttpForwardedWithObfuscatedIdentifier() : void
     {
         $_SERVER['HTTP_FORWARDED'] = 'for="fooBar", for=192.0.2.43';
-        $this->request->setIpKey('HTTP_FORWARDED');
-        self::assertSame('fooBar', $this->request->getIp(false));
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The value of HTTP_FORWARDED is not a valid IP address');
-        $this->request->getIp();
+        new Request(['ip_key' => 'HTTP_FORWARDED']);
     }
 
     public function testIpKeyException() : void
@@ -781,25 +797,24 @@ final class RequestTest extends TestCase
         $this->expectExceptionMessage(
             'The IP Key "HTTP_CF_CONNECTING_IP" is not set in the $_SERVER'
         );
-        $this->request->setIpKey('HTTP_CF_CONNECTING_IP');
+        new Request(['ip_key' => 'HTTP_CF_CONNECTING_IP']);
     }
 
     public function testIpKeyWithClosure() : void
     {
-        $this->request->setIpKey(static function () {
+        $request = new Request(['ip_key' => static function () {
             return '192.168.0.201';
-        });
-        self::assertSame('192.168.0.201', $this->request->getIp());
+        }]);
+        self::assertSame('192.168.0.201', $request->getIp());
     }
 
     public function testIpKeyWithClosureAndException() : void
     {
-        $this->request->setIpKey(static function () {
-            return 'foo';
-        });
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The value of Closure is not a valid IP address');
-        $this->request->getIp();
+        new Request(['ip_key' => static function () {
+            return 'foo';
+        }]);
     }
 
     public function testIsAjax() : void
