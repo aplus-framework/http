@@ -133,6 +133,14 @@ final class RequestTest extends TestCase
         ], $request->getAllowedHosts());
     }
 
+    public function testAllowedHostsWithEmptyArray() : void
+    {
+        $request = new Request([
+            'allowed_hosts' => [],
+        ]);
+        self::assertSame([], $request->getAllowedHosts());
+    }
+
     public function testInvalidHost() : void
     {
         $this->expectException(\UnexpectedValueException::class);

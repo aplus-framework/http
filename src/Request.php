@@ -81,7 +81,7 @@ class Request extends Message implements RequestInterface
      */
     public function __construct(array $config = [])
     {
-        if (!empty($config['allowed_hosts'])) {
+        if (isset($config['allowed_hosts'])) {
             $this->setAllowedHosts($config['allowed_hosts']);
         }
         if (!empty($config['ip_key'])) {
@@ -209,6 +209,10 @@ class Request extends Message implements RequestInterface
      */
     protected function setAllowedHosts(array $allowedHosts) : static
     {
+        if (empty($allowedHosts)) {
+            $this->allowedHosts = $allowedHosts;
+            return $this;
+        }
         $host = $_SERVER['HTTP_HOST'] ?? null;
         if (!\in_array($host, $allowedHosts, true)) {
             throw new UnexpectedValueException('Invalid Host: ' . $host);
