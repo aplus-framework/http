@@ -75,21 +75,19 @@ class Request extends Message implements RequestInterface
     /**
      * @var array<string>
      */
-    protected array $allowedHosts;
+    protected array $allowedHosts = [];
 
     /**
      * Request constructor.
      *
-     * @param array<string> $allowedHosts set allowed hosts if your
-     * server don't serve by Host header, as Nginx do
+     * @param array<string> $allowedHosts set allowed hosts
      *
      * @throws UnexpectedValueException if invalid Host
      */
     public function __construct(array $allowedHosts = [])
     {
-        $this->allowedHosts = $allowedHosts;
         if ($allowedHosts) {
-            $this->validateHost($allowedHosts);
+            $this->setAllowedHosts($allowedHosts);
         }
         $this->prepareStatusLine();
     }
@@ -201,19 +199,33 @@ class Request extends Message implements RequestInterface
     }
 
     /**
-     * Check if Host header is allowed.
+     * Check if Host header is allowed. And set allowed hosts.
      *
      * @see https://expressionengine.com/blog/http-host-and-server-name-security-issues
      * @see http://nginx.org/en/docs/http/request_processing.html
      *
      * @param array<string> $allowedHosts
+     *
+     * @return static
      */
-    protected function validateHost(array $allowedHosts) : void
+    protected function setAllowedHosts(array $allowedHosts) : static
     {
         $host = $_SERVER['HTTP_HOST'] ?? null;
         if (!\in_array($host, $allowedHosts, true)) {
             throw new UnexpectedValueException('Invalid Host: ' . $host);
         }
+        $this->allowedHosts = $allowedHosts;
+        return $this;
+    }
+
+    /**
+     * Get the allowed hosts.
+     *
+     * @return array<string>
+     */
+    public function getAllowedHosts() : array
+    {
+        return $this->allowedHosts;
     }
 
     protected function prepareStatusLine() : void
@@ -225,16 +237,6 @@ class Request extends Message implements RequestInterface
         $url .= $_SERVER['REQUEST_URI'];
         $this->setUrl($url);
         $this->setHost($this->getUrl()->getHost());
-    }
-
-    /**
-     * Get the allowed hosts.
-     *
-     * @return array<string>
-     */
-    public function getAllowedHosts() : array
-    {
-        return $this->allowedHosts;
     }
 
     public function getHeader(string $name) : ?string
