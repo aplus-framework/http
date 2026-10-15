@@ -122,8 +122,10 @@ final class RequestTest extends TestCase
         self::assertSame([], $request->getAllowedHosts());
         $_SERVER['HTTP_HOST'] = 'foo.tld';
         $request = new Request([
-            'foo.tld',
-            'bar.tld',
+            'allowed_hosts' => [
+                'foo.tld',
+                'bar.tld',
+            ],
         ]);
         self::assertSame([
             'foo.tld',
@@ -136,7 +138,9 @@ final class RequestTest extends TestCase
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage('Invalid Host: domain.tld');
         $this->request = new RequestMock([
-            'other.tld',
+            'allowed_hosts' => [
+                'other.tld',
+            ],
         ]);
     }
 

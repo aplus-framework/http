@@ -133,7 +133,9 @@ To prevent that, whitelist the allowed hosts. Set it on the Request constructor:
 .. code-block:: php
 
     $allowedHosts = ['domain.tld', 'domain.tld:8088', 'api.domain.tld'];
-    $request = new Request($allowedHosts);
+    $request = new Request([
+        'allowed_hosts' => $allowedHosts,
+    ]);
 
 When a request for an unwanted host is done, an ``UnexpectedValueException``
 will thrown, with the message "Invalid Host: other.tld".
@@ -141,7 +143,7 @@ will thrown, with the message "Invalid Host: other.tld".
 With the throwable is possible, for example, to *catch* the Exception message
 and log it.
 
-If the $allowedHosts argument is not set, the Request will accept any host.
+If the ``allowed_hosts`` config is not set, the Request will accept any host.
 
 Content Negotiation
 ###################

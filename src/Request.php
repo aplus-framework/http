@@ -80,14 +80,16 @@ class Request extends Message implements RequestInterface
     /**
      * Request constructor.
      *
-     * @param array<string> $allowedHosts set allowed hosts
+     * @param array{
+     *      allowed_hosts?: array<string>
+     * } $config
      *
      * @throws UnexpectedValueException if invalid Host
      */
-    public function __construct(array $allowedHosts = [])
+    public function __construct(array $config = [])
     {
-        if ($allowedHosts) {
-            $this->setAllowedHosts($allowedHosts);
+        if (!empty($config['allowed_hosts'])) {
+            $this->setAllowedHosts($config['allowed_hosts']);
         }
         $this->prepareStatusLine();
     }
