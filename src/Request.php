@@ -43,7 +43,6 @@ class Request extends Message implements RequestInterface
      * @var array<string,mixed>|null
      */
     protected ?array $parseBodyOptions = null;
-    protected int $port;
     protected URL | false | null $referrer = null;
     protected UserAgent | false | null $userAgent = null;
     protected bool $isAjax;
@@ -679,7 +678,7 @@ class Request extends Message implements RequestInterface
      */
     public function getPort() : int
     {
-        return $this->port ?? $_SERVER['SERVER_PORT'];
+        return (int) $_SERVER['SERVER_PORT'];
     }
 
     /**
