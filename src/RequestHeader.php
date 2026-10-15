@@ -18,7 +18,7 @@ namespace Framework\HTTP;
  */
 class RequestHeader
 {
-    use HeaderTrait;
+    use Traits\HeaderTrait;
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Accept
      */

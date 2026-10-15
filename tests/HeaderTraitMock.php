@@ -9,7 +9,7 @@
  */
 namespace Tests\HTTP;
 
-use Framework\HTTP\HeaderTrait;
+use Framework\HTTP\Traits\HeaderTrait;
 
 /**
  * Class HeaderTraitMock.
