@@ -108,14 +108,6 @@ final class RequestTest extends TestCase
         self::assertNull($this->request->getUserAgent());
     }
 
-    public function testHost() : void
-    {
-        self::assertSame('domain.tld', $this->request->getHost());
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid host: a_b');
-        $this->request->setHost('a_b');
-    }
-
     public function testAllowedHosts() : void
     {
         $request = new Request();

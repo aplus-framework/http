@@ -43,7 +43,6 @@ class Request extends Message implements RequestInterface
      * @var array<string,mixed>|null
      */
     protected ?array $parseBodyOptions = null;
-    protected string $host;
     protected int $port;
     protected URL | false | null $referrer = null;
     protected UserAgent | false | null $userAgent = null;
@@ -230,7 +229,6 @@ class Request extends Message implements RequestInterface
         $url .= '://' . $_SERVER['HTTP_HOST'];
         $url .= $_SERVER['REQUEST_URI'];
         $this->setUrl($url);
-        $this->setHost($this->getUrl()->getHost());
     }
 
     public function getHeader(string $name) : ?string
@@ -615,14 +613,6 @@ class Request extends Message implements RequestInterface
         array | int $filterOptions = 0
     ) : mixed {
         return $this->filterInput(\INPUT_GET, $name, $filter, $filterOptions);
-    }
-
-    /**
-     * @return string
-     */
-    public function getHost() : string
-    {
-        return $this->host;
     }
 
     /**
@@ -1041,28 +1031,6 @@ class Request extends Message implements RequestInterface
             return $return;
         };
         return $makeObjects(ArraySimple::files($files), $makeObjects); // @phpstan-ignore-line
-    }
-
-    /**
-     * @param string $host
-     *
-     * @throws InvalidArgumentException for invalid host
-     *
-     * @return static
-     */
-    protected function setHost(string $host) : static
-    {
-        $filteredHost = 'http://' . $host;
-        $filteredHost = \filter_var($filteredHost, \FILTER_VALIDATE_URL);
-        if (!$filteredHost) {
-            throw new InvalidArgumentException("Invalid host: {$host}");
-        }
-        $host = \parse_url($filteredHost);
-        $this->host = $host['host']; // @phpstan-ignore-line
-        if (isset($host['port'])) {
-            $this->port = $host['port'];
-        }
-        return $this;
     }
 
     /**

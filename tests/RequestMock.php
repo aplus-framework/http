@@ -109,11 +109,6 @@ class RequestMock extends \Framework\HTTP\Request
         return parent::setMethod($method);
     }
 
-    public function setHost(string $host) : static
-    {
-        return parent::setHost($host);
-    }
-
     protected function requestParseBody(?array $options = null) : array
     {
         if (!$this->isForm()) {

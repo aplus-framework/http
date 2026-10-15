@@ -24,11 +24,6 @@ final class RequestProxyTest extends TestCase
         ]);
     }
 
-    public function testHost() : void
-    {
-        self::assertSame('real-domain.tld', $this->proxyRequest->getHost());
-    }
-
     public function testAccept() : void
     {
         self::assertSame([], $this->proxyRequest->getAccepts());
