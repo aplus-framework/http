@@ -84,7 +84,7 @@ class Request extends Message implements RequestInterface
         if (isset($config['allowed_hosts'])) {
             $this->setAllowedHosts($config['allowed_hosts']);
         }
-        if (!empty($config['ip_key'])) {
+        if (isset($config['ip_key'])) {
             $this->setIpKey($config['ip_key']);
         }
         $this->setIp();
