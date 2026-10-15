@@ -7,13 +7,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\HTTP;
+namespace Framework\HTTP\Traits;
 
+use Framework\HTTP\Request;
+use Framework\HTTP\RequestHeader;
+use Framework\HTTP\ResponseHeader;
+use Framework\HTTP\Status;
 use InvalidArgumentException;
 use RuntimeException;
 
 /**
- * Trait ResponseDownload.
+ * Trait ResponseDownloadTrait.
  *
  * @see https://datatracker.ietf.org/doc/html/rfc7233
  *
@@ -21,7 +25,7 @@ use RuntimeException;
  *
  * @package http
  */
-trait ResponseDownload
+trait ResponseDownloadTrait
 {
     private string $filepath;
     private int $filesize;
