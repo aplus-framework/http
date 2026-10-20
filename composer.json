@@ -57,12 +57,12 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Framework\\HTTP\\": "src/"
+            "Aplus\\Http\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\HTTP\\": "tests/"
+            "Tests\\Http\\": "tests/"
         }
     },
     "config": {
