@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\HTTP;
+namespace Tests\Http;
 
 use PHPUnit\Framework\TestCase;
 
@@ -63,7 +63,7 @@ final class RequestProxyTest extends TestCase
             'https://real-domain.tld:8080/blog/posts?order_by=title&order=asc',
             (string) $this->proxyRequest->getUrl()
         );
-        self::assertInstanceOf(\Framework\HTTP\URL::class, $this->proxyRequest->getUrl());
+        self::assertInstanceOf(\Aplus\Http\Url::class, $this->proxyRequest->getUrl());
     }
 
     public function testId() : void

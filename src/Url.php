@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\HTTP;
+namespace Aplus\Http;
 
 use InvalidArgumentException;
 use JsonSerializable;
@@ -15,7 +15,7 @@ use RuntimeException;
 use Stringable;
 
 /**
- * Class URL.
+ * Class Url.
  *
  * @see https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Web_mechanics/What_is_a_URL
  * @see https://developer.mozilla.org/en-US/docs/Web/API/URL
@@ -23,7 +23,7 @@ use Stringable;
  *
  * @package http
  */
-class URL implements JsonSerializable, Stringable
+class Url implements JsonSerializable, Stringable
 {
     /**
      * The #fragment (id).

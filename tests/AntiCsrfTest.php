@@ -7,19 +7,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\HTTP;
+namespace Tests\Http;
 
-use Framework\HTTP\AntiCSRF;
+use Aplus\Http\AntiCsrf;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class AntiCSRFTest.
+ * Class AntiCsrfTest.
  *
  * @runTestsInSeparateProcesses
  */
-final class AntiCSRFTest extends TestCase
+final class AntiCsrfTest extends TestCase
 {
-    protected AntiCSRF $anti;
+    protected AntiCsrf $anti;
     protected RequestMock $request;
 
     protected function prepare() : void
@@ -27,14 +27,14 @@ final class AntiCSRFTest extends TestCase
         \session_start();
         $this->request = new RequestMock();
         $this->request->setMethod('POST');
-        $this->anti = new AntiCSRF($this->request);
+        $this->anti = new AntiCsrf($this->request);
     }
 
     public function testSessionDisabled() : void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Session must be active to use AntiCSRF class');
-        (new AntiCSRF(new RequestMock()));
+        $this->expectExceptionMessage('Session must be active to use AntiCsrf class');
+        (new AntiCsrf(new RequestMock()));
     }
 
     public function testTokenBytesLengthInConstructor() : void
@@ -42,13 +42,13 @@ final class AntiCSRFTest extends TestCase
         \session_start();
         $request = new RequestMock();
         $request->setMethod('POST');
-        $anti = new AntiCSRF($request, 32);
+        $anti = new AntiCsrf($request, 32);
         self::assertSame(32, $anti->getTokenBytesLength());
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'AntiCSRF token bytes length must be greater than 2, 1 given'
+            'AntiCsrf token bytes length must be greater than 2, 1 given'
         );
-        new AntiCSRF($request, 1);
+        new AntiCsrf($request, 1);
     }
 
     public function testTokenBytesLength() : void
@@ -59,7 +59,7 @@ final class AntiCSRFTest extends TestCase
         self::assertSame(3, $this->anti->getTokenBytesLength());
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'AntiCSRF token bytes length must be greater than 2, 2 given'
+            'AntiCsrf token bytes length must be greater than 2, 2 given'
         );
         $this->anti->setTokenBytesLength(2);
     }
@@ -77,14 +77,14 @@ final class AntiCSRFTest extends TestCase
         \session_start();
         $request = new RequestMock();
         $request->setMethod('POST');
-        $anti = new AntiCSRF($request, generateTokenFunction: $function);
+        $anti = new AntiCsrf($request, generateTokenFunction: $function);
         self::assertSame($function, $anti->getGenerateTokenFunction());
         self::assertSame($length, \strlen($anti->generateToken()));
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Invalid generate token function name: foo'
         );
-        new AntiCSRF($request, generateTokenFunction: 'foo');
+        new AntiCsrf($request, generateTokenFunction: 'foo');
     }
 
     /**
@@ -123,9 +123,9 @@ final class AntiCSRFTest extends TestCase
     {
         $this->prepare();
         self::assertSame('csrf_token', $this->anti->getTokenName());
-        self::assertInstanceOf(AntiCSRF::class, $this->anti->setTokenName('custom'));
+        self::assertInstanceOf(AntiCsrf::class, $this->anti->setTokenName('custom'));
         self::assertSame('custom', $this->anti->getTokenName());
-        self::assertInstanceOf(AntiCSRF::class, $this->anti->setTokenName("cus'tom"));
+        self::assertInstanceOf(AntiCsrf::class, $this->anti->setTokenName("cus'tom"));
         self::assertSame('cus&apos;tom', $this->anti->getTokenName());
     }
 

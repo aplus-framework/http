@@ -7,18 +7,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\HTTP\Debug;
+namespace Tests\Http\Debug;
 
-use Framework\HTTP\Debug\HTTPCollection;
+use Aplus\Http\Debug\HttpCollection;
 use PHPUnit\Framework\TestCase;
 
-final class HTTPCollectionTest extends TestCase
+final class HttpCollectionTest extends TestCase
 {
-    protected HTTPCollection $collection;
+    protected HttpCollection $collection;
 
     protected function setUp() : void
     {
-        $this->collection = new HTTPCollection('HTTP');
+        $this->collection = new HttpCollection('HTTP');
     }
 
     public function testIcon() : void

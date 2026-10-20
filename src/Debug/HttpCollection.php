@@ -7,16 +7,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\HTTP\Debug;
+namespace Aplus\Http\Debug;
 
-use Framework\Debug\Collection;
+use Aplus\Debug\Collection;
 
 /**
- * Class HTTPCollection.
+ * Class HttpCollection.
  *
  * @package http
  */
-class HTTPCollection extends Collection
+class HttpCollection extends Collection
 {
     protected string $iconPath = __DIR__ . '/icons/http.svg';
 }

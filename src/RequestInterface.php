@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\HTTP;
+namespace Aplus\Http;
 
 /**
  * Interface RequestInterface.
@@ -22,5 +22,5 @@ interface RequestInterface extends MessageInterface
 
     public function isMethod(string $method) : bool;
 
-    public function getUrl() : URL;
+    public function getUrl() : Url;
 }

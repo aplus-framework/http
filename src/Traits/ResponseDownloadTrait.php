@@ -7,12 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\HTTP\Traits;
+namespace Aplus\Http\Traits;
 
-use Framework\HTTP\Request;
-use Framework\HTTP\RequestHeader;
-use Framework\HTTP\ResponseHeader;
-use Framework\HTTP\Status;
+use Aplus\Http\Request;
+use Aplus\Http\RequestHeader;
+use Aplus\Http\ResponseHeader;
+use Aplus\Http\Status;
 use InvalidArgumentException;
 use RuntimeException;
 

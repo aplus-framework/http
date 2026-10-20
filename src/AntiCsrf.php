@@ -7,13 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\HTTP;
+namespace Aplus\Http;
 
 use InvalidArgumentException;
 use LogicException;
 
 /**
- * Class AntiCSRF.
+ * Class AntiCsrf.
  *
  * @see https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern
  * @see https://stackoverflow.com/q/6287903/6027968
@@ -22,7 +22,7 @@ use LogicException;
  *
  * @package http
  */
-class AntiCSRF
+class AntiCsrf
 {
     protected string $tokenName = 'csrf_token';
     protected Request $request;
@@ -40,7 +40,7 @@ class AntiCSRF
     ];
 
     /**
-     * AntiCSRF constructor.
+     * AntiCsrf constructor.
      *
      * @param Request $request
      * @param int|null $tokenBytesLength
@@ -52,7 +52,7 @@ class AntiCSRF
         ?string $generateTokenFunction = null,
     ) {
         if (\session_status() !== \PHP_SESSION_ACTIVE) {
-            throw new LogicException('Session must be active to use AntiCSRF class');
+            throw new LogicException('Session must be active to use AntiCsrf class');
         }
         $this->request = $request;
         if ($tokenBytesLength !== null) {
@@ -70,7 +70,7 @@ class AntiCSRF
     {
         if ($length < 3) {
             throw new InvalidArgumentException(
-                'AntiCSRF token bytes length must be greater than 2, ' . $length . ' given'
+                'AntiCsrf token bytes length must be greater than 2, ' . $length . ' given'
             );
         }
         $this->tokenBytesLength = $length;
@@ -253,7 +253,7 @@ class AntiCSRF
     /**
      * Tells if the verification is enabled.
      *
-     * @see AntiCSRF::verify()
+     * @see AntiCsrf::verify()
      *
      * @return bool
      */
@@ -265,7 +265,7 @@ class AntiCSRF
     /**
      * Enables the Anti CSRF verification.
      *
-     * @see AntiCSRF::verify()
+     * @see AntiCsrf::verify()
      *
      * @return static
      */
@@ -278,7 +278,7 @@ class AntiCSRF
     /**
      * Disables the Anti CSRF verification.
      *
-     * @see AntiCSRF::verify()
+     * @see AntiCsrf::verify()
      *
      * @return static
      */

@@ -7,14 +7,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\HTTP\Debug;
+namespace Tests\Http\Debug;
 
+use Aplus\Debug\Activity;
+use Aplus\Http\Cookie;
+use Aplus\Http\Debug\HttpCollector;
+use Aplus\Http\Request;
+use Aplus\Http\Response;
 use Closure;
-use Framework\Debug\Activity;
-use Framework\HTTP\Cookie;
-use Framework\HTTP\Debug\HTTPCollector;
-use Framework\HTTP\Request;
-use Framework\HTTP\Response;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class HTTPCollectorTest extends TestCase
 {
-    protected HTTPCollector $collector;
+    protected HttpCollector $collector;
 
     /**
      * @param array<string,scalar> $server
@@ -41,14 +41,14 @@ final class HTTPCollectorTest extends TestCase
         }
         $request = new Request();
         $response = new Response($request);
-        $this->collector = new HTTPCollector();
+        $this->collector = new HttpCollector();
         $response->setDebugCollector($this->collector);
         return $response;
     }
 
     public function testEmpty() : void
     {
-        $collector = new HTTPCollector();
+        $collector = new HttpCollector();
         $contents = $collector->getContents();
         self::assertStringContainsString('Request instance has not been set', $contents);
         self::assertStringContainsString('Response instance has not been set', $contents);
@@ -74,7 +74,7 @@ final class HTTPCollectorTest extends TestCase
             return '192.168.0.222';
         }]);
         $response = new Response($request);
-        $collector = new HTTPCollector();
+        $collector = new HttpCollector();
         $response->setDebugCollector($collector);
         $contents = $collector->getContents();
         self::assertStringContainsString('192.168.0.222', $contents);

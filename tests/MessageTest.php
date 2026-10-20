@@ -7,11 +7,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\HTTP;
+namespace Tests\Http;
 
-use Framework\HTTP\Cookie;
-use Framework\HTTP\RequestInterface;
-use Framework\HTTP\ResponseInterface;
+use Aplus\Http\Cookie;
+use Aplus\Http\RequestInterface;
+use Aplus\Http\ResponseInterface;
 use PHPUnit\Framework\TestCase;
 
 final class MessageTest extends TestCase

@@ -7,20 +7,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\HTTP;
+namespace Tests\Http;
 
-use Framework\HTTP\URL;
-use Framework\HTTP\UserAgent;
+use Aplus\Http\Url;
+use Aplus\Http\UserAgent;
 use RequestParseBodyException;
 use ValueError;
 
-class RequestMock extends \Framework\HTTP\Request
+class RequestMock extends \Aplus\Http\Request
 {
     /**
      * @var array<int,array<mixed>>|null
      */
     public ?array $parsedBody = null;
-    public URL | false | null $referrer = null;
+    public Url | false | null $referrer = null;
     public UserAgent | false | null $userAgent = null;
     public ?bool $isSecure;
     /**

@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\HTTP;
+namespace Aplus\Http;
 
 use BadMethodCallException;
 use InvalidArgumentException;
@@ -29,7 +29,7 @@ abstract class Message implements MessageInterface
     /**
      * HTTP Request URL.
      */
-    protected URL $url;
+    protected Url $url;
     /**
      * HTTP Request Method.
      */
@@ -456,9 +456,9 @@ abstract class Message implements MessageInterface
     /**
      * Gets the requested URL.
      *
-     * @return URL
+     * @return Url
      */
-    protected function getUrl() : URL
+    protected function getUrl() : Url
     {
         return $this->url;
     }
@@ -466,14 +466,14 @@ abstract class Message implements MessageInterface
     /**
      * Set the Message URL.
      *
-     * @param URL|string $url
+     * @param Url|string $url
      *
      * @return static
      */
-    protected function setUrl(URL | string $url) : static
+    protected function setUrl(Url | string $url) : static
     {
-        if (!$url instanceof URL) {
-            $url = new URL($url);
+        if (!$url instanceof Url) {
+            $url = new Url($url);
         }
         $this->url = $url;
         return $this;

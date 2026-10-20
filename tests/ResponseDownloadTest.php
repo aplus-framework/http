@@ -7,10 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\HTTP;
+namespace Tests\Http;
 
-use Framework\HTTP\Response;
-use Framework\HTTP\Status;
+use Aplus\Http\Response;
+use Aplus\Http\Status;
 use PHPUnit\Framework\TestCase;
 
 final class ResponseDownloadTest extends TestCase

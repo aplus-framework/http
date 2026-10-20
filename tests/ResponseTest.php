@@ -7,13 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\HTTP;
+namespace Tests\Http;
 
-use Framework\HTTP\Cookie;
-use Framework\HTTP\CSP;
-use Framework\HTTP\Request;
-use Framework\HTTP\Response;
-use Framework\HTTP\Status;
+use Aplus\Http\Cookie;
+use Aplus\Http\Csp;
+use Aplus\Http\Request;
+use Aplus\Http\Response;
+use Aplus\Http\Status;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 
@@ -744,8 +744,8 @@ final class ResponseTest extends TestCase
      */
     public function testCsp() : void
     {
-        $csp = new CSP([
-            CSP::defaultSrc => [
+        $csp = new Csp([
+            Csp::defaultSrc => [
                 'self',
             ],
         ]);
@@ -782,8 +782,8 @@ final class ResponseTest extends TestCase
     {
         self::assertNull($this->response->getCsp());
         self::assertFalse($this->response->hasCsp());
-        $csp = new CSP([
-            CSP::defaultSrc => [
+        $csp = new Csp([
+            Csp::defaultSrc => [
                 'self',
             ],
         ]);
@@ -800,8 +800,8 @@ final class ResponseTest extends TestCase
      */
     public function testCspNegotiationWithoutBody() : void
     {
-        $csp = new CSP([
-            CSP::defaultSrc => [
+        $csp = new Csp([
+            Csp::defaultSrc => [
                 'self',
             ],
         ]);
@@ -821,8 +821,8 @@ final class ResponseTest extends TestCase
      */
     public function testCspNegotiationWithInvalidContentType() : void
     {
-        $csp = new CSP([
-            CSP::defaultSrc => [
+        $csp = new Csp([
+            Csp::defaultSrc => [
                 'self',
             ],
         ]);
@@ -844,8 +844,8 @@ final class ResponseTest extends TestCase
      */
     public function testCspReportOnly() : void
     {
-        $csp = new CSP([
-            CSP::defaultSrc => [
+        $csp = new Csp([
+            Csp::defaultSrc => [
                 'self',
             ],
         ]);
@@ -882,8 +882,8 @@ final class ResponseTest extends TestCase
     {
         self::assertNull($this->response->getCspReportOnly());
         self::assertFalse($this->response->hasCspReportOnly());
-        $csp = new CSP([
-            CSP::defaultSrc => [
+        $csp = new Csp([
+            Csp::defaultSrc => [
                 'self',
             ],
         ]);
@@ -900,8 +900,8 @@ final class ResponseTest extends TestCase
      */
     public function testCspReportOnlyNegotiationWithoutBody() : void
     {
-        $csp = new CSP([
-            CSP::defaultSrc => [
+        $csp = new Csp([
+            Csp::defaultSrc => [
                 'self',
             ],
         ]);
@@ -921,8 +921,8 @@ final class ResponseTest extends TestCase
      */
     public function testCspReportOnlyNegotiationWithInvalidContentType() : void
     {
-        $csp = new CSP([
-            CSP::defaultSrc => [
+        $csp = new Csp([
+            Csp::defaultSrc => [
                 'self',
             ],
         ]);

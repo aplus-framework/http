@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\HTTP\Traits;
+namespace Aplus\Http\Traits;
 
-use Framework\HTTP\Message;
+use Aplus\Http\Message;
 
 /**
  * Trait ContentNegotiationTrait.

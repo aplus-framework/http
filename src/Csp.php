@@ -7,14 +7,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\HTTP;
+namespace Aplus\Http;
 
 use InvalidArgumentException;
 use LogicException;
 use Stringable;
 
 /**
- * Class CSP.
+ * Class Csp.
  *
  * @see https://content-security-policy.com/
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP
@@ -22,7 +22,7 @@ use Stringable;
  *
  * @package http
  */
-class CSP implements Stringable
+class Csp implements Stringable
 {
     /**
      * Restricts the URLs which can be used in a document's `<base>` element.

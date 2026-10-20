@@ -7,12 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\HTTP;
+namespace Aplus\Http;
 
+use Aplus\Http\Debug\HttpCollector;
 use Closure;
 use DateTime;
 use DateTimeZone;
-use Framework\HTTP\Debug\HTTPCollector;
 use InvalidArgumentException;
 use JsonException;
 use LogicException;
@@ -39,9 +39,9 @@ class Response extends Message implements ResponseInterface
     protected bool $inToString = false;
     protected bool $autoEtag = false;
     protected string $autoEtagHashAlgo = 'xxh3';
-    protected HTTPCollector $debugCollector;
-    protected ?CSP $csp;
-    protected ?CSP $cspReportOnly;
+    protected HttpCollector $debugCollector;
+    protected ?Csp $csp;
+    protected ?Csp $cspReportOnly;
     protected bool $replaceHeaders = false;
     protected Closure $stream;
 
@@ -228,11 +228,11 @@ class Response extends Message implements ResponseInterface
     /**
      * Set the Content-Security-Policy instance.
      *
-     * @param CSP $csp
+     * @param Csp $csp
      *
      * @return static
      */
-    public function setCsp(CSP $csp) : static
+    public function setCsp(Csp $csp) : static
     {
         $this->csp = $csp;
         return $this;
@@ -241,11 +241,11 @@ class Response extends Message implements ResponseInterface
     /**
      * Set the Content-Security-Policy-Report-Only instance.
      *
-     * @param CSP $csp
+     * @param Csp $csp
      *
      * @return static
      */
-    public function setCspReportOnly(CSP $csp) : static
+    public function setCspReportOnly(Csp $csp) : static
     {
         $this->cspReportOnly = $csp;
         return $this;
@@ -254,9 +254,9 @@ class Response extends Message implements ResponseInterface
     /**
      * Get the Content-Security-Policy instance or null.
      *
-     * @return CSP|null
+     * @return Csp|null
      */
-    public function getCsp() : ?CSP
+    public function getCsp() : ?Csp
     {
         return $this->csp ?? null;
     }
@@ -264,9 +264,9 @@ class Response extends Message implements ResponseInterface
     /**
      * Get the Content-Security-Policy-Report-Only instance or null.
      *
-     * @return CSP|null
+     * @return Csp|null
      */
-    public function getCspReportOnly() : ?CSP
+    public function getCspReportOnly() : ?Csp
     {
         return $this->cspReportOnly ?? null;
     }
@@ -1015,7 +1015,7 @@ class Response extends Message implements ResponseInterface
         return $this;
     }
 
-    public function setDebugCollector(HTTPCollector $debugCollector) : static
+    public function setDebugCollector(HttpCollector $debugCollector) : static
     {
         $this->debugCollector = $debugCollector;
         $this->debugCollector->setResponse($this);

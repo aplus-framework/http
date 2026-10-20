@@ -7,22 +7,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\HTTP\Debug;
+namespace Aplus\Http\Debug;
 
+use Aplus\Debug\Activity;
+use Aplus\Debug\Collector;
+use Aplus\Debug\Debugger as D;
+use Aplus\Helpers\ArraySimple;
+use Aplus\Http\Request;
+use Aplus\Http\Response;
 use Closure;
-use Framework\Debug\Activity;
-use Framework\Debug\Collector;
-use Framework\Debug\Debugger as D;
-use Framework\Helpers\ArraySimple;
-use Framework\HTTP\Request;
-use Framework\HTTP\Response;
 
 /**
- * Class HTTPCollector.
+ * Class HttpCollector.
  *
  * @package http
  */
-class HTTPCollector extends Collector
+class HttpCollector extends Collector
 {
     protected Request $request;
     protected Response $response;

@@ -7,13 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\HTTP;
+namespace Tests\Http;
 
-use Framework\HTTP\Request;
-use Framework\HTTP\Response;
-use Framework\HTTP\UploadedFile;
-use Framework\HTTP\URL;
-use Framework\HTTP\UserAgent;
+use Aplus\Http\Request;
+use Aplus\Http\Response;
+use Aplus\Http\UploadedFile;
+use Aplus\Http\Url;
+use Aplus\Http\UserAgent;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -984,7 +984,7 @@ final class RequestTest extends TestCase
     public function testReferer() : void
     {
         self::assertSame('http://domain.tld/contact.html', (string) $this->request->getReferer());
-        self::assertInstanceOf(URL::class, $this->request->getReferer());
+        self::assertInstanceOf(Url::class, $this->request->getReferer());
         $this->request->referrer = null;
         unset($_SERVER['HTTP_REFERER']);
         self::assertNull($this->request->getReferer());
@@ -1029,7 +1029,7 @@ final class RequestTest extends TestCase
             'http://domain.tld/blog/posts?order_by=title&order=asc',
             (string) $this->request->getUrl()
         );
-        self::assertInstanceOf(URL::class, $this->request->getUrl());
+        self::assertInstanceOf(Url::class, $this->request->getUrl());
     }
 
     public function testId() : void

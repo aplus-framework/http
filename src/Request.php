@@ -7,11 +7,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Framework\HTTP;
+namespace Aplus\Http;
 
+use Aplus\Helpers\ArraySimple;
 use BadMethodCallException;
 use Closure;
-use Framework\Helpers\ArraySimple;
 use InvalidArgumentException;
 use LogicException;
 use Override;
@@ -43,7 +43,7 @@ class Request extends Message implements RequestInterface
      * @var array<string,mixed>|null
      */
     protected ?array $parseBodyOptions = null;
-    protected URL | false | null $referrer = null;
+    protected Url | false | null $referrer = null;
     protected UserAgent | false | null $userAgent = null;
     protected bool $isAjax;
     /**
@@ -809,11 +809,11 @@ class Request extends Message implements RequestInterface
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer
      *
-     * @return URL|null
+     * @return Url|null
      */
-    public function getReferer() : ?URL
+    public function getReferer() : ?Url
     {
-        if ($this->referrer instanceof URL) {
+        if ($this->referrer instanceof Url) {
             return $this->referrer;
         }
         if ($this->referrer === false) {
@@ -825,7 +825,7 @@ class Request extends Message implements RequestInterface
             return null;
         }
         try {
-            $this->referrer = new URL($referer);
+            $this->referrer = new Url($referer);
         } catch (InvalidArgumentException) {
             $this->referrer = false;
         }
@@ -852,10 +852,10 @@ class Request extends Message implements RequestInterface
     /**
      * Gets the requested URL.
      *
-     * @return URL
+     * @return Url
      */
     #[Override]
-    public function getUrl() : URL
+    public function getUrl() : Url
     {
         return parent::getUrl();
     }

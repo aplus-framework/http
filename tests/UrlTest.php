@@ -7,59 +7,59 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Tests\HTTP;
+namespace Tests\Http;
 
-use Framework\HTTP\URL;
+use Aplus\Http\Url;
 use PHPUnit\Framework\TestCase;
 
-final class URLTest extends TestCase
+final class UrlTest extends TestCase
 {
-    protected URL $url;
+    protected Url $url;
 
     public function setUp() : void
     {
-        $this->url = new URL('http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id');
+        $this->url = new Url('http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id');
     }
 
     public function testSameUrl() : void
     {
         $expected = 'http://domain.tld';
-        $url = new URL($expected);
+        $url = new Url($expected);
         self::assertNotSame($expected, $url->getUrl());
         self::assertNotSame($expected, $url->toString());
         self::assertNotSame($expected, $url->__toString());
         $expected = 'http://domain.tld/';
-        $url = new URL($expected);
+        $url = new Url($expected);
         self::assertSame($expected, $url->getUrl());
         self::assertSame($expected, $url->toString());
         self::assertSame($expected, $url->__toString());
         $expected = 'http://domain.tld/foo';
-        $url = new URL($expected);
+        $url = new Url($expected);
         self::assertSame($expected, $url->getUrl());
         self::assertSame($expected, $url->toString());
         self::assertSame($expected, $url->__toString());
         $expected = 'http://domain.tld/foo/';
-        $url = new URL($expected);
+        $url = new Url($expected);
         self::assertSame($expected, $url->getUrl());
         self::assertSame($expected, $url->toString());
         self::assertSame($expected, $url->__toString());
         $expected = 'http://domain.tld/foo/bar';
-        $url = new URL($expected);
+        $url = new Url($expected);
         self::assertSame($expected, $url->getUrl());
         self::assertSame($expected, $url->toString());
         self::assertSame($expected, $url->__toString());
         $expected = 'http://domain.tld/foo/bar/';
-        $url = new URL($expected);
+        $url = new Url($expected);
         self::assertSame($expected, $url->getUrl());
         self::assertSame($expected, $url->toString());
         self::assertSame($expected, $url->__toString());
         $expected = 'http://user:pass@domain.tld:8080/foo/bar?a=1&b=2#id';
-        $url = new URL($expected);
+        $url = new Url($expected);
         self::assertSame($expected, $url->getUrl());
         self::assertSame($expected, $url->toString());
         self::assertSame($expected, $url->__toString());
         $expected = 'http://user:pass@domain.tld:8080/foo/bar/?a=1&b=2#id';
-        $url = new URL($expected);
+        $url = new Url($expected);
         self::assertSame($expected, $url->getUrl());
         self::assertSame($expected, $url->toString());
         self::assertSame($expected, $url->__toString());
@@ -68,28 +68,28 @@ final class URLTest extends TestCase
     public function testRelative() : void
     {
         $url = 'http://domain.tld';
-        $object = new URL($url);
+        $object = new Url($url);
         self::assertNotSame('', $object->getRelative());
         $url = 'http://domain.tld/';
-        $object = new URL($url);
+        $object = new Url($url);
         self::assertSame('/', $object->getRelative());
         $url = 'http://domain.tld?foo=bar';
-        $object = new URL($url);
+        $object = new Url($url);
         self::assertSame('/?foo=bar', $object->getRelative());
         $url = 'http://domain.tld/?foo=bar';
-        $object = new URL($url);
+        $object = new Url($url);
         self::assertSame('/?foo=bar', $object->getRelative());
         $url = 'http://domain.tld#contact';
-        $object = new URL($url);
+        $object = new Url($url);
         self::assertSame('/#contact', $object->getRelative());
         $url = 'http://domain.tld/?foo=bar#contact';
-        $object = new URL($url);
+        $object = new Url($url);
         self::assertSame('/?foo=bar#contact', $object->getRelative());
         $url = 'http://domain.tld/foo/bar#contact';
-        $object = new URL($url);
+        $object = new Url($url);
         self::assertSame('/foo/bar#contact', $object->getRelative());
         $url = 'http://domain.tld/foo/bar/#contact';
-        $object = new URL($url);
+        $object = new Url($url);
         self::assertSame('/foo/bar/#contact', $object->getRelative());
     }
 
@@ -98,14 +98,14 @@ final class URLTest extends TestCase
         $url = 'http://domain.tld';
         self::assertSame(
             $url . '/',
-            (new URL($url))->__toString()
+            (new Url($url))->__toString()
         );
     }
 
     public function testBaseUrl() : void
     {
         self::assertSame('http://domain.tld:8080/', $this->url->getBaseUrl());
-        self::assertSame('http://domain.tld:8080', $this->url->getBaseURL(''));
+        self::assertSame('http://domain.tld:8080', $this->url->getBaseUrl(''));
         self::assertSame('http://domain.tld:8080/foo/bar', $this->url->getBaseUrl('foo/bar'));
         self::assertSame('http://domain.tld:8080/foo/bar/', $this->url->getBaseUrl('foo/bar/'));
         $this->url->setScheme('https');
@@ -134,36 +134,36 @@ final class URLTest extends TestCase
         $this->url->setHostname('in_valid.com');
     }
 
-    public function testInvalidURL() : void
+    public function testInvalidUrl() : void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid URL: //unknown');
-        new URL('//unknown');
+        new Url('//unknown');
     }
 
     public function testInvalidUrlNoScheme() : void
     {
-        $url = new URL('https://unknown.com');
+        $url = new Url('https://unknown.com');
         self::assertSame('https', $url->getScheme());
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid URL: //unknown.com');
-        new URL('//unknown.com');
+        new Url('//unknown.com');
     }
 
     public function testInvalidUrlNoSchemeAndNoBars() : void
     {
-        $url = new URL('https://unknown.com');
+        $url = new Url('https://unknown.com');
         self::assertSame('https', $url->getScheme());
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid URL: unknown.com');
-        new URL('unknown.com');
+        new Url('unknown.com');
     }
 
     public function testInvalidUrlNoHost() : void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid URL: /foo/bar');
-        new URL('/foo/bar');
+        new Url('/foo/bar');
     }
 
     public function testOrigin() : void
