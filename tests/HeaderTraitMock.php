@@ -9,7 +9,7 @@
  */
 namespace Tests\Http;
 
-use Aplus\Http\Traits\HeaderTrait;
+use Aplus\Http\Traits\Header;
 
 /**
  * Class HeaderTraitMock.
@@ -18,5 +18,5 @@ use Aplus\Http\Traits\HeaderTrait;
  */
 class HeaderTraitMock
 {
-    use HeaderTrait;
+    use Header;
 }

@@ -12,13 +12,13 @@ namespace Aplus\Http\Traits;
 use Aplus\Http\Message;
 
 /**
- * Trait ContentNegotiationTrait.
+ * Trait ContentNegotiation.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Content_negotiation
  *
  * @package http
  */
-trait ContentNegotiationTrait
+trait ContentNegotiation
 {
     /**
      * @var array<string,array<mixed>|null>

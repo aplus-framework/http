@@ -9,6 +9,7 @@
  */
 namespace Aplus\Http;
 
+use Aplus\Http\Traits\Header;
 use InvalidArgumentException;
 use LogicException;
 
@@ -40,7 +41,7 @@ class Status
      * This code is sent in response to an Upgrade request header from the
      * client, and indicates the protocol the server is switching to.
      *
-     * @see HeaderTrait::UPGRADE
+     * @see Header::UPGRADE
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/101
      */
     public const int SWITCHING_PROTOCOLS = 101;
@@ -60,7 +61,7 @@ class Status
      * letting the user agent start preloading resources while the server
      * prepares a response.
      *
-     * @see HeaderTrait::LINK
+     * @see Header::LINK
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/103
      */
     public const int EARLY_HINTS = 103;
@@ -146,7 +147,7 @@ class Status
      * to request only part of a resource.
      *
      * @see RequestHeader::RANGE
-     * @see HeaderTrait::CONTENT_RANGE
+     * @see Header::CONTENT_RANGE
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/206
      */
     public const int PARTIAL_CONTENT = 206;
@@ -405,7 +406,7 @@ class Status
      * Server rejected the request because the Content-Length header field is
      * not defined and the server requires it.
      *
-     * @see HeaderTrait::CONTENT_LENGTH
+     * @see Header::CONTENT_LENGTH
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/411
      */
     public const int LENGTH_REQUIRED = 411;
@@ -528,7 +529,7 @@ class Status
      * protocol. The server sends an `Upgrade` header in a 426 response to
      * indicate the required protocol(s).
      *
-     * @see HeaderTrait::UPGRADE
+     * @see Header::UPGRADE
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/426
      */
     public const int UPGRADE_REQUIRED = 426;

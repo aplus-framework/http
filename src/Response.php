@@ -27,7 +27,7 @@ use Override;
  */
 class Response extends Message implements ResponseInterface
 {
-    use Traits\ResponseDownloadTrait;
+    use Traits\ResponseDownload;
 
     protected int $cacheSeconds = 0;
     protected bool $isSent = false;

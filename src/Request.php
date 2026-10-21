@@ -28,9 +28,9 @@ use UnexpectedValueException;
  */
 class Request extends Message implements RequestInterface
 {
-    use Traits\ContentNegotiationTrait;
-    use Traits\RequestAuthTrait;
-    use Traits\RequestIpTrait;
+    use Traits\ContentNegotiation;
+    use Traits\RequestAuth;
+    use Traits\RequestIp;
     /**
      * @var array<string,UploadedFile|array<mixed>>|null
      */

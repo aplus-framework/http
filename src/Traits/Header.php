@@ -10,13 +10,13 @@
 namespace Aplus\Http\Traits;
 
 /**
- * Trait HeaderTrait.
+ * Trait Header.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers
  *
  * @package http
  */
-trait HeaderTrait
+trait Header
 {
     // -------------------------------------------------------------------------
     // General headers (Request and Response)

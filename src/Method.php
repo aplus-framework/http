@@ -9,6 +9,7 @@
  */
 namespace Aplus\Http;
 
+use Aplus\Http\Traits\Header;
 use InvalidArgumentException;
 
 /**
@@ -84,7 +85,7 @@ class Method
      * the request is indicated by the Content-Type header.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/POST
-     * @see HeaderTrait::CONTENT_TYPE
+     * @see Header::CONTENT_TYPE
      */
     public const string POST = 'POST';
     /**
@@ -104,7 +105,7 @@ class Method
      * manner, returning the result in the response.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/QUERY
-     * @see HeaderTrait::CONTENT_TYPE
+     * @see Header::CONTENT_TYPE
      */
     public const string QUERY = 'QUERY';
     /**

@@ -14,11 +14,11 @@ use InvalidArgumentException;
 use RuntimeException;
 
 /**
- * Trait RequestIpTrait.
+ * Trait RequestIp.
  *
  * @package http
  */
-trait RequestIpTrait
+trait RequestIp
 {
     protected Closure | string $ipKey = 'REMOTE_ADDR';
     protected string $ip;

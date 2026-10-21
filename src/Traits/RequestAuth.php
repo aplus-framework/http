@@ -10,13 +10,13 @@
 namespace Aplus\Http\Traits;
 
 /**
- * Trait RequestAuthTrait.
+ * Trait RequestAuth.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Authentication
  *
  * @package http
  */
-trait RequestAuthTrait
+trait RequestAuth
 {
     /**
      * HTTP Authorization Header parsed.

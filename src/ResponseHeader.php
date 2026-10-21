@@ -18,7 +18,7 @@ namespace Aplus\Http;
  */
 class ResponseHeader
 {
-    use Traits\HeaderTrait;
+    use Traits\Header;
     /**
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Accept-Ranges
      */

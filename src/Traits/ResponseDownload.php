@@ -17,7 +17,7 @@ use InvalidArgumentException;
 use RuntimeException;
 
 /**
- * Trait ResponseDownloadTrait.
+ * Trait ResponseDownload.
  *
  * @see https://datatracker.ietf.org/doc/html/rfc7233
  *
@@ -25,7 +25,7 @@ use RuntimeException;
  *
  * @package http
  */
-trait ResponseDownloadTrait
+trait ResponseDownload
 {
     private string $filepath;
     private int $filesize;
