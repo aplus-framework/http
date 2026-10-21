@@ -10,7 +10,7 @@ Aplus Framework HTTP (HyperText Transfer Protocol) Library.
 - `Request`_
 - `Response`_
 - `URL`_
-- `AntiCSRF`_
+- `Anti-CSRF`_
 - `Content Security Policy`_
 
 Installation
@@ -35,7 +35,7 @@ Create a PHP file (**users.php**) with the following contents:
     <?php
     require __DIR__ . '/vendor/autoload.php';
 
-    use Framework\HTTP\Request;
+    use Aplus\Http\Request;
 
     $request = new Request();
 
@@ -330,8 +330,8 @@ To use the Response class, just instantiate it:
     <?php
     require __DIR__ . '/vendor/autoload.php';
     
-    use Framework\HTTP\Request;
-    use Framework\HTTP\Response;
+    use Aplus\Http\Request;
+    use Aplus\Http\Response;
     
     $request = new Request();
     $response = new Response($request);
@@ -345,7 +345,7 @@ the **Status** class:
 
 .. code-block:: php
 
-    use Framework\HTTP\Status;
+    use Aplus\Http\Status;
 
     $response->setStatus(401); // static
     $response->setStatus(Status::UNAUTHORIZED); // static
@@ -360,7 +360,7 @@ Also, you can use constants from the **ResponseHeader** class:
 
 .. code-block:: php
 
-    use Framework\HTTP\ResponseHeader;
+    use Aplus\Http\ResponseHeader;
 
     $response->setHeader('Content-Type', 'text/xml'); // static
     $response->setHeader(ResponseHeader::CONTENT_TYPE, 'text/xml'); // static
@@ -504,8 +504,8 @@ The file below (**sse.php**) shows how to send a stream using
     <?php
     require __DIR__ . '/vendor/autoload.php';
 
-    use Framework\HTTP\Request;
-    use Framework\HTTP\Response;
+    use Aplus\Http\Request;
+    use Aplus\Http\Response;
 
     $request = new Request();
     $response = new Response($request);
@@ -626,9 +626,9 @@ The library has a class for working with URLs. See how it works:
 
 .. code-block:: php
 
-    use Framework\HTTP\URL;
+    use Aplus\Http\Url;
     
-    $url = new URL('http://domain.tld:8080/slug?page=1#heading');
+    $url = new Url('http://domain.tld:8080/slug?page=1#heading');
     echo $url->getScheme(); // http
     echo $url->getHost(); // domain.tld:8080
     echo $url->getHostname(); // domain.tld
@@ -641,30 +641,30 @@ The library has a class for working with URLs. See how it works:
     echo $url->getQuery(); // page=1
     echo $url->getFragment(); // heading
 
-AntiCSRF
+Anti-CSRF
 --------
 
 The HTTP library has a class to prevent
 `Cross-Site Request Forgery (CSRF) <https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#synchronizer-token-pattern>`_
 using the Synchronizer Token Pattern.
 
-We will see below how AntiCSRF works.
+We will see below how Anti-CSRF works.
 
 We have a file called **header.php** that will be required by other files
 because it loads the autoload file, starts the session and instantiates the
-Request and AntiCSRF objects:
+Request and AntiCsrf objects:
 
 .. code-block:: php
 
     <?php
     require __DIR__ . '/vendor/autoload.php';
 
-    use Framework\HTTP\AntiCSRF;
-    use Framework\HTTP\Request;
+    use Aplus\Http\AntiCsrf;
+    use Aplus\Http\Request;
 
     session_start();
     $request = new Request();
-    $antiCsrf = new AntiCSRF($request);
+    $antiCsrf = new AntiCsrf($request);
 
 In this example, we have a form in the **form.php** file. In which there is a
 call to the ``$antiCsrf`` variable that returns the field with the token saved
@@ -723,7 +723,7 @@ Several directives can be passed in object construction or through the
 
 .. code-block:: php
 
-    use Framework\HTTP\CSP;
+    use Aplus\Http\Csp;
 
     $directives = [
         'default-src' => [
@@ -734,14 +734,14 @@ Several directives can be passed in object construction or through the
             'cdn.foo.tld',
         ],
     ];
-    $csp = new CSP($directives);
+    $csp = new Csp($directives);
     $csp->setDirectives($directives);
 
 Values for a single directive can be passed with the ``setDirective`` method:
 
 .. code-block:: php
 
-    $csp->setDirective(CSP::defaultSrc, [
+    $csp->setDirective(Csp::defaultSrc, [
         'self',
     ]);
 
@@ -750,7 +750,7 @@ use the ``addValues`` method:
 
 .. code-block:: php
 
-    $csp->addValues(CSP::styleSrc, [
+    $csp->addValues(Csp::styleSrc, [
         'self',
         'cdn.foo.tld',
     ]);
@@ -849,7 +849,7 @@ all the hashes.
 
 .. code-block:: php
 
-    $styleHashes = CSP::getStyleHashes($html);
+    $styleHashes = Csp::getStyleHashes($html);
 
 We can use the ``var_dump`` function to obtain style hashes:
 
@@ -869,7 +869,7 @@ method:
 
 .. code-block:: php
 
-    $csp->addValues(CSP::styleSrc, [
+    $csp->addValues(Csp::styleSrc, [
         'sha256-CvbCUHrSwRhSRk6O3h7eTuSY9r3oKFudXNGTM/oLBI8='
     ]);
 
@@ -886,7 +886,7 @@ First, let's get the script hashes:
 
 .. code-block:: php
 
-    $scriptHashes = CSP::getScriptHashes($html);
+    $scriptHashes = Csp::getScriptHashes($html);
 
 We can view them with a ``var_dump``:
 
@@ -907,7 +907,7 @@ So, we added the script hashes to the CSP object:
 
 .. code-block:: php
 
-    $csp->addValues(CSP::scriptSrc, [
+    $csp->addValues(Csp::scriptSrc, [
         'sha256-IfEVrz7Me6SW7O7OHy04/VaUhErMLxjWHdJd8MYN5b0=',
         'sha256-0TppQmjw9at2nEl3givShY5l6nABmQ84qrh1dRgvMJ0='
     ]);
@@ -932,19 +932,19 @@ hashes in the header.
 CSP in Response
 ###############
 
-An object of the CSP class can be set to an object of the Framework\HTTP\Response
+An object of the CSP class can be set to an object of the Aplus\Http\Response
 class and then it will be sent with the response via the ``send`` method.
 
 Below, we see how to instantiate the objects:
 
 .. code-block:: php
 
-    use Framework\HTTP\CSP;
-    use Framework\HTTP\Request;
-    use Framework\HTTP\Response;
+    use Aplus\Http\Csp;
+    use Aplus\Http\Request;
+    use Aplus\Http\Response;
 
-    $csp = new CSP([
-        CSP::defaultSrc => [
+    $csp = new Csp([
+        Csp::defaultSrc => [
             'self',
         ],
     ]);
