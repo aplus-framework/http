@@ -19,8 +19,6 @@ registerArgumentsSet(
     \FILTER_SANITIZE_NUMBER_FLOAT,
     \FILTER_SANITIZE_NUMBER_INT,
     \FILTER_SANITIZE_SPECIAL_CHARS,
-    \FILTER_SANITIZE_STRING,
-    \FILTER_SANITIZE_STRIPPED,
     \FILTER_SANITIZE_URL,
     \FILTER_UNSAFE_RAW,
     \FILTER_VALIDATE_BOOL,
@@ -62,11 +60,11 @@ registerArgumentsSet(
 );
 registerArgumentsSet(
     'protocols',
-    \Framework\HTTP\Protocol::HTTP_1_0,
-    \Framework\HTTP\Protocol::HTTP_1_1,
-    \Framework\HTTP\Protocol::HTTP_2_0,
-    \Framework\HTTP\Protocol::HTTP_2,
-    \Framework\HTTP\Protocol::HTTP_3,
+    \Aplus\Http\Protocol::HTTP_1_0,
+    \Aplus\Http\Protocol::HTTP_1_1,
+    \Aplus\Http\Protocol::HTTP_2_0,
+    \Aplus\Http\Protocol::HTTP_2,
+    \Aplus\Http\Protocol::HTTP_3,
     'HTTP/1.0',
     'HTTP/1.1',
     'HTTP/2.0',
@@ -75,15 +73,16 @@ registerArgumentsSet(
 );
 registerArgumentsSet(
     'methods',
-    \Framework\HTTP\Method::CONNECT,
-    \Framework\HTTP\Method::DELETE,
-    \Framework\HTTP\Method::GET,
-    \Framework\HTTP\Method::HEAD,
-    \Framework\HTTP\Method::OPTIONS,
-    \Framework\HTTP\Method::PATCH,
-    \Framework\HTTP\Method::POST,
-    \Framework\HTTP\Method::PUT,
-    \Framework\HTTP\Method::TRACE,
+    \Aplus\Http\Method::CONNECT,
+    \Aplus\Http\Method::DELETE,
+    \Aplus\Http\Method::GET,
+    \Aplus\Http\Method::HEAD,
+    \Aplus\Http\Method::OPTIONS,
+    \Aplus\Http\Method::PATCH,
+    \Aplus\Http\Method::POST,
+    \Aplus\Http\Method::PUT,
+    \Aplus\Http\Method::QUERY,
+    \Aplus\Http\Method::TRACE,
     'CONNECT',
     'DELETE',
     'GET',
@@ -92,145 +91,146 @@ registerArgumentsSet(
     'PATCH',
     'POST',
     'PUT',
+    'QUERY',
     'TRACE',
 );
 registerArgumentsSet(
     'response_status_codes',
-    \Framework\HTTP\Status::CONTINUE,
-    \Framework\HTTP\Status::SWITCHING_PROTOCOLS,
-    \Framework\HTTP\Status::PROCESSING,
-    \Framework\HTTP\Status::EARLY_HINTS,
-    \Framework\HTTP\Status::OK,
-    \Framework\HTTP\Status::CREATED,
-    \Framework\HTTP\Status::ACCEPTED,
-    \Framework\HTTP\Status::NON_AUTHORITATIVE_INFORMATION,
-    \Framework\HTTP\Status::NO_CONTENT,
-    \Framework\HTTP\Status::RESET_CONTENT,
-    \Framework\HTTP\Status::PARTIAL_CONTENT,
-    \Framework\HTTP\Status::MULTI_STATUS,
-    \Framework\HTTP\Status::ALREADY_REPORTED,
-    \Framework\HTTP\Status::IM_USED,
-    \Framework\HTTP\Status::MULTIPLE_CHOICES,
-    \Framework\HTTP\Status::MOVED_PERMANENTLY,
-    \Framework\HTTP\Status::FOUND,
-    \Framework\HTTP\Status::SEE_OTHER,
-    \Framework\HTTP\Status::NOT_MODIFIED,
-    \Framework\HTTP\Status::USE_PROXY,
-    \Framework\HTTP\Status::SWITCH_PROXY,
-    \Framework\HTTP\Status::TEMPORARY_REDIRECT,
-    \Framework\HTTP\Status::PERMANENT_REDIRECT,
-    \Framework\HTTP\Status::BAD_REQUEST,
-    \Framework\HTTP\Status::UNAUTHORIZED,
-    \Framework\HTTP\Status::PAYMENT_REQUIRED,
-    \Framework\HTTP\Status::FORBIDDEN,
-    \Framework\HTTP\Status::NOT_FOUND,
-    \Framework\HTTP\Status::METHOD_NOT_ALLOWED,
-    \Framework\HTTP\Status::NOT_ACCEPTABLE,
-    \Framework\HTTP\Status::PROXY_AUTHENTICATION_REQUIRED,
-    \Framework\HTTP\Status::REQUEST_TIMEOUT,
-    \Framework\HTTP\Status::CONFLICT,
-    \Framework\HTTP\Status::GONE,
-    \Framework\HTTP\Status::LENGTH_REQUIRED,
-    \Framework\HTTP\Status::PRECONDITION_FAILED,
-    \Framework\HTTP\Status::PAYLOAD_TOO_LARGE,
-    \Framework\HTTP\Status::URI_TOO_LARGE,
-    \Framework\HTTP\Status::UNSUPPORTED_MEDIA_TYPE,
-    \Framework\HTTP\Status::RANGE_NOT_SATISFIABLE,
-    \Framework\HTTP\Status::EXPECTATION_FAILED,
-    \Framework\HTTP\Status::IM_A_TEAPOT,
-    \Framework\HTTP\Status::MISDIRECTED_REQUEST,
-    \Framework\HTTP\Status::UNPROCESSABLE_ENTITY,
-    \Framework\HTTP\Status::LOCKED,
-    \Framework\HTTP\Status::FAILED_DEPENDENCY,
-    \Framework\HTTP\Status::TOO_EARLY,
-    \Framework\HTTP\Status::UPGRADE_REQUIRED,
-    \Framework\HTTP\Status::PRECONDITION_REQUIRED,
-    \Framework\HTTP\Status::TOO_MANY_REQUESTS,
-    \Framework\HTTP\Status::REQUEST_HEADER_FIELDS_TOO_LARGE,
-    \Framework\HTTP\Status::UNAVAILABLE_FOR_LEGAL_REASONS,
-    \Framework\HTTP\Status::CLIENT_CLOSED_REQUEST,
-    \Framework\HTTP\Status::INTERNAL_SERVER_ERROR,
-    \Framework\HTTP\Status::NOT_IMPLEMENTED,
-    \Framework\HTTP\Status::BAD_GATEWAY,
-    \Framework\HTTP\Status::SERVICE_UNAVAILABLE,
-    \Framework\HTTP\Status::GATEWAY_TIMEOUT,
-    \Framework\HTTP\Status::CODE_VERSION_NOT_SUPPORTED,
-    \Framework\HTTP\Status::VARIANT_ALSO_NEGOTIATES,
-    \Framework\HTTP\Status::INSUFFICIENT_STORAGE,
-    \Framework\HTTP\Status::LOOP_DETECTED,
-    \Framework\HTTP\Status::NOT_EXTENDED,
-    \Framework\HTTP\Status::NETWORK_AUTHENTICATION_REQUIRED,
-    \Framework\HTTP\Status::NETWORK_CONNECT_TIMEOUT_ERROR,
+    \Aplus\Http\Status::CONTINUE,
+    \Aplus\Http\Status::SWITCHING_PROTOCOLS,
+    \Aplus\Http\Status::PROCESSING,
+    \Aplus\Http\Status::EARLY_HINTS,
+    \Aplus\Http\Status::OK,
+    \Aplus\Http\Status::CREATED,
+    \Aplus\Http\Status::ACCEPTED,
+    \Aplus\Http\Status::NON_AUTHORITATIVE_INFORMATION,
+    \Aplus\Http\Status::NO_CONTENT,
+    \Aplus\Http\Status::RESET_CONTENT,
+    \Aplus\Http\Status::PARTIAL_CONTENT,
+    \Aplus\Http\Status::MULTI_STATUS,
+    \Aplus\Http\Status::ALREADY_REPORTED,
+    \Aplus\Http\Status::IM_USED,
+    \Aplus\Http\Status::MULTIPLE_CHOICES,
+    \Aplus\Http\Status::MOVED_PERMANENTLY,
+    \Aplus\Http\Status::FOUND,
+    \Aplus\Http\Status::SEE_OTHER,
+    \Aplus\Http\Status::NOT_MODIFIED,
+    \Aplus\Http\Status::USE_PROXY,
+    \Aplus\Http\Status::SWITCH_PROXY,
+    \Aplus\Http\Status::TEMPORARY_REDIRECT,
+    \Aplus\Http\Status::PERMANENT_REDIRECT,
+    \Aplus\Http\Status::BAD_REQUEST,
+    \Aplus\Http\Status::UNAUTHORIZED,
+    \Aplus\Http\Status::PAYMENT_REQUIRED,
+    \Aplus\Http\Status::FORBIDDEN,
+    \Aplus\Http\Status::NOT_FOUND,
+    \Aplus\Http\Status::METHOD_NOT_ALLOWED,
+    \Aplus\Http\Status::NOT_ACCEPTABLE,
+    \Aplus\Http\Status::PROXY_AUTHENTICATION_REQUIRED,
+    \Aplus\Http\Status::REQUEST_TIMEOUT,
+    \Aplus\Http\Status::CONFLICT,
+    \Aplus\Http\Status::GONE,
+    \Aplus\Http\Status::LENGTH_REQUIRED,
+    \Aplus\Http\Status::PRECONDITION_FAILED,
+    \Aplus\Http\Status::PAYLOAD_TOO_LARGE,
+    \Aplus\Http\Status::URI_TOO_LARGE,
+    \Aplus\Http\Status::UNSUPPORTED_MEDIA_TYPE,
+    \Aplus\Http\Status::RANGE_NOT_SATISFIABLE,
+    \Aplus\Http\Status::EXPECTATION_FAILED,
+    \Aplus\Http\Status::IM_A_TEAPOT,
+    \Aplus\Http\Status::MISDIRECTED_REQUEST,
+    \Aplus\Http\Status::UNPROCESSABLE_ENTITY,
+    \Aplus\Http\Status::LOCKED,
+    \Aplus\Http\Status::FAILED_DEPENDENCY,
+    \Aplus\Http\Status::TOO_EARLY,
+    \Aplus\Http\Status::UPGRADE_REQUIRED,
+    \Aplus\Http\Status::PRECONDITION_REQUIRED,
+    \Aplus\Http\Status::TOO_MANY_REQUESTS,
+    \Aplus\Http\Status::REQUEST_HEADER_FIELDS_TOO_LARGE,
+    \Aplus\Http\Status::UNAVAILABLE_FOR_LEGAL_REASONS,
+    \Aplus\Http\Status::CLIENT_CLOSED_REQUEST,
+    \Aplus\Http\Status::INTERNAL_SERVER_ERROR,
+    \Aplus\Http\Status::NOT_IMPLEMENTED,
+    \Aplus\Http\Status::BAD_GATEWAY,
+    \Aplus\Http\Status::SERVICE_UNAVAILABLE,
+    \Aplus\Http\Status::GATEWAY_TIMEOUT,
+    \Aplus\Http\Status::HTTP_VERSION_NOT_SUPPORTED,
+    \Aplus\Http\Status::VARIANT_ALSO_NEGOTIATES,
+    \Aplus\Http\Status::INSUFFICIENT_STORAGE,
+    \Aplus\Http\Status::LOOP_DETECTED,
+    \Aplus\Http\Status::NOT_EXTENDED,
+    \Aplus\Http\Status::NETWORK_AUTHENTICATION_REQUIRED,
+    \Aplus\Http\Status::NETWORK_CONNECT_TIMEOUT_ERROR,
 );
 registerArgumentsSet(
     'response_redirect_codes',
-    \Framework\HTTP\Status::MULTIPLE_CHOICES,
-    \Framework\HTTP\Status::MOVED_PERMANENTLY,
-    \Framework\HTTP\Status::FOUND,
-    \Framework\HTTP\Status::SEE_OTHER,
-    \Framework\HTTP\Status::NOT_MODIFIED,
-    \Framework\HTTP\Status::USE_PROXY,
-    \Framework\HTTP\Status::SWITCH_PROXY,
-    \Framework\HTTP\Status::TEMPORARY_REDIRECT,
-    \Framework\HTTP\Status::PERMANENT_REDIRECT,
+    \Aplus\Http\Status::MULTIPLE_CHOICES,
+    \Aplus\Http\Status::MOVED_PERMANENTLY,
+    \Aplus\Http\Status::FOUND,
+    \Aplus\Http\Status::SEE_OTHER,
+    \Aplus\Http\Status::NOT_MODIFIED,
+    \Aplus\Http\Status::USE_PROXY,
+    \Aplus\Http\Status::SWITCH_PROXY,
+    \Aplus\Http\Status::TEMPORARY_REDIRECT,
+    \Aplus\Http\Status::PERMANENT_REDIRECT,
 );
 registerArgumentsSet(
     'request_headers',
-    \Framework\HTTP\RequestHeader::ACCEPT,
-    \Framework\HTTP\RequestHeader::ACCEPT_CHARSET,
-    \Framework\HTTP\RequestHeader::ACCEPT_ENCODING,
-    \Framework\HTTP\RequestHeader::ACCEPT_LANGUAGE,
-    \Framework\HTTP\RequestHeader::ACCESS_CONTROL_REQUEST_HEADERS,
-    \Framework\HTTP\RequestHeader::ACCESS_CONTROL_REQUEST_METHOD,
-    \Framework\HTTP\RequestHeader::AUTHORIZATION,
-    \Framework\HTTP\RequestHeader::CACHE_CONTROL,
-    \Framework\HTTP\RequestHeader::CDN_LOOP,
-    \Framework\HTTP\RequestHeader::CONNECTION,
-    \Framework\HTTP\RequestHeader::CONTENT_DISPOSITION,
-    \Framework\HTTP\RequestHeader::CONTENT_ENCODING,
-    \Framework\HTTP\RequestHeader::CONTENT_LANGUAGE,
-    \Framework\HTTP\RequestHeader::CONTENT_LENGTH,
-    \Framework\HTTP\RequestHeader::CONTENT_LOCATION,
-    \Framework\HTTP\RequestHeader::CONTENT_RANGE,
-    \Framework\HTTP\RequestHeader::CONTENT_TYPE,
-    \Framework\HTTP\RequestHeader::COOKIE,
-    \Framework\HTTP\RequestHeader::DATE,
-    \Framework\HTTP\RequestHeader::DNT,
-    \Framework\HTTP\RequestHeader::EXPECT,
-    \Framework\HTTP\RequestHeader::FORWARDED,
-    \Framework\HTTP\RequestHeader::FROM,
-    \Framework\HTTP\RequestHeader::HOST,
-    \Framework\HTTP\RequestHeader::IF_MATCH,
-    \Framework\HTTP\RequestHeader::IF_MODIFIED_SINCE,
-    \Framework\HTTP\RequestHeader::IF_NONE_MATCH,
-    \Framework\HTTP\RequestHeader::IF_RANGE,
-    \Framework\HTTP\RequestHeader::IF_UNMODIFIED_SINCE,
-    \Framework\HTTP\RequestHeader::KEEP_ALIVE,
-    \Framework\HTTP\RequestHeader::LINK,
-    \Framework\HTTP\RequestHeader::ORIGIN,
-    \Framework\HTTP\RequestHeader::PRAGMA,
-    \Framework\HTTP\RequestHeader::PRIORITY,
-    \Framework\HTTP\RequestHeader::PROXY_AUTHORIZATION,
-    \Framework\HTTP\RequestHeader::RANGE,
-    \Framework\HTTP\RequestHeader::REFERER,
-    \Framework\HTTP\RequestHeader::SEC_FETCH_DEST,
-    \Framework\HTTP\RequestHeader::SEC_FETCH_MODE,
-    \Framework\HTTP\RequestHeader::SEC_FETCH_SITE,
-    \Framework\HTTP\RequestHeader::SEC_FETCH_USER,
-    \Framework\HTTP\RequestHeader::TE,
-    \Framework\HTTP\RequestHeader::TRAILER,
-    \Framework\HTTP\RequestHeader::TRANSFER_ENCODING,
-    \Framework\HTTP\RequestHeader::UPGRADE,
-    \Framework\HTTP\RequestHeader::UPGRADE_INSECURE_REQUESTS,
-    \Framework\HTTP\RequestHeader::USER_AGENT,
-    \Framework\HTTP\RequestHeader::VIA,
-    \Framework\HTTP\RequestHeader::WARNING,
-    \Framework\HTTP\RequestHeader::X_FORWARDED_FOR,
-    \Framework\HTTP\RequestHeader::X_FORWARDED_HOST,
-    \Framework\HTTP\RequestHeader::X_FORWARDED_PROTO,
-    \Framework\HTTP\RequestHeader::X_REAL_IP,
-    \Framework\HTTP\RequestHeader::X_REQUESTED_WITH,
-    \Framework\HTTP\RequestHeader::X_REQUEST_ID,
+    \Aplus\Http\RequestHeader::ACCEPT,
+    \Aplus\Http\RequestHeader::ACCEPT_CHARSET,
+    \Aplus\Http\RequestHeader::ACCEPT_ENCODING,
+    \Aplus\Http\RequestHeader::ACCEPT_LANGUAGE,
+    \Aplus\Http\RequestHeader::ACCESS_CONTROL_REQUEST_HEADERS,
+    \Aplus\Http\RequestHeader::ACCESS_CONTROL_REQUEST_METHOD,
+    \Aplus\Http\RequestHeader::AUTHORIZATION,
+    \Aplus\Http\RequestHeader::CACHE_CONTROL,
+    \Aplus\Http\RequestHeader::CDN_LOOP,
+    \Aplus\Http\RequestHeader::CONNECTION,
+    \Aplus\Http\RequestHeader::CONTENT_DISPOSITION,
+    \Aplus\Http\RequestHeader::CONTENT_ENCODING,
+    \Aplus\Http\RequestHeader::CONTENT_LANGUAGE,
+    \Aplus\Http\RequestHeader::CONTENT_LENGTH,
+    \Aplus\Http\RequestHeader::CONTENT_LOCATION,
+    \Aplus\Http\RequestHeader::CONTENT_RANGE,
+    \Aplus\Http\RequestHeader::CONTENT_TYPE,
+    \Aplus\Http\RequestHeader::COOKIE,
+    \Aplus\Http\RequestHeader::DATE,
+    \Aplus\Http\RequestHeader::DNT,
+    \Aplus\Http\RequestHeader::EXPECT,
+    \Aplus\Http\RequestHeader::FORWARDED,
+    \Aplus\Http\RequestHeader::FROM,
+    \Aplus\Http\RequestHeader::HOST,
+    \Aplus\Http\RequestHeader::IF_MATCH,
+    \Aplus\Http\RequestHeader::IF_MODIFIED_SINCE,
+    \Aplus\Http\RequestHeader::IF_NONE_MATCH,
+    \Aplus\Http\RequestHeader::IF_RANGE,
+    \Aplus\Http\RequestHeader::IF_UNMODIFIED_SINCE,
+    \Aplus\Http\RequestHeader::KEEP_ALIVE,
+    \Aplus\Http\RequestHeader::LINK,
+    \Aplus\Http\RequestHeader::ORIGIN,
+    \Aplus\Http\RequestHeader::PRAGMA,
+    \Aplus\Http\RequestHeader::PRIORITY,
+    \Aplus\Http\RequestHeader::PROXY_AUTHORIZATION,
+    \Aplus\Http\RequestHeader::RANGE,
+    \Aplus\Http\RequestHeader::REFERER,
+    \Aplus\Http\RequestHeader::SEC_FETCH_DEST,
+    \Aplus\Http\RequestHeader::SEC_FETCH_MODE,
+    \Aplus\Http\RequestHeader::SEC_FETCH_SITE,
+    \Aplus\Http\RequestHeader::SEC_FETCH_USER,
+    \Aplus\Http\RequestHeader::TE,
+    \Aplus\Http\RequestHeader::TRAILER,
+    \Aplus\Http\RequestHeader::TRANSFER_ENCODING,
+    \Aplus\Http\RequestHeader::UPGRADE,
+    \Aplus\Http\RequestHeader::UPGRADE_INSECURE_REQUESTS,
+    \Aplus\Http\RequestHeader::USER_AGENT,
+    \Aplus\Http\RequestHeader::VIA,
+    \Aplus\Http\RequestHeader::WARNING,
+    \Aplus\Http\RequestHeader::X_FORWARDED_FOR,
+    \Aplus\Http\RequestHeader::X_FORWARDED_HOST,
+    \Aplus\Http\RequestHeader::X_FORWARDED_PROTO,
+    \Aplus\Http\RequestHeader::X_REAL_IP,
+    \Aplus\Http\RequestHeader::X_REQUESTED_WITH,
+    \Aplus\Http\RequestHeader::X_REQUEST_ID,
     'Accept',
     'Accept-Charset',
     'Accept-Encoding',
@@ -288,62 +288,62 @@ registerArgumentsSet(
 );
 registerArgumentsSet(
     'response_headers',
-    \Framework\HTTP\ResponseHeader::ACCEPT_RANGES,
-    \Framework\HTTP\ResponseHeader::ACCESS_CONTROL_ALLOW_CREDENTIALS,
-    \Framework\HTTP\ResponseHeader::ACCESS_CONTROL_ALLOW_HEADERS,
-    \Framework\HTTP\ResponseHeader::ACCESS_CONTROL_ALLOW_METHODS,
-    \Framework\HTTP\ResponseHeader::ACCESS_CONTROL_ALLOW_ORIGIN,
-    \Framework\HTTP\ResponseHeader::ACCESS_CONTROL_EXPOSE_HEADERS,
-    \Framework\HTTP\ResponseHeader::ACCESS_CONTROL_MAX_AGE,
-    \Framework\HTTP\ResponseHeader::AGE,
-    \Framework\HTTP\ResponseHeader::ALLOW,
-    \Framework\HTTP\ResponseHeader::CACHE_CONTROL,
-    \Framework\HTTP\ResponseHeader::CLEAR_SITE_DATA,
-    \Framework\HTTP\ResponseHeader::CONNECTION,
-    \Framework\HTTP\ResponseHeader::CONTENT_DISPOSITION,
-    \Framework\HTTP\ResponseHeader::CONTENT_ENCODING,
-    \Framework\HTTP\ResponseHeader::CONTENT_LANGUAGE,
-    \Framework\HTTP\ResponseHeader::CONTENT_LENGTH,
-    \Framework\HTTP\ResponseHeader::CONTENT_LOCATION,
-    \Framework\HTTP\ResponseHeader::CONTENT_RANGE,
-    \Framework\HTTP\ResponseHeader::CONTENT_SECURITY_POLICY,
-    \Framework\HTTP\ResponseHeader::CONTENT_SECURITY_POLICY_REPORT_ONLY,
-    \Framework\HTTP\ResponseHeader::CONTENT_TYPE,
-    \Framework\HTTP\ResponseHeader::DATE,
-    \Framework\HTTP\ResponseHeader::ETAG,
-    \Framework\HTTP\ResponseHeader::EXPECT_CT,
-    \Framework\HTTP\ResponseHeader::EXPIRES,
-    \Framework\HTTP\ResponseHeader::FEATURE_POLICY,
-    \Framework\HTTP\ResponseHeader::KEEP_ALIVE,
-    \Framework\HTTP\ResponseHeader::LAST_MODIFIED,
-    \Framework\HTTP\ResponseHeader::LINK,
-    \Framework\HTTP\ResponseHeader::LOCATION,
-    \Framework\HTTP\ResponseHeader::PRAGMA,
-    \Framework\HTTP\ResponseHeader::PROXY_AUTHENTICATE,
-    \Framework\HTTP\ResponseHeader::PUBLIC_KEY_PINS,
-    \Framework\HTTP\ResponseHeader::PUBLIC_KEY_PINS_REPORT_ONLY,
-    \Framework\HTTP\ResponseHeader::REFERRER_POLICY,
-    \Framework\HTTP\ResponseHeader::RETRY_AFTER,
-    \Framework\HTTP\ResponseHeader::SERVER,
-    \Framework\HTTP\ResponseHeader::SET_COOKIE,
-    \Framework\HTTP\ResponseHeader::SOURCEMAP,
-    \Framework\HTTP\ResponseHeader::STRICT_TRANSPORT_SECURITY,
-    \Framework\HTTP\ResponseHeader::TIMING_ALLOW_ORIGIN,
-    \Framework\HTTP\ResponseHeader::TK,
-    \Framework\HTTP\ResponseHeader::TRAILER,
-    \Framework\HTTP\ResponseHeader::TRANSFER_ENCODING,
-    \Framework\HTTP\ResponseHeader::UPGRADE,
-    \Framework\HTTP\ResponseHeader::VARY,
-    \Framework\HTTP\ResponseHeader::VIA,
-    \Framework\HTTP\ResponseHeader::WARNING,
-    \Framework\HTTP\ResponseHeader::WWW_AUTHENTICATE,
-    \Framework\HTTP\ResponseHeader::X_CONTENT_TYPE_OPTIONS,
-    \Framework\HTTP\ResponseHeader::X_DNS_PREFETCH_CONTROL,
-    \Framework\HTTP\ResponseHeader::X_FRAME_OPTIONS,
-    \Framework\HTTP\ResponseHeader::X_POWERED_BY,
-    \Framework\HTTP\ResponseHeader::X_REQUEST_ID,
-    \Framework\HTTP\ResponseHeader::X_ROBOTS_TAG,
-    \Framework\HTTP\ResponseHeader::X_XSS_PROTECTION,
+    \Aplus\Http\ResponseHeader::ACCEPT_RANGES,
+    \Aplus\Http\ResponseHeader::ACCESS_CONTROL_ALLOW_CREDENTIALS,
+    \Aplus\Http\ResponseHeader::ACCESS_CONTROL_ALLOW_HEADERS,
+    \Aplus\Http\ResponseHeader::ACCESS_CONTROL_ALLOW_METHODS,
+    \Aplus\Http\ResponseHeader::ACCESS_CONTROL_ALLOW_ORIGIN,
+    \Aplus\Http\ResponseHeader::ACCESS_CONTROL_EXPOSE_HEADERS,
+    \Aplus\Http\ResponseHeader::ACCESS_CONTROL_MAX_AGE,
+    \Aplus\Http\ResponseHeader::AGE,
+    \Aplus\Http\ResponseHeader::ALLOW,
+    \Aplus\Http\ResponseHeader::CACHE_CONTROL,
+    \Aplus\Http\ResponseHeader::CLEAR_SITE_DATA,
+    \Aplus\Http\ResponseHeader::CONNECTION,
+    \Aplus\Http\ResponseHeader::CONTENT_DISPOSITION,
+    \Aplus\Http\ResponseHeader::CONTENT_ENCODING,
+    \Aplus\Http\ResponseHeader::CONTENT_LANGUAGE,
+    \Aplus\Http\ResponseHeader::CONTENT_LENGTH,
+    \Aplus\Http\ResponseHeader::CONTENT_LOCATION,
+    \Aplus\Http\ResponseHeader::CONTENT_RANGE,
+    \Aplus\Http\ResponseHeader::CONTENT_SECURITY_POLICY,
+    \Aplus\Http\ResponseHeader::CONTENT_SECURITY_POLICY_REPORT_ONLY,
+    \Aplus\Http\ResponseHeader::CONTENT_TYPE,
+    \Aplus\Http\ResponseHeader::DATE,
+    \Aplus\Http\ResponseHeader::ETAG,
+    \Aplus\Http\ResponseHeader::EXPECT_CT,
+    \Aplus\Http\ResponseHeader::EXPIRES,
+    \Aplus\Http\ResponseHeader::FEATURE_POLICY,
+    \Aplus\Http\ResponseHeader::KEEP_ALIVE,
+    \Aplus\Http\ResponseHeader::LAST_MODIFIED,
+    \Aplus\Http\ResponseHeader::LINK,
+    \Aplus\Http\ResponseHeader::LOCATION,
+    \Aplus\Http\ResponseHeader::PRAGMA,
+    \Aplus\Http\ResponseHeader::PROXY_AUTHENTICATE,
+    \Aplus\Http\ResponseHeader::PUBLIC_KEY_PINS,
+    \Aplus\Http\ResponseHeader::PUBLIC_KEY_PINS_REPORT_ONLY,
+    \Aplus\Http\ResponseHeader::REFERRER_POLICY,
+    \Aplus\Http\ResponseHeader::RETRY_AFTER,
+    \Aplus\Http\ResponseHeader::SERVER,
+    \Aplus\Http\ResponseHeader::SET_COOKIE,
+    \Aplus\Http\ResponseHeader::SOURCEMAP,
+    \Aplus\Http\ResponseHeader::STRICT_TRANSPORT_SECURITY,
+    \Aplus\Http\ResponseHeader::TIMING_ALLOW_ORIGIN,
+    \Aplus\Http\ResponseHeader::TK,
+    \Aplus\Http\ResponseHeader::TRAILER,
+    \Aplus\Http\ResponseHeader::TRANSFER_ENCODING,
+    \Aplus\Http\ResponseHeader::UPGRADE,
+    \Aplus\Http\ResponseHeader::VARY,
+    \Aplus\Http\ResponseHeader::VIA,
+    \Aplus\Http\ResponseHeader::WARNING,
+    \Aplus\Http\ResponseHeader::WWW_AUTHENTICATE,
+    \Aplus\Http\ResponseHeader::X_CONTENT_TYPE_OPTIONS,
+    \Aplus\Http\ResponseHeader::X_DNS_PREFETCH_CONTROL,
+    \Aplus\Http\ResponseHeader::X_FRAME_OPTIONS,
+    \Aplus\Http\ResponseHeader::X_POWERED_BY,
+    \Aplus\Http\ResponseHeader::X_REQUEST_ID,
+    \Aplus\Http\ResponseHeader::X_ROBOTS_TAG,
+    \Aplus\Http\ResponseHeader::X_XSS_PROTECTION,
     'Accept-Ranges',
     'Access-Control-Allow-Credentials',
     'Access-Control-Allow-Headers',
@@ -403,14 +403,14 @@ registerArgumentsSet(
 );
 registerArgumentsSet(
     'response_headers_multiline',
-    \Framework\HTTP\ResponseHeader::DATE,
-    \Framework\HTTP\ResponseHeader::EXPIRES,
-    \Framework\HTTP\ResponseHeader::LAST_MODIFIED,
-    \Framework\HTTP\ResponseHeader::PROXY_AUTHENTICATE,
-    \Framework\HTTP\ResponseHeader::RETRY_AFTER,
-    \Framework\HTTP\ResponseHeader::SET_COOKIE,
-    \Framework\HTTP\ResponseHeader::X_ROBOTS_TAG,
-    \Framework\HTTP\ResponseHeader::WWW_AUTHENTICATE,
+    \Aplus\Http\ResponseHeader::DATE,
+    \Aplus\Http\ResponseHeader::EXPIRES,
+    \Aplus\Http\ResponseHeader::LAST_MODIFIED,
+    \Aplus\Http\ResponseHeader::PROXY_AUTHENTICATE,
+    \Aplus\Http\ResponseHeader::RETRY_AFTER,
+    \Aplus\Http\ResponseHeader::SET_COOKIE,
+    \Aplus\Http\ResponseHeader::X_ROBOTS_TAG,
+    \Aplus\Http\ResponseHeader::WWW_AUTHENTICATE,
     'Date',
     'Expires',
     'Last-Modified',
@@ -520,32 +520,32 @@ registerArgumentsSet(
 );
 registerArgumentsSet(
     'csp_directives',
-    \Framework\HTTP\CSP::baseUri,
-    \Framework\HTTP\CSP::childSrc,
-    \Framework\HTTP\CSP::connectSrc,
-    \Framework\HTTP\CSP::defaultSrc,
-    \Framework\HTTP\CSP::fontSrc,
-    \Framework\HTTP\CSP::formAction,
-    \Framework\HTTP\CSP::frameAncestors,
-    \Framework\HTTP\CSP::frameSrc,
-    \Framework\HTTP\CSP::imgSrc,
-    \Framework\HTTP\CSP::manifestSrc,
-    \Framework\HTTP\CSP::mediaSrc,
-    \Framework\HTTP\CSP::navigateTo,
-    \Framework\HTTP\CSP::objectSrc,
-    \Framework\HTTP\CSP::pluginTypes,
-    \Framework\HTTP\CSP::prefetchSrc,
-    \Framework\HTTP\CSP::reportTo,
-    \Framework\HTTP\CSP::reportUri,
-    \Framework\HTTP\CSP::sandbox,
-    \Framework\HTTP\CSP::scriptSrc,
-    \Framework\HTTP\CSP::scriptSrcAttr,
-    \Framework\HTTP\CSP::scriptSrcElem,
-    \Framework\HTTP\CSP::styleSrc,
-    \Framework\HTTP\CSP::styleSrcAttr,
-    \Framework\HTTP\CSP::styleSrcElem,
-    \Framework\HTTP\CSP::upgradeInsecureRequests,
-    \Framework\HTTP\CSP::workerSrc,
+    \Aplus\Http\Csp::baseUri,
+    \Aplus\Http\Csp::childSrc,
+    \Aplus\Http\Csp::connectSrc,
+    \Aplus\Http\Csp::defaultSrc,
+    \Aplus\Http\Csp::fontSrc,
+    \Aplus\Http\Csp::formAction,
+    \Aplus\Http\Csp::frameAncestors,
+    \Aplus\Http\Csp::frameSrc,
+    \Aplus\Http\Csp::imgSrc,
+    \Aplus\Http\Csp::manifestSrc,
+    \Aplus\Http\Csp::mediaSrc,
+    \Aplus\Http\Csp::navigateTo,
+    \Aplus\Http\Csp::objectSrc,
+    \Aplus\Http\Csp::pluginTypes,
+    \Aplus\Http\Csp::prefetchSrc,
+    \Aplus\Http\Csp::reportTo,
+    \Aplus\Http\Csp::reportUri,
+    \Aplus\Http\Csp::sandbox,
+    \Aplus\Http\Csp::scriptSrc,
+    \Aplus\Http\Csp::scriptSrcAttr,
+    \Aplus\Http\Csp::scriptSrcElem,
+    \Aplus\Http\Csp::styleSrc,
+    \Aplus\Http\Csp::styleSrcAttr,
+    \Aplus\Http\Csp::styleSrcElem,
+    \Aplus\Http\Csp::upgradeInsecureRequests,
+    \Aplus\Http\Csp::workerSrc,
     'base-uri',
     'child-src',
     'connect-src',
@@ -616,236 +616,236 @@ registerArgumentsSet(
     'REMOTE_ADDR',
 );
 expectedArguments(
-    \Framework\HTTP\AntiCSRF::__construct(),
+    \Aplus\Http\AntiCsrf::__construct(),
     2,
     argumentsSet('anti_csrf_token_functions')
 );
 expectedArguments(
-    \Framework\HTTP\AntiCSRF::setGenerateTokenFunction(),
+    \Aplus\Http\AntiCsrf::setGenerateTokenFunction(),
     0,
     argumentsSet('anti_csrf_token_functions')
 );
 expectedReturnValues(
-    \Framework\HTTP\MessageInterface::getProtocol(),
+    \Aplus\Http\MessageInterface::getProtocol(),
     argumentsSet('protocols')
 );
 expectedReturnValues(
-    \Framework\HTTP\RequestInterface::getMethod(),
+    \Aplus\Http\RequestInterface::getMethod(),
     argumentsSet('methods')
 );
 expectedReturnValues(
-    \Framework\HTTP\ResponseInterface::getStatusCode(),
+    \Aplus\Http\ResponseInterface::getStatusCode(),
     argumentsSet('response_status_codes')
 );
 expectedArguments(
-    \Framework\HTTP\Message::setProtocol(),
+    \Aplus\Http\Message::setProtocol(),
     0,
     argumentsSet('protocols')
 );
 expectedArguments(
-    \Framework\HTTP\Message::setMethod(),
+    \Aplus\Http\Message::setMethod(),
     0,
     argumentsSet('methods')
 );
 expectedArguments(
-    \Framework\HTTP\Message::isMethod(),
+    \Aplus\Http\Message::isMethod(),
     0,
     argumentsSet('methods')
 );
 expectedArguments(
-    \Framework\HTTP\Request::filterInput(),
+    \Aplus\Http\Request::filterInput(),
     2,
     argumentsSet('filters')
 );
 expectedArguments(
-    \Framework\HTTP\Request::getEnv(),
+    \Aplus\Http\Request::getEnv(),
     1,
     argumentsSet('filters')
 );
 expectedArguments(
-    \Framework\HTTP\Request::getGet(),
+    \Aplus\Http\Request::getGet(),
     1,
     argumentsSet('filters')
 );
 expectedArguments(
-    \Framework\HTTP\Request::getPost(),
+    \Aplus\Http\Request::getPost(),
     1,
     argumentsSet('filters')
 );
 expectedArguments(
-    \Framework\HTTP\Request::getServer(),
+    \Aplus\Http\Request::getServer(),
     0,
     argumentsSet('fastcgi_params')
 );
 expectedArguments(
-    \Framework\HTTP\Request::getServer(),
+    \Aplus\Http\Request::getServer(),
     1,
     argumentsSet('filters')
 );
 expectedArguments(
-    \Framework\HTTP\Request::getJson(),
+    \Aplus\Http\Request::getJson(),
     1,
     argumentsSet('json_decode_flags')
 );
 expectedArguments(
-    \Framework\HTTP\Request::setJsonFlags(),
+    \Aplus\Http\Request::setJsonFlags(),
     0,
     argumentsSet('json_decode_flags')
 );
 expectedArguments(
-    \Framework\HTTP\Response::setContentEncoding(),
+    \Aplus\Http\Response::setContentEncoding(),
     0,
     argumentsSet('content_encodings')
 );
 expectedArguments(
-    \Framework\HTTP\Response::setContentType(),
+    \Aplus\Http\Response::setContentType(),
     0,
     argumentsSet('content_types')
 );
 expectedArguments(
-    \Framework\HTTP\Response::setJson(),
+    \Aplus\Http\Response::setJson(),
     1,
     argumentsSet('json_encode_flags')
 );
 expectedArguments(
-    \Framework\HTTP\Response::setJsonFlags(),
+    \Aplus\Http\Response::setJsonFlags(),
     0,
     argumentsSet('json_encode_flags')
 );
 expectedArguments(
-    \Framework\HTTP\Message::setStatusCode(),
+    \Aplus\Http\Message::setStatusCode(),
     0,
     argumentsSet('response_status_codes')
 );
 expectedArguments(
-    \Framework\HTTP\Message::isStatusCode(),
+    \Aplus\Http\Message::isStatusCode(),
     0,
     argumentsSet('response_status_codes')
 );
 expectedArguments(
-    \Framework\HTTP\Response::setStatus(),
+    \Aplus\Http\Response::setStatus(),
     0,
     argumentsSet('response_status_codes')
 );
 expectedArguments(
-    \Framework\HTTP\RequestInterface::getHeader(),
+    \Aplus\Http\RequestInterface::getHeader(),
     0,
     argumentsSet('request_headers')
 );
 expectedArguments(
-    \Framework\HTTP\Request::getHeader(),
+    \Aplus\Http\Request::getHeader(),
     0,
     argumentsSet('request_headers')
 );
 expectedArguments(
-    \Framework\HTTP\RequestInterface::hasHeader(),
+    \Aplus\Http\RequestInterface::hasHeader(),
     0,
     argumentsSet('request_headers')
 );
 expectedArguments(
-    \Framework\HTTP\Request::setIpKey(),
+    \Aplus\Http\Request::setIpKey(),
     0,
     argumentsSet('ip_keys')
 );
 expectedArguments(
-    \Framework\HTTP\Request::hasHeader(),
+    \Aplus\Http\Request::hasHeader(),
     0,
     argumentsSet('request_headers')
 );
 expectedArguments(
-    \Framework\HTTP\ResponseInterface::getHeader(),
+    \Aplus\Http\ResponseInterface::getHeader(),
     0,
     argumentsSet('response_headers')
 );
 expectedArguments(
-    \Framework\HTTP\Response::getHeader(),
+    \Aplus\Http\Response::getHeader(),
     0,
     argumentsSet('response_headers')
 );
 expectedArguments(
-    \Framework\HTTP\ResponseInterface::hasHeader(),
+    \Aplus\Http\ResponseInterface::hasHeader(),
     0,
     argumentsSet('response_headers')
 );
 expectedArguments(
-    \Framework\HTTP\Response::hasHeader(),
+    \Aplus\Http\Response::hasHeader(),
     0,
     argumentsSet('response_headers')
 );
 expectedArguments(
-    \Framework\HTTP\ResponseInterface::setHeader(),
+    \Aplus\Http\ResponseInterface::setHeader(),
     0,
     argumentsSet('response_headers')
 );
 expectedArguments(
-    \Framework\HTTP\Response::setHeader(),
+    \Aplus\Http\Response::setHeader(),
     0,
     argumentsSet('response_headers')
 );
 expectedArguments(
-    \Framework\HTTP\Response::appendHeader(),
+    \Aplus\Http\Response::appendHeader(),
     0,
     argumentsSet('response_headers_multiline')
 );
 expectedArguments(
-    \Framework\HTTP\Response::redirect(),
+    \Aplus\Http\Response::redirect(),
     2,
     argumentsSet('response_redirect_codes')
 );
 expectedArguments(
-    \Framework\HTTP\Response::setAutoEtag(),
+    \Aplus\Http\Response::setAutoEtag(),
     1,
     argumentsSet('hash_algos')
 );
 expectedArguments(
-    \Framework\HTTP\Cookie::setSameSite(),
+    \Aplus\Http\Cookie::setSameSite(),
     0,
     argumentsSet('cookie_samesite')
 );
 expectedArguments(
-    \Framework\HTTP\URL::setScheme(),
+    \Aplus\Http\Url::setScheme(),
     0,
     argumentsSet('url_schemes')
 );
 expectedArguments(
-    \Framework\HTTP\CSP::addOptions(),
+    \Aplus\Http\Csp::addOptions(),
     0,
     argumentsSet('csp_directives')
 );
 expectedArguments(
-    \Framework\HTTP\CSP::setDirective(),
+    \Aplus\Http\Csp::setDirective(),
     0,
     argumentsSet('csp_directives')
 );
 expectedArguments(
-    \Framework\HTTP\CSP::getDirective(),
+    \Aplus\Http\Csp::getDirective(),
     0,
     argumentsSet('csp_directives')
 );
 expectedArguments(
-    \Framework\HTTP\CSP::removeDirective(),
+    \Aplus\Http\Csp::removeDirective(),
     0,
     argumentsSet('csp_directives')
 );
 expectedArguments(
-    \Framework\HTTP\CSP::makeHash(),
+    \Aplus\Http\Csp::makeHash(),
     0,
     argumentsSet('csp_algos')
 );
 expectedArguments(
-    \Framework\HTTP\CSP::makeHashes(),
+    \Aplus\Http\Csp::makeHashes(),
     1,
     argumentsSet('csp_algos')
 );
 expectedReturnValues(
-    \Framework\HTTP\Request::getAuthType(),
+    \Aplus\Http\Request::getAuthType(),
     'Basic',
     'Bearer',
     'Digest',
     null,
 );
 expectedReturnValues(
-    \Framework\HTTP\UploadedFile::getError(),
+    \Aplus\Http\UploadedFile::getError(),
     \UPLOAD_ERR_OK,
     \UPLOAD_ERR_INI_SIZE,
     \UPLOAD_ERR_FORM_SIZE,
@@ -856,7 +856,7 @@ expectedReturnValues(
     \UPLOAD_ERR_EXTENSION,
 );
 expectedReturnValues(
-    \Framework\HTTP\UserAgent::getType(),
+    \Aplus\Http\UserAgent::getType(),
     'Browser',
     'Robot',
     'Unknown',
