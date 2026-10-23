@@ -578,7 +578,7 @@ class Status
      * A non-standard status code introduced by nginx for the case when a client
      * closes the connection while nginx is processing the request.
      *
-     * @see https://httpstatuses.com/499
+     * @see https://httpstatuses.net/499/
      */
     public const int CLIENT_CLOSED_REQUEST = 499;
     // -------------------------------------------------------------------------
