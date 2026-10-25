@@ -573,15 +573,6 @@ class Status
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/451
      */
     public const int UNAVAILABLE_FOR_LEGAL_REASONS = 451;
-    /**
-     * 499 Client Closed Request (nginx).
-     *
-     * A non-standard status code introduced by nginx for the case when a client
-     * closes the connection while nginx is processing the request.
-     *
-     * @see https://httpstatuses.com/499
-     */
-    public const int CLIENT_CLOSED_REQUEST = 499;
     // -------------------------------------------------------------------------
     // Server error responses
     // -------------------------------------------------------------------------
@@ -694,16 +685,6 @@ class Status
      */
     public const int NETWORK_AUTHENTICATION_REQUIRED = 511;
     /**
-     * 599 Network Connect Timeout Error.
-     *
-     * This status code is not specified in any RFCs, but is used by some HTTP
-     * proxies to signal a network connect timeout behind the proxy to a client
-     * in front of the proxy.
-     *
-     * @see https://httpstatuses.com/599
-     */
-    public const int NETWORK_CONNECT_TIMEOUT_ERROR = 599;
-    /**
      * Response status codes and reasons.
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
@@ -775,7 +756,6 @@ class Status
         429 => 'Too Many Requests',
         431 => 'Request Header Fields Too Large',
         451 => 'Unavailable For Legal Reasons',
-        499 => 'Client Closed Request',
         // ---------------------------------------------------------------------
         // Server error responses
         // ---------------------------------------------------------------------
@@ -790,7 +770,6 @@ class Status
         508 => 'Loop Detected',
         510 => 'Not Extended',
         511 => 'Network Authentication Required',
-        599 => 'Network Connect Timeout Error',
     ];
 
     /**

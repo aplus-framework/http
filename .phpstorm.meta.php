@@ -148,7 +148,6 @@ registerArgumentsSet(
     \Aplus\Http\Status::TOO_MANY_REQUESTS,
     \Aplus\Http\Status::REQUEST_HEADER_FIELDS_TOO_LARGE,
     \Aplus\Http\Status::UNAVAILABLE_FOR_LEGAL_REASONS,
-    \Aplus\Http\Status::CLIENT_CLOSED_REQUEST,
     \Aplus\Http\Status::INTERNAL_SERVER_ERROR,
     \Aplus\Http\Status::NOT_IMPLEMENTED,
     \Aplus\Http\Status::BAD_GATEWAY,
@@ -160,7 +159,6 @@ registerArgumentsSet(
     \Aplus\Http\Status::LOOP_DETECTED,
     \Aplus\Http\Status::NOT_EXTENDED,
     \Aplus\Http\Status::NETWORK_AUTHENTICATION_REQUIRED,
-    \Aplus\Http\Status::NETWORK_CONNECT_TIMEOUT_ERROR,
 );
 registerArgumentsSet(
     'response_redirect_codes',
