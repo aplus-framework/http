@@ -555,7 +555,7 @@ class Request extends Message implements RequestInterface
      */
     public function getContentType() : ?string
     {
-        return $_SERVER['HTTP_CONTENT_TYPE'] ?? null;
+        return $this->getHeader(RequestHeader::CONTENT_TYPE);
     }
 
     /**
