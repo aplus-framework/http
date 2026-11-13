@@ -337,6 +337,7 @@ final class RequestTest extends TestCase
             'X-Forwarded-For: 45.181.102.88',
             'X-Request-ID: abc123',
             'X-Requested-With: XMLHTTPREQUEST',
+            'Content-Length: 1024',
         ];
         $body = '';
         $message = $startLine . "\r\n"
@@ -716,6 +717,7 @@ final class RequestTest extends TestCase
             'x-forwarded-for' => '45.181.102.88',
             'x-request-id' => 'abc123',
             'x-requested-with' => 'XMLHTTPREQUEST',
+            'content-length' => '1024',
         ], $this->request->getHeaders());
     }
 

@@ -28,6 +28,8 @@ class RequestMock extends \Aplus\Http\Request
      */
     public static array $input = [
         \INPUT_SERVER => [
+            'CONTENT_LENGTH' => '1024',
+            'CONTENT_TYPE' => 'text/html; charset=UTF-8',
             'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
             'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
             'HTTP_ACCEPT_LANGUAGE' => 'pt-BR,es;q=0.8,en;q=0.5,en-US;q=0.3',

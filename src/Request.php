@@ -253,8 +253,14 @@ class Request extends Message implements RequestInterface
         foreach ($_SERVER as $name => $value) {
             if (\str_starts_with($name, 'HTTP_')) {
                 $name = \strtr(\substr($name, 5), ['_' => '-']);
-                $this->setHeader($name, $value);
+                $this->setHeader($name, (string) $value);
             }
+        }
+        if (isset($_SERVER['CONTENT_TYPE'])) {
+            $this->setHeader('Content-Type', (string) $_SERVER['CONTENT_TYPE']);
+        }
+        if (isset($_SERVER['CONTENT_LENGTH'])) {
+            $this->setHeader('Content-Length', (string) $_SERVER['CONTENT_LENGTH']);
         }
     }
 
