@@ -30,6 +30,7 @@ class Request extends Message implements RequestInterface
 {
     use Traits\ContentNegotiation;
     use Traits\RequestAuth;
+    use Traits\RequestHost;
     use Traits\RequestIp;
     /**
      * @var array<string,UploadedFile|array<mixed>>|null
@@ -52,17 +53,12 @@ class Request extends Message implements RequestInterface
      * @var bool|null
      */
     protected ?bool $isSecure;
-    /**
-     * @var array<string>
-     */
-    protected array $allowedHosts = [];
-    protected string $host;
 
     /**
      * Request constructor.
      *
      * @param array{
-     *      host_key?: string|null,
+     *      host_key?: Closure|string,
      *      allowed_hosts?: array<string>,
      *      ip_key?: Closure|string,
      * } $config
@@ -72,8 +68,10 @@ class Request extends Message implements RequestInterface
      */
     public function __construct(array $config = [])
     {
-        $hostKey = $config['host_key'] ?? 'HTTP_HOST';
-        $this->setHost($hostKey);
+        if (isset($config['host_key'])) {
+            $this->setHostKey($config['host_key']);
+        }
+        $this->setHost();
         if (isset($config['allowed_hosts'])) {
             $this->setAllowedHosts($config['allowed_hosts']);
         }
@@ -188,55 +186,6 @@ class Request extends Message implements RequestInterface
         }
         */
         return $bodyParts;
-    }
-
-    protected function setHost(string $key) : static
-    {
-        if (!isset($_SERVER[$key])) {
-            throw new InvalidArgumentException(
-                'The Host Key "' . $key . '" is not set in the $_SERVER'
-            );
-        }
-        $this->host = $_SERVER[$key];
-        return $this;
-    }
-
-    public function getHost() : string
-    {
-        return $this->host;
-    }
-
-    /**
-     * Check if Host header is allowed. And set allowed hosts.
-     *
-     * @see https://expressionengine.com/blog/http-host-and-server-name-security-issues
-     * @see http://nginx.org/en/docs/http/request_processing.html
-     *
-     * @param array<string> $allowedHosts
-     *
-     * @return static
-     */
-    protected function setAllowedHosts(array $allowedHosts) : static
-    {
-        if (empty($allowedHosts)) {
-            $this->allowedHosts = $allowedHosts;
-            return $this;
-        }
-        if (!\in_array($this->getHost(), $allowedHosts, true)) {
-            throw new UnexpectedValueException('Invalid Host: ' . $this->getHost());
-        }
-        $this->allowedHosts = $allowedHosts;
-        return $this;
-    }
-
-    /**
-     * Get the allowed hosts.
-     *
-     * @return array<string>
-     */
-    public function getAllowedHosts() : array
-    {
-        return $this->allowedHosts;
     }
 
     protected function prepareStatusLine() : void

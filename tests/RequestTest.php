@@ -110,14 +110,65 @@ final class RequestTest extends TestCase
 
     public function testHost() : void
     {
-        $request = new Request();
-        self::assertSame('domain.tld', $request->getHost());
+        self::assertSame('domain.tld', $this->request->getHost());
+    }
+
+    public function testHostKeyInConstructor() : void
+    {
+        $_SERVER['HTTP_FOO'] = 'foo.tld';
+        $request = new Request(['host_key' => 'HTTP_FOO']);
+        self::assertSame($request->getHostKey(), 'HTTP_FOO');
+        self::assertSame($request->getHost(), 'foo.tld');
+    }
+
+    public function testHostKeyWithHttpXForwardedHost() : void
+    {
         $_SERVER['HTTP_X_FORWARDED_HOST'] = 'foo.tld';
         $request = new Request(['host_key' => 'HTTP_X_FORWARDED_HOST']);
         self::assertSame('foo.tld', $request->getHost());
+    }
+
+    public function testHostKeyWithHttpForwarded() : void
+    {
+        $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.60;host=foo.tld;proto=http;by=203.0.113.43';
+        $request = new Request(['host_key' => 'HTTP_FORWARDED']);
+        self::assertSame('foo.tld', $request->getHost());
+        $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.43;host=bar.tld';
+        $request = new Request(['host_key' => 'HTTP_FORWARDED']);
+        self::assertSame('bar.tld', $request->getHost());
+        $_SERVER['HTTP_FORWARDED'] = 'proto=http;by=203.0.113.43;host=foo.tld;for=192.0.2.60';
+        $request = new Request(['host_key' => 'HTTP_FORWARDED']);
+        self::assertSame('foo.tld', $request->getHost());
+        $_SERVER['HTTP_FORWARDED'] = 'For="[2001:db8:cafe::17]:4711";Host=bar.tld';
+        $request = new Request(['host_key' => 'HTTP_FORWARDED']);
+        self::assertSame('bar.tld', $request->getHost());
+        $_SERVER['HTTP_FORWARDED'] = 'host=foo.tld;for=192.0.2.43, for="[2001:db8:cafe::17]"';
+        $request = new Request(['host_key' => 'HTTP_FORWARDED']);
+        self::assertSame('foo.tld', $request->getHost());
+        $_SERVER['HTTP_FORWARDED'] = 'host=foo.tld;';
+        $request = new Request(['host_key' => 'HTTP_FORWARDED']);
+        self::assertSame('foo.tld', $request->getHost());
+        $_SERVER['HTTP_FORWARDED'] = 'foo';
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The host could not be get from the Forwarded header');
+        $request = new Request(['host_key' => 'HTTP_FORWARDED']);
+    }
+
+    public function testHostKeyException() : void
+    {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The Host Key "FOO" is not set in the $_SERVER');
-        new Request(['host_key' => 'FOO']);
+        $this->expectExceptionMessage(
+            'The Host Key "HTTP_FOO_BAR" is not set in the $_SERVER'
+        );
+        new Request(['host_key' => 'HTTP_FOO_BAR']);
+    }
+
+    public function testHostKeyWithClosure() : void
+    {
+        $request = new Request(['host_key' => static function () {
+            return 'foo.com';
+        }]);
+        self::assertSame('foo.com', $request->getHost());
     }
 
     public function testAllowedHosts() : void
