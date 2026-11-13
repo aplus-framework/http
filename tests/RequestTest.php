@@ -108,6 +108,18 @@ final class RequestTest extends TestCase
         self::assertNull($this->request->getUserAgent());
     }
 
+    public function testHost() : void
+    {
+        $request = new Request();
+        self::assertSame('domain.tld', $request->getHost());
+        $_SERVER['HTTP_X_FORWARDED_HOST'] = 'foo.tld';
+        $request = new Request(['host_key' => 'HTTP_X_FORWARDED_HOST']);
+        self::assertSame('foo.tld', $request->getHost());
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The Host Key "FOO" is not set in the $_SERVER');
+        new Request(['host_key' => 'FOO']);
+    }
+
     public function testAllowedHosts() : void
     {
         $request = new Request();

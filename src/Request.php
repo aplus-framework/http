@@ -56,20 +56,24 @@ class Request extends Message implements RequestInterface
      * @var array<string>
      */
     protected array $allowedHosts = [];
+    protected string $host;
 
     /**
      * Request constructor.
      *
      * @param array{
+     *      host_key?: string|null,
      *      allowed_hosts?: array<string>,
      *      ip_key?: Closure|string,
      * } $config
      *
      * @throws UnexpectedValueException if invalid Host
-     * @throws InvalidArgumentException for IP key not set in the $_SERVER var
+     * @throws InvalidArgumentException for Host or IP key not set in the $_SERVER var
      */
     public function __construct(array $config = [])
     {
+        $hostKey = $config['host_key'] ?? 'HTTP_HOST';
+        $this->setHost($hostKey);
         if (isset($config['allowed_hosts'])) {
             $this->setAllowedHosts($config['allowed_hosts']);
         }
@@ -186,6 +190,22 @@ class Request extends Message implements RequestInterface
         return $bodyParts;
     }
 
+    protected function setHost(string $key) : static
+    {
+        if (!isset($_SERVER[$key])) {
+            throw new InvalidArgumentException(
+                'The Host Key "' . $key . '" is not set in the $_SERVER'
+            );
+        }
+        $this->host = $_SERVER[$key];
+        return $this;
+    }
+
+    public function getHost() : string
+    {
+        return $this->host;
+    }
+
     /**
      * Check if Host header is allowed. And set allowed hosts.
      *
@@ -202,9 +222,8 @@ class Request extends Message implements RequestInterface
             $this->allowedHosts = $allowedHosts;
             return $this;
         }
-        $host = $_SERVER['HTTP_HOST'] ?? null;
-        if (!\in_array($host, $allowedHosts, true)) {
-            throw new UnexpectedValueException('Invalid Host: ' . $host);
+        if (!\in_array($this->getHost(), $allowedHosts, true)) {
+            throw new UnexpectedValueException('Invalid Host: ' . $this->getHost());
         }
         $this->allowedHosts = $allowedHosts;
         return $this;
@@ -225,7 +244,7 @@ class Request extends Message implements RequestInterface
         $this->setProtocol($_SERVER['SERVER_PROTOCOL']);
         $this->setMethod($_SERVER['REQUEST_METHOD']);
         $url = $this->isSecure() ? 'https' : 'http';
-        $url .= '://' . $_SERVER['HTTP_HOST'];
+        $url .= '://' . $this->getHost();
         $url .= $_SERVER['REQUEST_URI'];
         $this->setUrl($url);
     }
