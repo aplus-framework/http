@@ -53,7 +53,7 @@ trait RequestHost
         }
         $host = match($key) {
             'HTTP_FORWARDED' => $this->getHostFromHttpForwarded(),
-            'HTTP_X_FORWARDED_HOST' => $this->getIpFromHttpXForwardedHost(),
+            'HTTP_X_FORWARDED_HOST' => $this->getHostFromHttpXForwardedHost(),
             default => $_SERVER[$key]
         };
         $this->host = $host;
@@ -67,7 +67,7 @@ trait RequestHost
      *
      * @return string The host
      */
-    protected function getIpFromHttpXForwardedHost() : string
+    protected function getHostFromHttpXForwardedHost() : string
     {
         return $_SERVER['HTTP_X_FORWARDED_HOST'];
     }
