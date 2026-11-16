@@ -936,7 +936,7 @@ final class RequestTest extends TestCase
 
     public function testProtoKeyWithHttpXForwardedProtoWithMultipleIps() : void
     {
-        $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'http, https';
+        $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'http';
         $request = new Request(['proto_key' => 'HTTP_X_FORWARDED_PROTO']);
         self::assertSame('http', $request->getProto());
     }

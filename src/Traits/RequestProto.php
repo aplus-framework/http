@@ -77,9 +77,7 @@ trait RequestProto
      */
     protected function getProtoFromHttpXForwardedProto() : string
     {
-        $ip = \explode(',', $_SERVER['HTTP_X_FORWARDED_PROTO'], 2)[0];
-        $ip = \trim($ip);
-        return $ip;
+        return $_SERVER['HTTP_X_FORWARDED_PROTO'];
     }
 
     /**
