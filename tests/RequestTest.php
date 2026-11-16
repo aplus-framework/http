@@ -888,19 +888,115 @@ final class RequestTest extends TestCase
         self::assertTrue($this->request->isAjax());
     }
 
-    public function testIsSecure() : void
+    public function testProto() : void
     {
-        self::assertFalse($this->request->isSecure());
-        $this->request->isSecure = null;
-        $_SERVER['REQUEST_SCHEME'] = 'HTTPS';
-        self::assertTrue($this->request->isSecure());
-        $this->request->isSecure = null;
-        unset($_SERVER['REQUEST_SCHEME']);
-        $_SERVER['HTTPS'] = 'On';
-        self::assertTrue($this->request->isSecure());
-        $this->request->isSecure = null;
-        unset($_SERVER['REQUEST_SCHEME'], $_SERVER['HTTPS']);
-        self::assertFalse($this->request->isSecure());
+        self::assertSame('http', $this->request->getProto());
+    }
+
+    public function testProtoWithHttps() : void
+    {
+        $_SERVER['HTTPS'] = 'on';
+        $request = new Request();
+        self::assertTrue($request->isSecure());
+        $_SERVER['HTTPS'] = 'Off';
+        $request = new Request(['proto_key' => 'HTTPS']);
+        self::assertFalse($request->isSecure());
+    }
+
+    public function testProtoWithRequestScheme() : void
+    {
+        $_SERVER['REQUEST_SCHEME'] = 'https';
+        $request = new Request(['proto_key' => 'REQUEST_SCHEME']);
+        self::assertTrue($request->isSecure());
+        $_SERVER['REQUEST_SCHEME'] = 'http';
+        $request = new Request(['proto_key' => 'REQUEST_SCHEME']);
+        self::assertFalse($request->isSecure());
+    }
+
+    public function testProtoKeyInConstructor() : void
+    {
+        $_SERVER['HTTP_FOO'] = 'http';
+        $request = new Request(['proto_key' => 'HTTP_FOO']);
+        self::assertSame($request->getProtoKey(), 'HTTP_FOO');
+        self::assertSame($request->getProto(), 'http');
+    }
+
+    public function testProtoKeyWithHttpXForwardedProto() : void
+    {
+        $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https';
+        $request = new Request(['proto_key' => 'HTTP_X_FORWARDED_PROTO']);
+        self::assertSame('https', $request->getProto());
+    }
+
+    public function testProtoKeyWithHttpXForwardedProtoWithMultipleIps() : void
+    {
+        $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'http, https';
+        $request = new Request(['proto_key' => 'HTTP_X_FORWARDED_PROTO']);
+        self::assertSame('http', $request->getProto());
+    }
+
+    public function testProtoKeyWithHttpForwarded() : void
+    {
+        $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.60;proto=http;by=203.0.113.43';
+        $request = new Request(['proto_key' => 'HTTP_FORWARDED']);
+        self::assertSame('http', $request->getProto());
+        $_SERVER['HTTP_FORWARDED'] = 'proto=https, proto=http';
+        $request = new Request(['proto_key' => 'HTTP_FORWARDED']);
+        self::assertSame('https', $request->getProto());
+        $_SERVER['HTTP_FORWARDED'] = 'proto=http;by=203.0.113.43;for=192.0.2.60';
+        $request = new Request(['proto_key' => 'HTTP_FORWARDED']);
+        self::assertSame('http', $request->getProto());
+        $_SERVER['HTTP_FORWARDED'] = 'For="[2001:db8:cafe::17]:4711";proto=https';
+        $request = new Request(['proto_key' => 'HTTP_FORWARDED']);
+        self::assertSame('https', $request->getProto());
+        $_SERVER['HTTP_FORWARDED'] = 'proto=http, for="[2001:db8:cafe::17]"';
+        $request = new Request(['proto_key' => 'HTTP_FORWARDED']);
+        self::assertSame('http', $request->getProto());
+        $_SERVER['HTTP_FORWARDED'] = 'foo';
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The proto could not be get from the Forwarded header');
+        $request = new Request(['proto_key' => 'HTTP_FORWARDED']);
+    }
+
+    /**
+     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Forwarded#using_the_forwarded_header
+     */
+    public function testProtoKeyWithHttpForwardedWithObfuscatedIdentifier() : void
+    {
+        $_SERVER['HTTP_FORWARDED'] = 'proto="fooBar", for=192.0.2.43';
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The value of HTTP_FORWARDED is not a valid proto');
+        new Request(['proto_key' => 'HTTP_FORWARDED']);
+    }
+
+    public function testProtoKeyException() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The Proto Key "HTTP_FOO" is not set in the $_SERVER'
+        );
+        new Request(['proto_key' => 'HTTP_FOO']);
+    }
+
+    public function testProtoKeyWithClosure() : void
+    {
+        $request = new Request(['proto_key' => static function () {
+            return 'https';
+        }]);
+        self::assertSame('https', $request->getProto());
+        $request = new Request(['proto_key' => static function () {
+            return 'http';
+        }]);
+        self::assertSame('http', $request->getProto());
+    }
+
+    public function testProtoKeyWithClosureAndException() : void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The value of Closure is not a valid proto');
+        new Request(['proto_key' => static function () {
+            return 'foo';
+        }]);
     }
 
     public function testJson() : void

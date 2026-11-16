@@ -32,6 +32,7 @@ class Request extends Message implements RequestInterface
     use Traits\RequestAuth;
     use Traits\RequestHost;
     use Traits\RequestIp;
+    use Traits\RequestProto;
     /**
      * @var array<string,UploadedFile|array<mixed>>|null
      */
@@ -47,17 +48,12 @@ class Request extends Message implements RequestInterface
     protected Url | false | null $referrer = null;
     protected UserAgent | false | null $userAgent = null;
     protected bool $isAjax;
-    /**
-     * Tell if is an HTTPS connection.
-     *
-     * @var bool|null
-     */
-    protected ?bool $isSecure;
 
     /**
      * Request constructor.
      *
      * @param array{
+     *      proto_key?: Closure|string,
      *      host_key?: Closure|string,
      *      allowed_hosts?: array<string>,
      *      ip_key?: Closure|string,
@@ -68,6 +64,10 @@ class Request extends Message implements RequestInterface
      */
     public function __construct(array $config = [])
     {
+        if (isset($config['proto_key'])) {
+            $this->setProtoKey($config['proto_key']);
+        }
+        $this->setProto();
         if (isset($config['host_key'])) {
             $this->setHostKey($config['host_key']);
         }
@@ -192,7 +192,7 @@ class Request extends Message implements RequestInterface
     {
         $this->setProtocol($_SERVER['SERVER_PROTOCOL']);
         $this->setMethod($_SERVER['REQUEST_METHOD']);
-        $url = $this->isSecure() ? 'https' : 'http';
+        $url = $this->getProto();
         $url .= '://' . $this->getHost();
         $url .= $_SERVER['REQUEST_URI'];
         $this->setUrl($url);
@@ -885,23 +885,6 @@ class Request extends Message implements RequestInterface
         $received = $_SERVER['HTTP_X_REQUESTED_WITH'] ?? null;
         return $this->isAjax = ($received
             && \strtolower($received) === 'xmlhttprequest');
-    }
-
-    /**
-     * Say if a connection has HTTPS.
-     *
-     * @return bool
-     */
-    public function isSecure() : bool
-    {
-        if (isset($this->isSecure)) {
-            return $this->isSecure;
-        }
-        $scheme = $_SERVER['REQUEST_SCHEME'] ?? '';
-        $https = $_SERVER['HTTPS'] ?? '';
-        return $this->isSecure = (
-            \strtolower($scheme) === 'https' || \strtolower($https) === 'on'
-        );
     }
 
     /**

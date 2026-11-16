@@ -22,7 +22,6 @@ class RequestMock extends \Aplus\Http\Request
     public ?array $parsedBody = null;
     public Url | false | null $referrer = null;
     public UserAgent | false | null $userAgent = null;
-    public ?bool $isSecure;
     /**
      * @var array<int,array<string,mixed>>
      */
