@@ -130,6 +130,9 @@ final class RequestTest extends TestCase
 
     public function testHostKeyWithHttpForwarded() : void
     {
+        $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.60;proto=https;by=203.0.113.43;host=example.com';
+        $request = new Request(['host_key' => 'HTTP_FORWARDED']);
+        self::assertSame('example.com', $request->getHost());
         $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.60;host=foo.tld;proto=http;by=203.0.113.43';
         $request = new Request(['host_key' => 'HTTP_FORWARDED']);
         self::assertSame('foo.tld', $request->getHost());
@@ -813,6 +816,9 @@ final class RequestTest extends TestCase
 
     public function testIpKeyWithHttpForwarded() : void
     {
+        $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.60;proto=https;by=203.0.113.43;host=example.com';
+        $request = new Request(['ip_key' => 'HTTP_FORWARDED']);
+        self::assertSame('192.0.2.60', $request->getIp());
         $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.60;proto=http;by=203.0.113.43';
         $request = new Request(['ip_key' => 'HTTP_FORWARDED']);
         self::assertSame('192.0.2.60', $request->getIp());
@@ -937,6 +943,9 @@ final class RequestTest extends TestCase
 
     public function testProtoKeyWithHttpForwarded() : void
     {
+        $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.60;proto=https;by=203.0.113.43;host=example.com';
+        $request = new Request(['proto_key' => 'HTTP_FORWARDED']);
+        self::assertSame('https', $request->getProto());
         $_SERVER['HTTP_FORWARDED'] = 'for=192.0.2.60;proto=http;by=203.0.113.43';
         $request = new Request(['proto_key' => 'HTTP_FORWARDED']);
         self::assertSame('http', $request->getProto());
