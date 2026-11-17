@@ -899,12 +899,29 @@ final class RequestTest extends TestCase
         self::assertSame('http', $this->request->getProto());
     }
 
-    public function testProtoWithHttps() : void
+    public function testProtoWithHttpsWithoutProtoKey() : void
     {
         $_SERVER['HTTPS'] = 'on';
         $request = new Request();
         self::assertTrue($request->isSecure());
         $_SERVER['HTTPS'] = 'Off';
+        $request = new Request();
+        self::assertFalse($request->isSecure());
+    }
+
+    public function testProtoWithHttpsWithProtoKey() : void
+    {
+        $_SERVER['HTTPS'] = 'OFF';
+        $request = new Request(['proto_key' => 'HTTPS']);
+        self::assertFalse($request->isSecure());
+        $_SERVER['HTTPS'] = 'On';
+        $request = new Request(['proto_key' => 'HTTPS']);
+        self::assertTrue($request->isSecure());
+    }
+
+    public function testProtoWithHttpsNotSet() : void
+    {
+        unset($_SERVER['HTTPS']);
         $request = new Request(['proto_key' => 'HTTPS']);
         self::assertFalse($request->isSecure());
     }

@@ -130,6 +130,10 @@ trait RequestProto
      */
     protected function setProtoKey(Closure | string $protoKey) : static
     {
+        if ($protoKey === 'HTTPS') {
+            $this->protoKey = $protoKey;
+            return $this;
+        }
         if (\is_string($protoKey) && !isset($_SERVER[$protoKey])) {
             throw new InvalidArgumentException(
                 'The Proto Key "' . $protoKey . '" is not set in the $_SERVER'
